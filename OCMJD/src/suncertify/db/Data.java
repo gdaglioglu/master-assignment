@@ -7,11 +7,11 @@ public class Data implements DBAccess {
 
 	private static DatabaseFileAccess database = null;
 	
-	public Data() throws FileNotFoundException {
+	public Data() throws FileNotFoundException, IOException {
 		this(System.getProperty("user.dir"));
 	}
 	
-	public Data(String dbLocation) throws FileNotFoundException {
+	public Data(String dbLocation) throws FileNotFoundException, IOException {
 		database = new DatabaseFileAccess(dbLocation);
 	}
 	

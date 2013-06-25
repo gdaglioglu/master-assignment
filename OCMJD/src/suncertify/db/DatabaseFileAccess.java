@@ -10,11 +10,12 @@ public class DatabaseFileAccess {
 	private RandomAccessFile database = null;
 	private String dbLocation = null;
 	
-	public DatabaseFileAccess(String providedDbLocation) throws FileNotFoundException {
+	public DatabaseFileAccess(String providedDbLocation) throws FileNotFoundException, IOException {
 		log.entering("DatabaseFileAccess", "DatabaseFileAccess", providedDbLocation);
 		
 		if (database == null) {
 			database = new RandomAccessFile(providedDbLocation, "rw");
+			readDatabase();
 			dbLocation = providedDbLocation;
 			log.fine("database opened and file location table populated");
 		}
@@ -26,11 +27,15 @@ public class DatabaseFileAccess {
 		log.exiting("DatabaseFileAccess", "DatabaseFileAccess");
 	}
 
-	public void printDatabase() throws IOException {
+	
+	public void readDatabase() {
+		// TODO Auto-generated method stub
+	}
+	
+	public void printDatabase() throws FileNotFoundException, IOException {
 		log.entering("DatabaseFileAccess", "printDatabase");
 		try {
 				int i = 0, j = 0;
-
 				
 				long magicCookie = database.readInt();
 				short fieldsInRecord = database.readShort();
@@ -49,7 +54,6 @@ public class DatabaseFileAccess {
 				
 
 				long location = database.getFilePointer();
-				long current = 0;
 				i = 0;	
 				while (database.getFilePointer() < database.length()) {
 					byte[] temp = new byte[1];
@@ -76,16 +80,26 @@ public class DatabaseFileAccess {
 					i++;
 				}
 				
-				System.out.println(magicCookie);
-				System.out.println(fieldsInRecord);
+				System.out.println("Magic Cookie: " + magicCookie);
+				System.out.println("Fields per Record: " + fieldsInRecord);
+				
 				for (i = 0; i < fieldsInRecord; i++) {
-					System.out.println(fieldNamesLengths[i]);
-					System.out.println(fieldNames[i]);
-					System.out.println(fieldLengths[i]);
+					System.out.println("Field " + (i + 1) + ":");
+					System.out.println("    Length of Field Name: " + fieldNamesLengths[i]);
+					System.out.println("    Field Name: " + fieldNames[i]);
+					System.out.println("    Length of Field: " + fieldLengths[i]);
 				}
+				
+				System.out.print("deleted");
+				for (i = 0; i < fieldsInRecord; i++) {
+					System.out.format("%-" + (fieldLengths[i] > fieldNamesLengths[i] ? fieldLengths[i] : fieldNamesLengths[i]) + "s", fieldNames[i]);
+				}
+				
 				for (i = 0; i < records.length; i++) {
-					for (j = 0; j < records[i].length; j++) {
-						System.out.println(records[i][j]);
+					System.out.println();
+					System.out.format("%-7s", records[i][0]);
+					for (j = 1; j < records[i].length; j++) {
+						System.out.format("%-" + (fieldLengths[j-1] > fieldNamesLengths[j-1] ? fieldLengths[j-1] : fieldNamesLengths[j-1]) + "s", records[i][j]);
 					}
 				}
 				
