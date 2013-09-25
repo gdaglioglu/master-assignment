@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class LockObjectNotMemberVariables{
+public class LockObjectNonMemberVariables{
     private Vector myVector = new Vector();
 
     public static void main(String args[]){
