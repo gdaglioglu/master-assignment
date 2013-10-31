@@ -1,8 +1,6 @@
 package suncertify.db;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class DatabaseFileAccess {
@@ -12,7 +10,7 @@ public class DatabaseFileAccess {
 	private RandomAccessFile database = null;
 	private String dbLocation = null;
 	
-	private Database db;
+	private Database db = new Database();
 	
 	public DatabaseFileAccess(String providedDbLocation) throws FileNotFoundException, IOException {
 		log.entering("DatabaseFileAccess", "DatabaseFileAccess", providedDbLocation);
@@ -50,20 +48,18 @@ public class DatabaseFileAccess {
 			}
 							
 			while (database.getFilePointer() < database.length()) {
-				List<Object> recordContents = new ArrayList<Object>();
+				String[] recordContents = new String[db.getFieldsPerRecord()];
 									
-				byte[] temp = new byte[1];
-				temp[0] = database.readByte();
+				byte[] recordFlag = new byte[1];
+				recordFlag[0] = database.readByte();
 				
-				recordContents.add(new String(temp,0,temp.length, "US-ASCII"));
-				
-				for (int index = 1; index < db.getFieldsPerRecord(); index++) {
-					temp = new byte[db.getFieldInfoAtIndex(index).getSizeContents()];
+				for (int index = 0; index < db.getFieldsPerRecord(); index++) {
+					byte[] temp = new byte[db.getFieldInfoAtIndex(index).getSizeContents()];
 					database.read(temp, 0, db.getFieldInfoAtIndex(index).getSizeContents());
-					recordContents.add(new String(temp,0,temp.length, "US-ASCII"));
+					recordContents[index] = new String(temp,0,temp.length, "US-ASCII");
 				}
 				
-				db.addRecord(recordContents);
+				db.addRecord(recordFlag, recordContents);
 			}
 			
 		} finally {
@@ -71,36 +67,36 @@ public class DatabaseFileAccess {
 	}
 	
 	public void printDatabase() throws FileNotFoundException, IOException {
-		readDatabase();
 		
-		int index;
+		int i;
 		
 		System.out.println("Magic Cookie: " + db.getMagicCookie());
 		System.out.println("Fields per Record: " + db.getFieldsPerRecord());
 		
-		for (index = 0; index <= db.getFieldsPerRecord(); index++) {
-			System.out.println("Field " + (index + 1) + ":");
-			System.out.println("    Length of Field Name: " + db.getFieldInfoAtIndex(index).getSizeName());
-			System.out.println("    Field Name: " + db.getFieldInfoAtIndex(index).getName());
-			System.out.println("    Length of Field: " + db.getFieldInfoAtIndex(index).getSizeContents());
+		for (i = 0; i < db.getFieldsPerRecord(); i++) {
+			System.out.println("Field " + (i + 1) + ":");
+			System.out.println("    Length of Field Name: " + db.getFieldInfoAtIndex(i).getSizeName());
+			System.out.println("    Field Name: " + db.getFieldInfoAtIndex(i).getName());
+			System.out.println("    Length of Field: " + db.getFieldInfoAtIndex(i).getSizeContents());
 		}
 		
-		for (index = 0; index <= db.getFieldsPerRecord(); index++) {
-			System.out.format("%-" + (db.getFieldInfoAtIndex(index).getSizeContents() > db.getFieldInfoAtIndex(index).getSizeName() ? db.getFieldInfoAtIndex(index).getSizeContents() : db.getFieldInfoAtIndex(index).getSizeName()) + "s", db.getFieldInfoAtIndex(index).getName());
+		
+		System.out.print("deleted");
+		for (i = 0; i < db.getFieldsPerRecord(); i++) {
+			System.out.format("%-" + (db.getFieldInfoAtIndex(i).getSizeContents() > db.getFieldInfoAtIndex(i).getSizeName() ? db.getFieldInfoAtIndex(i).getSizeContents() : db.getFieldInfoAtIndex(i).getSizeName()) + "s", db.getFieldInfoAtIndex(i).getName());
 		}
 		
-		for (index = 0; index < db.getNumberOfRecords(); index++) {
+		for (i = 0; i < db.getNumberOfRecords(); i++) {
 			System.out.println();
-			System.out.format("%-7s", db.getRecordAtIndex(index).getValue(db.getFieldInfoAtIndex(0).getName()));
-			for (int j = 1; j < db.getFieldsPerRecord(); j++) {
-				System.out.format("%-" + (db.getFieldInfoAtIndex(j-1).getSizeContents() > db.getFieldInfoAtIndex(j-1).getSizeName() ? db.getFieldInfoAtIndex(j-1).getSizeContents() : db.getFieldInfoAtIndex(j-1).getSizeName()) + "s", db.getRecordAtIndex(index).getValue(db.getFieldInfoAtIndex(j).getName()));
+			System.out.format("%-7s", db.isRecordDeleted(i));
+			for (int j = 0; j < db.getFieldsPerRecord(); j++) {
+				System.out.format("%-" + (db.getFieldInfoAtIndex(j).getSizeContents() > db.getFieldInfoAtIndex(j).getSizeName() ? db.getFieldInfoAtIndex(j).getSizeContents() : db.getFieldInfoAtIndex(j).getSizeName()) + "s", db.getRecordAtIndex(i)[j]);
 			}
 		}
 	}
 	
 	public String[] readRecord(long recNo) {
-		// TODO Auto-generated method stub
-		return null;
+		return db.getRecordAtIndex(recNo);
 	}
 
 	public void updateRecord(long recNo, String[] data, long lockCookie) {

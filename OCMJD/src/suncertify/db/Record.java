@@ -1,31 +1,35 @@
 package suncertify.db;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class Record {
 	
-	private Map<String, Object> fields;
+	private boolean deleted;
+	private String[] fields;
 	
 	public Record() {
-		fields = new HashMap<String, Object>();
 	}
 	
-	public Record(List<String> names, List<Object> contents){
-		this();
+	public Record(byte[] flag, String[] content){
 		
-		int index = 0;
-		
-		if (names.size() == contents.size()) {
-			while (index < names.size()) {
-				fields.put(names.get(index),contents.get(index));
-			}
+		if (flag[0] == 0x00) {
+			deleted = false;
 		}
-		//else throw exception
+		else if (flag[0] == 0xFF) {
+			deleted = true;
+		}
+		//else throw corrupt data
+		
+		fields = content;
 	}
 	
-	public Object getValue(String key) {
-		return fields.get(key);
+	public String getField(int number) {
+		return fields[number];
+	}
+	
+	public String[] getAllFields() {
+		return fields;
+	}
+	
+	public boolean isDeleted(){
+		return deleted;
 	}
 }

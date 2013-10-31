@@ -11,7 +11,6 @@ public class Database {
 	private List<Record> records = new ArrayList<Record>();
 	
 	public Database() {
-		fieldsInfo.add(new FieldInfo(0,"deleted",1));
 	}
 	
 	public void setMagicCookie(long number) {
@@ -42,17 +41,16 @@ public class Database {
 		records.add(record);
 	}
 	
-	public void addRecord (List<Object> content) {
-		List<String> fieldNames = new ArrayList<String>();
-		for (FieldInfo fieldInfo : fieldsInfo) {
-			fieldNames.add(fieldInfo.getName());
-		}
-		
-		records.add(new Record(fieldNames, content));
+	public void addRecord (byte[] flag, String[] content) {
+		this.addRecord(new Record(flag, content));
 	}
 	
-	public Record getRecordAtIndex (int index) {
-		return records.get(index);
+	public String[] getRecordAtIndex (long index) {
+		return records.get((int)index).getAllFields();
+	}
+	
+	public boolean isRecordDeleted (long index) {
+		return records.get((int)index).isDeleted();
 	}
 	
 	public int getNumberOfRecords() {
