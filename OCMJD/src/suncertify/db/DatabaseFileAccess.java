@@ -1,6 +1,8 @@
 package suncertify.db;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class DatabaseFileAccess {
@@ -9,6 +11,8 @@ public class DatabaseFileAccess {
 	
 	private RandomAccessFile database = null;
 	private String dbLocation = null;
+	
+	private Database db;
 	
 	public DatabaseFileAccess(String providedDbLocation) throws FileNotFoundException, IOException {
 		log.entering("DatabaseFileAccess", "DatabaseFileAccess", providedDbLocation);
@@ -28,83 +32,69 @@ public class DatabaseFileAccess {
 	}
 
 	
-	public void readDatabase() {
-		// TODO Auto-generated method stub
+	public void readDatabase() throws FileNotFoundException, IOException {
+		log.entering("DatabaseFileAccess", "printDatabase");
+		try {
+			db.setMagicCookie(database.readInt());
+			db.setFieldsPerRecord(database.readShort());
+	
+			for (int i = 0; i < db.getFieldsPerRecord(); i++) {
+				int fieldNameLengthTemp = database.readByte();
+				byte[] fieldNameTemp = new byte[fieldNameLengthTemp];
+				database.read(fieldNameTemp, 0, fieldNameLengthTemp);
+				int fieldLength = database.readByte();
+				
+				FieldInfo fieldInfoTemp = new FieldInfo(fieldNameLengthTemp, fieldNameTemp, fieldLength);
+				
+				db.addFieldInfo(fieldInfoTemp);
+			}
+							
+			while (database.getFilePointer() < database.length()) {
+				List<Object> recordContents = new ArrayList<Object>();
+									
+				byte[] temp = new byte[1];
+				temp[0] = database.readByte();
+				
+				recordContents.add(new String(temp,0,temp.length, "US-ASCII"));
+				
+				for (int index = 1; index < db.getFieldsPerRecord(); index++) {
+					temp = new byte[db.getFieldInfoAtIndex(index).getSizeContents()];
+					database.read(temp, 0, db.getFieldInfoAtIndex(index).getSizeContents());
+					recordContents.add(new String(temp,0,temp.length, "US-ASCII"));
+				}
+				
+				db.addRecord(recordContents);
+			}
+			
+		} finally {
+		}
 	}
 	
 	public void printDatabase() throws FileNotFoundException, IOException {
-		log.entering("DatabaseFileAccess", "printDatabase");
-		try {
-				int i = 0, j = 0;
-				
-				long magicCookie = database.readInt();
-				short fieldsInRecord = database.readShort();
-
-				int[] fieldNamesLengths = new int[fieldsInRecord];
-				String[] fieldNames = new String[fieldsInRecord];
-				int[] fieldLengths = new int[fieldsInRecord];
-
-				for (i = 0; i < fieldsInRecord; i++) {
-					fieldNamesLengths[i] = database.readByte();
-					byte[] temp = new byte[fieldNamesLengths[i]];
-					database.read(temp, 0, fieldNamesLengths[i]);
-					fieldNames[i] = new String(temp,0,temp.length, "US-ASCII");
-					fieldLengths[i] = database.readByte(); 
-				}
-				
-
-				long location = database.getFilePointer();
-				i = 0;	
-				while (database.getFilePointer() < database.length()) {
-					byte[] temp = new byte[1];
-					temp[0] = database.readByte();
-					for (j = 0; j < fieldsInRecord; j++) {
-						temp = new byte[fieldLengths[j]];
-						database.read(temp, 0, fieldLengths[j]);
-					}
-					i++;
-				}
-				
-				database.seek(location);
-				String[][] records = new String[i][fieldsInRecord + 1];
-				i = 0;
-				while (database.getFilePointer() < database.length()) {
-					byte[] temp = new byte[1];
-					temp[0] = database.readByte();
-					records[i][0] = new String(temp,0,temp.length, "US-ASCII");
-					for (j = 0; j < fieldsInRecord; j++) {
-						temp = new byte[fieldLengths[j]];
-						database.read(temp, 0, fieldLengths[j]);
-						records[i][j+1] = new String(temp,0,temp.length, "US-ASCII");
-					}
-					i++;
-				}
-				
-				System.out.println("Magic Cookie: " + magicCookie);
-				System.out.println("Fields per Record: " + fieldsInRecord);
-				
-				for (i = 0; i < fieldsInRecord; i++) {
-					System.out.println("Field " + (i + 1) + ":");
-					System.out.println("    Length of Field Name: " + fieldNamesLengths[i]);
-					System.out.println("    Field Name: " + fieldNames[i]);
-					System.out.println("    Length of Field: " + fieldLengths[i]);
-				}
-				
-				System.out.print("deleted");
-				for (i = 0; i < fieldsInRecord; i++) {
-					System.out.format("%-" + (fieldLengths[i] > fieldNamesLengths[i] ? fieldLengths[i] : fieldNamesLengths[i]) + "s", fieldNames[i]);
-				}
-				
-				for (i = 0; i < records.length; i++) {
-					System.out.println();
-					System.out.format("%-7s", records[i][0]);
-					for (j = 1; j < records[i].length; j++) {
-						System.out.format("%-" + (fieldLengths[j-1] > fieldNamesLengths[j-1] ? fieldLengths[j-1] : fieldNamesLengths[j-1]) + "s", records[i][j]);
-					}
-				}
-				
-		} finally {
-			
+		readDatabase();
+		
+		int index;
+		
+		System.out.println("Magic Cookie: " + db.getMagicCookie());
+		System.out.println("Fields per Record: " + db.getFieldsPerRecord());
+		
+		for (index = 0; index <= db.getFieldsPerRecord(); index++) {
+			System.out.println("Field " + (index + 1) + ":");
+			System.out.println("    Length of Field Name: " + db.getFieldInfoAtIndex(index).getSizeName());
+			System.out.println("    Field Name: " + db.getFieldInfoAtIndex(index).getName());
+			System.out.println("    Length of Field: " + db.getFieldInfoAtIndex(index).getSizeContents());
+		}
+		
+		for (index = 0; index <= db.getFieldsPerRecord(); index++) {
+			System.out.format("%-" + (db.getFieldInfoAtIndex(index).getSizeContents() > db.getFieldInfoAtIndex(index).getSizeName() ? db.getFieldInfoAtIndex(index).getSizeContents() : db.getFieldInfoAtIndex(index).getSizeName()) + "s", db.getFieldInfoAtIndex(index).getName());
+		}
+		
+		for (index = 0; index < db.getNumberOfRecords(); index++) {
+			System.out.println();
+			System.out.format("%-7s", db.getRecordAtIndex(index).getValue(db.getFieldInfoAtIndex(0).getName()));
+			for (int j = 1; j < db.getFieldsPerRecord(); j++) {
+				System.out.format("%-" + (db.getFieldInfoAtIndex(j-1).getSizeContents() > db.getFieldInfoAtIndex(j-1).getSizeName() ? db.getFieldInfoAtIndex(j-1).getSizeContents() : db.getFieldInfoAtIndex(j-1).getSizeName()) + "s", db.getRecordAtIndex(index).getValue(db.getFieldInfoAtIndex(j).getName()));
+			}
 		}
 	}
 	
