@@ -31,7 +31,7 @@ public class DatabaseFileAccess {
 
 	
 	public void readDatabase() throws FileNotFoundException, IOException {
-		log.entering("DatabaseFileAccess", "printDatabase");
+		log.entering("DatabaseFileAccess", "readDatabase");
 		try {
 			db.setMagicCookie(database.readInt());
 			db.setFieldsPerRecord(database.readShort());
@@ -50,12 +50,11 @@ public class DatabaseFileAccess {
 			while (database.getFilePointer() < database.length()) {
 				String[] recordContents = new String[db.getFieldsPerRecord()];
 									
-				byte[] recordFlag = new byte[1];
-				recordFlag[0] = database.readByte();
+				byte recordFlag = database.readByte();
 				
 				for (int index = 0; index < db.getFieldsPerRecord(); index++) {
-					byte[] temp = new byte[db.getFieldInfoAtIndex(index).getSizeContents()];
-					database.read(temp, 0, db.getFieldInfoAtIndex(index).getSizeContents());
+					byte[] temp = new byte[db.getFieldInfoAtIndex(index).getBytesInField()];
+					database.read(temp, 0, db.getFieldInfoAtIndex(index).getBytesInField());
 					recordContents[index] = new String(temp,0,temp.length, "US-ASCII");
 				}
 				
@@ -67,7 +66,7 @@ public class DatabaseFileAccess {
 	}
 	
 	public void printDatabase() throws FileNotFoundException, IOException {
-		
+		log.entering("DatabaseFileAccess", "printDatabase");
 		int i;
 		
 		System.out.println("Magic Cookie: " + db.getMagicCookie());
@@ -75,22 +74,23 @@ public class DatabaseFileAccess {
 		
 		for (i = 0; i < db.getFieldsPerRecord(); i++) {
 			System.out.println("Field " + (i + 1) + ":");
-			System.out.println("    Length of Field Name: " + db.getFieldInfoAtIndex(i).getSizeName());
+			System.out.println("    Length of Field Name: " + db.getFieldInfoAtIndex(i).getBytesInName());
 			System.out.println("    Field Name: " + db.getFieldInfoAtIndex(i).getName());
-			System.out.println("    Length of Field: " + db.getFieldInfoAtIndex(i).getSizeContents());
+			System.out.println("    Length of Field: " + db.getFieldInfoAtIndex(i).getBytesInField());
 		}
 		
-		
+		System.out.print("record");
 		System.out.print("deleted");
 		for (i = 0; i < db.getFieldsPerRecord(); i++) {
-			System.out.format("%-" + (db.getFieldInfoAtIndex(i).getSizeContents() > db.getFieldInfoAtIndex(i).getSizeName() ? db.getFieldInfoAtIndex(i).getSizeContents() : db.getFieldInfoAtIndex(i).getSizeName()) + "s", db.getFieldInfoAtIndex(i).getName());
+			System.out.format("%-" + (db.getFieldInfoAtIndex(i).getBytesInField() > db.getFieldInfoAtIndex(i).getBytesInName() ? db.getFieldInfoAtIndex(i).getBytesInField() : db.getFieldInfoAtIndex(i).getBytesInName()) + "s", db.getFieldInfoAtIndex(i).getName());
 		}
 		
 		for (i = 0; i < db.getNumberOfRecords(); i++) {
 			System.out.println();
+			System.out.format("%-6s", db.getRecordIDAtIndex(i));
 			System.out.format("%-7s", db.isRecordDeleted(i));
 			for (int j = 0; j < db.getFieldsPerRecord(); j++) {
-				System.out.format("%-" + (db.getFieldInfoAtIndex(j).getSizeContents() > db.getFieldInfoAtIndex(j).getSizeName() ? db.getFieldInfoAtIndex(j).getSizeContents() : db.getFieldInfoAtIndex(j).getSizeName()) + "s", db.getRecordAtIndex(i)[j]);
+				System.out.format("%-" + (db.getFieldInfoAtIndex(j).getBytesInField() > db.getFieldInfoAtIndex(j).getBytesInName() ? db.getFieldInfoAtIndex(j).getBytesInField() : db.getFieldInfoAtIndex(j).getBytesInName()) + "s", db.getRecordAtIndex(i)[j]);
 			}
 		}
 	}

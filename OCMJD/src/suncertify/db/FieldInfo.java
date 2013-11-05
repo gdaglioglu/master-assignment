@@ -4,29 +4,29 @@ import java.io.UnsupportedEncodingException;
 
 public class FieldInfo {
 	
-	private int sizeName;
+	private int bytesInName;
 	private String name;
-	private int sizeContents;
+	private int bytesInField;
 	
 	public FieldInfo() {
 	}
 	
 	public FieldInfo(int sizeName, String name, int sizeContents) {
-		this.sizeName = sizeName;
+		this.bytesInName = sizeName;
 		this.name = name;
-		this.sizeContents = sizeContents;
+		this.bytesInField = sizeContents;
 	}
 	
 	public FieldInfo(int sizeName, byte[] name, int sizeContents) throws UnsupportedEncodingException {
 		this(sizeName, new String(name, "US-ASCII"), sizeContents);
 	}
 	
-	public int getSizeName(){
-		return sizeName;
+	public int getBytesInName(){
+		return bytesInName;
 	}
 	
-	public void setSizeName(int sizeName){
-		this.sizeName = sizeName;
+	public void setBytesInName(int sizeName){
+		this.bytesInName = sizeName;
 	}
 	
 	public String getName(){
@@ -37,11 +37,11 @@ public class FieldInfo {
 		this.name = name;
 	}
 	
-	public int getSizeContents(){
-		return sizeContents;
+	public int getBytesInField(){
+		return bytesInField;
 	}
 	
-	public void setSizeContents(int sizeContents){
-		this.sizeContents = sizeContents;
+	public void setBytesInField(int sizeContents){
+		this.bytesInField = sizeContents;
 	}
 }
