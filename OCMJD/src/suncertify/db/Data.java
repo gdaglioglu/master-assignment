@@ -6,19 +6,20 @@ import java.io.IOException;
 public class Data implements DBAccess {
 
 	private static DatabaseFileAccess database = null;
-	
+
 	public Data() throws FileNotFoundException, IOException {
 		this(System.getProperty("user.dir"));
 	}
-	
+
 	public Data(String dbLocation) throws FileNotFoundException, IOException {
 		database = new DatabaseFileAccess(dbLocation);
 	}
-	
+
 	public void printDatabase() throws IOException {
+		database.printDatabaseSchema();
 		database.printDatabase();
 	}
-	
+
 	@Override
 	public String[] readRecord(long recNo) throws RecordNotFoundException {
 		return database.readRecord(recNo);
@@ -27,6 +28,7 @@ public class Data implements DBAccess {
 	@Override
 	public void updateRecord(long recNo, String[] data, long lockCookie)
 			throws RecordNotFoundException, SecurityException {
+
 		database.updateRecord(recNo, data, lockCookie);
 	}
 
@@ -38,7 +40,11 @@ public class Data implements DBAccess {
 
 	@Override
 	public long[] findByCriteria(String[] criteria) {
-		return database.findByCriteria(criteria);
+		if (criteria == null) {
+			return database.getAllRecordIDs();
+		} else {
+			return database.findByCriteria(criteria);
+		}
 	}
 
 	@Override
@@ -48,7 +54,7 @@ public class Data implements DBAccess {
 
 	@Override
 	public long lockRecord(long recNo) throws RecordNotFoundException {
-		return 0;
+		return database.lockRecord(recNo);
 	}
 
 	@Override
