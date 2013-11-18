@@ -6,6 +6,7 @@ public class MainObserver {
 
 	public static void main(String[] args) {
 
+		@SuppressWarnings("unused")
 		RunnerObserver mainRunnerObserver = new RunnerObserver();
 
 	} // mainObserver()

@@ -15,14 +15,14 @@ public class Controller {
 	private View view;
 	private ActionListener actionListener;
 
-	public Controller(Model model, View view) {
-		this.model = model;
-		this.view = view;
+	public Controller() {
+		model = new Model();
+		view = new View(model);
 	}
 
 	public void control() {
 		try {
-			database = new Data("C:\\Users\\" + "eeoimoo"
+			database = new Data("C:\\Users\\" + "moonpie"
 					+ "\\git\\OCMJD\\Instructions\\db-1x3.db");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -37,7 +37,7 @@ public class Controller {
 				linkBtnAndTable();
 			}
 		};
-		view.getButton().addActionListener(actionListener);
+		view.getSearchButton().addActionListener(actionListener);
 	}
 
 	private void linkBtnAndTable() {
@@ -45,7 +45,6 @@ public class Controller {
 	}
 
 	public Model getRecords() {
-		Model test = new Model();
 		long[] recordIdArray = null;
 
 		recordIdArray = database.findByCriteria(null);
@@ -53,12 +52,12 @@ public class Controller {
 		for (long recordID : recordIdArray) {
 
 			try {
-				test.addRecord(database.readRecord(recordID));
+				model.addRecord(database.readRecord(recordID));
 			} catch (RecordNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		return test;
+		return model;
 	}
 }
