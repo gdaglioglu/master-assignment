@@ -19,11 +19,6 @@ public class View extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setLayout(new BorderLayout());
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (int) ((d.getWidth() - getWidth()) / 2);
-		int y = (int) ((d.getHeight() - getHeight()) / 2);
-		this.setLocation(x, y);
-		setVisible(true);
 
 		searchField = new JTextField(20);
 		searchButton = new JButton("Search");
@@ -44,13 +39,13 @@ public class View extends JFrame {
 		tableScrollPanel.setSize(500, 250);
 
 		reserveButton = new JButton("Reserve Room");
-		
+
 		JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		actionPanel.add(reserveButton);
-		
+
 		JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.add(actionPanel, BorderLayout.SOUTH);
-		
+		bottomPanel.add(actionPanel, BorderLayout.SOUTH);
+
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(topPanel, BorderLayout.NORTH);
 		panel.add(tableScrollPanel, BorderLayout.CENTER);
@@ -59,6 +54,12 @@ public class View extends JFrame {
 
 		pack();
 		this.setSize(650, 300);
+
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((d.getWidth() - getWidth()) / 2);
+		int y = (int) ((d.getHeight() - getHeight()) / 2);
+		this.setLocation(x, y);
+		setVisible(true);
 
 	}
 

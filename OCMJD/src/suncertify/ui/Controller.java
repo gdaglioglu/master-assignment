@@ -16,13 +16,8 @@ public class Controller {
 	private ActionListener actionListener;
 
 	public Controller() {
-		model = new Model();
-		view = new View(model);
-	}
-
-	public void control() {
 		try {
-			database = new Data("C:\\Users\\" + "moonpie"
+			database = new Data("C:\\Users\\" + "eeoimoo"
 					+ "\\git\\OCMJD\\Instructions\\db-1x3.db");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -32,6 +27,11 @@ public class Controller {
 			e.printStackTrace();
 		}
 
+		model = getRecords();
+		view = new View(model);
+	}
+
+	public void control() {
 		actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				linkBtnAndTable();
@@ -45,6 +45,7 @@ public class Controller {
 	}
 
 	public Model getRecords() {
+		model = new Model();
 		long[] recordIdArray = null;
 
 		recordIdArray = database.findByCriteria(null);
