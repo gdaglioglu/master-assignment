@@ -15,9 +15,8 @@ public class Data implements DBAccess {
 		database = new DatabaseFileAccess(dbLocation);
 	}
 
-	public void printDatabase() throws IOException {
-		database.printDatabaseSchema();
-		database.printDatabase();
+	public static Database getDatabase() {
+		return database.getDatabase();
 	}
 
 	@Override
@@ -41,7 +40,7 @@ public class Data implements DBAccess {
 	@Override
 	public long[] findByCriteria(String[] criteria) {
 		if (criteria == null) {
-			return database.getAllRecordIDs();
+			return database.getValidRecNos();
 		} else {
 			return database.findByCriteria(criteria);
 		}
@@ -60,5 +59,4 @@ public class Data implements DBAccess {
 	@Override
 	public void unlock(long recNo, long cookie) throws SecurityException {
 	}
-
 }

@@ -12,7 +12,7 @@ public class View extends JFrame {
 	private JTable table;
 	private JTextField searchField;
 	private JButton searchButton;
-	private JButton reserveButton;
+	private JButton bookingButton;
 
 	public View(AbstractTableModel tableData) {
 		super("URLyBird 1.0");
@@ -38,10 +38,10 @@ public class View extends JFrame {
 		JScrollPane tableScrollPanel = new JScrollPane(table);
 		tableScrollPanel.setSize(500, 250);
 
-		reserveButton = new JButton("Reserve Room");
+		bookingButton = new JButton("Book Room");
 
 		JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		actionPanel.add(reserveButton);
+		actionPanel.add(bookingButton);
 
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 		bottomPanel.add(actionPanel, BorderLayout.SOUTH);
@@ -65,6 +65,48 @@ public class View extends JFrame {
 
 	public JButton getSearchButton() {
 		return searchButton;
+	}
+
+	public String getSearchField() {
+		return searchField.getText();
+	}
+
+	public JButton getBookingButton() {
+		return bookingButton;
+	}
+
+	public long getSelectedRowRecNo() {
+		if (table.getSelectedRowCount() == 0) {
+			JOptionPane.showMessageDialog(this,
+					"You have not selected a room.", "Warning",
+					JOptionPane.WARNING_MESSAGE);
+			return -1;
+		} else {
+			String selectedOwner = (String) table.getValueAt(
+					table.getSelectedRow(), 7);
+			if (!selectedOwner.equals("        ")) {
+				JOptionPane.showMessageDialog(this,
+						"This room has already been booked.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return -1;
+			} else {
+				String selectedRecNo = (String) table.getValueAt(
+						table.getSelectedRow(), 0);
+				return Long.parseLong(selectedRecNo);
+			}
+		}
+	}
+
+	public String getCustomerID() {
+		String customerID;
+
+		do {
+			customerID = JOptionPane.showInputDialog(this,
+					"Please enter the 8 digit customer ID:",
+					"Enter Customer ID", JOptionPane.QUESTION_MESSAGE);
+		} while ((customerID != null) && !customerID.matches("\\d{8}"));
+
+		return customerID;
 	}
 
 	public void updateTable(AbstractTableModel tableData) {

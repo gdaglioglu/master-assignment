@@ -1,6 +1,8 @@
 package suncertify.db;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class DatabaseFileAccess {
@@ -35,10 +37,10 @@ public class DatabaseFileAccess {
 				e.printStackTrace();
 			}
 
-			startOfDataOffset = readSchemaFromFile();
+			startOfDataOffset = readDatabaseSchemaFromFile();
 			log.fine("Schema read");
 
-			readRecordsFromFile();
+			readRecordsDataFromFile();
 			log.fine("Database loaded into memory");
 		} else if (dbLocation != providedDbLocation) {
 			log.warning("Only one database location can be specified. "
@@ -49,7 +51,11 @@ public class DatabaseFileAccess {
 		log.exiting("DatabaseFileAccess", "DatabaseFileAccess");
 	}
 
-	public long readSchemaFromFile() {
+	public Database getDatabase() {
+		return db;
+	}
+
+	public long readDatabaseSchemaFromFile() {
 		log.entering("DatabaseFileAccess", "readDatabaseSchema");
 		long offset = -1;
 
@@ -63,9 +69,9 @@ public class DatabaseFileAccess {
 
 		try {
 			db.setMagicCookie(database.readInt());
-			db.setFieldsPerRecord(database.readShort());
+			db.setFieldsPerRoomRecord(database.readShort());
 
-			for (int i = 0; i < db.getFieldsPerRecord(); i++) {
+			for (int i = 0; i < db.getFieldsPerRoomRecord(); i++) {
 				int fieldNameLengthTemp;
 				fieldNameLengthTemp = database.readByte();
 
@@ -76,9 +82,9 @@ public class DatabaseFileAccess {
 				fieldLength = database.readByte();
 
 				try {
-					final FieldInfo fieldInfoTemp = new FieldInfo(
+					final RecordFieldInfo fieldInfoTemp = new RecordFieldInfo(
 							fieldNameLengthTemp, fieldNameTemp, fieldLength);
-					db.addFieldInfo(fieldInfoTemp);
+					db.addRecordFieldInfo(fieldInfoTemp);
 				} catch (final UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -100,7 +106,7 @@ public class DatabaseFileAccess {
 		return offset;
 	}
 
-	public void readRecordsFromFile() {
+	public void readRecordsDataFromFile() {
 		log.entering("DatabaseFileAccess", "readDatabase");
 
 		try {
@@ -120,15 +126,15 @@ public class DatabaseFileAccess {
 		try {
 			while (database.getFilePointer() < database.length()) {
 				final String[] recordContents = new String[db
-						.getFieldsPerRecord()];
+						.getFieldsPerRoomRecord()];
 
 				byte recordFlag;
 				recordFlag = database.readByte();
 
-				for (int index = 0; index < db.getFieldsPerRecord(); index++) {
-					final byte[] temp = new byte[db.getFieldInfoAtIndex(index)
-							.getBytesInField()];
-					database.read(temp, 0, db.getFieldInfoAtIndex(index)
+				for (int index = 0; index < db.getFieldsPerRoomRecord(); index++) {
+					final byte[] temp = new byte[db.getRecordFieldInfoAtIndex(
+							index).getBytesInField()];
+					database.read(temp, 0, db.getRecordFieldInfoAtIndex(index)
 							.getBytesInField());
 
 					try {
@@ -140,7 +146,7 @@ public class DatabaseFileAccess {
 					}
 				}
 
-				db.addRecord(recordFlag, recordContents);
+				db.addRoomRecord(recordFlag, recordContents);
 			}
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
@@ -158,63 +164,8 @@ public class DatabaseFileAccess {
 		log.exiting("DatabaseFileAccess", "readDatabaseSchema");
 	}
 
-	public void printDatabaseSchema() {
-		log.entering("DatabaseFileAccess", "printDatabaseSchema");
-
-		System.out.println("Magic Cookie: " + db.getMagicCookie());
-		System.out.println("Fields per Record: " + db.getFieldsPerRecord());
-
-		for (int i = 0; i < db.getFieldsPerRecord(); i++) {
-			System.out.println("Field " + (i + 1) + ":");
-			System.out.println("    Length of Field Name: "
-					+ db.getFieldInfoAtIndex(i).getBytesInName());
-			System.out.println("    Field Name: "
-					+ db.getFieldInfoAtIndex(i).getName());
-			System.out.println("    Length of Field: "
-					+ db.getFieldInfoAtIndex(i).getBytesInField());
-		}
-
-		log.exiting("DatabaseFileAccess", "printDatabase");
-	}
-
-	public void printDatabase() {
-		log.entering("DatabaseFileAccess", "printDatabase");
-		int i;
-
-		System.out.print("record");
-		System.out.print("deleted");
-		for (i = 0; i < db.getFieldsPerRecord(); i++) {
-			System.out.format("%-"
-					+ (db.getFieldInfoAtIndex(i).getBytesInField() > db
-							.getFieldInfoAtIndex(i).getBytesInName() ? db
-							.getFieldInfoAtIndex(i).getBytesInField() : db
-							.getFieldInfoAtIndex(i).getBytesInName()) + "s", db
-					.getFieldInfoAtIndex(i).getName());
-		}
-
-		for (i = 0; i < db.getNumberOfRecords(); i++) {
-			System.out.println();
-			System.out.format("%-6s", db.getRecordIDAtIndex(i));
-			System.out.format("%-7s", db.isRecordDeleted(i));
-			for (int j = 0; j < db.getFieldsPerRecord(); j++) {
-				System.out
-						.format("%-"
-								+ (db.getFieldInfoAtIndex(j).getBytesInField() > db
-										.getFieldInfoAtIndex(j)
-										.getBytesInName() ? db
-										.getFieldInfoAtIndex(j)
-										.getBytesInField() : db
-										.getFieldInfoAtIndex(j)
-										.getBytesInName()) + "s", db
-								.getRecordAtIndex(i)[j]);
-			}
-		}
-
-		log.exiting("DatabaseFileAccess", "printDatabase");
-	}
-
 	public String[] readRecord(final long recNo) {
-		return db.getRecordAtIndex(recNo);
+		return db.getRoomRecordData(recNo);
 	}
 
 	public void updateRecord(final long recNo, final String[] data,
@@ -226,9 +177,26 @@ public class DatabaseFileAccess {
 		// TODO Auto-generated method stub
 	}
 
+	public long[] getValidRecNos() {
+		return db.getValidRecNos();
+	}
+
 	public long[] findByCriteria(final String[] criteria) {
-		// TODO Auto-generated method stub
-		return null;
+		long[] validRecNos = getValidRecNos();
+		List<Long> tempArray = new ArrayList<Long>();
+
+		for (long recNo : validRecNos) {
+			if (db.isRecordMatch(recNo, criteria)) {
+				tempArray.add(recNo);
+			}
+		}
+
+		long[] matchedRecNos = new long[tempArray.size()];
+
+		for (int i = 0; i < tempArray.size(); i++) {
+			matchedRecNos[i] = tempArray.get(i);
+		}
+		return matchedRecNos;
 	}
 
 	public long createRecord(final String[] data) {
@@ -238,13 +206,13 @@ public class DatabaseFileAccess {
 
 	public long lockRecord(long recNo) throws RecordNotFoundException {
 		// TODO Auto-generated method stub
+		// Implement locking mechanism
 		return recNo;
 	}
 
 	public void unlock(long recNo, long cookie) throws SecurityException {
+		// TODO Auto-generated method stub
+
 	}
 
-	public long[] getAllRecordIDs() {
-		return db.getValidRecordIDs();
-	}
 }

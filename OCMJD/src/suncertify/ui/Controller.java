@@ -13,7 +13,8 @@ public class Controller {
 
 	private Model model;
 	private View view;
-	private ActionListener actionListener;
+	private ActionListener searchListener, bookingListener;
+	private String lastSearch;
 
 	public Controller() {
 		try {
@@ -27,33 +28,79 @@ public class Controller {
 			e.printStackTrace();
 		}
 
-		model = getRecords();
+		model = getRecords("");
 		view = new View(model);
 	}
 
 	public void control() {
-		actionListener = new ActionListener() {
+		searchListener = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				linkBtnAndTable();
+				lastSearch = getSearchText();
+				view.updateTable(getRecords(lastSearch));
 			}
 		};
-		view.getSearchButton().addActionListener(actionListener);
+		bookingListener = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				long selectedRecNo = getReserveRecNo();
+
+				if (selectedRecNo != -1) {
+					String owner = getCustomerID();
+
+					if (owner != null) {
+						bookRoom(selectedRecNo, owner);
+						view.updateTable(getRecords(lastSearch));
+					}
+				}
+			}
+		};
+
+		view.getSearchButton().addActionListener(searchListener);
+		view.getBookingButton().addActionListener(bookingListener);
 	}
 
-	private void linkBtnAndTable() {
-		view.updateTable(getRecords());
+	private String getSearchText() {
+		return view.getSearchField();
 	}
 
-	public Model getRecords() {
+	private long getReserveRecNo() {
+		return view.getSelectedRowRecNo();
+	}
+
+	protected String getCustomerID() {
+		return view.getCustomerID();
+	}
+
+	private void bookRoom(long recNo, String owner) {
+		try {
+			long lock = database.lockRecord(recNo);
+			String[] record = database.readRecord(recNo);
+			record[7] = owner;
+			database.updateRecord(recNo, record, lock);
+			database.unlock(recNo, lock);
+		} catch (RecordNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private Model getRecords(String searchText) {
 		model = new Model();
-		long[] recordIdArray = null;
+		long[] recNoArray = null;
 
-		recordIdArray = database.findByCriteria(null);
+		if ((searchText == null) || searchText.equals("")) {
+			recNoArray = database.findByCriteria(null);
+		} else {
+			String[] search = new String[model.getColumnCount()];
+			search[model.findColumn("Name")] = searchText;
+			search[model.findColumn("Location")] = searchText;
+			recNoArray = database.findByCriteria(search);
+		}
 
-		for (long recordID : recordIdArray) {
+		for (long recNo : recNoArray) {
 
 			try {
-				model.addRecord(database.readRecord(recordID));
+				model.addRecord(database.readRecord(recNo));
 			} catch (RecordNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

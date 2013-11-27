@@ -4,14 +4,13 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import suncertify.db.Record;
+import suncertify.db.RoomRecord;
 
+@SuppressWarnings("serial")
 public class Model extends AbstractTableModel {
 
-	private static final long serialVersionUID = 2302760553289448235L;
-
-	private String[] tableHeaderNames = { "id", "name", "location", "size",
-			"smoking", "rate", "date", "owner" };
+	private String[] tableHeaderNames = { "Rec No", "Name", "Location", "Size",
+			"Smoking", "Rate", "Date", "Booked By" };
 
 	private ArrayList<String[]> tableRecords = new ArrayList<String[]>(5);
 
@@ -51,8 +50,8 @@ public class Model extends AbstractTableModel {
 		tableRecords.add(data);
 	}
 
-	public void addRecord(Record record) {
-		addRecord(record.getAllFields());
+	public void addRecord(RoomRecord record) {
+		addRecord(record.getAllFieldsData());
 	}
 
 }
