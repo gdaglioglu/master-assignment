@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import suncertify.constants.EnvironmentConstants;
 import suncertify.db.*;
 
 public class Controller {
@@ -18,7 +19,7 @@ public class Controller {
 
 	public Controller() {
 		try {
-			database = new Data("C:\\Users\\" + "eeoimoo"
+			database = new Data("C:\\Users\\" + EnvironmentConstants.USERNAME
 					+ "\\git\\OCMJD\\Instructions\\db-1x3.db");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
