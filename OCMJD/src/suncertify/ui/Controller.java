@@ -20,7 +20,7 @@ public class Controller {
 	public Controller() {
 		try {
 			database = new Data("C:\\Users\\" + EnvironmentConstants.USERNAME
-					+ "\\git\\OCMJD\\Instructions\\db-1x3.db");
+					+ "\\git\\OCMJD\\db-test.db");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
