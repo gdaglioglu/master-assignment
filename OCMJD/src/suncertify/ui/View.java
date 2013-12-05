@@ -14,10 +14,17 @@ public class View extends JFrame {
 	private JButton searchButton;
 	private JButton bookingButton;
 
-	public View(AbstractTableModel tableData) {
+	public View() {
 		super("URLyBird 1.0");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		setResizable(false);
+		// Centres the JFrame on the screen
+		setLocationRelativeTo(null);
+
+	}
+
+	public void startClientView(AbstractTableModel tableData) {
 		setLayout(new BorderLayout());
 
 		searchField = new JTextField(20);
@@ -60,7 +67,6 @@ public class View extends JFrame {
 		int y = (int) ((d.getHeight() - getHeight()) / 2);
 		this.setLocation(x, y);
 		setVisible(true);
-
 	}
 
 	public JButton getSearchButton() {
@@ -98,7 +104,7 @@ public class View extends JFrame {
 	}
 
 	public String getCustomerID() {
-		String customerID;
+		String customerID = "";
 
 		do {
 			customerID = JOptionPane.showInputDialog(this,
@@ -124,4 +130,5 @@ public class View extends JFrame {
 			}
 		}
 	}
+
 }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import suncertify.db.RoomRecord;
-
 @SuppressWarnings("serial")
 public class Model extends AbstractTableModel {
 
@@ -49,9 +47,4 @@ public class Model extends AbstractTableModel {
 	public void addRecord(String[] data) {
 		tableRecords.add(data);
 	}
-
-	public void addRecord(RoomRecord record) {
-		addRecord(record.getAllFieldsData());
-	}
-
 }

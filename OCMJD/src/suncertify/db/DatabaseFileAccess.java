@@ -203,16 +203,4 @@ public class DatabaseFileAccess {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	public long lockRecord(long recNo) throws RecordNotFoundException {
-		// TODO Auto-generated method stub
-		// Implement locking mechanism
-		return recNo;
-	}
-
-	public void unlock(long recNo, long cookie) throws SecurityException {
-		// TODO Auto-generated method stub
-
-	}
-
 }

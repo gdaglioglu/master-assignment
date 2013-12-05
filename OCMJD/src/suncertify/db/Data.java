@@ -7,6 +7,8 @@ public class Data implements DBAccess {
 
 	private static DatabaseFileAccess database = null;
 
+	private static DatabaseLockManager lockManager = new DatabaseLockManager();
+
 	public Data() throws FileNotFoundException, IOException {
 		this(System.getProperty("user.dir"));
 	}
@@ -53,10 +55,11 @@ public class Data implements DBAccess {
 
 	@Override
 	public long lockRecord(long recNo) throws RecordNotFoundException {
-		return database.lockRecord(recNo);
+		return lockManager.lockRecord(recNo);
 	}
 
 	@Override
 	public void unlock(long recNo, long cookie) throws SecurityException {
+		lockManager.unlock(recNo, cookie);
 	}
 }

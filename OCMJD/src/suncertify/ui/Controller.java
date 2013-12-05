@@ -5,8 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import suncertify.constants.EnvironmentConstants;
 import suncertify.db.*;
+import suncertify.util.*;
 
 public class Controller {
 
@@ -17,10 +17,19 @@ public class Controller {
 	private ActionListener searchListener, bookingListener;
 	private String lastSearch;
 
-	public Controller() {
+	private ConfigDialog dialog;
+	private PropertyManager properties = PropertyManager.getInstance();
+
+	public Controller(ApplicationMode applicationMode) {
+		view = new View();
+
+		dialog = new ConfigDialog(applicationMode);
+		dialog.setVisible(true);
+
 		try {
-			database = new Data("C:\\Users\\" + EnvironmentConstants.USERNAME
-					+ "\\git\\OCMJD\\db-test.db");
+			database = new Data(
+					properties
+							.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -30,7 +39,7 @@ public class Controller {
 		}
 
 		model = getRecords("");
-		view = new View(model);
+		view.startClientView(model);
 	}
 
 	public void control() {
@@ -82,7 +91,6 @@ public class Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	private Model getRecords(String searchText) {
