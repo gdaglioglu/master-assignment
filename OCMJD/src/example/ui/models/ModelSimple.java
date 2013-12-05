@@ -1,4 +1,4 @@
-package suncertify.ui.example.models;
+package example.ui.models;
 
 public class ModelSimple {
 

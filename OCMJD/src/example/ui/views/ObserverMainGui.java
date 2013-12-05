@@ -1,4 +1,4 @@
-package suncertify.ui.example.views;
+package example.ui.views;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -6,7 +6,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import suncertify.ui.example.controllers.ObserverController;
+import example.ui.controllers.ObserverController;
 
 public class ObserverMainGui extends JFrame {
 	private static final long serialVersionUID = -6640422987288265832L;

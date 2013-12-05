@@ -1,7 +1,7 @@
-package suncertify.ui.example.controllers;
+package example.ui.controllers;
 
-import suncertify.ui.example.models.ModelObserver;
-import suncertify.ui.example.views.ViewObserver;
+import example.ui.models.ModelObserver;
+import example.ui.views.ViewObserver;
 
 //ControllerObserver.java
 //(C) Joseph Mack 2011, jmack (at) wm7d (dot) net, released under GPL v3 (or any later version)

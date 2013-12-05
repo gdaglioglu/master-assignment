@@ -1,15 +1,17 @@
-package suncertify.ui.example.views;
+package example.ui.views;
 
-//for CloseListener()	//for CloseListener()
 import java.awt.*;
-//ViewObserver.java
+import java.awt.event.WindowAdapter; //for CloseListener()
+//ViewObserverDraft.java
 //(C) Joseph Mack 2011, jmack (at) wm7d (dot) net, released under GPL v3 (or any later version)
 //inspired by Joseph Bergin's MVC gui at http://csis.pace.edu/~bergin/mvc/mvcgui.html
-//ViewObserver is an Observer
-import java.awt.event.*; //for addControllerObserver()
+//ViewObserverDraft is an Observer
+import java.awt.event.WindowEvent; //for CloseListener()
 import java.util.Observable; //for update();
 
-public class ViewObserver implements java.util.Observer {
+import example.ui.controllers.ControllerObserver;
+
+public class ViewObserverDraft implements java.util.Observer {
 
 	// attributes as must be visible within class
 	private TextField myTextField;
@@ -17,11 +19,11 @@ public class ViewObserver implements java.util.Observer {
 
 	// private ModelObserver modelObserver; //Joe: ModelObserver is hardwired
 	// in,
-	// needed only if viewObserver initialises modelObserver (which we aren't
-	// doing)
+	// needed only if viewObserverDraft initialises modelObserver (which we
+	// aren't doing)
 
-	public ViewObserver() {
-		System.out.println("ViewObserver()");
+	public ViewObserverDraft() {
+		System.out.println("ViewObserverDraft()");
 
 		// frame in constructor and not an attribute as doesn't need to be
 		// visible to whole class
@@ -43,18 +45,18 @@ public class ViewObserver implements java.util.Observer {
 		frame.setLocation(100, 100);
 		frame.setVisible(true);
 
-	} // ViewObserver()
+	} // ViewObserverDraft()
 
 	// Called from the ModelObserver
 	public void update(Observable obs, Object obj) {
 
 		// who called us and what did they send?
-		// System.out.println ("ViewObserver      : Observable is " +
+		// System.out.println ("ViewObserverDraft      : Observable is " +
 		// obs.getClass() + ", object passed is " + obj.getClass());
 
 		// modelObserver Pull
 		// ignore obj and ask modelObserver for value,
-		// to do this, the viewObserver has to know about the modelObserver
+		// to do this, the viewObserverDraft has to know about the modelObserver
 		// (which I decided I didn't want to do)
 		// uncomment next line to do ModelObserver Pull
 		// myTextField.setText("" + modelObserver.getValue());
@@ -73,18 +75,18 @@ public class ViewObserver implements java.util.Observer {
 		myTextField.setText("" + v);
 	} // setValue()
 
-	public void addControllerObserver(ActionListener controllerObserver) {
-		System.out.println("ViewObserver      : adding controllerObserver");
-		button.addActionListener(controllerObserver); // need instance of
-														// controllerObserver
-														// before can add it as
-														// a listener
+	public void addControllerObserver(ControllerObserver controllerObserver) {
+		System.out
+				.println("ViewObserverDraft      : adding controllerObserver");
+		button.addActionListener(controllerObserver); // need controllerObserver
+														// before adding it as a
+														// listener
 	} // addControllerObserver()
 
-	// uncomment to allow controllerObserver to use viewObserver to initialise
-	// modelObserver
+	// uncomment to allow controllerObserver to use viewObserverDraft to
+	// initialise modelObserver
 	// public void addModelObserver(ModelObserver m){
-	// System.out.println("ViewObserver      : adding modelObserver");
+	// System.out.println("ViewObserverDraft      : adding modelObserver");
 	// this.modelObserver = m;
 	// } //addModelObserver()
 
@@ -95,4 +97,4 @@ public class ViewObserver implements java.util.Observer {
 		} // windowClosing()
 	} // CloseListener
 
-} // ViewObserver
+} // ViewObserverDraft

@@ -1,4 +1,4 @@
-package suncertify.ui.example.views;
+package example.ui.views;
 
 import java.awt.*;
 import java.util.Observable;
@@ -6,7 +6,7 @@ import java.util.Observer;
 
 import javax.swing.*;
 
-import suncertify.ui.example.controllers.ObserverController;
+import example.ui.controllers.ObserverController;
 
 public class ObserverPanel2 extends JPanel implements Observer {
 	private static final long serialVersionUID = -5101339087937915902L;

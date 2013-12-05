@@ -1,11 +1,11 @@
-package suncertify.ui.example.controllers;
+package example.ui.controllers;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Observer;
 
-import suncertify.ui.example.models.ObserverModel;
-import suncertify.ui.example.views.ObserverMainGui;
+import example.ui.models.ObserverModel;
+import example.ui.views.ObserverMainGui;
 
 public class ObserverController {
 	private final static ObserverModel model = new ObserverModel();

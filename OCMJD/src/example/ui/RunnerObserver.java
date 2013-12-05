@@ -1,8 +1,8 @@
-package suncertify.ui.example;
+package example.ui;
 
-import suncertify.ui.example.controllers.ControllerObserver;
-import suncertify.ui.example.models.ModelObserver;
-import suncertify.ui.example.views.ViewObserver;
+import example.ui.controllers.ControllerObserver;
+import example.ui.models.ModelObserver;
+import example.ui.views.ViewObserver;
 
 //RunnerObserver.java
 //(C) Joseph Mack 2011, jmack (at) wm7d (dot) net, released under GPL v3 (or any later version)

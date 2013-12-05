@@ -20,6 +20,7 @@ public class Runner {
 			controller.control();
 		} else if ((args.length == 1) && "server".equals(args[0])) {
 			Server server = new Server();
+			server.startServer();
 		} else {
 			System.err
 					.println("Command line options are case sensitive and may be only one of:");

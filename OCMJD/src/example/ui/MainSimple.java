@@ -1,10 +1,10 @@
-package suncertify.ui.example;
+package example.ui;
 
 import javax.swing.SwingUtilities;
 
-import suncertify.ui.example.controllers.ControllerSimple;
-import suncertify.ui.example.models.ModelSimple;
-import suncertify.ui.example.views.ViewSimple;
+import example.ui.controllers.ControllerSimple;
+import example.ui.models.ModelSimple;
+import example.ui.views.ViewSimple;
 
 public class MainSimple {
 	public static void main(String[] args) {

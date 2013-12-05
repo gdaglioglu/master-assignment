@@ -1,13 +1,12 @@
 package suncertify.ui;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 
 public class View extends JFrame {
-
-	private static final long serialVersionUID = -826146775442786697L;
 
 	private JTable table;
 	private JTextField searchField;
@@ -19,9 +18,7 @@ public class View extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setResizable(false);
-		// Centres the JFrame on the screen
 		setLocationRelativeTo(null);
-
 	}
 
 	public void startClientView(AbstractTableModel tableData) {
@@ -62,10 +59,7 @@ public class View extends JFrame {
 		pack();
 		this.setSize(650, 300);
 
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (int) ((d.getWidth() - getWidth()) / 2);
-		int y = (int) ((d.getHeight() - getHeight()) / 2);
-		this.setLocation(x, y);
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 

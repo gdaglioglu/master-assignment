@@ -26,16 +26,27 @@ public class Controller {
 		dialog = new ConfigDialog(applicationMode);
 		dialog.setVisible(true);
 
-		try {
-			database = new Data(
-					properties
-							.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
+			try {
+				database = new Data(
+						properties
+								.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (applicationMode == ApplicationMode.NETWORKED_CLIENT) {
+			properties
+					.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_HOST);
+			properties
+					.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT);
+			// lookup remote database
+
+		} else {
+			// Massive Problems
 		}
 
 		model = getRecords("");

@@ -13,11 +13,14 @@ public class Server extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setResizable(false);
-		// Centres the JFrame on the screen
 		setLocationRelativeTo(null);
 
 		dialog = new ConfigDialog(ApplicationMode.SERVER);
 		dialog.setVisible(true);
+	}
+
+	public void startServer() {
+
 		dialog.serverRunning(true);
 	}
 }

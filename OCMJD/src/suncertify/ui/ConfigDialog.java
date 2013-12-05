@@ -50,7 +50,6 @@ public class ConfigDialog extends JDialog implements ActionListener {
 
 		setSize(500, 130);
 		setResizable(false);
-		// Centres the JDialog on the screen
 		setLocationRelativeTo(null);
 
 		addWindowListener(new WindowAdapter() {
@@ -59,7 +58,6 @@ public class ConfigDialog extends JDialog implements ActionListener {
 			}
 		});
 
-		// Add JPanels
 		switch (runningMode) {
 		case STANDALONE_CLIENT:
 			dbPanel = buildDBPanel();
@@ -93,7 +91,6 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	private JPanel buildDBPanel() {
 		dbLabel = new JLabel("Location:");
 
-		// Manually set size of JTextField
 		dbField = new JTextField(30);
 
 		dbButton = new JButton(BROWSE_TEXT + "...");
@@ -113,7 +110,6 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		netHostLabel = new JLabel("Server Address:");
 		netPortLabel = new JLabel("Server Port:");
 
-		// Manually set size of JTextFields
 		netHostField = new JTextField(22);
 		netPortField = new JTextField(5);
 
@@ -267,7 +263,10 @@ public class ConfigDialog extends JDialog implements ActionListener {
 						.setProperty(
 								ApplicationConstants.KEY_PROPERTY_NETWORK_HOST,
 								netHost);
-			} catch (UnknownHostException uhex) {
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
 				tempFlag = false;
 				JOptionPane.showMessageDialog(controlPanel,
 						"Host name supplied is not a recognised host");

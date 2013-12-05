@@ -1,10 +1,10 @@
-package suncertify.ui.example.controllers;
+package example.ui.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import suncertify.ui.example.models.ModelSimple;
-import suncertify.ui.example.views.ViewSimple;
+import example.ui.models.ModelSimple;
+import example.ui.views.ViewSimple;
 
 public class ControllerSimple {
 

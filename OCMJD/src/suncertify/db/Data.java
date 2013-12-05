@@ -3,43 +3,38 @@ package suncertify.db;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import suncertify.util.ApplicationConstants;
+import suncertify.util.PropertyManager;
+
 public class Data implements DBAccess {
 
 	private static DatabaseFileAccess database = null;
-
 	private static DatabaseLockManager lockManager = new DatabaseLockManager();
+	private static PropertyManager properties = PropertyManager.getInstance();
 
 	public Data() throws FileNotFoundException, IOException {
-		this(System.getProperty("user.dir"));
+		this(properties.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH));
 	}
 
 	public Data(String dbLocation) throws FileNotFoundException, IOException {
 		database = new DatabaseFileAccess(dbLocation);
 	}
 
-	public static Database getDatabase() {
-		return database.getDatabase();
-	}
-
-	@Override
 	public String[] readRecord(long recNo) throws RecordNotFoundException {
 		return database.readRecord(recNo);
 	}
 
-	@Override
 	public void updateRecord(long recNo, String[] data, long lockCookie)
 			throws RecordNotFoundException, SecurityException {
 
 		database.updateRecord(recNo, data, lockCookie);
 	}
 
-	@Override
 	public void deleteRecord(long recNo, long lockCookie)
 			throws RecordNotFoundException, SecurityException {
 		database.deleteRecord(recNo, lockCookie);
 	}
 
-	@Override
 	public long[] findByCriteria(String[] criteria) {
 		if (criteria == null) {
 			return database.getValidRecNos();
@@ -48,17 +43,14 @@ public class Data implements DBAccess {
 		}
 	}
 
-	@Override
 	public long createRecord(String[] data) throws DuplicateKeyException {
 		return database.createRecord(data);
 	}
 
-	@Override
 	public long lockRecord(long recNo) throws RecordNotFoundException {
 		return lockManager.lockRecord(recNo);
 	}
 
-	@Override
 	public void unlock(long recNo, long cookie) throws SecurityException {
 		lockManager.unlock(recNo, cookie);
 	}
