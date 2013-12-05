@@ -228,7 +228,9 @@ public class ConfigDialog extends JDialog implements ActionListener {
 
 		if (dbFlag && netHostFlag && netPortFlag) {
 			setVisible(false);
+			serverRunning(runningMode == ApplicationMode.SERVER);
 		}
+
 	}
 
 	private boolean verifyDBFilePath() {
@@ -310,5 +312,28 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		}
 
 		return tempFlag;
+	}
+
+	public void serverRunning(boolean b) {
+		remove(controlPanel);
+
+		controlConfirmButton = new JButton("Server Running ...");
+		controlCancelButton = new JButton("Exit and Stop Server!");
+
+		controlPanel = new JPanel();
+		controlPanel.add(controlConfirmButton);
+		controlPanel.add(controlCancelButton);
+		controlCancelButton.setActionCommand(CANCEL_TEXT);
+		controlCancelButton.addActionListener(this);
+
+		add(controlPanel, BorderLayout.SOUTH);
+
+		dbField.setEnabled(false);
+		dbButton.setEnabled(false);
+		netHostField.setEnabled(false);
+		netPortField.setEnabled(false);
+		controlConfirmButton.setEnabled(false);
+
+		setVisible(true);
 	}
 }
