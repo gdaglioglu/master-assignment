@@ -1,0 +1,314 @@
+Magic cookie: 257
+Record length: 159
+Number of fields in each record: 7
+
+*********** RECORD 1 ***********
+name: Palace
+location: Smallville
+size: 2
+smoking: Y
+rate: $150.00
+date: 2005/07/27
+owner:
+Status: valid record
+
+*********** RECORD 2 ***********
+name: Castle
+location: Smallville
+size: 6
+smoking: Y
+rate: $220.00
+date: 2005/11/19
+owner:
+Status: valid record
+
+*********** RECORD 3 ***********
+name: Excelsior
+location: Smallville
+size: 4
+smoking: Y
+rate: $230.00
+date: 2003/02/05
+owner:
+Status: valid record
+
+*********** RECORD 4 ***********
+name: Palace
+location: Whoville
+size: 6
+smoking: N
+rate: $110.00
+date: 2005/09/11
+owner:
+Status: valid record
+
+*********** RECORD 5 ***********
+name: Bed & Breakfast & Business
+location: Whoville
+size: 2
+smoking: Y
+rate: $100.00
+date: 2005/08/07
+owner:
+Status: valid record
+
+*********** RECORD 6 ***********
+name: Grandview
+location: Whoville
+size: 6
+smoking: Y
+rate: $210.00
+date: 2003/06/10
+owner:
+Status: valid record
+
+*********** RECORD 7 ***********
+name: Dew Drop Inn
+location: Metropolis
+size: 4
+smoking: Y
+rate: $240.00
+date: 2005/11/17
+owner:
+Status: valid record
+
+*********** RECORD 8 ***********
+name: Excelsior
+location: Metropolis
+size: 6
+smoking: Y
+rate: $140.00
+date: 2005/02/28
+owner:
+Status: valid record
+
+*********** RECORD 9 ***********
+name: Pandemonium
+location: Pleasantville
+size: 4
+smoking: N
+rate: $250.00
+date: 2004/12/02
+owner:
+Status: valid record
+
+*********** RECORD 10 ***********
+name: Dew Drop Inn
+location: Pleasantville
+size: 6
+smoking: N
+rate: $160.00
+date: 2005/03/04
+owner:
+Status: valid record
+
+*********** RECORD 11 ***********
+name: Dew Drop Inn
+location: Digitopolis
+size: 4
+smoking: N
+rate: $190.00
+date: 2005/09/17
+owner:
+Status: valid record
+
+*********** RECORD 12 ***********
+name: Castle
+location: Digitopolis
+size: 4
+smoking: N
+rate: $90.00
+date: 2004/01/17
+owner:
+Status: valid record
+
+*********** RECORD 13 ***********
+name: Bed & Breakfast & Business
+location: Digitopolis
+size: 6
+smoking: Y
+rate: $250.00
+date: 2003/09/15
+owner:
+Status: valid record
+
+*********** RECORD 14 ***********
+name: Bed & Breakfast & Business
+location: Atlantis
+size: 4
+smoking: N
+rate: $110.00
+date: 2003/09/03
+owner:
+Status: valid record
+
+*********** RECORD 15 ***********
+name: Excelsior
+location: Atlantis
+size: 6
+smoking: Y
+rate: $230.00
+date: 2004/04/05
+owner:
+Status: valid record
+
+*********** RECORD 16 ***********
+name: Grandview
+location: Atlantis
+size: 4
+smoking: N
+rate: $110.00
+date: 2004/05/04
+owner:
+Status: valid record
+
+*********** RECORD 17 ***********
+name: Elephant Inn
+location: EmeraldCity
+size: 6
+smoking: Y
+rate: $110.00
+date: 2003/07/28
+owner:
+Status: valid record
+
+*********** RECORD 18 ***********
+name: Splendide
+location: EmeraldCity
+size: 6
+smoking: N
+rate: $120.00
+date: 2003/06/10
+owner:
+Status: valid record
+
+*********** RECORD 19 ***********
+name: Castle
+location: EmeraldCity
+size: 4
+smoking: Y
+rate: $150.00
+date: 2003/05/15
+owner:
+Status: valid record
+
+*********** RECORD 20 ***********
+name: Splendide
+location: Bali Hai
+size: 6
+smoking: Y
+rate: $100.00
+date: 2005/04/06
+owner:
+Status: valid record
+
+*********** RECORD 21 ***********
+name: Pandemonium
+location: Bali Hai
+size: 4
+smoking: Y
+rate: $150.00
+date: 2003/08/01
+owner:
+Status: valid record
+
+*********** RECORD 22 ***********
+name: Grandview
+location: Xanadu
+size: 6
+smoking: N
+rate: $150.00
+date: 2003/08/02
+owner:
+Status: valid record
+
+*********** RECORD 23 ***********
+name: Pandemonium
+location: Xanadu
+size: 2
+smoking: N
+rate: $130.00
+date: 2004/08/07
+owner:
+Status: valid record
+
+*********** RECORD 24 ***********
+name: Castle
+location: Paravel
+size: 4
+smoking: N
+rate: $220.00
+date: 2004/09/14
+owner:
+Status: valid record
+
+*********** RECORD 25 ***********
+name: Splendide
+location: Paravel
+size: 4
+smoking: N
+rate: $110.00
+date: 2004/03/14
+owner:
+Status: valid record
+
+*********** RECORD 26 ***********
+name: Palace
+location: Hobbiton
+size: 4
+smoking: N
+rate: $90.00
+date: 2003/09/22
+owner:
+Status: valid record
+
+*********** RECORD 27 ***********
+name: Grandview
+location: Hobbiton
+size: 4
+smoking: Y
+rate: $110.00
+date: 2004/01/03
+owner:
+Status: valid record
+
+*********** RECORD 28 ***********
+name: Excelsior
+location: Hobbiton
+size: 4
+smoking: N
+rate: $110.00
+date: 2005/06/23
+owner:
+Status: valid record
+
+*********** RECORD 29 ***********
+name: Castle
+location: Lendmarch
+size: 4
+smoking: N
+rate: $140.00
+date: 2003/09/17
+owner:
+Status: valid record
+
+*********** RECORD 30 ***********
+name: Pandemonium
+location: Lendmarch
+size: 6
+smoking: Y
+rate: $230.00
+date: 2004/05/02
+owner:
+Status: valid record
+
+*********** RECORD 31 ***********
+name: Grandview
+location: Lendmarch
+size: 4
+smoking: N
+rate: $170.00
+date: 2003/11/12
+owner:
+Status: valid record
+
