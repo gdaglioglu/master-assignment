@@ -1,4 +1,4 @@
-package example.ui.views;
+package example.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,14 +7,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import example.ui.controllers.ObserverController;
 
-public class ObserverPanel0 extends JPanel {
+public class ObserverObservablePanel0 extends JPanel {
 	private static final long serialVersionUID = -545814952082212811L;
-	private ObserverController controller = null;
+	private ObserverObservableController controller = null;
 	private JTextField field = null;
 
-	public ObserverPanel0(ObserverController controller) {
+	public ObserverObservablePanel0(ObserverObservableController controller) {
 		this.controller = controller;
 		JLabel label = new JLabel("Input % ");
 		add(label);
@@ -34,7 +33,7 @@ public class ObserverPanel0 extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					ObserverPanel0.this.controller.writeData(Integer.parseInt(field
+					ObserverObservablePanel0.this.controller.writeData(Integer.parseInt(field
 							.getText()));
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, e.getMessage());

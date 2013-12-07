@@ -1,17 +1,15 @@
-package example.ui.controllers;
+package example.ui;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Observer;
 
-import example.ui.models.ObserverModel;
-import example.ui.views.ObserverMainGui;
 
-public class ObserverController {
-	private final static ObserverModel model = new ObserverModel();
+public class ObserverObservableController {
+	private final static ObserverObservableModel model = new ObserverObservableModel();
 
 	public static void main(String... args) {
-		ObserverMainGui view = new ObserverMainGui(new ObserverController());
+		ObserverObservableMainGui view = new ObserverObservableMainGui(new ObserverObservableController());
 		view.setVisible(true);
 	}
 

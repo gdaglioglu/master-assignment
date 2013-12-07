@@ -1,9 +1,9 @@
-package example.ui.models;
+package example.ui;
 
 import java.io.*;
 import java.util.Observable;
 
-public class ObserverModel extends Observable {
+public class ObserverObservableModel extends Observable {
 
 	public Object readData() throws FileNotFoundException, IOException,
 			ClassNotFoundException {

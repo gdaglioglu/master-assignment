@@ -1,4 +1,4 @@
-package example.ui.views;
+package example.ui;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter; //for CloseListener()
@@ -9,9 +9,8 @@ import java.awt.event.WindowAdapter; //for CloseListener()
 import java.awt.event.WindowEvent; //for CloseListener()
 import java.util.Observable; //for update();
 
-import example.ui.controllers.ControllerObserver;
 
-public class ViewObserverDraft implements java.util.Observer {
+public class ComplexViewDraft implements java.util.Observer {
 
 	// attributes as must be visible within class
 	private TextField myTextField;
@@ -22,7 +21,7 @@ public class ViewObserverDraft implements java.util.Observer {
 	// needed only if viewObserverDraft initialises modelObserver (which we
 	// aren't doing)
 
-	public ViewObserverDraft() {
+	public ComplexViewDraft() {
 		System.out.println("ViewObserverDraft()");
 
 		// frame in constructor and not an attribute as doesn't need to be
@@ -75,7 +74,7 @@ public class ViewObserverDraft implements java.util.Observer {
 		myTextField.setText("" + v);
 	} // setValue()
 
-	public void addControllerObserver(ControllerObserver controllerObserver) {
+	public void addControllerObserver(ComplexController controllerObserver) {
 		System.out
 				.println("ViewObserverDraft      : adding controllerObserver");
 		button.addActionListener(controllerObserver); // need controllerObserver

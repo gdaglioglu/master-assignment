@@ -1,7 +1,5 @@
-package example.ui.controllers;
+package example.ui;
 
-import example.ui.models.ModelObserver;
-import example.ui.views.ViewObserver;
 
 //ControllerObserver.java
 //(C) Joseph Mack 2011, jmack (at) wm7d (dot) net, released under GPL v3 (or any later version)
@@ -10,13 +8,13 @@ import example.ui.views.ViewObserver;
 
 //ControllerObserver is a Listener
 
-public class ControllerObserver implements java.awt.event.ActionListener {
+public class ComplexController implements java.awt.event.ActionListener {
 
 	// Joe: ControllerObserver has ModelObserver and ViewObserver hardwired in
-	ModelObserver modelObserver;
-	ViewObserver viewObserver;
+	ComplexModel modelObserver;
+	ComplexView viewObserver;
 
-	public ControllerObserver() {
+	public ComplexController() {
 		System.out.println("ControllerObserver()");
 	} // ControllerObserver()
 
@@ -35,12 +33,12 @@ public class ControllerObserver implements java.awt.event.ActionListener {
 	// Joe I should be able to add any modelObserver/viewObserver with the
 	// correct API
 	// but here I can only add ModelObserver/ViewObserver
-	public void addModelObserver(ModelObserver m) {
+	public void addModelObserver(ComplexModel m) {
 		System.out.println("ControllerObserver: adding modelObserver");
 		modelObserver = m;
 	} // addModelObserver()
 
-	public void addViewObserver(ViewObserver v) {
+	public void addViewObserver(ComplexView v) {
 		System.out.println("ControllerObserver: adding viewObserver");
 		viewObserver = v;
 	} // addViewObserver()

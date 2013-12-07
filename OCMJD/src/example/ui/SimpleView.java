@@ -1,16 +1,16 @@
-package example.ui.views;
+package example.ui;
 
 import java.awt.BorderLayout;
 
 import javax.swing.*;
 
-public class ViewSimple {
+public class SimpleView {
 
 	private JFrame frame;
 	private JLabel label;
 	private JButton button;
 
-	public ViewSimple(String text) {
+	public SimpleView(String text) {
 		frame = new JFrame("View");
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

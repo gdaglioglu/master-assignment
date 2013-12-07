@@ -1,13 +1,10 @@
 package example.ui;
 
-import example.ui.controllers.ControllerObserver;
-import example.ui.models.ModelObserver;
-import example.ui.views.ViewObserver;
 
 //RunnerObserver.java
 //(C) Joseph Mack 2011, jmack (at) wm7d (dot) net, released under GPL v3 (or any later version)
 
-public class RunnerObserver {
+public class ComplexRunner {
 
 	// The order of instantiating the objects below will be important for some
 	// pairs of commands.
@@ -16,11 +13,11 @@ public class RunnerObserver {
 	private int start_value = 10; // initialise modelObserver, which in turn
 									// initialises viewObserver
 
-	public RunnerObserver() {
+	public ComplexRunner() {
 
 		// create ModelObserver and ViewObserver
-		ModelObserver myModelObserver = new ModelObserver();
-		ViewObserver myViewObserver = new ViewObserver();
+		ComplexModel myModelObserver = new ComplexModel();
+		ComplexView myViewObserver = new ComplexView();
 
 		// tell ModelObserver about ViewObserver.
 		myModelObserver.addObserver(myViewObserver);
@@ -35,7 +32,7 @@ public class RunnerObserver {
 
 		// create ControllerObserver. tell it about ModelObserver and
 		// ViewObserver, initialise modelObserver
-		ControllerObserver myControllerObserver = new ControllerObserver();
+		ComplexController myControllerObserver = new ComplexController();
 		myControllerObserver.addModelObserver(myModelObserver);
 		myControllerObserver.addViewObserver(myViewObserver);
 		myControllerObserver.initModelObserver(start_value);

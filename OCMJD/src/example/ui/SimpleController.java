@@ -1,18 +1,16 @@
-package example.ui.controllers;
+package example.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import example.ui.models.ModelSimple;
-import example.ui.views.ViewSimple;
 
-public class ControllerSimple {
+public class SimpleController {
 
-	private ModelSimple model;
-	private ViewSimple view;
+	private SimpleModel model;
+	private SimpleView view;
 	private ActionListener actionListener;
 
-	public ControllerSimple(ModelSimple model, ViewSimple view) {
+	public SimpleController(SimpleModel model, SimpleView view) {
 		this.model = model;
 		this.view = view;
 

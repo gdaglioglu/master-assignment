@@ -1,4 +1,4 @@
-package example.ui.views;
+package example.ui;
 
 //for CloseListener()	//for CloseListener()
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.*; //for addControllerObserver()
 import java.util.Observable; //for update();
 
-public class ViewObserver implements java.util.Observer {
+public class ComplexView implements java.util.Observer {
 
 	// attributes as must be visible within class
 	private TextField myTextField;
@@ -20,7 +20,7 @@ public class ViewObserver implements java.util.Observer {
 	// needed only if viewObserver initialises modelObserver (which we aren't
 	// doing)
 
-	public ViewObserver() {
+	public ComplexView() {
 		System.out.println("ViewObserver()");
 
 		// frame in constructor and not an attribute as doesn't need to be

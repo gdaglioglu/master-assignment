@@ -1,14 +1,14 @@
-package example.ui.models;
+package example.ui;
 
-public class ModelSimple {
+public class SimpleModel {
 
 	private int x;
 
-	public ModelSimple() {
+	public SimpleModel() {
 		x = 0;
 	}
 
-	public ModelSimple(int x) {
+	public SimpleModel(int x) {
 		this.x = x;
 	}
 

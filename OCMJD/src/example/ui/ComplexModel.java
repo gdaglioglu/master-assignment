@@ -1,4 +1,4 @@
-package example.ui.models;
+package example.ui;
 
 //ModelObserver.java
 //(C) Joseph Mack 2011, jmack (at) wm7d (dot) net, released under GPL v3 (or any later version)
@@ -9,11 +9,11 @@ package example.ui.models;
 //ModelObserver is an Observable
 //ModelObserver doesn't know about ViewObserver or ControllerObserver
 
-public class ModelObserver extends java.util.Observable {
+public class ComplexModel extends java.util.Observable {
 
 	private int counter; // primitive, automatically initialised to 0
 
-	public ModelObserver() {
+	public ComplexModel() {
 
 		System.out.println("ModelObserver()");
 
