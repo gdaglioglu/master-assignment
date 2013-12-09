@@ -8,6 +8,9 @@ import javax.swing.table.AbstractTableModel;
 
 public class View extends JFrame {
 
+	// TODO serialVersionUID
+	private static final long serialVersionUID = -3325479541523028013L;
+	
 	private JTable table;
 	private JTextField searchField;
 	private JButton searchButton;

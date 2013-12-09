@@ -8,8 +8,8 @@ import suncertify.util.PropertyManager;
 
 public class Data implements DBAccess {
 
-	private static DatabaseFileAccess database = null;
-	private static DatabaseLockManager lockManager = new DatabaseLockManager();
+	private static DataFileAccess database = null;
+	private static DataLockManager lockManager = new DataLockManager();
 	private static PropertyManager properties = PropertyManager.getInstance();
 
 	public Data() throws FileNotFoundException, IOException {
@@ -17,9 +17,9 @@ public class Data implements DBAccess {
 	}
 
 	public Data(String dbLocation) throws FileNotFoundException, IOException {
-		database = new DatabaseFileAccess(dbLocation);
+		database = new DataFileAccess(dbLocation);
 	}
-
+	
 	public String[] readRecord(long recNo) throws RecordNotFoundException {
 		return database.readRecord(recNo);
 	}

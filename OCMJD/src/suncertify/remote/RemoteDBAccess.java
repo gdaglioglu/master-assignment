@@ -7,6 +7,7 @@ import suncertify.db.DuplicateKeyException;
 import suncertify.db.RecordNotFoundException;
 
 public interface RemoteDBAccess extends Remote {
+	
 	public String[] readRecord(long recNo) throws RecordNotFoundException,
 			RemoteException;
 
@@ -26,5 +27,4 @@ public interface RemoteDBAccess extends Remote {
 
 	public void unlock(long recNo, long cookie) throws SecurityException,
 			RemoteException;
-
 }

@@ -12,6 +12,9 @@ import suncertify.util.*;
 
 public class ConfigDialog extends JDialog implements ActionListener {
 
+	// TODO serialVersionUID
+	private static final long serialVersionUID = -2130127546941012498L;
+	
 	private JPanel dbPanel;
 	private JLabel dbLabel;
 	private JTextField dbField;
@@ -314,25 +317,27 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	public void serverRunning(boolean b) {
-		remove(controlPanel);
-
-		controlConfirmButton = new JButton("Server Running ...");
-		controlCancelButton = new JButton("Exit and Stop Server!");
-
-		controlPanel = new JPanel();
-		controlPanel.add(controlConfirmButton);
-		controlPanel.add(controlCancelButton);
-		controlCancelButton.setActionCommand(CANCEL_TEXT);
-		controlCancelButton.addActionListener(this);
-
-		add(controlPanel, BorderLayout.SOUTH);
-
-		dbField.setEnabled(false);
-		dbButton.setEnabled(false);
-		netHostField.setEnabled(false);
-		netPortField.setEnabled(false);
-		controlConfirmButton.setEnabled(false);
-
-		setVisible(true);
+		if(b){
+			remove(controlPanel);
+	
+			controlConfirmButton = new JButton("Server Running ...");
+			controlCancelButton = new JButton("Exit and Stop Server!");
+	
+			controlPanel = new JPanel();
+			controlPanel.add(controlConfirmButton);
+			controlPanel.add(controlCancelButton);
+			controlCancelButton.setActionCommand(CANCEL_TEXT);
+			controlCancelButton.addActionListener(this);
+	
+			add(controlPanel, BorderLayout.SOUTH);
+	
+			dbField.setEnabled(false);
+			dbButton.setEnabled(false);
+			netHostField.setEnabled(false);
+			netPortField.setEnabled(false);
+			controlConfirmButton.setEnabled(false);
+	
+			setVisible(true);
+		}
 	}
 }

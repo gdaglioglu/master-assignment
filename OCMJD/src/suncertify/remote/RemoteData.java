@@ -9,6 +9,9 @@ import suncertify.db.*;
 
 public class RemoteData extends UnicastRemoteObject implements RemoteDBAccess {
 
+	// TODO serialVersionUID
+	private static final long serialVersionUID = 8217941285842635667L;
+	
 	private static DBAccess database = null;
 
 	public RemoteData(String dbLocation) throws RemoteException {
@@ -20,7 +23,7 @@ public class RemoteData extends UnicastRemoteObject implements RemoteDBAccess {
 			throw new RemoteException(e.getMessage(), e);
 		}
 	}
-
+	
 	public String[] readRecord(long recNo) throws RecordNotFoundException,
 			RemoteException {
 		return database.readRecord(recNo);

@@ -1,6 +1,6 @@
 package suncertify.db;
 
-public class DatabaseLockManager {
+public class DataLockManager {
 
 	public long lockRecord(long recNo) {
 		// TODO Auto-generated method stub

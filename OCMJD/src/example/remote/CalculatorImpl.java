@@ -5,6 +5,9 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class CalculatorImpl extends UnicastRemoteObject implements Calculator {
 
+	// TODO serialVersionUID
+	private static final long serialVersionUID = 5232401150631985592L;
+
 	public CalculatorImpl() throws RemoteException {
 		super();
 	}

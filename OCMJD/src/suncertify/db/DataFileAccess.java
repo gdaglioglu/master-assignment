@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class DatabaseFileAccess {
+public class DataFileAccess {
 
 	private long startOfDataOffset;
 
@@ -16,7 +16,7 @@ public class DatabaseFileAccess {
 
 	private Database db = new Database();
 
-	public DatabaseFileAccess(final String providedDbLocation) {
+	public DataFileAccess(final String providedDbLocation) {
 		log.entering("DatabaseFileAccess", "DatabaseFileAccess",
 				providedDbLocation);
 
