@@ -2,8 +2,13 @@ package suncertify.util;
 
 import java.io.*;
 import java.util.Properties;
+import java.util.logging.Logger;
 
-public final class PropertyManager {
+public class PropertyFileManager {
+
+	// TODO PropertyManager = SavedConfiguration
+
+	private Logger log = Logger.getLogger("suncertify.ui");
 
 	private static final String PROPERTY_FILE_NAME = "suncertify.properties";
 	private static final String PROPERTY_FILE_DIR = System
@@ -12,13 +17,14 @@ public final class PropertyManager {
 			PROPERTY_FILE_NAME);
 
 	private Properties properties = null;
-	private static final PropertyManager instance = new PropertyManager();
 
-	public static PropertyManager getInstance() {
+	private static PropertyFileManager instance = new PropertyFileManager();
+
+	public static PropertyFileManager getInstance() {
 		return instance;
 	}
 
-	private PropertyManager() {
+	private PropertyFileManager() {
 		properties = loadProperties();
 
 		if ((properties == null) || properties.isEmpty()) {

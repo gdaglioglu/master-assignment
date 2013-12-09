@@ -5,12 +5,12 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import suncertify.util.ApplicationConstants;
-import suncertify.util.PropertyManager;
+import suncertify.util.PropertyFileManager;
 
 public class CalculatorServer {
 
 	public CalculatorServer() {
-		PropertyManager properties = PropertyManager.getInstance();
+		PropertyFileManager properties = PropertyFileManager.getInstance();
 		int port = Integer.parseInt(properties
 				.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT));
 

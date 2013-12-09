@@ -6,37 +6,45 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
-import suncertify.db.*;
+import suncertify.db.DBAccess;
+import suncertify.db.RecordNotFoundException;
 import suncertify.remote.RemoteDBAccess;
 import suncertify.util.*;
 
 public class Controller {
 
 	private ApplicationMode applicationMode;
-	
+
 	private DBAccess database;
 	private RemoteDBAccess remoteDatabase;
-	
+
 	private Model model;
 	private View view;
 	private ActionListener searchListener, bookingListener;
 	private String lastSearch;
 
 	private ConfigDialog dialog;
-	private PropertyManager properties = PropertyManager.getInstance();
+	private PropertyFileManager properties = PropertyFileManager.getInstance();
 
 	public Controller(ApplicationMode applicationMode) {
 		this.applicationMode = applicationMode;
-		
-		view = new View();
+
+		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
+			view = new View("URLyBird 1.0 - Standalone Mode");
+		} else if (applicationMode == ApplicationMode.NETWORKED_CLIENT) {
+			view = new View("URLyBird 1.0 - Network Mode");
+		} else {
+			// TODO Massive Problems
+		}
 
 		dialog = new ConfigDialog(applicationMode);
 		dialog.setVisible(true);
 
 		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
 			try {
-					database = DataConnector.getLocal(properties
-						.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH));
+				database = DataConnector
+						.getLocal(properties
+								.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH));
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -49,9 +57,12 @@ public class Controller {
 			}
 		} else if (applicationMode == ApplicationMode.NETWORKED_CLIENT) {
 			try {
-				remoteDatabase = DataConnector.getRemote(properties
-						.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_HOST), properties
-								.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT));
+				remoteDatabase = DataConnector
+						.getRemote(
+								properties
+										.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_HOST),
+								properties
+										.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT));
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -103,7 +114,7 @@ public class Controller {
 	}
 
 	private void bookRoom(long recNo, String owner) {
-		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {	
+		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
 			try {
 				long lock = database.lockRecord(recNo);
 				String[] record = database.readRecord(recNo);
@@ -137,7 +148,7 @@ public class Controller {
 		model = new Model();
 		long[] recNoArray = null;
 
-		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {	
+		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
 			if ((searchText == null) || searchText.equals("")) {
 				recNoArray = database.findByCriteria(null);
 			} else {
@@ -146,7 +157,7 @@ public class Controller {
 				search[model.findColumn("Location")] = searchText;
 				recNoArray = database.findByCriteria(search);
 			}
-	
+
 			for (long recNo : recNoArray) {
 				try {
 					model.addRecord(database.readRecord(recNo));
@@ -155,7 +166,7 @@ public class Controller {
 					e.printStackTrace();
 				}
 			}
-		} else if (applicationMode == ApplicationMode.NETWORKED_CLIENT) {	
+		} else if (applicationMode == ApplicationMode.NETWORKED_CLIENT) {
 			if ((searchText == null) || searchText.equals("")) {
 				try {
 					recNoArray = remoteDatabase.findByCriteria(null);
@@ -174,7 +185,7 @@ public class Controller {
 					e.printStackTrace();
 				}
 			}
-	
+
 			for (long recNo : recNoArray) {
 				try {
 					model.addRecord(remoteDatabase.readRecord(recNo));
@@ -189,7 +200,7 @@ public class Controller {
 		} else {
 			// TODO Massive Problems
 		}
-		
+
 		return model;
 	}
 }

@@ -2,22 +2,25 @@ package suncertify.ui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 
 public class View extends JFrame {
 
+	private Logger log = Logger.getLogger("suncertify.ui");
+
 	// TODO serialVersionUID
 	private static final long serialVersionUID = -3325479541523028013L;
-	
+
 	private JTable table;
 	private JTextField searchField;
 	private JButton searchButton;
 	private JButton bookingButton;
 
-	public View() {
-		super("URLyBird 1.0");
+	public View(String title) {
+		super(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setResizable(false);

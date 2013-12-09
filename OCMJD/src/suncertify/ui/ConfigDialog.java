@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 
@@ -14,7 +15,9 @@ public class ConfigDialog extends JDialog implements ActionListener {
 
 	// TODO serialVersionUID
 	private static final long serialVersionUID = -2130127546941012498L;
-	
+
+	private Logger log = Logger.getLogger("suncertify.ui");
+
 	private JPanel dbPanel;
 	private JLabel dbLabel;
 	private JTextField dbField;
@@ -37,7 +40,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	private String netHost = null;
 	private String netPort = null;
 
-	private PropertyManager properties = PropertyManager.getInstance();
+	private PropertyFileManager properties = PropertyFileManager.getInstance();
 	private ApplicationMode runningMode;
 
 	private boolean dbFlag;
@@ -226,8 +229,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		}
 
 		if (dbFlag && netHostFlag && netPortFlag) {
-			setVisible(false);
-			serverRunning(runningMode == ApplicationMode.SERVER);
+			dispose();
 		}
 
 	}
@@ -314,30 +316,5 @@ public class ConfigDialog extends JDialog implements ActionListener {
 		}
 
 		return tempFlag;
-	}
-
-	public void serverRunning(boolean b) {
-		if(b){
-			remove(controlPanel);
-	
-			controlConfirmButton = new JButton("Server Running ...");
-			controlCancelButton = new JButton("Exit and Stop Server!");
-	
-			controlPanel = new JPanel();
-			controlPanel.add(controlConfirmButton);
-			controlPanel.add(controlCancelButton);
-			controlCancelButton.setActionCommand(CANCEL_TEXT);
-			controlCancelButton.addActionListener(this);
-	
-			add(controlPanel, BorderLayout.SOUTH);
-	
-			dbField.setEnabled(false);
-			dbButton.setEnabled(false);
-			netHostField.setEnabled(false);
-			netPortField.setEnabled(false);
-			controlConfirmButton.setEnabled(false);
-	
-			setVisible(true);
-		}
 	}
 }

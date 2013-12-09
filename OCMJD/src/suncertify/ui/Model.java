@@ -1,11 +1,14 @@
 package suncertify.ui;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
 public class Model extends AbstractTableModel {
+
+	private Logger log = Logger.getLogger("suncertify.ui");
 
 	private String[] tableHeaderNames = { "Rec No", "Name", "Location", "Size",
 			"Smoking", "Rate", "Date", "Booked By" };

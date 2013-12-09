@@ -6,13 +6,13 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import suncertify.util.ApplicationConstants;
-import suncertify.util.PropertyManager;
+import suncertify.util.PropertyFileManager;
 
 public class CalculatorClient {
 
 	public static void main(String[] args) {
 		try {
-			PropertyManager properties = PropertyManager.getInstance();
+			PropertyFileManager properties = PropertyFileManager.getInstance();
 			int port = Integer
 					.parseInt(properties
 							.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT));
