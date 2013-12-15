@@ -8,7 +8,7 @@ public class PropertyFileManager {
 
 	// TODO PropertyManager = SavedConfiguration
 
-	private Logger log = Logger.getLogger("suncertify.ui");
+	private Logger log = Logger.getLogger("suncertify.util");
 
 	private static final String PROPERTY_FILE_NAME = "suncertify.properties";
 	private static final String PROPERTY_FILE_DIR = System
@@ -25,6 +25,7 @@ public class PropertyFileManager {
 	}
 
 	private PropertyFileManager() {
+		log.entering("suncertify.util.PropertyFileManager", "PropertyFileManager()");
 		properties = loadProperties();
 
 		if ((properties == null) || properties.isEmpty()) {
@@ -40,6 +41,8 @@ public class PropertyFileManager {
 					ApplicationConstants.KEY_PROPERTY_NETWORK_PORT,
 					String.valueOf(java.rmi.registry.Registry.REGISTRY_PORT));
 		}
+
+		log.exiting("suncertify.util.PropertyFileManager", "PropertyFileManager()");
 	}
 
 	public String getProperty(String propertyName) {

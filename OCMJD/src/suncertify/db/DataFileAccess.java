@@ -40,7 +40,7 @@ public class DataFileAccess {
 			startOfDataOffset = readDatabaseSchemaFromFile();
 			log.fine("Schema read");
 
-			readRecordsDataFromFile();
+			readRecordsFromFile();
 			log.fine("Database loaded into memory");
 		} else if (dbLocation != providedDbLocation) {
 			log.warning("Only one database location can be specified. "
@@ -69,23 +69,7 @@ public class DataFileAccess {
 			db.setFieldsPerRoomRecord(database.readShort());
 
 			for (int i = 0; i < db.getFieldsPerRoomRecord(); i++) {
-				int fieldNameLengthTemp;
-				fieldNameLengthTemp = database.readByte();
-
-				byte[] fieldNameTemp = new byte[fieldNameLengthTemp];
-				database.read(fieldNameTemp, 0, fieldNameLengthTemp);
-
-				int fieldLength;
-				fieldLength = database.readByte();
-
-				try {
-					RecordFieldInfo fieldInfoTemp = new RecordFieldInfo(
-							fieldNameLengthTemp, fieldNameTemp, fieldLength);
-					db.addRecordFieldInfo(fieldInfoTemp);
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				readFieldInfoFromFile();
 			}
 
 			offset = database.getFilePointer();
@@ -103,8 +87,28 @@ public class DataFileAccess {
 
 		return offset;
 	}
+	
+	private void readFieldInfoFromFile() throws IOException{
+		int fieldNameLengthTemp;
+		fieldNameLengthTemp = database.readByte();
 
-	public void readRecordsDataFromFile() {
+		byte[] fieldNameTemp = new byte[fieldNameLengthTemp];
+		database.read(fieldNameTemp, 0, fieldNameLengthTemp);
+
+		int fieldLength;
+		fieldLength = database.readByte();
+
+		try {
+			RecordFieldInfo fieldInfoTemp = new RecordFieldInfo(
+					fieldNameLengthTemp, fieldNameTemp, fieldLength);
+			db.addRecordFieldInfo(fieldInfoTemp);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void readRecordsFromFile() {
 		log.entering("suncertify.db.DataFileAccess", "readRecordsDataFromFile");
 
 		try {
@@ -123,26 +127,8 @@ public class DataFileAccess {
 
 		try {
 			while (database.getFilePointer() < database.length()) {
-				String[] recordContents = new String[db
-						.getFieldsPerRoomRecord()];
-
-				byte recordFlag;
-				recordFlag = database.readByte();
-
-				for (int index = 0; index < db.getFieldsPerRoomRecord(); index++) {
-					byte[] temp = new byte[db.getRecordFieldInfoAtIndex(index)
-							.getBytesInField()];
-					database.read(temp, 0, db.getRecordFieldInfoAtIndex(index)
-							.getBytesInField());
-
-					try {
-						recordContents[index] = new String(temp, 0,
-								temp.length, "US-ASCII");
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+				byte recordFlag = readRecordFlagFromFile();
+				String[] recordContents = readRecordDataFromFile();
 
 				db.addRoomRecord(recordFlag, recordContents);
 			}
@@ -161,40 +147,50 @@ public class DataFileAccess {
 
 		log.exiting("suncertify.db.DataFileAccess", "readRecordsDataFromFile");
 	}
+	
+	private byte readRecordFlagFromFile() throws IOException {
+		byte recordFlag;
+		recordFlag = database.readByte();
+		
+		return recordFlag;
+	}
+	
+	private String[] readRecordDataFromFile() throws IOException {
+		String[] recordContents = new String[db.getFieldsPerRoomRecord()];
+		
+		for (int index = 0; index < db.getFieldsPerRoomRecord(); index++) {
+			byte[] temp = new byte[db.getRecordFieldInfoAtIndex(index)
+					.getBytesInField()];
+			database.read(temp, 0, db.getRecordFieldInfoAtIndex(index)
+					.getBytesInField());
 
+			try {
+				recordContents[index] = new String(temp, 0,
+						temp.length, "US-ASCII");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return recordContents;
+	}
 	public String[] readRecord(long recNo) {
-		log.entering("suncertify.db.DataFileAccess", "readRecord", recNo);
-		log.exiting("suncertify.db.DataFileAccess", "readRecord");
-
 		return db.getRoomRecordData(recNo);
 	}
 
 	public void updateRecord(long recNo, String[] data, long lockCookie) {
-		log.entering("suncertify.db.DataFileAccess", "updateRecord");
-
 		// TODO Auto-generated method stub
-
-		log.exiting("suncertify.db.DataFileAccess", "updateRecord");
 	}
 
 	public void deleteRecord(long recNo, long lockCookie) {
-		log.entering("suncertify.db.DataFileAccess", "deleteRecord");
-
 		// TODO Auto-generated method stub
-
-		log.exiting("suncertify.db.DataFileAccess", "deleteRecord");
 	}
 
 	public long[] getValidRecNos() {
-		log.entering("suncertify.db.DataFileAccess", "readRecord");
-		log.exiting("suncertify.db.DataFileAccess", "readRecord");
-
-		return db.getValidRecNos();
+		return db.getValidRoomRecordRecNos();
 	}
 
 	public long[] findByCriteria(String[] criteria) {
-		log.entering("suncertify.db.DataFileAccess", "findByCriteria", criteria);
-
 		long[] validRecNos = getValidRecNos();
 		List<Long> tempArray = new ArrayList<Long>();
 
@@ -210,15 +206,10 @@ public class DataFileAccess {
 			matchedRecNos[i] = tempArray.get(i);
 		}
 
-		log.exiting("suncertify.db.DataFileAccess", "findByCriteria");
-
 		return matchedRecNos;
 	}
 
 	public long createRecord(String[] data) {
-		log.entering("suncertify.db.DataFileAccess", "createRecord", data);
-		log.exiting("suncertify.db.DataFileAccess", "createRecord");
-
 		// TODO Auto-generated method stub
 		return 0;
 	}

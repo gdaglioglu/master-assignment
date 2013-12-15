@@ -1,20 +1,17 @@
 package suncertify.ui;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
-
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
 public class Model extends AbstractTableModel {
 
-	private Logger log = Logger.getLogger("suncertify.ui");
-
-	private String[] tableHeaderNames = { "Rec No", "Name", "Location", "Size",
+	private String[] tableHeaderNames = { "Name", "Location", "Size",
 			"Smoking", "Rate", "Date", "Booked By" };
 
 	private ArrayList<String[]> tableRecords = new ArrayList<String[]>(5);
-
+	private ArrayList<Long> recNos = new ArrayList<Long>(5);
+	
 	@Override
 	public int getColumnCount() {
 		return tableHeaderNames.length;
@@ -47,7 +44,12 @@ public class Model extends AbstractTableModel {
 		return false;
 	}
 
-	public void addRecord(String[] data) {
+	public void addRecord(String[] data, long recNo) {
 		tableRecords.add(data);
+		recNos.add(recNo);
+	}
+	
+	public long getRecNo(int rowIndex){
+		return recNos.get(rowIndex);
 	}
 }

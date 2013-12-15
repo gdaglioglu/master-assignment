@@ -106,7 +106,8 @@ public class Controller {
 	}
 
 	private long getReserveRecNo() {
-		return view.getSelectedRowRecNo();
+		int selectedRow = view.getSelectedRowNo();
+		return model.getRecNo(selectedRow - 1);
 	}
 
 	protected String getCustomerID() {
@@ -118,7 +119,7 @@ public class Controller {
 			try {
 				long lock = database.lockRecord(recNo);
 				String[] record = database.readRecord(recNo);
-				record[7] = owner;
+				record[6] = owner;
 				database.updateRecord(recNo, record, lock);
 				database.unlock(recNo, lock);
 			} catch (RecordNotFoundException e) {
@@ -129,7 +130,7 @@ public class Controller {
 			try {
 				long lock = remoteDatabase.lockRecord(recNo);
 				String[] record = remoteDatabase.readRecord(recNo);
-				record[7] = owner;
+				record[6] = owner;
 				remoteDatabase.updateRecord(recNo, record, lock);
 				remoteDatabase.unlock(recNo, lock);
 			} catch (RemoteException e) {
@@ -160,7 +161,7 @@ public class Controller {
 
 			for (long recNo : recNoArray) {
 				try {
-					model.addRecord(database.readRecord(recNo));
+					model.addRecord(database.readRecord(recNo), recNo);
 				} catch (RecordNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -188,7 +189,7 @@ public class Controller {
 
 			for (long recNo : recNoArray) {
 				try {
-					model.addRecord(remoteDatabase.readRecord(recNo));
+					model.addRecord(remoteDatabase.readRecord(recNo), recNo);
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

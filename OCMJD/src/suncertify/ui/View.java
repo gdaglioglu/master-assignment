@@ -2,14 +2,11 @@ package suncertify.ui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 
 public class View extends JFrame {
-
-	private Logger log = Logger.getLogger("suncertify.ui");
 
 	// TODO serialVersionUID
 	private static final long serialVersionUID = -3325479541523028013L;
@@ -81,7 +78,7 @@ public class View extends JFrame {
 		return bookingButton;
 	}
 
-	public long getSelectedRowRecNo() {
+	public int getSelectedRowNo() {
 		if (table.getSelectedRowCount() == 0) {
 			JOptionPane.showMessageDialog(this,
 					"You have not selected a room.", "Warning",
@@ -89,16 +86,15 @@ public class View extends JFrame {
 			return -1;
 		} else {
 			String selectedOwner = (String) table.getValueAt(
-					table.getSelectedRow(), 7);
+					table.getSelectedRow(), 6);
 			if (!selectedOwner.equals("        ")) {
 				JOptionPane.showMessageDialog(this,
 						"This room has already been booked.", "Error",
 						JOptionPane.ERROR_MESSAGE);
 				return -1;
 			} else {
-				String selectedRecNo = (String) table.getValueAt(
-						table.getSelectedRow(), 0);
-				return Long.parseLong(selectedRecNo);
+				
+				return table.getSelectedRowCount();
 			}
 		}
 	}

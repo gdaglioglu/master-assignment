@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
-import java.util.logging.Logger;
-
 import javax.swing.*;
 
 import suncertify.util.*;
@@ -16,8 +14,6 @@ public class Server extends JFrame {
 
 	// TODO serialVersionUID
 	private static final long serialVersionUID = -7816958458327680485L;
-
-	private Logger log = Logger.getLogger("suncertify.ui");
 
 	ConfigDialog dialog;
 

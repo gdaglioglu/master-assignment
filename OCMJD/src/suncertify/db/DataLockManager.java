@@ -20,7 +20,7 @@ public class DataLockManager {
 		lockedRecords = new HashMap<Long, Long>();
 	}
 
-	public long lockRecord(long recNo) throws RecordNotFoundException {
+	public synchronized long lockRecord(long recNo) throws RecordNotFoundException {
 		log.entering("suncertify.db.DataLockManager", "lockRecord()");
 
 		long lockOwnerCookie = Thread.currentThread().getId();
@@ -42,7 +42,7 @@ public class DataLockManager {
 		return lockOwnerCookie;
 	}
 
-	public void unlock(long recNo, long cookie) throws SecurityException {
+	public synchronized void unlock(long recNo, long cookie) throws SecurityException {
 		log.entering("suncertify.db.DataLockManager", "unlock()");
 
 		long lockOwnerCookie = Thread.currentThread().getId();

@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.logging.Logger;
 
 import javax.swing.*;
 
@@ -15,8 +14,6 @@ public class ConfigDialog extends JDialog implements ActionListener {
 
 	// TODO serialVersionUID
 	private static final long serialVersionUID = -2130127546941012498L;
-
-	private Logger log = Logger.getLogger("suncertify.ui");
 
 	private JPanel dbPanel;
 	private JLabel dbLabel;
