@@ -6,7 +6,7 @@
 package suncertify;
 
 import suncertify.ui.ClientController;
-import suncertify.ui.Server;
+import suncertify.ui.ServerWindow;
 import suncertify.util.ApplicationMode;
 
 /**
@@ -44,7 +44,7 @@ public class Runner {
 					ApplicationMode.STANDALONE_CLIENT);
 			controller.control();
 		} else if (args.length == 1 && "server".equals(args[0])) {
-			final Server server = new Server();
+			final ServerWindow server = new ServerWindow();
 			server.startServer();
 		} else {
 			System.err

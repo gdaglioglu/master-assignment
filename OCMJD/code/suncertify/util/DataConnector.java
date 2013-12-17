@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import suncertify.db.DBAccess;
 import suncertify.db.Data;
 import suncertify.remote.RemoteDBAccess;
-import suncertify.remote.ServerFactory;
+import suncertify.remote.RemoteServerFactory;
 
 /**
  * This class is used when the GUI wants to create a connection to a database.
@@ -69,7 +69,7 @@ public class DataConnector {
 				+ ApplicationConstants.RMI_SERVER_IDENTIFIER;
 
 		try {
-			final ServerFactory factory = (ServerFactory) Naming.lookup(url);
+			final RemoteServerFactory factory = (RemoteServerFactory) Naming.lookup(url);
 
 			DataConnector.log.exiting("suncertify.util.DataConnector",
 					"getRemote()");

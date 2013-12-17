@@ -1,5 +1,7 @@
 /*
+ * RemoteData
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.remote;
 
@@ -8,25 +10,33 @@ import java.rmi.server.UnicastRemoteObject;
 
 import suncertify.db.*;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class RemoteData.
+ * An implementation of <code>RemoteDBAccess</code> that wraps the
+ * <code>DBAccess</code> interface to connect to a local datafile
+ * 
+ * @author Eoin Mooney
  */
 public class RemoteData extends UnicastRemoteObject implements RemoteDBAccess {
 
 	/**
-	 * 
+	 * A version number for this class to support serialization and
+	 * de-serialization.
 	 */
 	private static final long serialVersionUID = 8217941285842635667L;
-	
-	/** The database. */
+
+	/**
+	 * The <code>DBAccess</code> instance used to interact with a local datafile
+	 */
 	private static DBAccess database = null;
 
 	/**
-	 * Instantiates a new remote data.
-	 *
-	 * @param dbLocation the db location
-	 * @throws RemoteException the remote exception
+	 * Instantiates a new <code>RemoteData</code> and creates the new
+	 * <code>Data</code> instance to communicate with the datafile
+	 * 
+	 * @param dbLocation
+	 *            The local location of the datafile
+	 * @throws RemoteException
+	 *             the remote exception
 	 */
 	public RemoteData(final String dbLocation) throws RemoteException {
 		RemoteData.database = new Data(dbLocation);
