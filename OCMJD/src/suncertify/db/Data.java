@@ -1,56 +1,104 @@
+/*
+ * 
+ */
 package suncertify.db;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import suncertify.util.ApplicationConstants;
-import suncertify.util.PropertyFileManager;
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Data.
+ */
 public class Data implements DBAccess {
 
+	/** The database. */
 	private static DataFileAccess database = null;
+
+	/** The locks. */
 	private static DataLockManager locks = DataLockManager.getInstance();
-	private static PropertyFileManager properties = PropertyFileManager
-			.getInstance();
 
-	public Data() throws FileNotFoundException, IOException {
-		this(properties.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH));
+	/**
+	 * Instantiates a new data.
+	 *
+	 * @param dbLocation the db location
+	 */
+	public Data(final String dbLocation) {
+		Data.database = new DataFileAccess(dbLocation);
 	}
 
-	public Data(String dbLocation) throws FileNotFoundException, IOException {
-		database = new DataFileAccess(dbLocation);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.db.DBAccess#readRecord(long)
+	 */
+	@Override
+	public String[] readRecord(final long recNo) throws RecordNotFoundException {
+		return Data.database.readRecord(recNo);
 	}
 
-	public String[] readRecord(long recNo) throws RecordNotFoundException {
-		return database.readRecord(recNo);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.db.DBAccess#updateRecord(long, java.lang.String[], long)
+	 */
+	@Override
+	public void updateRecord(final long recNo, final String[] data,
+			final long lockCookie) throws RecordNotFoundException,
+			SecurityException {
+
+		Data.database.updateRecord(recNo, data, lockCookie);
+
 	}
 
-	public void updateRecord(long recNo, String[] data, long lockCookie)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.db.DBAccess#deleteRecord(long, long)
+	 */
+	@Override
+	public void deleteRecord(final long recNo, final long lockCookie)
 			throws RecordNotFoundException, SecurityException {
-		database.updateRecord(recNo, data, lockCookie);
+
+		Data.database.deleteRecord(recNo, lockCookie);
+
 	}
 
-	public void deleteRecord(long recNo, long lockCookie)
-			throws RecordNotFoundException, SecurityException {
-		database.deleteRecord(recNo, lockCookie);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.db.DBAccess#findByCriteria(java.lang.String[])
+	 */
+	@Override
+	public long[] findByCriteria(final String[] criteria) {
+		return Data.database.findByCriteria(criteria);
 	}
 
-	public long[] findByCriteria(String[] criteria) {
-		if (criteria == null) {
-			return database.getValidRecNos();
-		} else {
-			return database.findByCriteria(criteria);
-		}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.db.DBAccess#createRecord(java.lang.String[])
+	 */
+	@Override
+	public long createRecord(final String[] data) throws DuplicateKeyException {
+		return Data.database.createRecord(data);
 	}
 
-	public long createRecord(String[] data) throws DuplicateKeyException {
-		return database.createRecord(data);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.db.DBAccess#lockRecord(long)
+	 */
+	@Override
+	public long lockRecord(final long recNo) throws RecordNotFoundException {
+		return Data.locks.lockRecord(recNo);
 	}
 
-	public long lockRecord(long recNo) throws RecordNotFoundException {
-		return locks.lockRecord(recNo);
-	}
-
-	public void unlock(long recNo, long cookie) throws SecurityException {
-		locks.unlock(recNo, cookie);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.db.DBAccess#unlock(long, long)
+	 */
+	@Override
+	public void unlock(final long recNo, final long cookie)
+			throws SecurityException {
+		Data.locks.unlock(recNo, cookie);
 	}
 }

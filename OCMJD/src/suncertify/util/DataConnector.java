@@ -1,6 +1,9 @@
+/*
+ * 
+ */
 package suncertify.util;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.rmi.*;
 import java.util.logging.Logger;
 
@@ -9,45 +12,65 @@ import suncertify.db.Data;
 import suncertify.remote.RemoteDBAccess;
 import suncertify.remote.ServerFactory;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DataConnector.
+ */
 public class DataConnector {
 
+	/** The log. */
 	private static Logger log = Logger.getLogger("suncertify.ui");
 
+	/**
+	 * Instantiates a new data connector.
+	 */
 	private DataConnector() {
-		log.entering("suncertify.util.DataConnector", "DataConnector()");
+		DataConnector.log.entering("suncertify.util.DataConnector",
+				"DataConnector()");
 
-		log.exiting("suncertify.util.DataConnector", "DataConnector()");
+		DataConnector.log.exiting("suncertify.util.DataConnector",
+				"DataConnector()");
 	}
 
-	public static DBAccess getLocal(String dbLocation) throws IOException,
-			ClassNotFoundException {
-		log.entering("suncertify.util.DataConnector", "getLocal()", dbLocation);
-		log.exiting("suncertify.util.DataConnector", "getLocal()");
-
+	/**
+	 * Gets the local.
+	 *
+	 * @param dbLocation the db location
+	 * @return the local
+	 */
+	public static DBAccess getLocal(final String dbLocation) {
 		return new Data(dbLocation);
 	}
 
-	public static RemoteDBAccess getRemote(String host, String port)
+	/**
+	 * Gets the remote.
+	 *
+	 * @param host the host
+	 * @param port the port
+	 * @return the remote
+	 * @throws RemoteException the remote exception
+	 */
+	public static RemoteDBAccess getRemote(final String host, final String port)
 			throws RemoteException {
-		log.entering("suncertify.util.DataConnector", "getRemote()");
+		DataConnector.log.entering("suncertify.util.DataConnector",
+				"getRemote()");
 
-		String url = "rmi://" + host + ":" + port + "/"
+		final String url = "rmi://" + host + ":" + port + "/"
 				+ ApplicationConstants.RMI_SERVER_IDENTIFIER;
 
 		try {
-			ServerFactory factory = (ServerFactory) Naming.lookup(url);
+			final ServerFactory factory = (ServerFactory) Naming.lookup(url);
 
-			log.exiting("suncertify.util.DataConnector", "getRemote()");
+			DataConnector.log.exiting("suncertify.util.DataConnector",
+					"getRemote()");
 
 			return factory.getClient();
-		} catch (NotBoundException e) {
-			// TODO Auto-generated catch block
+		} catch (final NotBoundException nbe) {
 			throw new RemoteException(
 					ApplicationConstants.RMI_SERVER_IDENTIFIER
-							+ " not registered: ", e);
-		} catch (java.net.MalformedURLException e) {
-			// TODO Auto-generated catch block
-			throw new RemoteException("cannot connect to " + host, e);
+							+ " not registered: ", nbe);
+		} catch (final MalformedURLException murle) {
+			throw new RemoteException("Cannot connect to " + host, murle);
 		}
 
 	}

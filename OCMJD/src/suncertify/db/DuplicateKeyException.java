@@ -1,15 +1,27 @@
+/*
+ * 
+ */
 package suncertify.db;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DuplicateKeyException.
+ */
 public class DuplicateKeyException extends Exception {
 
-	// TODO serialVersionUID
-	private static final long serialVersionUID = -6689165809485807888L;
-
+	/**
+	 * Instantiates a new duplicate key exception.
+	 */
 	public DuplicateKeyException() {
 		super();
 	}
 
-	public DuplicateKeyException(String s) {
+	/**
+	 * Instantiates a new duplicate key exception.
+	 *
+	 * @param s the s
+	 */
+	public DuplicateKeyException(final String s) {
 		super(s);
 	}
 }

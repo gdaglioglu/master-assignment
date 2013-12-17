@@ -1,33 +1,51 @@
+/*
+ * 
+ */
 package suncertify.remote;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Logger;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ServerFactoryImpl.
+ */
 public class ServerFactoryImpl extends UnicastRemoteObject implements
 		ServerFactory {
 
-	// TODO serialVersionUID
-	private static final long serialVersionUID = 1006816376037422397L;
-
+	/** The db location. */
 	private static String dbLocation = null;
 
-	private Logger log = Logger.getLogger("suncertify.remote");
+	/** The log. */
+	private final Logger log = Logger.getLogger("suncertify.remote");
 
-	public ServerFactoryImpl(String dbLocation) throws RemoteException {
-		log.entering("suncertify.remote.ServerFactoryImpl",
+	/**
+	 * Instantiates a new server factory impl.
+	 *
+	 * @param dbLocation the db location
+	 * @throws RemoteException the remote exception
+	 */
+	public ServerFactoryImpl(final String dbLocation) throws RemoteException {
+		this.log.entering("suncertify.remote.ServerFactoryImpl",
 				"ServerFactoryImpl()", dbLocation);
 
 		ServerFactoryImpl.dbLocation = dbLocation;
 
-		log.exiting("suncertify.remote.ServerFactoryImpl",
+		this.log.exiting("suncertify.remote.ServerFactoryImpl",
 				"ServerFactoryImpl()");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.remote.ServerFactory#getClient()
+	 */
+	@Override
 	public RemoteDBAccess getClient() throws RemoteException {
-		log.entering("suncertify.remote.ServerFactoryImpl", "getClient()");
-		log.exiting("suncertify.remote.ServerFactoryImpl", "getClient()");
+		this.log.entering("suncertify.remote.ServerFactoryImpl", "getClient()");
+		this.log.exiting("suncertify.remote.ServerFactoryImpl", "getClient()");
 
-		return new RemoteData(dbLocation);
+		return new RemoteData(ServerFactoryImpl.dbLocation);
 	}
 }

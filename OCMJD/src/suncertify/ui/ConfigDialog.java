@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package suncertify.ui;
 
 import java.awt.*;
@@ -5,310 +8,418 @@ import java.awt.event.*;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 
 import suncertify.util.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ConfigDialog.
+ */
 public class ConfigDialog extends JDialog implements ActionListener {
 
-	// TODO serialVersionUID
-	private static final long serialVersionUID = -2130127546941012498L;
+	/** The log. */
+	private final Logger log = Logger.getLogger("suncertify.ui");
 
+	/** The db panel. */
 	private JPanel dbPanel;
+
+	/** The db label. */
 	private JLabel dbLabel;
+
+	/** The db field. */
 	private JTextField dbField;
+
+	/** The db button. */
 	private JButton dbButton;
 
+	/** The net panel. */
 	private JPanel netPanel;
+
+	/** The net host label. */
 	private JLabel netHostLabel;
+
+	/** The net port label. */
 	private JLabel netPortLabel;
+
+	/** The net host field. */
 	private JTextField netHostField;
+
+	/** The net port field. */
 	private JTextField netPortField;
 
+	/** The control panel. */
 	private JPanel controlPanel;
+
+	/** The control confirm button. */
 	private JButton controlConfirmButton;
+
+	/** The control cancel button. */
 	private JButton controlCancelButton;
 
+	/** The Constant BROWSE_TEXT. */
 	private static final String BROWSE_TEXT = "Browse";
+
+	/** The Constant CONFIRM_TEXT. */
 	private static final String CONFIRM_TEXT = "OK";
+
+	/** The Constant CANCEL_TEXT. */
 	private static final String CANCEL_TEXT = "Exit";
+
+	/** The db file path. */
 	private String dbFilePath = null;
+
+	/** The net host. */
 	private String netHost = null;
+
+	/** The net port. */
 	private String netPort = null;
 
+	/** The properties. */
 	private PropertyFileManager properties = PropertyFileManager.getInstance();
-	private ApplicationMode runningMode;
 
+	/** The running mode. */
+	private final ApplicationMode runningMode;
+
+	/** The db flag. */
 	private boolean dbFlag;
+
+	/** The net host flag. */
 	private boolean netHostFlag;
+
+	/** The net port flag. */
 	private boolean netPortFlag;
 
-	public ConfigDialog(ApplicationMode mode) {
-		runningMode = mode;
+	/**
+	 * Instantiates a new config dialog.
+	 *
+	 * @param mode the mode
+	 */
+	public ConfigDialog(final ApplicationMode mode) {
+		this.runningMode = mode;
 
-		setTitle("URLyBird 1.0 - Configuration");
-		setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setTitle("URLyBird 1.0 - Configuration");
+		this.setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-		setSize(500, 130);
-		setResizable(false);
-		setLocationRelativeTo(null);
+		this.setSize(500, 130);
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
 
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent event) {
-				getCustomEvent(CANCEL_TEXT);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(final WindowEvent event) {
+				ConfigDialog.this.getCustomEvent(ConfigDialog.CANCEL_TEXT);
 			}
 		});
 
-		switch (runningMode) {
+		switch (this.runningMode) {
 		case STANDALONE_CLIENT:
-			dbPanel = buildDBPanel();
-			add(dbPanel, BorderLayout.CENTER);
-			controlPanel = buildControlPanel();
-			add(controlPanel, BorderLayout.SOUTH);
+			this.dbPanel = this.buildDBPanel();
+			this.add(this.dbPanel, BorderLayout.CENTER);
+			this.controlPanel = this.buildControlPanel();
+			this.add(this.controlPanel, BorderLayout.SOUTH);
 			break;
 
 		case NETWORKED_CLIENT:
-			netPanel = buildNetPanel();
-			add(netPanel, BorderLayout.CENTER);
-			controlPanel = buildControlPanel();
-			add(controlPanel, BorderLayout.SOUTH);
+			this.netPanel = this.buildNetPanel();
+			this.add(this.netPanel, BorderLayout.CENTER);
+			this.controlPanel = this.buildControlPanel();
+			this.add(this.controlPanel, BorderLayout.SOUTH);
 			break;
 
 		case SERVER:
-			dbPanel = buildDBPanel();
-			add(dbPanel, BorderLayout.NORTH);
-			netPanel = buildNetPanel();
-			add(netPanel, BorderLayout.CENTER);
-			controlPanel = buildControlPanel();
-			add(controlPanel, BorderLayout.SOUTH);
+			this.dbPanel = this.buildDBPanel();
+			this.add(this.dbPanel, BorderLayout.NORTH);
+			this.netPanel = this.buildNetPanel();
+			this.add(this.netPanel, BorderLayout.CENTER);
+			this.controlPanel = this.buildControlPanel();
+			this.add(this.controlPanel, BorderLayout.SOUTH);
 			break;
+
 		default:
-			// TODO Massive problems
+			this.log.severe("Config dialog started with incorrect Application Mode. Exiting application");
+			System.exit(0);
 		}
 
-		initaliseValues();
+		this.initaliseValues();
 	}
 
+	/**
+	 * Builds the db panel.
+	 *
+	 * @return the j panel
+	 */
 	private JPanel buildDBPanel() {
-		dbLabel = new JLabel("Location:");
+		this.dbLabel = new JLabel("Location:");
 
-		dbField = new JTextField(30);
+		this.dbField = new JTextField(30);
 
-		dbButton = new JButton(BROWSE_TEXT + "...");
-		dbButton.setActionCommand(BROWSE_TEXT);
-		dbButton.addActionListener(this);
+		this.dbButton = new JButton(ConfigDialog.BROWSE_TEXT + "...");
+		this.dbButton.setActionCommand(ConfigDialog.BROWSE_TEXT);
+		this.dbButton.addActionListener(this);
 
-		dbPanel = new JPanel();
-		dbPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		dbPanel.add(dbLabel);
-		dbPanel.add(dbField);
-		dbPanel.add(dbButton);
+		this.dbPanel = new JPanel();
+		this.dbPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		this.dbPanel.add(this.dbLabel);
+		this.dbPanel.add(this.dbField);
+		this.dbPanel.add(this.dbButton);
 
-		return dbPanel;
+		return this.dbPanel;
 	}
 
+	/**
+	 * Builds the net panel.
+	 *
+	 * @return the j panel
+	 */
 	private JPanel buildNetPanel() {
-		netHostLabel = new JLabel("Server Address:");
-		netPortLabel = new JLabel("Server Port:");
+		this.netHostLabel = new JLabel("Server Address:");
+		this.netPortLabel = new JLabel("Server Port:");
 
-		netHostField = new JTextField(22);
-		netPortField = new JTextField(5);
+		this.netHostField = new JTextField(22);
+		this.netPortField = new JTextField(5);
 
-		netPanel = new JPanel();
-		netPanel.add(netHostLabel);
-		netPanel.add(netHostField);
-		netPanel.add(netPortLabel);
-		netPanel.add(netPortField);
+		this.netPanel = new JPanel();
+		this.netPanel.add(this.netHostLabel);
+		this.netPanel.add(this.netHostField);
+		this.netPanel.add(this.netPortLabel);
+		this.netPanel.add(this.netPortField);
 
-		return netPanel;
+		return this.netPanel;
 	}
 
+	/**
+	 * Builds the control panel.
+	 *
+	 * @return the j panel
+	 */
 	private JPanel buildControlPanel() {
-		controlConfirmButton = new JButton(CONFIRM_TEXT);
-		controlConfirmButton.setActionCommand(CONFIRM_TEXT);
-		controlConfirmButton.addActionListener(this);
+		this.controlConfirmButton = new JButton(ConfigDialog.CONFIRM_TEXT);
+		this.controlConfirmButton.setActionCommand(ConfigDialog.CONFIRM_TEXT);
+		this.controlConfirmButton.addActionListener(this);
 
-		controlCancelButton = new JButton(CANCEL_TEXT);
-		controlCancelButton.setActionCommand(CANCEL_TEXT);
-		controlCancelButton.addActionListener(this);
+		this.controlCancelButton = new JButton(ConfigDialog.CANCEL_TEXT);
+		this.controlCancelButton.setActionCommand(ConfigDialog.CANCEL_TEXT);
+		this.controlCancelButton.addActionListener(this);
 
-		controlPanel = new JPanel();
-		controlPanel.add(controlConfirmButton);
-		controlPanel.add(controlCancelButton);
+		this.controlPanel = new JPanel();
+		this.controlPanel.add(this.controlConfirmButton);
+		this.controlPanel.add(this.controlCancelButton);
 
-		return controlPanel;
+		return this.controlPanel;
 	}
 
+	/**
+	 * Initalise values.
+	 */
 	private void initaliseValues() {
-		dbFlag = false;
-		netHostFlag = false;
-		netPortFlag = false;
+		this.dbFlag = false;
+		this.netHostFlag = false;
+		this.netPortFlag = false;
 
-		dbFilePath = properties
+		this.dbFilePath = this.properties
 				.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH);
-		netHost = properties
+		this.netHost = this.properties
 				.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_HOST);
-		netPort = properties
+		this.netPort = this.properties
 				.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT);
 
-		switch (runningMode) {
+		switch (this.runningMode) {
 		case STANDALONE_CLIENT:
-			if (!dbFilePath.equals("")) {
-				dbField.setText(dbFilePath);
+			if (!this.dbFilePath.equals("")) {
+				this.dbField.setText(this.dbFilePath);
 			}
 			break;
 
 		case NETWORKED_CLIENT:
-			netHostField.setText(netHost);
-			netPortField.setText(netPort);
+			this.netHostField.setText(this.netHost);
+			this.netPortField.setText(this.netPort);
 			break;
 
 		case SERVER:
-			netHostField.setEnabled(false);
+			this.netHostField.setEnabled(false);
 
-			if (!dbFilePath.equals("")) {
-				dbField.setText(dbFilePath);
+			if (!this.dbFilePath.equals("")) {
+				this.dbField.setText(this.dbFilePath);
 			}
-			netHostField.setText("localhost");
-			netPortField.setText(netPort);
+			this.netHostField.setText("localhost");
+			this.netPortField.setText(this.netPort);
 			break;
 		default:
-			// TODO Massive problems
-		}
-	}
-
-	public void actionPerformed(ActionEvent event) {
-		getCustomEvent(event.getActionCommand());
-	}
-
-	private void getCustomEvent(String event) {
-		if (CONFIRM_TEXT.equals(event)) {
-			verifyValues();
-		} else if (BROWSE_TEXT.equals(event)) {
-			browseFiles();
-		} else {
-			properties = null;
+			this.log.severe("Config dialog started with incorrect Application Mode. Exiting application");
 			System.exit(0);
 		}
 	}
 
-	private void browseFiles() {
-		JFileChooser fileChooser = new JFileChooser();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent event) {
+		this.getCustomEvent(event.getActionCommand());
+	}
 
-		int returnVal = fileChooser.showOpenDialog(null);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			dbField.setText(fileChooser.getSelectedFile().toString());
+	/**
+	 * Gets the custom event.
+	 *
+	 * @param event the event
+	 * @return the custom event
+	 */
+	private void getCustomEvent(final String event) {
+		if (ConfigDialog.CONFIRM_TEXT.equals(event)) {
+			this.verifyValues();
+		} else if (ConfigDialog.BROWSE_TEXT.equals(event)) {
+			this.browseFiles();
+		} else {
+			this.properties = null;
+			System.exit(0);
 		}
 	}
 
+	/**
+	 * Browse files.
+	 */
+	private void browseFiles() {
+		final JFileChooser fileChooser = new JFileChooser();
+
+		final int returnVal = fileChooser.showOpenDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			this.dbField.setText(fileChooser.getSelectedFile().toString());
+		}
+	}
+
+	/**
+	 * Verify values.
+	 */
 	private void verifyValues() {
-		switch (runningMode) {
+		switch (this.runningMode) {
 		case STANDALONE_CLIENT:
-			dbFlag = verifyDBFilePath();
-			netPortFlag = true;
-			netHostFlag = true;
+			this.dbFlag = this.verifyDBFilePath();
+			this.netPortFlag = true;
+			this.netHostFlag = true;
 			break;
 		case NETWORKED_CLIENT:
-			dbFlag = true;
-			netHostFlag = verifyNetHost();
-			netPortFlag = verifyNetPort();
+			this.dbFlag = true;
+			this.netHostFlag = this.verifyNetHost();
+			this.netPortFlag = this.verifyNetPort();
 			break;
 		case SERVER:
-			dbFlag = verifyDBFilePath();
-			netHostFlag = verifyNetHost();
-			netPortFlag = verifyNetPort();
+			this.dbFlag = this.verifyDBFilePath();
+			this.netHostFlag = this.verifyNetHost();
+			this.netPortFlag = this.verifyNetPort();
 			break;
 		default:
 			throw new UnsupportedOperationException(
 					"Invalid application startup mode");
 		}
 
-		if (dbFlag && netHostFlag && netPortFlag) {
-			dispose();
+		if (this.dbFlag && this.netHostFlag && this.netPortFlag) {
+			this.dispose();
 		}
 
 	}
 
+	/**
+	 * Verify db file path.
+	 *
+	 * @return true, if successful
+	 */
 	private boolean verifyDBFilePath() {
 		boolean tempFlag = false;
 
-		if (!dbField.getText().equals("")) {
-			dbFilePath = dbField.getText();
+		if (!this.dbField.getText().equals("")) {
+			this.dbFilePath = this.dbField.getText();
 
-			File file = new File(dbFilePath);
+			final File file = new File(this.dbFilePath);
 			if (file.exists() && file.canRead()) {
 				tempFlag = true;
-				properties.setProperty("dbPath", dbFilePath);
+				this.properties.setProperty("dbPath", this.dbFilePath);
 			} else {
-				JOptionPane.showMessageDialog(controlPanel,
+				JOptionPane.showMessageDialog(this.controlPanel,
 						"Path entered is invalid");
 			}
 		} else {
-			JOptionPane.showMessageDialog(controlPanel,
+			JOptionPane.showMessageDialog(this.controlPanel,
 					"Please enter a path to the local database");
 		}
 
 		return tempFlag;
 	}
 
+	/**
+	 * Verify net host.
+	 *
+	 * @return true, if successful
+	 */
 	private boolean verifyNetHost() {
 		boolean tempFlag = false;
 
-		if (!netHostField.getText().equals("")) {
-			netHost = netHostField.getText();
+		if (!this.netHostField.getText().equals("")) {
+			this.netHost = this.netHostField.getText();
 			try {
-				InetAddress.getByName(netHost);
+				InetAddress.getByName(this.netHost);
 				tempFlag = true;
-				properties
-						.setProperty(
-								ApplicationConstants.KEY_PROPERTY_NETWORK_HOST,
-								netHost);
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				this.properties.setProperty(
+						ApplicationConstants.KEY_PROPERTY_NETWORK_HOST,
+						this.netHost);
+			} catch (final UnknownHostException uhe) {
+				this.log.log(Level.INFO, uhe.getMessage(), uhe);
+				System.err.println("Unknown Host: " + uhe.getMessage());
+				uhe.printStackTrace();
 
 				tempFlag = false;
-				JOptionPane.showMessageDialog(controlPanel,
+				JOptionPane.showMessageDialog(this.controlPanel,
 						"Host name supplied is not a recognised host");
-				netHostField.setText("");
+				this.netHostField.setText("");
 			}
 		} else {
-			JOptionPane.showMessageDialog(controlPanel,
+			JOptionPane.showMessageDialog(this.controlPanel,
 					"Please enter a hostname");
 		}
 
 		return tempFlag;
 	}
 
+	/**
+	 * Verify net port.
+	 *
+	 * @return true, if successful
+	 */
 	private boolean verifyNetPort() {
 		boolean tempFlag = false;
 
-		if (!netPortField.getText().equals("")) {
+		if (!this.netPortField.getText().equals("")) {
 
 			try {
-				int port = Integer.parseInt(netPortField.getText());
-				if ((port >= 0) && (port < 65536)) {
+				final int port = Integer.parseInt(this.netPortField.getText());
+				if (port >= 0 && port < 65536) {
 					tempFlag = true;
-					netPort = netPortField.getText();
-					properties.setProperty(
+					this.netPort = this.netPortField.getText();
+					this.properties.setProperty(
 							ApplicationConstants.KEY_PROPERTY_NETWORK_PORT,
-							netPort);
+							this.netPort);
 				} else {
 					JOptionPane
-							.showMessageDialog(controlPanel,
+							.showMessageDialog(this.controlPanel,
 									"Port not in range, port must be between 0 and 65535");
 				}
-			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (final NumberFormatException nfe) {
+				this.log.log(Level.INFO, nfe.getMessage(), nfe);
+				System.err.println("Not a number: " + nfe.getMessage());
+				nfe.printStackTrace();
 
-				JOptionPane.showMessageDialog(controlPanel,
+				JOptionPane.showMessageDialog(this.controlPanel,
 						"Port number supplied is not a recognised number");
 			}
 		} else {
-			JOptionPane.showMessageDialog(controlPanel,
+			JOptionPane.showMessageDialog(this.controlPanel,
 					"Please enter a port number");
 		}
 

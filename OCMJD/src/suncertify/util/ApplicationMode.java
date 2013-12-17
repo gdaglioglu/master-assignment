@@ -1,5 +1,20 @@
+/*
+ * 
+ */
 package suncertify.util;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Enum ApplicationMode.
+ */
 public enum ApplicationMode {
-	SERVER, STANDALONE_CLIENT, NETWORKED_CLIENT
+
+	/** The server. */
+	SERVER,
+
+	/** The standalone client. */
+	STANDALONE_CLIENT,
+
+	/** The networked client. */
+	NETWORKED_CLIENT
 }

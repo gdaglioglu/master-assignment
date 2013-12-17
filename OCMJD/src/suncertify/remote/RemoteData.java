@@ -1,60 +1,108 @@
+/*
+ * 
+ */
 package suncertify.remote;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import suncertify.db.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RemoteData.
+ */
 public class RemoteData extends UnicastRemoteObject implements RemoteDBAccess {
 
-	// TODO serialVersionUID
-	private static final long serialVersionUID = 8217941285842635667L;
-
+	/** The database. */
 	private static DBAccess database = null;
 
-	public RemoteData(String dbLocation) throws RemoteException {
-		try {
-			database = new Data(dbLocation);
-		} catch (FileNotFoundException e) {
-			throw new RemoteException(e.getMessage(), e);
-		} catch (IOException e) {
-			throw new RemoteException(e.getMessage(), e);
-		}
+	/**
+	 * Instantiates a new remote data.
+	 *
+	 * @param dbLocation the db location
+	 * @throws RemoteException the remote exception
+	 */
+	public RemoteData(final String dbLocation) throws RemoteException {
+		RemoteData.database = new Data(dbLocation);
 	}
 
-	public String[] readRecord(long recNo) throws RecordNotFoundException,
-			RemoteException {
-		return database.readRecord(recNo);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.remote.RemoteDBAccess#readRecord(long)
+	 */
+	@Override
+	public String[] readRecord(final long recNo)
+			throws RecordNotFoundException, RemoteException {
+		return RemoteData.database.readRecord(recNo);
 	}
 
-	public void updateRecord(long recNo, String[] data, long lockCookie)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.remote.RemoteDBAccess#updateRecord(long,
+	 * java.lang.String[], long)
+	 */
+	@Override
+	public void updateRecord(final long recNo, final String[] data,
+			final long lockCookie) throws RecordNotFoundException,
+			SecurityException, RemoteException {
+		RemoteData.database.updateRecord(recNo, data, lockCookie);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.remote.RemoteDBAccess#deleteRecord(long, long)
+	 */
+	@Override
+	public void deleteRecord(final long recNo, final long lockCookie)
 			throws RecordNotFoundException, SecurityException, RemoteException {
-		database.updateRecord(recNo, data, lockCookie);
+		RemoteData.database.deleteRecord(recNo, lockCookie);
 	}
 
-	public void deleteRecord(long recNo, long lockCookie)
-			throws RecordNotFoundException, SecurityException, RemoteException {
-		database.deleteRecord(recNo, lockCookie);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.remote.RemoteDBAccess#findByCriteria(java.lang.String[])
+	 */
+	@Override
+	public long[] findByCriteria(final String[] criteria)
+			throws RemoteException {
+		return RemoteData.database.findByCriteria(criteria);
 	}
 
-	public long[] findByCriteria(String[] criteria) throws RemoteException {
-		return database.findByCriteria(criteria);
-	}
-
-	public long createRecord(String[] data) throws DuplicateKeyException,
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.remote.RemoteDBAccess#createRecord(java.lang.String[])
+	 */
+	@Override
+	public long createRecord(final String[] data) throws DuplicateKeyException,
 			RemoteException {
-		return database.createRecord(data);
+		return RemoteData.database.createRecord(data);
 	}
 
-	public long lockRecord(long recNo) throws RecordNotFoundException,
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.remote.RemoteDBAccess#lockRecord(long)
+	 */
+	@Override
+	public long lockRecord(final long recNo) throws RecordNotFoundException,
 			RemoteException {
-		return database.lockRecord(recNo);
+		return RemoteData.database.lockRecord(recNo);
 	}
 
-	public void unlock(long recNo, long cookie) throws SecurityException,
-			RemoteException {
-		database.unlock(recNo, cookie);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see suncertify.remote.RemoteDBAccess#unlock(long, long)
+	 */
+	@Override
+	public void unlock(final long recNo, final long cookie)
+			throws SecurityException, RemoteException {
+		RemoteData.database.unlock(recNo, cookie);
 	}
 }

@@ -1,5 +1,9 @@
+/*
+ * 
+ */
 package suncertify.remote;
 
+import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.logging.Logger;
@@ -7,42 +11,67 @@ import java.util.logging.Logger;
 import suncertify.util.ApplicationConstants;
 import suncertify.util.PropertyFileManager;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ServerRegistry.
+ */
 public class ServerRegistry {
 
+	/** The log. */
 	private static Logger log = Logger.getLogger("suncertify.remote");
 
+	/**
+	 * Instantiates a new server registry.
+	 */
 	private ServerRegistry() {
-		log.entering("suncertify.remote.ServerRegistry", "ServerRegistry()");
-		log.exiting("suncertify.remote.ServerRegistry", "ServerRegistry()");
 	}
 
+	/**
+	 * Register.
+	 *
+	 * @throws RemoteException the remote exception
+	 * @throws MalformedURLException the malformed url exception
+	 */
 	public static void register() throws RemoteException,
 			java.net.MalformedURLException {
-		log.entering("suncertify.remote.ServerRegistry", "register()");
+		ServerRegistry.log.entering("suncertify.remote.ServerRegistry",
+				"register()");
 
-		PropertyFileManager properties = PropertyFileManager.getInstance();
+		final PropertyFileManager properties = PropertyFileManager
+				.getInstance();
 
-		String dbLocation = properties
+		final String dbLocation = properties
 				.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH);
-		int port = Integer.parseInt(properties
+		final int port = Integer.parseInt(properties
 				.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT));
 
-		register(dbLocation, port);
+		ServerRegistry.register(dbLocation, port);
 
-		log.exiting("suncertify.remote.ServerRegistry", "register()");
+		ServerRegistry.log.exiting("suncertify.remote.ServerRegistry",
+				"register()");
 	}
 
-	public static void register(String dbLocation, int port)
+	/**
+	 * Register.
+	 *
+	 * @param dbLocation the db location
+	 * @param port the port
+	 * @throws RemoteException the remote exception
+	 * @throws MalformedURLException the malformed url exception
+	 */
+	public static void register(final String dbLocation, final int port)
 			throws RemoteException, java.net.MalformedURLException {
-		log.entering("suncertify.remote.ServerRegistry", "register()");
+		ServerRegistry.log.entering("suncertify.remote.ServerRegistry",
+				"register()");
 
 		java.rmi.registry.LocateRegistry.createRegistry(port);
 
-		ServerFactoryImpl server = new ServerFactoryImpl(dbLocation);
+		final ServerFactoryImpl server = new ServerFactoryImpl(dbLocation);
 
 		Naming.rebind(ApplicationConstants.RMI_SERVER_IDENTIFIER, server);
 
-		log.exiting("suncertify.remote.ServerRegistry", "register()");
+		ServerRegistry.log.exiting("suncertify.remote.ServerRegistry",
+				"register()");
 	}
 
 }

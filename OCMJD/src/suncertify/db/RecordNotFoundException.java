@@ -1,15 +1,27 @@
+/*
+ * 
+ */
 package suncertify.db;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RecordNotFoundException.
+ */
 public class RecordNotFoundException extends Exception {
 
-	// TODO serialVersionUID
-	private static final long serialVersionUID = 9172845648588845215L;
-
+	/**
+	 * Instantiates a new record not found exception.
+	 */
 	public RecordNotFoundException() {
 		super();
 	}
 
-	public RecordNotFoundException(String s) {
+	/**
+	 * Instantiates a new record not found exception.
+	 *
+	 * @param s the s
+	 */
+	public RecordNotFoundException(final String s) {
 		super(s);
 	}
 }

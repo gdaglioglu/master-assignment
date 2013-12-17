@@ -1,47 +1,104 @@
+/*
+ * 
+ */
 package suncertify.db;
 
 import java.io.UnsupportedEncodingException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RecordFieldInfo.
+ */
 public class RecordFieldInfo {
 
+	/** The bytes in field name. */
 	private int bytesInFieldName;
+
+	/** The field name. */
 	private String fieldName;
+
+	/** The bytes in field data. */
 	private int bytesInFieldData;
 
-	public RecordFieldInfo(int sizeOfFieldName, String fieldName,
-			int sizeOfFieldData) {
-		bytesInFieldName = sizeOfFieldName;
+	/**
+	 * Instantiates a new record field info.
+	 *
+	 * @param sizeOfFieldName the size of field name
+	 * @param fieldName the field name
+	 * @param sizeOfFieldData the size of field data
+	 */
+	public RecordFieldInfo(final int sizeOfFieldName, final String fieldName,
+			final int sizeOfFieldData) {
+		this.bytesInFieldName = sizeOfFieldName;
 		this.fieldName = fieldName;
-		bytesInFieldData = sizeOfFieldData;
+		this.bytesInFieldData = sizeOfFieldData;
 	}
 
-	public RecordFieldInfo(int sizeOfFieldName, byte[] fieldName,
-			int sizeOfFieldData) throws UnsupportedEncodingException {
+	/**
+	 * Instantiates a new record field info.
+	 *
+	 * @param sizeOfFieldName the size of field name
+	 * @param fieldName the field name
+	 * @param sizeOfFieldData the size of field data
+	 * @throws UnsupportedEncodingException the unsupported encoding exception
+	 */
+	public RecordFieldInfo(final int sizeOfFieldName, final byte[] fieldName,
+			final int sizeOfFieldData) throws UnsupportedEncodingException {
 		this(sizeOfFieldName, new String(fieldName, "US-ASCII"),
 				sizeOfFieldData);
 	}
 
+	/**
+	 * Gets the bytes in field name.
+	 *
+	 * @return the bytes in field name
+	 */
 	public int getBytesInFieldName() {
-		return bytesInFieldName;
+		return this.bytesInFieldName;
 	}
 
-	public void setBytesInFieldName(int sizeOfFieldName) {
-		bytesInFieldName = sizeOfFieldName;
+	/**
+	 * Sets the bytes in field name.
+	 *
+	 * @param sizeOfFieldName the new bytes in field name
+	 */
+	public void setBytesInFieldName(final int sizeOfFieldName) {
+		this.bytesInFieldName = sizeOfFieldName;
 	}
 
+	/**
+	 * Gets the field name.
+	 *
+	 * @return the field name
+	 */
 	public String getFieldName() {
-		return fieldName;
+		return this.fieldName;
 	}
 
-	public void setFieldName(String fieldName) {
+	/**
+	 * Sets the field name.
+	 *
+	 * @param fieldName the new field name
+	 */
+	public void setFieldName(final String fieldName) {
 		this.fieldName = fieldName;
 	}
 
+	/**
+	 * Gets the bytes in field.
+	 *
+	 * @return the bytes in field
+	 */
 	public int getBytesInField() {
-		return bytesInFieldData;
+		return this.bytesInFieldData;
 	}
 
-	public void setBytesInField(int sizeOfFieldData) {
-		bytesInFieldData = sizeOfFieldData;
+	/**
+	 * Sets the bytes in field.
+	 *
+	 * @param sizeOfFieldData the new bytes in field
+	 */
+	public void setBytesInField(final int sizeOfFieldData) {
+		this.bytesInFieldData = sizeOfFieldData;
 	}
 }

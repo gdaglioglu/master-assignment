@@ -1,61 +1,121 @@
+/*
+ * 
+ */
 package suncertify.db;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DataLockManager.
+ */
 public class DataLockManager {
 
-	private Logger log = Logger.getLogger("suncertify.db");
+	/** The log. */
+	private final Logger log = Logger.getLogger("suncertify.db");
 
-	private Map<Long, Long> lockedRecords;
+	/** The locked records. */
+	private final Map<Long, Long> lockedRecords = new HashMap<Long, Long>();
 
-	private static DataLockManager instance = new DataLockManager();
+	/** The Constant instance. */
+	private static final DataLockManager instance = new DataLockManager();
 
+	/**
+	 * Gets the single instance of DataLockManager.
+	 *
+	 * @return single instance of DataLockManager
+	 */
 	public static DataLockManager getInstance() {
-		return instance;
+		return DataLockManager.instance;
 	}
 
+	/**
+	 * Instantiates a new data lock manager.
+	 */
 	private DataLockManager() {
-		lockedRecords = new HashMap<Long, Long>();
 	}
 
-	public synchronized long lockRecord(long recNo) throws RecordNotFoundException {
-		log.entering("suncertify.db.DataLockManager", "lockRecord()");
+	/**
+	 * Lock record.
+	 *
+	 * @param recNo the rec no
+	 * @return the long
+	 * @throws RecordNotFoundException the record not found exception
+	 */
+	public synchronized long lockRecord(final long recNo)
+			throws RecordNotFoundException {
+		this.log.entering("suncertify.db.DataLockManager", "lockRecord()");
 
-		long lockOwnerCookie = Thread.currentThread().getId();
+		final long lockOwnerCookie = Thread.currentThread().getId();
 		try {
 
-			while (lockedRecords.containsKey(recNo)
-					&& (lockedRecords.get(recNo) != lockOwnerCookie)) {
-				wait();
+			while (this.isLocked(recNo)
+					&& this.getOwner(recNo) != lockOwnerCookie) {
+				this.wait();
 			}
 
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (final InterruptedException ie) {
+			throw new RecordNotFoundException(
+					"Problem encountered when attempting"
+							+ " to lock record, recNo: " + recNo + ". "
+							+ ie.getMessage());
 		}
-		lockedRecords.put(recNo, lockOwnerCookie);
+		this.lockedRecords.put(recNo, lockOwnerCookie);
 
-		log.exiting("suncertify.db.DataLockManager", "lockRecord()");
+		this.log.exiting("suncertify.db.DataLockManager", "lockRecord()");
 
 		return lockOwnerCookie;
 	}
 
-	public synchronized void unlock(long recNo, long cookie) throws SecurityException {
-		log.entering("suncertify.db.DataLockManager", "unlock()");
+	/**
+	 * Unlock.
+	 *
+	 * @param recNo the rec no
+	 * @param cookie the cookie
+	 * @throws SecurityException the security exception
+	 */
+	public synchronized void unlock(final long recNo, final long cookie)
+			throws SecurityException {
+		this.log.entering("suncertify.db.DataLockManager", "unlock()");
 
-		long lockOwnerCookie = Thread.currentThread().getId();
+		final long lockOwnerCookie = Thread.currentThread().getId();
 
-		if (lockedRecords.get(recNo) == null) {
-			// TODO Throw SecurityException
-		} else if (lockedRecords.get(recNo) != lockOwnerCookie) {
-			// TODO Throw SecurityException
-		} else if (lockedRecords.containsKey(recNo)) {
-			lockedRecords.remove(recNo);
-			notifyAll();
+		if (!this.isLocked(recNo)) {
+			throw new SecurityException(
+					"User trying to remove lock on already unlocked record, recNo: "
+							+ recNo);
+		} else if (this.getOwner(recNo) != lockOwnerCookie) {
+			throw new SecurityException(
+					"User trying to another user's lock, recNo: " + recNo);
+		} else if (lockOwnerCookie == cookie) {
+			this.lockedRecords.remove(recNo);
+			this.notifyAll();
+		} else {
+			throw new SecurityException(
+					"Provided lock cookie does not match user generated lock cookie");
 		}
+		this.log.exiting("suncertify.db.DataLockManager", "unlock()");
+	}
 
-		log.exiting("suncertify.db.DataLockManager", "unlock()");
+	/**
+	 * Checks if is locked.
+	 *
+	 * @param recNo the rec no
+	 * @return true, if is locked
+	 */
+	public boolean isLocked(final long recNo) {
+		return this.lockedRecords.containsKey(recNo);
+	}
+
+	/**
+	 * Gets the owner.
+	 *
+	 * @param recNo the rec no
+	 * @return the owner
+	 */
+	public Long getOwner(final long recNo) {
+		return this.lockedRecords.get(recNo);
 	}
 }

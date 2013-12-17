@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package suncertify.ui;
 
 import java.awt.BorderLayout;
@@ -6,97 +9,123 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.*;
 
 import suncertify.util.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Server.
+ */
 public class Server extends JFrame {
 
-	// TODO serialVersionUID
-	private static final long serialVersionUID = -7816958458327680485L;
+	/** The log. */
+	private final Logger log = Logger.getLogger("suncertify.ui");
 
+	/** The dialog. */
 	ConfigDialog dialog;
 
+	/**
+	 * Instantiates a new server.
+	 */
 	public Server() {
 		super("URLyBird 1.0 - Server Mode");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setSize(500, 130);
-		setResizable(false);
-		setLocationRelativeTo(null);
+		this.setSize(500, 130);
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
 
-		setVisible(true);
+		this.setVisible(true);
 
-		dialog = new ConfigDialog(ApplicationMode.SERVER);
-		dialog.setVisible(true);
+		this.dialog = new ConfigDialog(ApplicationMode.SERVER);
+		this.dialog.setVisible(true);
 	}
 
+	/**
+	 * Start server.
+	 */
 	public void startServer() {
 		try {
 			suncertify.remote.ServerRegistry.register();
-			serverRunning(true);
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.serverRunning(true);
+		} catch (final RemoteException re) {
+			this.log.log(Level.SEVERE, re.getMessage(), re);
+			System.err
+					.println("Remote Exception encountered when starting server "
+							+ re.getMessage());
+			re.printStackTrace();
+		} catch (final MalformedURLException murle) {
+			this.log.log(Level.SEVERE, murle.getMessage(), murle);
+			System.err.println("Invalid URL used for starting server "
+					+ murle.getMessage());
+			murle.printStackTrace();
 		}
 	}
 
-	public void serverRunning(boolean b) {
+	/**
+	 * Server running.
+	 *
+	 * @param b the b
+	 */
+	public void serverRunning(final boolean b) {
 		if (b) {
-			PropertyFileManager properties = PropertyFileManager.getInstance();
+			final PropertyFileManager properties = PropertyFileManager
+					.getInstance();
 
-			JLabel dbLabel = new JLabel(
+			final JLabel dbLabel = new JLabel(
 					"Location: "
 							+ properties
 									.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH));
-			JPanel dbPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			final JPanel dbPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			dbPanel.add(dbLabel);
 
-			JLabel hostLabel = new JLabel(
+			final JLabel hostLabel = new JLabel(
 					"Server Address: "
 							+ properties
 									.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_HOST));
-			JPanel hostPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			final JPanel hostPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			hostPanel.add(hostLabel);
 
-			JLabel portLabel = new JLabel(
+			final JLabel portLabel = new JLabel(
 					"Server Port: "
 							+ properties
 									.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT));
-			JPanel portPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			final JPanel portPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			portPanel.add(portLabel);
 
-			JPanel serverPanel = new JPanel(new BorderLayout());
+			final JPanel serverPanel = new JPanel(new BorderLayout());
 			serverPanel.add(dbPanel, BorderLayout.NORTH);
 			serverPanel.add(hostPanel, BorderLayout.WEST);
 			serverPanel.add(portPanel);
 			this.add(serverPanel, BorderLayout.NORTH);
 
-			JButton status = new JButton("Server Running ...");
+			final JButton status = new JButton("Server Running ...");
 			status.setEnabled(false);
-			JButton action = new JButton("Exit and Stop Server!");
+			final JButton action = new JButton("Exit and Stop Server!");
 			action.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					exitServer();
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					Server.this.exitServer();
 				}
 			});
-			JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+			final JPanel controlPanel = new JPanel(new FlowLayout(
+					FlowLayout.CENTER));
 			controlPanel.add(status);
 			controlPanel.add(action);
 			this.add(controlPanel, BorderLayout.SOUTH);
 
-			setVisible(true);
+			this.setVisible(true);
 		}
 	}
 
+	/**
+	 * Exit server.
+	 */
 	private void exitServer() {
-		// TODO Clean up before exiting
 		System.exit(0);
 	}
 }
