@@ -1,5 +1,7 @@
 /*
+ * PropertyManager
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.util;
 
@@ -8,48 +10,57 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class PropertyFileManager.
+ * This singleton class is used to read and write to the suncertify.properties
+ * file
+ * 
+ * @author Eoin Mooney
  */
-public class PropertyFileManager {
+public class PropertyManager {
 
-	/** The log. */
+	/**
+	 * The logger instance. All log message from this class are routed through
+	 * this member. The logger namespace is <code>suncertify.util</code>
+	 */
 	private final Logger log = Logger.getLogger("suncertify.util");
 
 	/** The Constant PROPERTY_FILE_NAME. */
-	private static final String PROPERTY_FILE_NAME = "suncertify.properties";
+	private static final String PROPERTY_FILE_NAME = ApplicationConstants.PROPERTY_FILE_NAME;
 
 	/** The Constant PROPERTY_FILE_DIR. */
-	private static final String PROPERTY_FILE_DIR = System
-			.getProperty("user.dir");
-
-	/** The properties file. */
-	private static File propertiesFile = new File(
-			PropertyFileManager.PROPERTY_FILE_DIR,
-			PropertyFileManager.PROPERTY_FILE_NAME);
-
-	/** The properties. */
-	private Properties properties = null;
-
-	/** The instance. */
-	private static PropertyFileManager instance = new PropertyFileManager();
+	private static final String PROPERTY_FILE_DIR = ApplicationConstants.PROPERTY_FILE_DIR;
 
 	/**
-	 * Gets the single instance of PropertyFileManager.
-	 *
-	 * @return single instance of PropertyFileManager
+	 * The properties file which will hold the configuration options between
+	 * sessions
 	 */
-	public static PropertyFileManager getInstance() {
-		return PropertyFileManager.instance;
+	private static File propertiesFile = new File(
+			PropertyManager.PROPERTY_FILE_DIR,
+			PropertyManager.PROPERTY_FILE_NAME);
+
+	/**
+	 * An instance of <code>Properties</code> that will be used to hold
+	 * properties and their values
+	 */
+	private Properties properties = null;
+
+	/** Create the singleton instance of this class */
+	private static PropertyManager instance = new PropertyManager();
+
+	/**
+	 * Gets the single instance of <code>PropertiesManager</code>.
+	 * 
+	 * @return single instance of <code>PropertiesManager</code>
+	 */
+	public static PropertyManager getInstance() {
+		return PropertyManager.instance;
 	}
 
 	/**
-	 * Instantiates a new property file manager.
+	 * Singleton constructor for <code>PropertyManager</code>
+	 * 
 	 */
-	private PropertyFileManager() {
-		this.log.entering("suncertify.util.PropertyFileManager",
-				"PropertyFileManager()");
+	private PropertyManager() {
 		this.properties = this.loadProperties();
 
 		if (this.properties == null || this.properties.isEmpty()) {
@@ -65,26 +76,26 @@ public class PropertyFileManager {
 					ApplicationConstants.KEY_PROPERTY_NETWORK_PORT,
 					String.valueOf(java.rmi.registry.Registry.REGISTRY_PORT));
 		}
-
-		this.log.exiting("suncertify.util.PropertyFileManager",
-				"PropertyFileManager()");
 	}
 
 	/**
-	 * Gets the property.
-	 *
-	 * @param propertyName the property name
-	 * @return the property
+	 * Gets a property.
+	 * 
+	 * @param propertyName
+	 *            The name of the property to be retrieved
+	 * @return The value of propertyName
 	 */
 	public String getProperty(final String propertyName) {
 		return this.properties.getProperty(propertyName);
 	}
 
 	/**
-	 * Sets the property.
-	 *
-	 * @param propertyName the property name
-	 * @param propertyValue the property value
+	 * Sets a property.
+	 * 
+	 * @param propertyName
+	 *            The name of the property to be stored
+	 * @param propertyValue
+	 *            The value to be stored as propertyName
 	 */
 	public void setProperty(final String propertyName,
 			final String propertyValue) {
@@ -93,17 +104,17 @@ public class PropertyFileManager {
 	}
 
 	/**
-	 * Save properties.
+	 * Save properties and write to file
 	 */
 	private void saveProperties() {
 		try {
-			synchronized (PropertyFileManager.propertiesFile) {
-				if (PropertyFileManager.propertiesFile.exists()) {
-					PropertyFileManager.propertiesFile.delete();
+			synchronized (PropertyManager.propertiesFile) {
+				if (PropertyManager.propertiesFile.exists()) {
+					PropertyManager.propertiesFile.delete();
 				}
-				PropertyFileManager.propertiesFile.createNewFile();
+				PropertyManager.propertiesFile.createNewFile();
 				final FileOutputStream fos = new FileOutputStream(
-						PropertyFileManager.propertiesFile);
+						PropertyManager.propertiesFile);
 				this.properties.store(fos, "URLyBird Properties");
 				fos.close();
 			}
@@ -117,27 +128,27 @@ public class PropertyFileManager {
 	}
 
 	/**
-	 * Load properties.
-	 *
-	 * @return the properties
+	 * Load properties from properties file
+	 * 
+	 * @return A <code>Properties</code> object holding the properties read from the file
 	 */
 	private Properties loadProperties() {
 		Properties loadedProperties = null;
 
-		if (PropertyFileManager.propertiesFile.exists()
-				&& PropertyFileManager.propertiesFile.canRead()) {
-			synchronized (PropertyFileManager.propertiesFile) {
+		if (PropertyManager.propertiesFile.exists()
+				&& PropertyManager.propertiesFile.canRead()) {
+			synchronized (PropertyManager.propertiesFile) {
 				try {
 					loadedProperties = new Properties();
 					final FileInputStream fis = new FileInputStream(
-							PropertyFileManager.propertiesFile);
+							PropertyManager.propertiesFile);
 					loadedProperties.load(fis);
 					fis.close();
 				} catch (final FileNotFoundException fnfe) {
 					this.log.log(Level.SEVERE, fnfe.getMessage(), fnfe);
 					System.err.println("Unable to open properties file at "
-							+ PropertyFileManager.PROPERTY_FILE_DIR
-							+ PropertyFileManager.PROPERTY_FILE_NAME + ": "
+							+ PropertyManager.PROPERTY_FILE_DIR
+							+ PropertyManager.PROPERTY_FILE_NAME + ": "
 							+ fnfe.getMessage());
 					fnfe.printStackTrace();
 				} catch (final IOException ioe) {

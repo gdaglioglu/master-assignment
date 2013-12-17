@@ -5,9 +5,10 @@
  */
 package suncertify.util;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Enum ApplicationMode.
+ * The Enum ApplicationMode is used throughout the application to define what mode the application is running in.
+ * 
+ * @author Eoin Mooney
  */
 public enum ApplicationMode {
 
