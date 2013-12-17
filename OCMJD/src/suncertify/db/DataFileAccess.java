@@ -15,25 +15,34 @@ import suncertify.util.ApplicationConstants;
 
 // TODO: Auto-generated Javadoc
 /**
- * This DataFileAccess class is a worker class called by the Data facade class for all interactions with the datafile and the cache provided by the Database class
+ * This class is a worker class called by the <code>Data</code> facade class for
+ * all interactions with the datafile It also interacts with the cache provided
+ * by the <code>Database</code> class
+ * 
+ * @author Eoin Mooney
  */
 public class DataFileAccess {
 
 	/**
-	 * This attribute is used to store the location of the first record in the datafile
+	 * This attribute is used to store the location of the first record in the
+	 * datafile
 	 */
 	private long startOfDataOffset;
 
-	/** The log. */
+	/**
+	 * The logger instance. All log message from this class are routed through
+	 * this member. The logger namespace is <code>suncertify.db</code>
+	 */
 	private final Logger log = Logger.getLogger("suncertify.db");
 
-	/** 
-	 * The database instance is used for all read and write operations on the data file
+	/**
+	 * The database instance is used for all read and write operations on the
+	 * datafile
 	 */
 	private RandomAccessFile database = null;
 
-	/** 
-	 * dbLocation holds the location of the datafile on the system
+	/**
+	 * This <code>String</code> holds the location of the datafile on the system
 	 */
 	private String dbLocation = null;
 
@@ -43,13 +52,14 @@ public class DataFileAccess {
 	private final Database cache = new Database();
 
 	/**
-	 * This constructor takes the datafile location as a parameter and checks that this file can be accessed
-	 *
-	 * @param providedDbLocation the provided location for the datafile
+	 * This constructor takes the datafile location as a parameter and checks
+	 * that this file can be accessed
+	 * 
+	 * @param providedDbLocation
+	 *            A <code>String</code> holding the provided location for the
+	 *            datafile
 	 */
 	public DataFileAccess(final String providedDbLocation) {
-		this.log.entering("suncertify.db.DataFileAccess", "DataFileAccess",
-				providedDbLocation);
 
 		if (this.database == null) {
 			this.openDatabase(providedDbLocation, "r");
@@ -72,15 +82,17 @@ public class DataFileAccess {
 					+ "Current location: " + this.dbLocation + " "
 					+ "Ignoring provided path: " + providedDbLocation);
 		}
-
-		this.log.exiting("suncertify.db.DataFileAccess", "DataFileAccess");
 	}
 
 	/**
-	 * This method opens the datafile for read or read/write operations and logs any exceptions encountered as SEVERE
-	 *
-	 * @param location the location
-	 * @param mode the mode
+	 * This method opens the datafile for read or read/write operations and logs
+	 * any exceptions encountered as <code>SEVERE</code>
+	 * 
+	 * @param location
+	 *            A <code>String</code> containing the location of the datafile
+	 * @param mode
+	 *            Used to open the file in read mode (use "r") or read/write
+	 *            mode (use "rw")
 	 */
 	private void openDatabase(final String location, final String mode) {
 		try {
@@ -102,7 +114,8 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * This method closes the datafile and logs any IO exceptions encountered as SEVERE
+	 * This method closes the datafile and logs any IO exceptions encountered as
+	 * <code>SEVERE</code>
 	 */
 	private void closeDatabase() {
 		try {
@@ -119,9 +132,12 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * This method dynamically reads the schema information for a field from the database and stores this information in a RecordFieldInfo object in the cache
-	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * This method dynamically reads the schema information for a field from the
+	 * database and stores this information in a <code>RecordFieldInfo</code>
+	 * object in the cache
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	private void readFieldInfo() throws IOException {
 		int fieldNameLengthTemp;
@@ -137,10 +153,10 @@ public class DataFileAccess {
 			// Build RecordFieldInfo object
 			final RecordFieldInfo fieldInfoTemp = new RecordFieldInfo(
 					fieldNameLengthTemp, fieldNameTemp, fieldLength);
-			
+
 			// Store RecordFieldInfo object in the cache
 			this.cache.addRecordFieldInfo(fieldInfoTemp);
-			
+
 		} catch (final UnsupportedEncodingException uee) {
 			this.log.log(Level.SEVERE, uee.getMessage(), uee);
 			System.err.println("Unable to decode field info: ");
@@ -149,10 +165,13 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * This method reads all the schema information from the datafile and stores it in the cache
-	 *
-	 * @return The location in the datafile after the schema info where first data record begins.
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * This method reads all the schema information from the datafile and stores
+	 * it in the cache
+	 * 
+	 * @return The location in the datafile after the schema info where first
+	 *         data record begins.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public long readDatabaseSchema() throws IOException {
 		long offset = -1;
@@ -161,12 +180,12 @@ public class DataFileAccess {
 		this.openDatabase(this.dbLocation, "r");
 
 		final int magicCookie = this.database.readInt();
-		
-		if(magicCookie != ApplicationConstants.MAGIC_COOKIE) {
+
+		if (magicCookie != ApplicationConstants.MAGIC_COOKIE) {
 			this.log.severe("Magic Cookie does not match expected value for datafile. Exiting Application");
 			System.exit(0);
 		}
-		
+
 		this.cache.setMagicCookie(magicCookie);
 		this.cache.setFieldsPerRecord(this.database.readShort());
 
@@ -187,10 +206,12 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Reads a 1 byte flag at the start of each record that differentiates between a valid or deleted record
-	 *
+	 * Reads a 1 <code>byte</code> flag at the start of each record that
+	 * differentiates between a valid or deleted record
+	 * 
 	 * @return The deleted flag
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	private byte readRecordFlag() throws IOException {
 		final byte recordFlag = this.database.readByte();
@@ -199,16 +220,20 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Reads a record from the datafile, using the schema info from the cache to accurately read each field
-	 *
-	 * @return An array of strings, each containing one field from the record padded with spaces
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * Reads a record from the datafile, using the schema info from the cache to
+	 * accurately read each field
+	 * 
+	 * @return An array of <String>, each containing one field from the record
+	 *         padded with spaces
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	private String[] readRecordData() throws IOException {
 		final String[] recordContents = new String[this.cache
 				.getFieldsPerRecord()];
 
 		for (int index = 0; index < this.cache.getFieldsPerRecord(); index++) {
+			// read n bytes, where n is based on the schema info in the cache
 			final byte[] temp = new byte[this.cache.getRecordFieldInfoAtIndex(
 					index).getBytesInField()];
 			this.database.read(temp, 0,
@@ -216,6 +241,7 @@ public class DataFileAccess {
 							.getBytesInField());
 
 			try {
+				//convert byte array to String
 				recordContents[index] = new String(temp, 0, temp.length,
 						"US-ASCII");
 			} catch (final UnsupportedEncodingException uee) {
@@ -228,10 +254,13 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Writes the 1 byte flag at the start of each record that differentiates between a valid or deleted record
-	 *
-	 * @param recNo Identifies the record the flag will be written for
-	 * @param deleted If true the flag will indicate a deleted record
+	 * Writes the 1 byte flag at the start of each record that differentiates
+	 * between a valid or deleted record
+	 * 
+	 * @param recNo
+	 *            Identifies the record number where the flag will be written
+	 * @param deleted
+	 *            If true the flag will indicate a deleted record
 	 */
 	private void writeRecordFlag(final long recNo, final boolean deleted) {
 		final long startOfRecord = this.startOfDataOffset + recNo
@@ -261,12 +290,14 @@ public class DataFileAccess {
 
 	/**
 	 * Writes the fields of a record to the datafile.
-	 *
-	 * @param recNo Identifies the location in the datafile where the record will be written
-	 * @param data An array of strings containing the fields of the record to be written
+	 * 
+	 * @param recNo
+	 *            Identifies record number of the record to be written
+	 * @param data
+	 *            An array of <code>String</code> containing the fields of the
+	 *            record to be written
 	 */
 	private void writeRecordData(final long recNo, final String[] data) {
-		this.log.entering("suncertify.db.DataFileAccess", "writeRecordData");
 
 		final long startOfRecord = this.startOfDataOffset + recNo
 				* this.cache.getSizeOfRecord();
@@ -290,16 +321,13 @@ public class DataFileAccess {
 		} finally {
 			this.closeDatabase();
 		}
-
-		this.log.exiting("suncertify.db.DataFileAccess", "writeRecordData");
 	}
 
 	/**
-	 * Clears the existing cache and re-populates it by reading all records from the datafile
+	 * Clears the existing cache and re-populates it by reading all records from
+	 * the datafile
 	 */
 	private void updateCache() {
-		this.log.entering("suncertify.db.DataFileAccess", "updateCache");
-
 		this.cache.clearRecordsCache();
 		this.log.fine("Cache cleared");
 
@@ -327,16 +355,16 @@ public class DataFileAccess {
 		}
 
 		this.log.fine("Database loaded into memory");
-
-		this.log.exiting("suncertify.db.DataFileAccess", "updateCache");
 	}
 
 	/**
-	 * Read record.
-	 *
-	 * @param recNo the rec no
-	 * @return the string[]
-	 * @throws RecordNotFoundException the record not found exception
+	 * Reads a single record from the cache
+	 * 
+	 * @param recNo
+	 *            The record number of the record to read
+	 * @return A <code>String[]</code> with each <code>String</code> holding a field of the record
+	 * @throws RecordNotFoundException
+	 *             Signals that no valid record exists with given record number
 	 */
 	public String[] readRecord(final long recNo) throws RecordNotFoundException {
 
@@ -353,18 +381,22 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Update record.
-	 *
-	 * @param recNo the rec no
-	 * @param data the data
-	 * @param lockCookie the lock cookie
-	 * @throws RecordNotFoundException the record not found exception
-	 * @throws SecurityException the security exception
+	 * Updates a record in the datafile and refreshes the cache
+	 * 
+	 * @param recNo
+	 *            The record number of the record to be updated
+	 * @param data
+	 *            A <code>String[]</code> with each <code>String</code> holding a field of the record that will be written to the datafile
+	 * @param lockCookie
+	 *            A <code>lockCookie</code> provided by the <code>DataLockManager</code>, used to ensure only one user can update a record at a time
+	 * @throws RecordNotFoundException
+	 *             Signals that no valid record exists with given record number
+	 * @throws SecurityException
+	 *             Signals that user is attempting to update record with an invalid <code>lockCookie</code>
 	 */
 	public void updateRecord(final long recNo, final String[] data,
 			final long lockCookie) throws RecordNotFoundException,
 			SecurityException {
-		this.log.entering("suncertify.db.DataFileAccess", "updateRecord");
 		final long userLockCookie = Thread.currentThread().getId();
 
 		final DataLockManager locks = DataLockManager.getInstance();
@@ -397,22 +429,22 @@ public class DataFileAccess {
 		}
 
 		this.updateCache();
-
-		this.log.exiting("suncertify.db.DataFileAccess", "updateRecord");
 	}
 
 	/**
-	 * Delete record.
-	 *
-	 * @param recNo the rec no
-	 * @param lockCookie the lock cookie
-	 * @throws RecordNotFoundException the record not found exception
-	 * @throws SecurityException the security exception
+	 * Marks a record as deleted in the datafile and refreshes the cache
+	 * 
+	 * @param recNo
+	 *            The record number of the record to be deleted
+	 * @param lockCookie
+	 *            A <code>lockCookie</code> provided by the <code>DataLockManager</code>, used to ensure only one user can update a record at a time
+	 * @throws RecordNotFoundException
+	 *             Signals that no valid record exists with given record number
+	 * @throws SecurityException
+	 *             Signals that user is attempting to update record with an invalid <code>lockCookie</code>
 	 */
 	public void deleteRecord(final long recNo, final long lockCookie)
 			throws RecordNotFoundException, SecurityException {
-		this.log.entering("suncertify.db.DataFileAccess", "deleteRecord");
-
 		final long userLockCookie = Thread.currentThread().getId();
 
 		final DataLockManager locks = DataLockManager.getInstance();
@@ -442,15 +474,14 @@ public class DataFileAccess {
 		}
 
 		this.updateCache();
-
-		this.log.exiting("suncertify.db.DataFileAccess", "deleteRecord");
 	}
 
 	/**
-	 * Find by criteria.
-	 *
-	 * @param criteria the criteria
-	 * @return the long[]
+	 * Case sensitive search that will return record number of all records that match the given criteria for each field.
+	 * 
+	 * @param criteria
+	 *            A <code>String[]</code> containing the <code>String</code> to match each field on
+	 * @return The list of record numbers that match the given criteria, if criteria is <code>null</code> returns all valid records
 	 */
 	public long[] findByCriteria(final String[] criteria) {
 
@@ -480,13 +511,15 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Creates the record.
-	 *
-	 * @param data the data
-	 * @return the long
-	 * @throws DuplicateKeyException the duplicate key exception
+	 * Writes a new record to the datafile, overwriting a deleted record if available.
+	 * 
+	 * @param data
+	 *            A <code>String[]</code> with each <code>String</code> holding a field of the record that will be written to the datafile
+	 * @return The record number of the newly created record
+	 * @throws DuplicateKeyException
+	 *             the duplicate key exception
 	 */
-	public long createRecord(final String[] data) throws DuplicateKeyException {
+	public long createRecord(final String[] data) {
 		long recNo;
 
 		for (recNo = 0; recNo < this.cache.getNumberOfRoomRecords(); recNo++) {
