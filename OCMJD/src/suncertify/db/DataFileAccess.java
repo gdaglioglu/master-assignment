@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 import suncertify.util.ApplicationConstants;
 
-// TODO: Auto-generated Javadoc
 /**
  * This class is a worker class called by the <code>Data</code> facade class for
  * all interactions with the datafile It also interacts with the cache provided
