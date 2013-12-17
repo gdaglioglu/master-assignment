@@ -1,5 +1,7 @@
 /*
+ * ServerFactoryImpl
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.remote;
 
@@ -13,6 +15,11 @@ import java.util.logging.Logger;
  */
 public class ServerFactoryImpl extends UnicastRemoteObject implements
 		ServerFactory {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3574077733831896020L;
 
 	/** The db location. */
 	private static String dbLocation = null;

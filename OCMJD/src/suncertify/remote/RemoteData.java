@@ -14,6 +14,11 @@ import suncertify.db.*;
  */
 public class RemoteData extends UnicastRemoteObject implements RemoteDBAccess {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8217941285842635667L;
+	
 	/** The database. */
 	private static DBAccess database = null;
 

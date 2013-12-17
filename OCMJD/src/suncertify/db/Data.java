@@ -1,24 +1,33 @@
 /*
+ * Data
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.db;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Data.
+ * This class implements the provided interface DBAccess
+ * This class is a facade and delegates all functionality to two worker classes
+ * 
+ * @author Eoin Mooney
+ * 
  */
 public class Data implements DBAccess {
 
-	/** The database. */
+	/**
+	 * All interactions with the datafile are delegated to this class
+	 */
 	private static DataFileAccess database = null;
 
-	/** The locks. */
+	/**
+	 * The locking mechanism is delegated to this class
+	 */
 	private static DataLockManager locks = DataLockManager.getInstance();
 
 	/**
-	 * Instantiates a new data.
+	 * This constructor takes the location of the data file as a parameter and creates a new DataFileAccess object to interact with the datafile
 	 *
-	 * @param dbLocation the db location
+	 * @param dbLocation The location of the datafile on disk 
 	 */
 	public Data(final String dbLocation) {
 		Data.database = new DataFileAccess(dbLocation);

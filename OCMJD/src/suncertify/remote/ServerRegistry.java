@@ -1,5 +1,7 @@
 /*
+ * ServerRegistry
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.remote;
 

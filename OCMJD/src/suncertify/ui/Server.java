@@ -1,5 +1,7 @@
 /*
+ * Server
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.ui;
 
@@ -21,6 +23,11 @@ import suncertify.util.*;
  * The Class Server.
  */
 public class Server extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8912635373524728136L;
 
 	/** The log. */
 	private final Logger log = Logger.getLogger("suncertify.ui");

@@ -1,5 +1,7 @@
 /*
+ * DataFileAccess
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.db;
 
@@ -9,31 +11,41 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import suncertify.util.ApplicationConstants;
+
 // TODO: Auto-generated Javadoc
 /**
- * The Class DataFileAccess.
+ * This DataFileAccess class is a worker class called by the Data facade class for all interactions with the datafile and the cache provided by the Database class
  */
 public class DataFileAccess {
 
-	/** The start of data offset. */
+	/**
+	 * This attribute is used to store the location of the first record in the datafile
+	 */
 	private long startOfDataOffset;
 
 	/** The log. */
 	private final Logger log = Logger.getLogger("suncertify.db");
 
-	/** The database. */
+	/** 
+	 * The database instance is used for all read and write operations on the data file
+	 */
 	private RandomAccessFile database = null;
 
-	/** The db location. */
+	/** 
+	 * dbLocation holds the location of the datafile on the system
+	 */
 	private String dbLocation = null;
 
-	/** The cache. */
+	/**
+	 * This class provides a caching mechanism
+	 */
 	private final Database cache = new Database();
 
 	/**
-	 * Instantiates a new data file access.
+	 * This constructor takes the datafile location as a parameter and checks that this file can be accessed
 	 *
-	 * @param providedDbLocation the provided db location
+	 * @param providedDbLocation the provided location for the datafile
 	 */
 	public DataFileAccess(final String providedDbLocation) {
 		this.log.entering("suncertify.db.DataFileAccess", "DataFileAccess",
@@ -65,7 +77,7 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Open database.
+	 * This method opens the datafile for read or read/write operations and logs any exceptions encountered as SEVERE
 	 *
 	 * @param location the location
 	 * @param mode the mode
@@ -90,7 +102,7 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Close database.
+	 * This method closes the datafile and logs any IO exceptions encountered as SEVERE
 	 */
 	private void closeDatabase() {
 		try {
@@ -107,7 +119,7 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Read field info.
+	 * This method dynamically reads the schema information for a field from the database and stores this information in a RecordFieldInfo object in the cache
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
@@ -122,9 +134,13 @@ public class DataFileAccess {
 		fieldLength = this.database.readByte();
 
 		try {
+			// Build RecordFieldInfo object
 			final RecordFieldInfo fieldInfoTemp = new RecordFieldInfo(
 					fieldNameLengthTemp, fieldNameTemp, fieldLength);
+			
+			// Store RecordFieldInfo object in the cache
 			this.cache.addRecordFieldInfo(fieldInfoTemp);
+			
 		} catch (final UnsupportedEncodingException uee) {
 			this.log.log(Level.SEVERE, uee.getMessage(), uee);
 			System.err.println("Unable to decode field info: ");
@@ -133,20 +149,24 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Read database schema.
+	 * This method reads all the schema information from the datafile and stores it in the cache
 	 *
-	 * @return the long
+	 * @return The location in the datafile after the schema info where first data record begins.
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public long readDatabaseSchema() throws IOException {
-		this.log.entering("suncertify.db.DataFileAccess", "readDatabaseSchema");
 		long offset = -1;
 		long sizeOfRecord = 1;
 
 		this.openDatabase(this.dbLocation, "r");
 
 		final int magicCookie = this.database.readInt();
-
+		
+		if(magicCookie != ApplicationConstants.MAGIC_COOKIE) {
+			this.log.severe("Magic Cookie does not match expected value for datafile. Exiting Application");
+			System.exit(0);
+		}
+		
 		this.cache.setMagicCookie(magicCookie);
 		this.cache.setFieldsPerRecord(this.database.readShort());
 
@@ -161,17 +181,15 @@ public class DataFileAccess {
 
 		this.closeDatabase();
 
-		this.log.exiting("suncertify.db.DataFileAccess", "readDatabaseSchema");
-
-		this.log.fine("Schema successfully read to cache");
+		this.log.info("Schema successfully read to cache");
 
 		return offset;
 	}
 
 	/**
-	 * Read record flag.
+	 * Reads a 1 byte flag at the start of each record that differentiates between a valid or deleted record
 	 *
-	 * @return the byte
+	 * @return The deleted flag
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	private byte readRecordFlag() throws IOException {
@@ -181,9 +199,9 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Read record data.
+	 * Reads a record from the datafile, using the schema info from the cache to accurately read each field
 	 *
-	 * @return the string[]
+	 * @return An array of strings, each containing one field from the record padded with spaces
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	private String[] readRecordData() throws IOException {
@@ -210,14 +228,12 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Write record flag.
+	 * Writes the 1 byte flag at the start of each record that differentiates between a valid or deleted record
 	 *
-	 * @param recNo the rec no
-	 * @param deleted the deleted
+	 * @param recNo Identifies the record the flag will be written for
+	 * @param deleted If true the flag will indicate a deleted record
 	 */
 	private void writeRecordFlag(final long recNo, final boolean deleted) {
-		this.log.entering("suncertify.db.DataFileAccess", "writeRecordFlag");
-
 		final long startOfRecord = this.startOfDataOffset + recNo
 				* this.cache.getSizeOfRecord();
 
@@ -241,15 +257,13 @@ public class DataFileAccess {
 		} finally {
 			this.closeDatabase();
 		}
-
-		this.log.exiting("suncertify.db.DataFileAccess", "writeRecordFlag");
 	}
 
 	/**
-	 * Write record data.
+	 * Writes the fields of a record to the datafile.
 	 *
-	 * @param recNo the rec no
-	 * @param data the data
+	 * @param recNo Identifies the location in the datafile where the record will be written
+	 * @param data An array of strings containing the fields of the record to be written
 	 */
 	private void writeRecordData(final long recNo, final String[] data) {
 		this.log.entering("suncertify.db.DataFileAccess", "writeRecordData");
@@ -281,9 +295,9 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Update cache.
+	 * Clears the existing cache and re-populates it by reading all records from the datafile
 	 */
-	public void updateCache() {
+	private void updateCache() {
 		this.log.entering("suncertify.db.DataFileAccess", "updateCache");
 
 		this.cache.clearRecordsCache();

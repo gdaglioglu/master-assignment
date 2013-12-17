@@ -1,5 +1,7 @@
 /*
+ * ClientController
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.ui;
 
@@ -44,8 +46,8 @@ public class ClientController {
 	/** The last search. */
 	private String lastSearch;
 
-	/** The dialog. */
-	private final ConfigDialog dialog;
+	/** The config. */
+	private final ConfigDialog config;
 
 	/** The properties. */
 	private final PropertyFileManager properties = PropertyFileManager
@@ -65,11 +67,16 @@ public class ClientController {
 			this.clientUI = new ClientWindow("URLyBird 1.0 - Network Mode");
 		} else {
 			this.log.severe("Client started with incorrect Application Mode. Exiting application");
+			this.clientUI
+			.showError(
+					"Client started with incorrect Application Mode. Exiting application",
+					"Error", Level.SEVERE);
+
 			System.exit(0);
 		}
 
-		this.dialog = new ConfigDialog(applicationMode);
-		this.dialog.setVisible(true);
+		this.config = new ConfigDialog(applicationMode);
+		this.config.setVisible(true);
 
 		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
 			this.database = DataConnector.getLocal(this.properties
@@ -80,18 +87,29 @@ public class ClientController {
 				this.remoteDatabase = DataConnector
 						.getRemote(
 								this.properties
-										.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_HOST),
+								.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_HOST),
 								this.properties
-										.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT));
+								.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT));
 			} catch (final RemoteException re) {
 				this.log.log(Level.SEVERE, re.getMessage(), re);
+
+				this.clientUI
+				.showError(
+						"Remote Exception encountered when starting networked client.",
+						"Error", Level.SEVERE);
+
 				System.err
-						.println("Remote Exception encountered when starting networked client "
-								+ re.getMessage());
+				.println("Remote Exception encountered when starting networked client "
+						+ re.getMessage());
 				re.printStackTrace();
 			}
 		} else {
 			this.log.severe("Client started with incorrect Application Mode. Exiting application");
+			this.clientUI
+			.showError(
+					"Client started with incorrect Application Mode. Exiting application",
+					"Error", Level.SEVERE);
+
 			System.exit(0);
 		}
 
@@ -109,8 +127,8 @@ public class ClientController {
 				ClientController.this.lastSearch = ClientController.this
 						.getSearchText();
 				ClientController.this.clientUI
-						.updateTable(ClientController.this
-								.getRecords(ClientController.this.lastSearch));
+				.updateTable(ClientController.this
+						.getRecords(ClientController.this.lastSearch));
 			}
 		};
 		this.bookingListener = new ActionListener() {
@@ -125,8 +143,8 @@ public class ClientController {
 					if (owner != null) {
 						ClientController.this.bookRoom(selectedRecNo, owner);
 						ClientController.this.clientUI
-								.updateTable(ClientController.this
-										.getRecords(ClientController.this.lastSearch));
+						.updateTable(ClientController.this
+								.getRecords(ClientController.this.lastSearch));
 					}
 				}
 			}
@@ -134,7 +152,7 @@ public class ClientController {
 
 		this.clientUI.getSearchButton().addActionListener(this.searchListener);
 		this.clientUI.getBookingButton()
-				.addActionListener(this.bookingListener);
+		.addActionListener(this.bookingListener);
 	}
 
 	/**
@@ -181,6 +199,11 @@ public class ClientController {
 				this.database.unlock(recNo, lock);
 			} catch (final RecordNotFoundException rnfe) {
 				this.log.log(Level.WARNING, rnfe.getMessage(), rnfe);
+
+				this.clientUI.showError(
+						"Cannot book record: " + rnfe.getMessage(), "Warning",
+						Level.WARNING);
+
 				System.err.println("Cannot book record: " + rnfe.getMessage());
 				rnfe.printStackTrace();
 			}
@@ -193,17 +216,33 @@ public class ClientController {
 				this.remoteDatabase.unlock(recNo, lock);
 			} catch (final RemoteException re) {
 				this.log.log(Level.SEVERE, re.getMessage(), re);
+
+				this.clientUI.showError(
+						"Remote Exception encountered when booking a room: "
+								+ re.getMessage() + re.getMessage(), "Error",
+								Level.SEVERE);
+
 				System.err
-						.println("Remote Exception encountered when booking a room "
-								+ re.getMessage());
+				.println("Remote Exception encountered when booking a room "
+						+ re.getMessage());
 				re.printStackTrace();
 			} catch (final RecordNotFoundException rnfe) {
 				this.log.log(Level.WARNING, rnfe.getMessage(), rnfe);
+
+				this.clientUI.showError(
+						"Cannot book record: " + rnfe.getMessage(), "Warning",
+						Level.WARNING);
+
 				System.err.println("Cannot book record: " + rnfe.getMessage());
 				rnfe.printStackTrace();
 			}
 		} else {
 			this.log.severe("Client controller started with incorrect Application Mode. Exiting application");
+			this.clientUI
+			.showError(
+					"Client controller started with incorrect Application Mode. Exiting application",
+					"Error", Level.SEVERE);
+
 			System.exit(0);
 		}
 	}
@@ -231,9 +270,14 @@ public class ClientController {
 			for (final long recNo : recNoArray) {
 				try {
 					this.model
-							.addRecord(this.database.readRecord(recNo), recNo);
+					.addRecord(this.database.readRecord(recNo), recNo);
 				} catch (final RecordNotFoundException rnfe) {
 					this.log.log(Level.WARNING, rnfe.getMessage(), rnfe);
+
+					this.clientUI.showError(
+							"Cannot retrieve record: " + rnfe.getMessage(),
+							"Warning", Level.WARNING);
+
 					System.err.println("Cannot retrieve record: "
 							+ rnfe.getMessage());
 					rnfe.printStackTrace();
@@ -245,9 +289,14 @@ public class ClientController {
 					recNoArray = this.remoteDatabase.findByCriteria(null);
 				} catch (final RemoteException re) {
 					this.log.log(Level.SEVERE, re.getMessage(), re);
+
+					this.clientUI.showError(
+							"Remote Exception encountered when retrieving search results"
+									+ re.getMessage(), "Error", Level.SEVERE);
+
 					System.err
-							.println("Remote Exception encountered when retrieving search results"
-									+ re.getMessage());
+					.println("Remote Exception encountered when retrieving search results"
+							+ re.getMessage());
 					re.printStackTrace();
 				}
 			} else {
@@ -258,9 +307,14 @@ public class ClientController {
 					recNoArray = this.remoteDatabase.findByCriteria(search);
 				} catch (final RemoteException re) {
 					this.log.log(Level.SEVERE, re.getMessage(), re);
+
+					this.clientUI.showError(
+							"Remote Exception encountered when retrieving search results"
+									+ re.getMessage(), "Error", Level.SEVERE);
+
 					System.err
-							.println("Remote Exception encountered when retrieving search results"
-									+ re.getMessage());
+					.println("Remote Exception encountered when retrieving search results"
+							+ re.getMessage());
 					re.printStackTrace();
 				}
 			}
@@ -271,12 +325,22 @@ public class ClientController {
 							recNo);
 				} catch (final RemoteException re) {
 					this.log.log(Level.SEVERE, re.getMessage(), re);
+
+					this.clientUI.showError(
+							"Remote Exception encountered when retrieving search results"
+									+ re.getMessage(), "Error", Level.SEVERE);
+
 					System.err
-							.println("Remote Exception encountered when retrieving search results"
-									+ re.getMessage());
+					.println("Remote Exception encountered when retrieving search results"
+							+ re.getMessage());
 					re.printStackTrace();
 				} catch (final RecordNotFoundException rnfe) {
 					this.log.log(Level.WARNING, rnfe.getMessage(), rnfe);
+
+					this.clientUI.showError(
+							"Cannot retrieve record: " + rnfe.getMessage(),
+							"Warning", Level.WARNING);
+
 					System.err.println("Cannot retrieve record: "
 							+ rnfe.getMessage());
 					rnfe.printStackTrace();
@@ -284,6 +348,11 @@ public class ClientController {
 			}
 		} else {
 			this.log.severe("Client controller started with incorrect Application Mode. Exiting application");
+			this.clientUI
+			.showError(
+					"Client controller started with incorrect Application Mode. Exiting application",
+					"Error", Level.SEVERE);
+
 			System.exit(0);
 		}
 

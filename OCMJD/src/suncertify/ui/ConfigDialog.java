@@ -1,5 +1,7 @@
 /*
+ * ConfigDialog
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.ui;
 
@@ -20,6 +22,11 @@ import suncertify.util.*;
  * The Class ConfigDialog.
  */
 public class ConfigDialog extends JDialog implements ActionListener {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7286902966873123608L;
 
 	/** The log. */
 	private final Logger log = Logger.getLogger("suncertify.ui");

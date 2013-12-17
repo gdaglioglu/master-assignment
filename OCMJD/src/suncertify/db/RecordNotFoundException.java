@@ -1,5 +1,7 @@
 /*
+ * RecordNotFoundException
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.db;
 
@@ -8,6 +10,11 @@ package suncertify.db;
  * The Class RecordNotFoundException.
  */
 public class RecordNotFoundException extends Exception {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9172845648588845215L;
 
 	/**
 	 * Instantiates a new record not found exception.

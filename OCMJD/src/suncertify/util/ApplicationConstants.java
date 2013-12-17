@@ -1,5 +1,7 @@
 /*
+ * ApplicationConstants
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.util;
 
@@ -12,6 +14,9 @@ public class ApplicationConstants {
 	/** The Constant USERNAME. */
 	public static final String USERNAME = System.getProperty("user.name");
 
+	/** The Constant MAGIC_COOKIE. */
+	public static final int MAGIC_COOKIE = 0x103;
+	
 	/** The Constant RMI_SERVER_IDENTIFIER. */
 	public static final String RMI_SERVER_IDENTIFIER = "OCMJD";
 

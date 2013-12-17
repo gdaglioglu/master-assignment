@@ -1,10 +1,13 @@
 /*
+ * ClientWindow
  * 
+ * Software developed for Oracle Certified Master, Java SE 6 Developer
  */
 package suncertify.ui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.util.logging.Level;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -14,6 +17,9 @@ import javax.swing.table.AbstractTableModel;
  * The Class ClientWindow.
  */
 public class ClientWindow extends JFrame {
+
+	/** The Constant serialVersionUID. */
+	private static final long serialVersionUID = -3556141753736333290L;
 
 	/** The table. */
 	private JTable table;
@@ -167,14 +173,32 @@ public class ClientWindow extends JFrame {
 		final String prevSelected = index >= 0 ? (String) this.table
 				.getValueAt(index, 0) : "";
 
-		this.table.setModel(tableData);
+				this.table.setModel(tableData);
 
-		for (int i = 0; i < this.table.getRowCount(); i++) {
-			final String id = (String) this.table.getValueAt(i, 0);
-			if (id.equals(prevSelected)) {
-				this.table.setRowSelectionInterval(i, i);
-				break;
-			}
+				for (int i = 0; i < this.table.getRowCount(); i++) {
+					final String id = (String) this.table.getValueAt(i, 0);
+					if (id.equals(prevSelected)) {
+						this.table.setRowSelectionInterval(i, i);
+						break;
+					}
+				}
+	}
+
+	/**
+	 * Show error.
+	 *
+	 * @param message the message
+	 * @param title the title
+	 * @param importance the importance
+	 */
+	public void showError(final String message, final String title,
+			final Level importance) {
+		if (importance == Level.SEVERE) {
+			JOptionPane.showMessageDialog(this, message, title,
+					JOptionPane.ERROR_MESSAGE);
+		} else if (importance == Level.WARNING) {
+			JOptionPane.showMessageDialog(this, message, title,
+					JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
