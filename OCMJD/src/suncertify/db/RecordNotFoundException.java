@@ -5,14 +5,16 @@
  */
 package suncertify.db;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class RecordNotFoundException.
+ * This is the exception class used when a record cannot be found
+ * 
+ * @author Eoin Mooney
  */
 public class RecordNotFoundException extends Exception {
 
 	/**
-	 * 
+	 * A version number for this class to support serialization and
+	 * de-serialization.
 	 */
 	private static final long serialVersionUID = 9172845648588845215L;
 
@@ -24,9 +26,9 @@ public class RecordNotFoundException extends Exception {
 	}
 
 	/**
-	 * Instantiates a new record not found exception.
+	 * Instantiates a new record not found exception with a specific message.
 	 *
-	 * @param s the s
+	 * @param s the message
 	 */
 	public RecordNotFoundException(final String s) {
 		super(s);

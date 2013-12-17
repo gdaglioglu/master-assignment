@@ -5,14 +5,16 @@
  */
 package suncertify.db;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class DuplicateKeyException.
+ * This is the exception class used when a duplicate key is found.
+ * 
+ * @author Eoin Mooney
  */
 public class DuplicateKeyException extends Exception {
 
 	/**
-	 * 
+	 * A version number for this class to support serialization and
+	 * de-serialization.
 	 */
 	private static final long serialVersionUID = -6689165809485807888L;
 
@@ -24,9 +26,9 @@ public class DuplicateKeyException extends Exception {
 	}
 
 	/**
-	 * Instantiates a new duplicate key exception.
+	 * Instantiates a new duplicate key exception with a specific message.
 	 *
-	 * @param s the s
+	 * @param s the message
 	 */
 	public DuplicateKeyException(final String s) {
 		super(s);
