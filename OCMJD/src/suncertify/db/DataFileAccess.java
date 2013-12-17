@@ -172,7 +172,7 @@ public class DataFileAccess {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public long readDatabaseSchema() throws IOException {
+	private long readDatabaseSchema() throws IOException {
 		long offset = -1;
 		long sizeOfRecord = 1;
 
@@ -190,7 +190,7 @@ public class DataFileAccess {
 
 		for (int i = 0; i < this.cache.getFieldsPerRecord(); i++) {
 			this.readFieldInfo();
-			sizeOfRecord += this.cache.getRecordFieldInfoAtIndex(i)
+			sizeOfRecord += this.cache.getRecordFieldInfo(i)
 					.getBytesInField();
 		}
 
@@ -233,10 +233,10 @@ public class DataFileAccess {
 
 		for (int index = 0; index < this.cache.getFieldsPerRecord(); index++) {
 			// read n bytes, where n is based on the schema info in the cache
-			final byte[] temp = new byte[this.cache.getRecordFieldInfoAtIndex(
+			final byte[] temp = new byte[this.cache.getRecordFieldInfo(
 					index).getBytesInField()];
 			this.database.read(temp, 0,
-					this.cache.getRecordFieldInfoAtIndex(index)
+					this.cache.getRecordFieldInfo(index)
 							.getBytesInField());
 
 			try {
