@@ -7,63 +7,68 @@ package suncertify.db;
 
 import java.util.logging.Logger;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class RoomRecord.
+ * This class is used to store a record from the datafile. A <code>List</code>
+ * of these objects is used by <code>Database</code> to provide a caching
+ * mechanism for the application
+ * 
+ * @author Eoin Mooney
  */
 public class RoomRecord {
 
-	/** The log. */
+	/**
+	 * The logger instance. All log message from this class are routed through
+	 * this member. The logger namespace is <code>suncertify.db</code>
+	 */
 	private final Logger log = Logger.getLogger("suncertify.db");
 
-	/** The deleted. */
-	private boolean deleted;
+	/** If true, this record has been marked as deleted */
+	private Boolean deleted;
 
-	/** The fields. */
+	/**
+	 * A <code>String[]</code> with each <code>String</code> storing the
+	 * contents of a field of the record
+	 */
 	private final String[] fields;
 
 	/**
-	 * Instantiates a new room record.
-	 *
-	 * @param flag the flag
-	 * @param content the content
+	 * Instantiates a new record.
+	 * 
+	 * @param flag
+	 *            a byte indicating whether the field is marked as deleted or
+	 *            not. 0x00 indicates valid, 0xFF indicates deleted.
+	 * @param content
+	 *            the content
 	 */
 	public RoomRecord(final byte flag, final String[] content) {
+
 		if (flag == 0x00) {
 			this.deleted = false;
+			this.fields = content;
 		} else if (flag == 0xFF) {
 			this.deleted = true;
+			this.fields = content;
 		} else {
-			this.log.warning("Incorrect value for flag ... assuming deleted = false");
-			this.deleted = false;
+			this.log.warning("Incorrect value for flag ... setting all attributes to null");
+			this.deleted = null;
+			this.fields = null;
 		}
-
-		this.fields = content;
 	}
 
 	/**
-	 * Checks if is room record deleted.
-	 *
-	 * @return true, if is room record deleted
+	 * Checks if the record is marked for deletion.
+	 * 
+	 * @return true, if the record is deleted
 	 */
 	public boolean isRoomRecordDeleted() {
 		return this.deleted;
 	}
 
 	/**
-	 * Gets the field data.
-	 *
-	 * @param number the number
-	 * @return the field data
-	 */
-	public String getFieldData(final int number) {
-		return this.fields[number];
-	}
-
-	/**
-	 * Gets the all fields data.
-	 *
-	 * @return the all fields data
+	 * Gets the contents of the fields in this record.
+	 * 
+	 * @return A <code>String[]</code> with each <code>String</code> holding the
+	 *         contents of a field of the record
 	 */
 	public String[] getAllFieldsData() {
 		return this.fields;
