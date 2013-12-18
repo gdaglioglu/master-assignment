@@ -44,7 +44,7 @@
         description="the assignment jar file (used to copy instructions and database file)" />
     <property name="jar.executable" value="${dir.submission}/runme.jar" 
         description="the executable jar file" />
-    <property name="jar.executable.main.class" value="suncertify.main.ApplicationRunner" 
+    <property name="jar.executable.main.class" value="suncertify.Runner" 
         description="the full qualified name of the main class" />
     <property name="jar.submission" value="OCMJD_EoinMooney_OC1014829.jar" 
         description="the submission jar file" />
