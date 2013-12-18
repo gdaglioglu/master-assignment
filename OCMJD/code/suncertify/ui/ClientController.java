@@ -128,6 +128,7 @@ public class ClientController {
 						.println("Remote Exception encountered when starting networked client "
 								+ re.getMessage());
 				re.printStackTrace();
+				System.exit(0);
 			}
 		} else {
 			this.log.severe("Client started with incorrect Application Mode. Exiting application");
