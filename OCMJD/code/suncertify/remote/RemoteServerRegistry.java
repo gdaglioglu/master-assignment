@@ -14,8 +14,8 @@ import suncertify.util.ApplicationConstants;
 import suncertify.util.PropertyManager;
 
 /**
- * This utility class starts the RMI Registry and binds the implementation of the
- * <code>RemoteServerFactory</code> to the naming service. This allows for a
+ * This utility class starts the RMI Registry and binds the implementation of
+ * the <code>RemoteServerFactory</code> to the naming service. This allows for a
  * client to lookup a <code>RemoteServerFactory</code> instance and use it to
  * get a <code>RemoteDBAccess</code> implementation that can be used to interact
  * with a datafile remotely
@@ -31,7 +31,7 @@ public class RemoteServerRegistry {
 	private static Logger log = Logger.getLogger("suncertify.remote");
 
 	/**
- 	 * This is a utility class and its methods are accessed statically, so there
+	 * This is a utility class and its methods are accessed statically, so there
 	 * is no need for anyone to call its constructor
 	 */
 	private RemoteServerRegistry() {
@@ -59,7 +59,8 @@ public class RemoteServerRegistry {
 	}
 
 	/**
-	 * Starts the RMI registry, creates a <code>RemoteServerFactory</code> instance referencing a local datafile and binds it to the naming service
+	 * Starts the RMI registry, creates a <code>RemoteServerFactory</code>
+	 * instance referencing a local datafile and binds it to the naming service
 	 * 
 	 * @param dbLocation
 	 *            The location of the datafile

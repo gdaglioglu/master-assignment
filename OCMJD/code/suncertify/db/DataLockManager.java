@@ -9,7 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This singleton class is a worker class called by the <code>Data</code> facade class to provide a locking mechanism for the application
+ * This singleton class is a worker class called by the <code>Data</code> facade
+ * class to provide a locking mechanism for the application
  * 
  * @author Eoin Mooney
  */

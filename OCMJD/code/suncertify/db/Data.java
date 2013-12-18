@@ -6,8 +6,8 @@
 package suncertify.db;
 
 /**
- * This class implements the provided interface <code>DBAccess</code>
- * This class is a facade and delegates all functionality to two worker classes
+ * This class implements the provided interface <code>DBAccess</code> This class
+ * is a facade and delegates all functionality to two worker classes
  * 
  * @author Eoin Mooney
  * 
@@ -25,9 +25,12 @@ public class Data implements DBAccess {
 	private static DataLockManager locks = DataLockManager.getInstance();
 
 	/**
-	 * This constructor takes the location of the data file as a parameter and creates a new <code>DataFileAccess</code> object to interact with the datafile
-	 *
-	 * @param dbLocation The location of the datafile on disk 
+	 * This constructor takes the location of the data file as a parameter and
+	 * creates a new <code>DataFileAccess</code> object to interact with the
+	 * datafile
+	 * 
+	 * @param dbLocation
+	 *            The location of the datafile on disk
 	 */
 	public Data(final String dbLocation) {
 		Data.database = new DataFileAccess(dbLocation);

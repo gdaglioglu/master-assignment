@@ -43,9 +43,11 @@ public class ApplicationConstants {
 	 * The Constant PROPERTY_FILE_NAME. Used as filename for the properties file
 	 */
 	public static final String PROPERTY_FILE_NAME = "suncertify.properties";
-	
+
 	/**
-	 * The Constant PROPERTY_FILE_NAME. Used as directory for the properties file
+	 * The Constant PROPERTY_FILE_NAME. Used as directory for the properties
+	 * file
 	 */
-	public static final String PROPERTY_FILE_DIR = System.getProperty("user.dir");
+	public static final String PROPERTY_FILE_DIR = System
+			.getProperty("user.dir");
 }

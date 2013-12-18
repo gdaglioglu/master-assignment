@@ -190,8 +190,7 @@ public class DataFileAccess {
 
 		for (int i = 0; i < this.cache.getFieldsPerRecord(); i++) {
 			this.readFieldInfo();
-			sizeOfRecord += this.cache.getRecordFieldInfo(i)
-					.getBytesInField();
+			sizeOfRecord += this.cache.getRecordFieldInfo(i).getBytesInField();
 		}
 
 		offset = this.database.getFilePointer();
@@ -233,14 +232,13 @@ public class DataFileAccess {
 
 		for (int index = 0; index < this.cache.getFieldsPerRecord(); index++) {
 			// read n bytes, where n is based on the schema info in the cache
-			final byte[] temp = new byte[this.cache.getRecordFieldInfo(
-					index).getBytesInField()];
-			this.database.read(temp, 0,
-					this.cache.getRecordFieldInfo(index)
-							.getBytesInField());
+			final byte[] temp = new byte[this.cache.getRecordFieldInfo(index)
+					.getBytesInField()];
+			this.database.read(temp, 0, this.cache.getRecordFieldInfo(index)
+					.getBytesInField());
 
 			try {
-				//convert byte array to String
+				// convert byte array to String
 				recordContents[index] = new String(temp, 0, temp.length,
 						"US-ASCII");
 			} catch (final UnsupportedEncodingException uee) {
@@ -361,7 +359,8 @@ public class DataFileAccess {
 	 * 
 	 * @param recNo
 	 *            The record number of the record to read
-	 * @return A <code>String[]</code> with each <code>String</code> holding a field of the record
+	 * @return A <code>String[]</code> with each <code>String</code> holding a
+	 *         field of the record
 	 * @throws RecordNotFoundException
 	 *             Signals that no valid record exists with given record number
 	 */
@@ -385,13 +384,17 @@ public class DataFileAccess {
 	 * @param recNo
 	 *            The record number of the record to be updated
 	 * @param data
-	 *            A <code>String[]</code> with each <code>String</code> holding a field of the record that will be written to the datafile
+	 *            A <code>String[]</code> with each <code>String</code> holding
+	 *            a field of the record that will be written to the datafile
 	 * @param lockCookie
-	 *            A <code>lockCookie</code> provided by the <code>DataLockManager</code>, used to ensure only one user can update a record at a time
+	 *            A <code>lockCookie</code> provided by the
+	 *            <code>DataLockManager</code>, used to ensure only one user can
+	 *            update a record at a time
 	 * @throws RecordNotFoundException
 	 *             Signals that no valid record exists with given record number
 	 * @throws SecurityException
-	 *             Signals that user is attempting to update record with an invalid <code>lockCookie</code>
+	 *             Signals that user is attempting to update record with an
+	 *             invalid <code>lockCookie</code>
 	 */
 	public void updateRecord(final long recNo, final String[] data,
 			final long lockCookie) throws RecordNotFoundException,
@@ -436,11 +439,14 @@ public class DataFileAccess {
 	 * @param recNo
 	 *            The record number of the record to be deleted
 	 * @param lockCookie
-	 *            A <code>lockCookie</code> provided by the <code>DataLockManager</code>, used to ensure only one user can update a record at a time
+	 *            A <code>lockCookie</code> provided by the
+	 *            <code>DataLockManager</code>, used to ensure only one user can
+	 *            update a record at a time
 	 * @throws RecordNotFoundException
 	 *             Signals that no valid record exists with given record number
 	 * @throws SecurityException
-	 *             Signals that user is attempting to update record with an invalid <code>lockCookie</code>
+	 *             Signals that user is attempting to update record with an
+	 *             invalid <code>lockCookie</code>
 	 */
 	public void deleteRecord(final long recNo, final long lockCookie)
 			throws RecordNotFoundException, SecurityException {
@@ -476,11 +482,14 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Case sensitive search that will return record number of all records that match the given criteria for each field.
+	 * Case sensitive search that will return record number of all records that
+	 * match the given criteria for each field.
 	 * 
 	 * @param criteria
-	 *            A <code>String[]</code> containing the <code>String</code> to match each field on
-	 * @return The list of record numbers that match the given criteria, if criteria is <code>null</code> returns all valid records
+	 *            A <code>String[]</code> containing the <code>String</code> to
+	 *            match each field on
+	 * @return The list of record numbers that match the given criteria, if
+	 *         criteria is <code>null</code> returns all valid records
 	 */
 	public long[] findByCriteria(final String[] criteria) {
 
@@ -510,10 +519,12 @@ public class DataFileAccess {
 	}
 
 	/**
-	 * Writes a new record to the datafile, overwriting a deleted record if available.
+	 * Writes a new record to the datafile, overwriting a deleted record if
+	 * available.
 	 * 
 	 * @param data
-	 *            A <code>String[]</code> with each <code>String</code> holding a field of the record that will be written to the datafile
+	 *            A <code>String[]</code> with each <code>String</code> holding
+	 *            a field of the record that will be written to the datafile
 	 * @return The record number of the newly created record
 	 * @throws DuplicateKeyException
 	 *             the duplicate key exception

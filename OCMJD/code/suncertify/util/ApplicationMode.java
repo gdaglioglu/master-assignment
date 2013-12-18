@@ -6,7 +6,8 @@
 package suncertify.util;
 
 /**
- * The Enum ApplicationMode is used throughout the application to define what mode the application is running in.
+ * The Enum ApplicationMode is used throughout the application to define what
+ * mode the application is running in.
  * 
  * @author Eoin Mooney
  */

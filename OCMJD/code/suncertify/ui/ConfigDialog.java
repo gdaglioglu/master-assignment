@@ -18,7 +18,8 @@ import javax.swing.*;
 import suncertify.util.*;
 
 /**
- * This class is used to display the configuration parameters to the user and store their selected values using the <code>PropertyManager</code> instance.
+ * This class is used to display the configuration parameters to the user and
+ * store their selected values using the <code>PropertyManager</code> instance.
  * 
  * @author Eoin Mooney
  */
@@ -106,9 +107,11 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	private boolean netPortFlag;
 
 	/**
-	 * Instantiates a new config dialog and calls methods to build the relevant <cod>JPanel</code>s based on the application mode
-	 *
-	 * @param mode The mode the application is running in
+	 * Instantiates a new config dialog and calls methods to build the relevant
+	 * <cod>JPanel</code>s based on the application mode
+	 * 
+	 * @param mode
+	 *            The mode the application is running in
 	 */
 	public ConfigDialog(final ApplicationMode mode) {
 		this.runningMode = mode;
@@ -162,7 +165,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 
 	/**
 	 * Builds the <code>JPanel</code> for datafile location parameters.
-	 *
+	 * 
 	 * @return the <code>JPanel</code> for datafile location
 	 */
 	private JPanel buildDBPanel() {
@@ -185,7 +188,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 
 	/**
 	 * Builds the <code>JPanel</code> for network parameters.
-	 *
+	 * 
 	 * @return the <code>JPanel</code> for network parameters
 	 */
 	private JPanel buildNetPanel() {
@@ -206,7 +209,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 
 	/**
 	 * Builds the <code>JPanel</code> for confirm/canel buttons.
-	 *
+	 * 
 	 * @return the <code>JPanel</code> for confirm/canel buttons
 	 */
 	private JPanel buildControlPanel() {
@@ -279,9 +282,11 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Gets the custom event that triggers data validation, launches a file browser or exits the application
-	 *
-	 * @param event the event
+	 * Gets the custom event that triggers data validation, launches a file
+	 * browser or exits the application
+	 * 
+	 * @param event
+	 *            the event
 	 * @return the custom event
 	 */
 	private void getCustomEvent(final String event) {
@@ -296,7 +301,8 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Launch a file browser and bring the selected location back to <code>ConfigDialog</code>
+	 * Launch a file browser and bring the selected location back to
+	 * <code>ConfigDialog</code>
 	 */
 	private void browseFiles() {
 		final JFileChooser fileChooser = new JFileChooser();
@@ -340,7 +346,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 
 	/**
 	 * Verify datafile location.
-	 *
+	 * 
 	 * @return true, if file exists and can be read
 	 */
 	private boolean verifyDBFilePath() {
@@ -367,7 +373,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 
 	/**
 	 * Verify network host.
-	 *
+	 * 
 	 * @return true, if network host is a valid network address
 	 */
 	private boolean verifyNetHost() {
@@ -401,7 +407,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 
 	/**
 	 * Verify network port.
-	 *
+	 * 
 	 * @return true, if network port is a number between 0 - 65535
 	 */
 	private boolean verifyNetPort() {

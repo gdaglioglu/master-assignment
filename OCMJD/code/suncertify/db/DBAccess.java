@@ -55,11 +55,14 @@ public interface DBAccess {
 	 * @param recNo
 	 *            The record number of the record to be deleted
 	 * @param lockCookie
-	 *            A <code>lockCookie</code> provided by the <code>DataLockManager</code>, used to ensure only one user can update a record at a time
+	 *            A <code>lockCookie</code> provided by the
+	 *            <code>DataLockManager</code>, used to ensure only one user can
+	 *            update a record at a time
 	 * @throws RecordNotFoundException
 	 *             Signals that no valid record exists with given record number
 	 * @throws SecurityException
-	 *             Signals that user is attempting to update record with an invalid <code>lockCookie</code>
+	 *             Signals that user is attempting to update record with an
+	 *             invalid <code>lockCookie</code>
 	 */
 	public void deleteRecord(long recNo, long lockCookie)
 			throws RecordNotFoundException, SecurityException;
@@ -72,8 +75,10 @@ public interface DBAccess {
 	 * "Fred" matches "Fred" or "Freddy".)
 	 * 
 	 * @param criteria
-	 *            A <code>String[]</code> containing the <code>String</code> to match each field on
-	 * @return The list of record numbers that match the given criteria, if criteria is <code>null</code> returns all valid records
+	 *            A <code>String[]</code> containing the <code>String</code> to
+	 *            match each field on
+	 * @return The list of record numbers that match the given criteria, if
+	 *         criteria is <code>null</code> returns all valid records
 	 */
 	public long[] findByCriteria(String[] criteria);
 
@@ -82,7 +87,8 @@ public interface DBAccess {
 	 * Inserts the given data, and returns the record number of the new record.
 	 * 
 	 * @param data
-	 *            A <code>String[]</code> with each <code>String</code> holding a field of the record that will be written to the datafile
+	 *            A <code>String[]</code> with each <code>String</code> holding
+	 *            a field of the record that will be written to the datafile
 	 * @return The record number of the newly created record
 	 * @throws DuplicateKeyException
 	 *             the duplicate key exception
@@ -98,7 +104,8 @@ public interface DBAccess {
 	 * 
 	 * @param recNo
 	 *            The record number of the record to be locked
-	 * @return A <code>lockCookie</code> to ensure only one user can update a record at a time
+	 * @return A <code>lockCookie</code> to ensure only one user can update a
+	 *         record at a time
 	 * @throws RecordNotFoundException
 	 *             Signals that no valid record exists with given record number
 	 */
@@ -111,9 +118,11 @@ public interface DBAccess {
 	 * @param recNo
 	 *            The record number of the record to be unlocked
 	 * @param cookie
-	 *            A <code>lockCookie</code> previously provided by this class to ensure only one user can update a record at a time
+	 *            A <code>lockCookie</code> previously provided by this class to
+	 *            ensure only one user can update a record at a time
 	 * @throws SecurityException
-	 *             Signals that user is attempting to unlock a record with an invalid <code>lockCookie</code>
+	 *             Signals that user is attempting to unlock a record with an
+	 *             invalid <code>lockCookie</code>
 	 */
 	public void unlock(long recNo, long cookie) throws SecurityException;
 }

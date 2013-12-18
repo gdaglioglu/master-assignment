@@ -7,7 +7,6 @@ package suncertify.remote;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.logging.Logger;
 
 /**
  * This class implements the <code>RemoteServerFactory</code> interface and is

@@ -27,8 +27,9 @@ public class DuplicateKeyException extends Exception {
 
 	/**
 	 * Instantiates a new duplicate key exception with a specific message.
-	 *
-	 * @param s the message
+	 * 
+	 * @param s
+	 *            the message
 	 */
 	public DuplicateKeyException(final String s) {
 		super(s);

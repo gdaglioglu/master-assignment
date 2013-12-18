@@ -27,8 +27,9 @@ public class RecordNotFoundException extends Exception {
 
 	/**
 	 * Instantiates a new record not found exception with a specific message.
-	 *
-	 * @param s the message
+	 * 
+	 * @param s
+	 *            the message
 	 */
 	public RecordNotFoundException(final String s) {
 		super(s);

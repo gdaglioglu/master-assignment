@@ -130,7 +130,8 @@ public class PropertyManager {
 	/**
 	 * Load properties from properties file
 	 * 
-	 * @return A <code>Properties</code> object holding the properties read from the file
+	 * @return A <code>Properties</code> object holding the properties read from
+	 *         the file
 	 */
 	private Properties loadProperties() {
 		Properties loadedProperties = null;

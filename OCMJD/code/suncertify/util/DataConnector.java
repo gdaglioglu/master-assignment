@@ -69,7 +69,8 @@ public class DataConnector {
 				+ ApplicationConstants.RMI_SERVER_IDENTIFIER;
 
 		try {
-			final RemoteServerFactory factory = (RemoteServerFactory) Naming.lookup(url);
+			final RemoteServerFactory factory = (RemoteServerFactory) Naming
+					.lookup(url);
 
 			DataConnector.log.exiting("suncertify.util.DataConnector",
 					"getRemote()");
