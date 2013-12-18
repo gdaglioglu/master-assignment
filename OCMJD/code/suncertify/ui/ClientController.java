@@ -23,7 +23,7 @@ import suncertify.util.*;
  * <code>ClientModel</code> and <code>ClientWindow</code> instances, but neither
  * of these instances have direct references to each other or this controller
  * 
- * @suthor Eoin Mooney
+ * @author Eoin Mooney
  */
 public class ClientController {
 
