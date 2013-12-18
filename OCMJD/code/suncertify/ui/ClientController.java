@@ -16,51 +16,75 @@ import suncertify.db.RecordNotFoundException;
 import suncertify.remote.RemoteDBAccess;
 import suncertify.util.*;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ClientController.
+ * This class is the controller in the client model-view-controller pattern.
+ * Using the <code>DataConnector</code> it can connect to either a local
+ * datafile or a remote datafile. It also has references to both the
+ * <code>ClientModel</code> and <code>ClientWindow</code> instances, but neither
+ * of these instances have direct references to each other or this controller
+ * 
+ * @suthor Eoin Mooney
  */
 public class ClientController {
 
-	/** The log. */
+	/**
+	 * The logger instance. All log message from this class are routed through
+	 * this member. The logger namespace is <code>suncertify.ui</code>
+	 */
 	private final Logger log = Logger.getLogger("suncertify.ui");
 
-	/** The application mode. */
+	/** The mode the application is currently running in. */
 	private final ApplicationMode applicationMode;
 
-	/** The database. */
+	/** The reference to a local datafile. */
 	private DBAccess database;
 
-	/** The remote database. */
+	/** The reference to a remote datafile. */
 	private RemoteDBAccess remoteDatabase;
 
-	/** The model. */
+	/** The model for the client MVC. */
 	private ClientModel model;
 
-	/** The client ui. */
+	/** The view for the client MVC. */
 	private ClientWindow clientUI;
 
-	/** The booking listener. */
-	private ActionListener searchListener, bookingListener;
+	/**
+	 * The search listener, attached to the search button in the
+	 * <code>ClientWindow</code> instance.
+	 */
+	private ActionListener searchListener;
 
-	/** The last search. */
+	/**
+	 * The booking listener, attached to the book button in the
+	 * <code>ClientWindow</code> instance.
+	 */
+	private ActionListener bookingListener;
+
+	/** The criteria for last search executed. */
 	private String lastSearch;
 
-	/** The config. */
+	/**
+	 * The <code>ConfigDialog</code> used to store users configuration
+	 * parameters in the <code>PropertyManager</code>.
+	 */
 	private final ConfigDialog config;
 
-	/** The properties. */
-	private final PropertyFileManager properties = PropertyFileManager
-			.getInstance();
+	/**
+	 * The <code>PropertyManager</code> instance used to get and set property
+	 * values
+	 */
+	private final PropertyManager properties = PropertyManager.getInstance();
 
 	/**
 	 * Instantiates a new client controller.
-	 *
-	 * @param applicationMode the application mode
+	 * 
+	 * @param applicationMode
+	 *            The mode the application is currently running in
 	 */
 	public ClientController(final ApplicationMode applicationMode) {
 		this.applicationMode = applicationMode;
 
+		// Start ClientWindow so we can pop-up a ConfigDialog
 		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
 			this.clientUI = new ClientWindow("URLyBird 1.0 - Standalone Mode");
 		} else if (applicationMode == ApplicationMode.NETWORKED_CLIENT) {
@@ -68,57 +92,63 @@ public class ClientController {
 		} else {
 			this.log.severe("Client started with incorrect Application Mode. Exiting application");
 			this.clientUI
-			.showError(
-					"Client started with incorrect Application Mode. Exiting application",
-					"Error", Level.SEVERE);
+					.showError(
+							"Client started with incorrect Application Mode. Exiting application",
+							"Error", Level.SEVERE);
 
 			System.exit(0);
 		}
 
+		// Pop-up the ConfigDialog
 		this.config = new ConfigDialog(applicationMode);
 		this.config.setVisible(true);
 
+		// Connect to datafile based on applicationMode and properties set in
+		// the ConfigDialog
 		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
 			this.database = DataConnector.getLocal(this.properties
 					.getProperty(ApplicationConstants.KEY_PROPERTY_DB_PATH));
-
 		} else if (applicationMode == ApplicationMode.NETWORKED_CLIENT) {
 			try {
 				this.remoteDatabase = DataConnector
 						.getRemote(
 								this.properties
-								.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_HOST),
+										.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_HOST),
 								this.properties
-								.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT));
+										.getProperty(ApplicationConstants.KEY_PROPERTY_NETWORK_PORT));
 			} catch (final RemoteException re) {
 				this.log.log(Level.SEVERE, re.getMessage(), re);
 
 				this.clientUI
-				.showError(
-						"Remote Exception encountered when starting networked client.",
-						"Error", Level.SEVERE);
+						.showError(
+								"Remote Exception encountered when starting networked client.",
+								"Error", Level.SEVERE);
 
 				System.err
-				.println("Remote Exception encountered when starting networked client "
-						+ re.getMessage());
+						.println("Remote Exception encountered when starting networked client "
+								+ re.getMessage());
 				re.printStackTrace();
 			}
 		} else {
 			this.log.severe("Client started with incorrect Application Mode. Exiting application");
 			this.clientUI
-			.showError(
-					"Client started with incorrect Application Mode. Exiting application",
-					"Error", Level.SEVERE);
+					.showError(
+							"Client started with incorrect Application Mode. Exiting application",
+							"Error", Level.SEVERE);
 
 			System.exit(0);
 		}
 
+		// Perform an empty search to retrieve all records, start the ClientView
 		this.model = this.getRecords("");
 		this.clientUI.startClientView(this.model);
 	}
 
 	/**
-	 * Control.
+	 * This method is called by the <code>Runner</code> after instantiating a
+	 * <code>ClientController</code>. It creates <code>ActionListener</code>
+	 * instances for searching and booking and adds them to the relevant
+	 * <code>JButtons</code> in the <code>ClientWindow</code>
 	 */
 	public void control() {
 		this.searchListener = new ActionListener() {
@@ -127,8 +157,8 @@ public class ClientController {
 				ClientController.this.lastSearch = ClientController.this
 						.getSearchText();
 				ClientController.this.clientUI
-				.updateTable(ClientController.this
-						.getRecords(ClientController.this.lastSearch));
+						.updateTable(ClientController.this
+								.getRecords(ClientController.this.lastSearch));
 			}
 		};
 		this.bookingListener = new ActionListener() {
@@ -143,8 +173,8 @@ public class ClientController {
 					if (owner != null) {
 						ClientController.this.bookRoom(selectedRecNo, owner);
 						ClientController.this.clientUI
-						.updateTable(ClientController.this
-								.getRecords(ClientController.this.lastSearch));
+								.updateTable(ClientController.this
+										.getRecords(ClientController.this.lastSearch));
 					}
 				}
 			}
@@ -152,22 +182,22 @@ public class ClientController {
 
 		this.clientUI.getSearchButton().addActionListener(this.searchListener);
 		this.clientUI.getBookingButton()
-		.addActionListener(this.bookingListener);
+				.addActionListener(this.bookingListener);
 	}
 
 	/**
 	 * Gets the search text.
-	 *
-	 * @return the search text
+	 * 
+	 * @return the text in the search field
 	 */
 	private String getSearchText() {
 		return this.clientUI.getSearchField();
 	}
 
 	/**
-	 * Gets the reserve rec no.
-	 *
-	 * @return the reserve rec no
+	 * Gets the record number from the row selected for booking
+	 * 
+	 * @return The record number for the selected row
 	 */
 	private long getReserveRecNo() {
 		final int selectedRow = this.clientUI.getSelectedRowNo();
@@ -175,19 +205,23 @@ public class ClientController {
 	}
 
 	/**
-	 * Gets the customer id.
-	 *
-	 * @return the customer id
+	 * Calls a method in the <code>ClientWindow</code> that prompts the user for
+	 * a customer ID
+	 * 
+	 * @return The validated 8 digit customer ID
 	 */
 	protected String getCustomerID() {
 		return this.clientUI.getCustomerID();
 	}
 
 	/**
-	 * Book room.
-	 *
-	 * @param recNo the rec no
-	 * @param owner the owner
+	 * This method attempts to lock the record, update the record with the
+	 * customer ID and unlock the record
+	 * 
+	 * @param recNo
+	 *            The record number of the record the user wishes to book
+	 * @param owner
+	 *            The customer ID the user wishes to book the record for
 	 */
 	private void bookRoom(final long recNo, final String owner) {
 		if (this.applicationMode == ApplicationMode.STANDALONE_CLIENT) {
@@ -220,11 +254,11 @@ public class ClientController {
 				this.clientUI.showError(
 						"Remote Exception encountered when booking a room: "
 								+ re.getMessage() + re.getMessage(), "Error",
-								Level.SEVERE);
+						Level.SEVERE);
 
 				System.err
-				.println("Remote Exception encountered when booking a room "
-						+ re.getMessage());
+						.println("Remote Exception encountered when booking a room "
+								+ re.getMessage());
 				re.printStackTrace();
 			} catch (final RecordNotFoundException rnfe) {
 				this.log.log(Level.WARNING, rnfe.getMessage(), rnfe);
@@ -239,19 +273,22 @@ public class ClientController {
 		} else {
 			this.log.severe("Client controller started with incorrect Application Mode. Exiting application");
 			this.clientUI
-			.showError(
-					"Client controller started with incorrect Application Mode. Exiting application",
-					"Error", Level.SEVERE);
+					.showError(
+							"Client controller started with incorrect Application Mode. Exiting application",
+							"Error", Level.SEVERE);
 
 			System.exit(0);
 		}
 	}
 
 	/**
-	 * Gets the records.
-	 *
-	 * @param searchText the search text
-	 * @return the records
+	 * This method searches both "name" and "location" fields and returns all
+	 * records that match the search text. If search text is empty, this method
+	 * will return all valid records
+	 * 
+	 * @param searchText
+	 *            The text entered in the search box
+	 * @return A <code>ClientModel</code> populated with the matched records
 	 */
 	private ClientModel getRecords(final String searchText) {
 		this.model = new ClientModel();
@@ -270,7 +307,7 @@ public class ClientController {
 			for (final long recNo : recNoArray) {
 				try {
 					this.model
-					.addRecord(this.database.readRecord(recNo), recNo);
+							.addRecord(this.database.readRecord(recNo), recNo);
 				} catch (final RecordNotFoundException rnfe) {
 					this.log.log(Level.WARNING, rnfe.getMessage(), rnfe);
 
@@ -295,8 +332,8 @@ public class ClientController {
 									+ re.getMessage(), "Error", Level.SEVERE);
 
 					System.err
-					.println("Remote Exception encountered when retrieving search results"
-							+ re.getMessage());
+							.println("Remote Exception encountered when retrieving search results"
+									+ re.getMessage());
 					re.printStackTrace();
 				}
 			} else {
@@ -313,8 +350,8 @@ public class ClientController {
 									+ re.getMessage(), "Error", Level.SEVERE);
 
 					System.err
-					.println("Remote Exception encountered when retrieving search results"
-							+ re.getMessage());
+							.println("Remote Exception encountered when retrieving search results"
+									+ re.getMessage());
 					re.printStackTrace();
 				}
 			}
@@ -331,8 +368,8 @@ public class ClientController {
 									+ re.getMessage(), "Error", Level.SEVERE);
 
 					System.err
-					.println("Remote Exception encountered when retrieving search results"
-							+ re.getMessage());
+							.println("Remote Exception encountered when retrieving search results"
+									+ re.getMessage());
 					re.printStackTrace();
 				} catch (final RecordNotFoundException rnfe) {
 					this.log.log(Level.WARNING, rnfe.getMessage(), rnfe);
@@ -349,9 +386,9 @@ public class ClientController {
 		} else {
 			this.log.severe("Client controller started with incorrect Application Mode. Exiting application");
 			this.clientUI
-			.showError(
-					"Client controller started with incorrect Application Mode. Exiting application",
-					"Error", Level.SEVERE);
+					.showError(
+							"Client controller started with incorrect Application Mode. Exiting application",
+							"Error", Level.SEVERE);
 
 			System.exit(0);
 		}

@@ -17,93 +17,98 @@ import javax.swing.*;
 
 import suncertify.util.*;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ConfigDialog.
+ * This class is used to display the configuration parameters to the user and store their selected values using the <code>PropertyManager</code> instance.
+ * 
+ * @author Eoin Mooney
  */
 public class ConfigDialog extends JDialog implements ActionListener {
 
 	/**
-	 * 
+	 * A version number for this class to support serialization and
+	 * de-serialization.
 	 */
 	private static final long serialVersionUID = -7286902966873123608L;
 
-	/** The log. */
+	/**
+	 * The logger instance. All log message from this class are routed through
+	 * this member. The logger namespace is <code>suncertify.ui</code>
+	 */
 	private final Logger log = Logger.getLogger("suncertify.ui");
 
-	/** The db panel. */
+	/** The <code>JPanel</code> for datafile location. */
 	private JPanel dbPanel;
 
-	/** The db label. */
+	/** The <code>JLabel</code> used in dbPanel. */
 	private JLabel dbLabel;
 
-	/** The db field. */
+	/** The <code>JTextField</code> where the user enters a datafile location. */
 	private JTextField dbField;
 
-	/** The db button. */
+	/** The <code>JButton</code> that can be used to open a file browser. */
 	private JButton dbButton;
 
-	/** The net panel. */
+	/** The <code>JPanel</code> for network information. */
 	private JPanel netPanel;
 
-	/** The net host label. */
+	/** The <code>JLabel</code> used to identify the host text field. */
 	private JLabel netHostLabel;
 
-	/** The net port label. */
+	/** The <code>JLabel</code> used to identify the port text field. */
 	private JLabel netPortLabel;
 
-	/** The net host field. */
+	/** The <code>JTextField</code> where the user enters a host. */
 	private JTextField netHostField;
 
-	/** The net port field. */
+	/** The <code>JTextField</code> where the user enters a port. */
 	private JTextField netPortField;
 
-	/** The control panel. */
+	/** The <code>JPanel</code> for confirmation/cancellation buttons. */
 	private JPanel controlPanel;
 
-	/** The control confirm button. */
+	/** The <code>JButton</code> used to confirm the parameters. */
 	private JButton controlConfirmButton;
 
-	/** The control cancel button. */
+	/** The <code>JButton</code> used to cancel and exit the application. */
 	private JButton controlCancelButton;
 
-	/** The Constant BROWSE_TEXT. */
+	/** The Constant BROWSE_TEXT for the text shown on dbButton. */
 	private static final String BROWSE_TEXT = "Browse";
 
-	/** The Constant CONFIRM_TEXT. */
+	/** The Constant CONFIRM_TEXT for the text shown on controlConfirmButton. */
 	private static final String CONFIRM_TEXT = "OK";
 
-	/** The Constant CANCEL_TEXT. */
+	/** The Constant CANCEL_TEXT for the text shown on controlCancelButton. */
 	private static final String CANCEL_TEXT = "Exit";
 
 	/** The db file path. */
 	private String dbFilePath = null;
 
-	/** The net host. */
+	/** The network host. */
 	private String netHost = null;
 
-	/** The net port. */
+	/** The network port. */
 	private String netPort = null;
 
-	/** The properties. */
-	private PropertyFileManager properties = PropertyFileManager.getInstance();
+	/** The PropertyManager instance */
+	private PropertyManager properties = PropertyManager.getInstance();
 
-	/** The running mode. */
+	/** The mode the application is running in. */
 	private final ApplicationMode runningMode;
 
 	/** The db flag. */
 	private boolean dbFlag;
 
-	/** The net host flag. */
+	/** The network host flag. */
 	private boolean netHostFlag;
 
-	/** The net port flag. */
+	/** The network port flag. */
 	private boolean netPortFlag;
 
 	/**
-	 * Instantiates a new config dialog.
+	 * Instantiates a new config dialog and calls methods to build the relevant <cod>JPanel</code>s based on the application mode
 	 *
-	 * @param mode the mode
+	 * @param mode The mode the application is running in
 	 */
 	public ConfigDialog(final ApplicationMode mode) {
 		this.runningMode = mode;
@@ -156,9 +161,9 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Builds the db panel.
+	 * Builds the <code>JPanel</code> for datafile location parameters.
 	 *
-	 * @return the j panel
+	 * @return the <code>JPanel</code> for datafile location
 	 */
 	private JPanel buildDBPanel() {
 		this.dbLabel = new JLabel("Location:");
@@ -179,9 +184,9 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Builds the net panel.
+	 * Builds the <code>JPanel</code> for network parameters.
 	 *
-	 * @return the j panel
+	 * @return the <code>JPanel</code> for network parameters
 	 */
 	private JPanel buildNetPanel() {
 		this.netHostLabel = new JLabel("Server Address:");
@@ -200,9 +205,9 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Builds the control panel.
+	 * Builds the <code>JPanel</code> for confirm/canel buttons.
 	 *
-	 * @return the j panel
+	 * @return the <code>JPanel</code> for confirm/canel buttons
 	 */
 	private JPanel buildControlPanel() {
 		this.controlConfirmButton = new JButton(ConfigDialog.CONFIRM_TEXT);
@@ -221,7 +226,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Initalise values.
+	 * Initalise values to values from properties file, if set
 	 */
 	private void initaliseValues() {
 		this.dbFlag = false;
@@ -274,7 +279,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Gets the custom event.
+	 * Gets the custom event that triggers data validation, launches a file browser or exits the application
 	 *
 	 * @param event the event
 	 * @return the custom event
@@ -291,7 +296,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Browse files.
+	 * Launch a file browser and bring the selected location back to <code>ConfigDialog</code>
 	 */
 	private void browseFiles() {
 		final JFileChooser fileChooser = new JFileChooser();
@@ -303,7 +308,7 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Verify values.
+	 * Verify that the values make sense
 	 */
 	private void verifyValues() {
 		switch (this.runningMode) {
@@ -334,9 +339,9 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Verify db file path.
+	 * Verify datafile location.
 	 *
-	 * @return true, if successful
+	 * @return true, if file exists and can be read
 	 */
 	private boolean verifyDBFilePath() {
 		boolean tempFlag = false;
@@ -361,9 +366,9 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Verify net host.
+	 * Verify network host.
 	 *
-	 * @return true, if successful
+	 * @return true, if network host is a valid network address
 	 */
 	private boolean verifyNetHost() {
 		boolean tempFlag = false;
@@ -395,9 +400,9 @@ public class ConfigDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Verify net port.
+	 * Verify network port.
 	 *
-	 * @return true, if successful
+	 * @return true, if network port is a number between 0 - 65535
 	 */
 	private boolean verifyNetPort() {
 		boolean tempFlag = false;

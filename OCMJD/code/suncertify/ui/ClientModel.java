@@ -9,21 +9,30 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ClientModel.
+ * This class extends <code>AbstractTableModel</code> and provides the table
+ * data to be shown by the <code>ClientWindow</code>. It has no reference to
+ * either the <code>ClientWindow</code> or the <code>ClientController</code>
+ * 
+ * @author Eoin Mooney
  */
-@SuppressWarnings("serial")
+
 public class ClientModel extends AbstractTableModel {
+
+	/**
+	 * A version number for this class to support serialization and
+	 * de-serialization.
+	 */
+	private static final long serialVersionUID = -2812214454393924967L;
 
 	/** The table header names. */
 	private final String[] tableHeaderNames = { "Name", "Location", "Size",
 			"Smoking", "Rate", "Date", "Booked By" };
 
-	/** The table records. */
+	/** The records content. */
 	private final ArrayList<String[]> tableRecords = new ArrayList<String[]>(5);
 
-	/** The rec nos. */
+	/** The record numbers */
 	private final ArrayList<Long> recNos = new ArrayList<Long>(5);
 
 	/*
@@ -91,10 +100,14 @@ public class ClientModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Adds the record.
-	 *
-	 * @param data the data
-	 * @param recNo the rec no
+	 * Adds a record to the <code>ClientModel</code> by adding the record's data
+	 * to tableRecords and adding the record number to recNos.
+	 * 
+	 * @param data
+	 *            A <code>String[]</code> where each <code>String</code> is a
+	 *            field of the record
+	 * @param recNo
+	 *            The record number of the record
 	 */
 	public void addRecord(final String[] data, final long recNo) {
 		this.tableRecords.add(data);
@@ -102,10 +115,11 @@ public class ClientModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Gets the rec no.
-	 *
-	 * @param rowIndex the row index
-	 * @return the rec no
+	 * Gets the record number for a row
+	 * 
+	 * @param rowIndex
+	 *            A row of the table
+	 * @return The record number of the record at rowIndex in the table
 	 */
 	public long getRecNo(final int rowIndex) {
 		return this.recNos.get(rowIndex);

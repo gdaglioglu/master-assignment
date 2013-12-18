@@ -18,27 +18,39 @@ import javax.swing.*;
 
 import suncertify.util.*;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Server.
+ * Since the server requires no model, an MVC pattern is not suitable. But this
+ * <code>ServerWindow</code> class is similar to a combined View and Controller
+ * for the server application. After the user selects values for the config
+ * parameters, this class registers the
+ * <code>RemoteServerFactory<code> on the RMI registry.
+ * 
+ * @author Eoin Mooney
  */
-public class Server extends JFrame {
+public class ServerWindow extends JFrame {
 
 	/**
-	 * 
+	 * A version number for this class to support serialization and
+	 * de-serialization.
 	 */
 	private static final long serialVersionUID = 8912635373524728136L;
 
-	/** The log. */
+	/**
+	 * The logger instance. All log message from this class are routed through
+	 * this member. The logger namespace is <code>suncertify.ui</code>
+	 */
 	private final Logger log = Logger.getLogger("suncertify.ui");
 
-	/** The dialog. */
+	/**
+	 * The <code>ConfigDialog</code> used to store users configuration
+	 * parameters in the <code>PropertyManager</code>.
+	 */
 	ConfigDialog dialog;
 
 	/**
 	 * Instantiates a new server.
 	 */
-	public Server() {
+	public ServerWindow() {
 		super("URLyBird 1.0 - Server Mode");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -48,16 +60,20 @@ public class Server extends JFrame {
 
 		this.setVisible(true);
 
+		// Pop-up the ConfigDialog
 		this.dialog = new ConfigDialog(ApplicationMode.SERVER);
 		this.dialog.setVisible(true);
 	}
 
 	/**
-	 * Start server.
+	 * This method is called by the <code>Runner</code> after instantiating a
+	 * <code>ServerWindow</code>. It creates a <code>RemoteServerRegistry</code>
+	 * which will make a
+	 * <code>RemoteServerFactory<code> instance available remotely.
 	 */
 	public void startServer() {
 		try {
-			suncertify.remote.ServerRegistry.register();
+			suncertify.remote.RemoteServerRegistry.register();
 			this.serverRunning(true);
 		} catch (final RemoteException re) {
 			this.log.log(Level.SEVERE, re.getMessage(), re);
@@ -74,14 +90,16 @@ public class Server extends JFrame {
 	}
 
 	/**
-	 * Server running.
-	 *
-	 * @param b the b
+	 * This method creates a new window and populates with the network and
+	 * datafile parameters from the properties file. It also provides a button
+	 * that stops the server and quits the application
+	 * 
+	 * @param b
+	 *            if true, create the window.
 	 */
 	public void serverRunning(final boolean b) {
 		if (b) {
-			final PropertyFileManager properties = PropertyFileManager
-					.getInstance();
+			final PropertyManager properties = PropertyManager.getInstance();
 
 			final JLabel dbLabel = new JLabel(
 					"Location: "
@@ -116,7 +134,7 @@ public class Server extends JFrame {
 			action.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
-					Server.this.exitServer();
+					ServerWindow.this.exitServer();
 				}
 			});
 			final JPanel controlPanel = new JPanel(new FlowLayout(
@@ -130,7 +148,8 @@ public class Server extends JFrame {
 	}
 
 	/**
-	 * Exit server.
+	 * This method is called by the <code>ServerWindow</code> when the
+	 * "Exit and Stop Server!" button is pressed
 	 */
 	private void exitServer() {
 		System.exit(0);
