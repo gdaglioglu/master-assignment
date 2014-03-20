@@ -113,6 +113,40 @@ public class DatabaseFileReader {
         }
     }
 
+    public List<Hotel> readDatabaseFile() {
+
+        List<Hotel> hotels = new ArrayList<Hotel>();
+
+        for(int i = 0; i < numberOfFields; i++) {
+
+            Hotel hotel = new Hotel();
+
+            hotel.setName(readHotelName());
+            hotel.setLocation(readHotelLocation());
+            hotel.setRoomSize(readHotelRoomSize());
+            hotel.setSmoking(readHotelIsSmoking());
+            hotel.setRate(readHotelRate());
+            hotel.setDate(readHotelDate());
+            hotel.setOwnerName(readHotelOwner());
+
+            hotels.add(hotel);
+        }
+
+        return hotels;
+    }
+
+    public int getMagicCookie() {
+        return magicCookie;
+    }
+
+    public void closeDatabaseFileInputStream() {
+        try {
+            databaseFileInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void readNumberOfFields() throws IOException {
 
         final byte[] numberOfFieldsBytes = new byte[BYTES_NUMBER_OF_FIELDS];
@@ -134,30 +168,6 @@ public class DatabaseFileReader {
         magicCookie = retrieveIntegerFromDatabaseFile(magicCookieBytes);
     }
 
-    public List<Hotel> readDatabaseFile() {
-
-        List<Hotel> hotels = new ArrayList<Hotel>();
-
-        for(int i = 0; i < numberOfFields; i++) {
-
-
-        }
-
-        return hotels;
-    }
-
-    public int getMagicCookie() {
-        return magicCookie;
-    }
-
-    public void closeDatabaseFileInputStream() {
-        try {
-            databaseFileInputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private int retrieveIntegerFromDatabaseFile(final byte[] bytes) {
 
         int retrievedValue = 0;
@@ -165,7 +175,7 @@ public class DatabaseFileReader {
 
         for (int i = 0; i < bytesLength; i++) {
 
-            retrievedValue += (bytes[i] & 0x000000FF) << (bytesLength - 1 - i) * 8;
+            retrievedValue += (bytes[i] & 0x000000FF) << ((bytesLength - 1 - i) * 8);
         }
 
         return retrievedValue;
@@ -178,7 +188,7 @@ public class DatabaseFileReader {
 
         for (int i = 0; i < bytesLength; i++) {
 
-            retrievedValue.append((bytes[i] & 0x000000FF) << (bytesLength - 1 - i) * 8);
+            retrievedValue.append((bytes[i] & 0x000000FF) << ((bytesLength - 1 - i) * 8));
         }
 
         return retrievedValue.toString();
