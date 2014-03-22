@@ -82,6 +82,8 @@ public class DatabaseFileReader {
     private final int BYTES_RECORD_LENGTH = 4;
     // The bytes that store the number of fields in each record.
     private final int BYTES_NUMBER_OF_FIELDS = 2;
+    // The string representation for rooms that allow smoking.
+    private final String SMOKING_ALLOWED = "Y";
 
     // --------------- Instance Variables ---------------- //
     private InputStream databaseFileInputStream;
@@ -135,6 +137,7 @@ public class DatabaseFileReader {
         return hotels;
     }
 
+
     public int getMagicCookie() {
         return magicCookie;
     }
@@ -168,9 +171,104 @@ public class DatabaseFileReader {
         magicCookie = retrieveIntegerFromDatabaseFile(magicCookieBytes);
     }
 
+    private String readHotelName() {
+
+        final byte[] hotelNameBytes = new byte[FIELD_LENGTH_HOTEL];
+        try{
+            databaseFileInputStream.read(hotelNameBytes);
+        } catch (IOException e) {
+            System.out.println("Error Reading Hotel Name");
+        }
+        return retrieveStringFromDatabaseFile(hotelNameBytes);
+    }
+
+    private String readHotelLocation() {
+
+        final byte[] hotelLocationBytes = new byte[FIELD_LENGTH_CITY];
+        try{
+            databaseFileInputStream.read(hotelLocationBytes);
+        } catch (IOException e) {
+            System.out.println("Error Reading Hotel Location");
+        }
+        return retrieveStringFromDatabaseFile(hotelLocationBytes);
+    }
+
+    private int readHotelRoomSize() {
+
+        final byte[] hotelSizeBytes = new byte[FIELD_LENGTH_SIZE];
+        try{
+            databaseFileInputStream.read(hotelSizeBytes);
+        } catch (IOException e) {
+            System.out.println("Error Reading Hotel Size");
+        }
+        return retrieveIntegerFromDatabaseFile(hotelSizeBytes);
+    }
+
+    private boolean readHotelIsSmoking() {
+
+        final byte[] hotelSmokingBytes = new byte[FIELD_LENGTH_SMOKING];
+        try{
+            databaseFileInputStream.read(hotelSmokingBytes);
+        } catch (IOException e) {
+            System.out.println("Error Reading Hotel Smoking");
+        }
+
+        if(retrieveStringFromDatabaseFile(hotelSmokingBytes).equalsIgnoreCase(SMOKING_ALLOWED)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private double readHotelRate() {
+
+        final byte[] hotelRateBytes = new byte[FIELD_LENGTH_RATE];
+        try{
+            databaseFileInputStream.read(hotelRateBytes);
+        } catch (IOException e) {
+            System.out.println("Error Reading Hotel Rate");
+        }
+        return retrieveDoubleFromDatabaseFile(hotelRateBytes);
+    }
+
+    private String readHotelDate() {
+
+        final byte[] hotelDateBytes = new byte[FIELD_LENGTH_DATE];
+        try{
+            databaseFileInputStream.read(hotelDateBytes);
+        } catch (IOException e) {
+            System.out.println("Error Reading Hotel Date");
+        }
+        return retrieveStringFromDatabaseFile(hotelDateBytes);
+    }
+
+    private String readHotelOwner() {
+
+        final byte[] hotelOwnerBytes = new byte[FIELD_LENGTH_OWNER];
+        try{
+            databaseFileInputStream.read(hotelOwnerBytes);
+        } catch (IOException e) {
+            System.out.println("Error Reading Hotel Owner");
+        }
+        return retrieveStringFromDatabaseFile(hotelOwnerBytes);
+    }
+
     private int retrieveIntegerFromDatabaseFile(final byte[] bytes) {
 
         int retrievedValue = 0;
+        final int bytesLength = bytes.length;
+
+        for (int i = 0; i < bytesLength; i++) {
+
+            retrievedValue += (bytes[i] & 0x000000FF) << ((bytesLength - 1 - i) * 8);
+        }
+
+        return retrievedValue;
+    }
+
+    private double retrieveDoubleFromDatabaseFile(final byte[] bytes) {
+
+        double retrievedValue = 0;
         final int bytesLength = bytes.length;
 
         for (int i = 0; i < bytesLength; i++) {
