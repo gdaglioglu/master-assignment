@@ -20,5 +20,10 @@ public class MainController {
         hotels = databaseFileReader.readDatabaseFile();
 
         databaseFileReader.closeDatabaseFileInputStream();
+
+        System.out.println("The List of Hotels is :");
+        for(Hotel hotel : hotels) {
+            System.out.println(hotel.toString());
+        }
     }
 }

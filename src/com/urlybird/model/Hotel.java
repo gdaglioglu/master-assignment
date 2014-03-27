@@ -85,4 +85,16 @@ public class Hotel {
     public void setRate(double rate) {
         this.rate = rate;
     }
+
+    @Override
+    public String toString() {
+
+        StringBuffer stringBuffer = new StringBuffer(name);
+
+        stringBuffer.append(", ");
+        stringBuffer.append(location);
+
+
+        return stringBuffer.toString();
+    }
 }
