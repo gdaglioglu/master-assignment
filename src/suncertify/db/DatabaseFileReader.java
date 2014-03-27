@@ -2,10 +2,9 @@ package suncertify.db;
 
 import suncertify.model.Hotel;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,13 +85,14 @@ public class DatabaseFileReader {
     private final String SMOKING_ALLOWED = "Y";
 
     // --------------- Instance Variables ---------------- //
-    private InputStream databaseFileInputStream;
-    private int magicCookie, numberOfFields;
+    private RandomAccessFile databaseRandomAccessFile;
+    private int magicCookie, recordLength, numberOfFields, headerOffset;
 
     public DatabaseFileReader() {
 
         try {
-            databaseFileInputStream = new FileInputStream(PATH_TO_DATABASE_FILE);
+            databaseRandomAccessFile = new RandomAccessFile(PATH_TO_DATABASE_FILE, "rw");
+            databaseRandomAccessFile.seek(0);
 
             // Set the magic cookie value, by reading it from the database file's header.
             readMagicCookie();
@@ -102,6 +102,8 @@ public class DatabaseFileReader {
 
             // Set the number of fields, by reading it from the database file's header.
             readNumberOfFields();
+
+            headerOffset = (int) databaseRandomAccessFile.getFilePointer();
 
         } catch (FileNotFoundException e) {
 
@@ -137,14 +139,25 @@ public class DatabaseFileReader {
         return hotels;
     }
 
-
     public int getMagicCookie() {
         return magicCookie;
     }
 
+    public int getRecordLength() {
+        return recordLength;
+    }
+
+    public int getNumberOfFields() {
+        return numberOfFields;
+    }
+
+    public int getHeaderOffset() {
+        return headerOffset;
+    }
+
     public void closeDatabaseFileInputStream() {
         try {
-            databaseFileInputStream.close();
+            databaseRandomAccessFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -153,21 +166,21 @@ public class DatabaseFileReader {
     private void readNumberOfFields() throws IOException {
 
         final byte[] numberOfFieldsBytes = new byte[BYTES_NUMBER_OF_FIELDS];
-        databaseFileInputStream.read(numberOfFieldsBytes);
+        databaseRandomAccessFile.read(numberOfFieldsBytes);
         numberOfFields = retrieveIntegerFromDatabaseFile(numberOfFieldsBytes);
     }
 
     private void readRecordLength() throws IOException {
 
         final byte[] recordLengthBytes = new byte[BYTES_RECORD_LENGTH];
-        databaseFileInputStream.read(recordLengthBytes);
-        // int recordLength = retrieveIntegerFromDatabaseFile(recordLengthBytes);
+        databaseRandomAccessFile.read(recordLengthBytes);
+        recordLength = retrieveIntegerFromDatabaseFile(recordLengthBytes);
     }
 
     private void readMagicCookie() throws IOException {
 
         final byte[] magicCookieBytes = new byte[BYTES_MAGIC_COOKIE];
-        databaseFileInputStream.read(magicCookieBytes);
+        databaseRandomAccessFile.read(magicCookieBytes);
         magicCookie = retrieveIntegerFromDatabaseFile(magicCookieBytes);
     }
 
@@ -175,7 +188,7 @@ public class DatabaseFileReader {
 
         final byte[] hotelNameBytes = new byte[FIELD_LENGTH_HOTEL];
         try{
-            databaseFileInputStream.read(hotelNameBytes);
+            databaseRandomAccessFile.read(hotelNameBytes);
         } catch (IOException e) {
             System.out.println("Error Reading Hotel Name");
         }
@@ -186,7 +199,7 @@ public class DatabaseFileReader {
 
         final byte[] hotelLocationBytes = new byte[FIELD_LENGTH_CITY];
         try{
-            databaseFileInputStream.read(hotelLocationBytes);
+            databaseRandomAccessFile.read(hotelLocationBytes);
         } catch (IOException e) {
             System.out.println("Error Reading Hotel Location");
         }
@@ -197,7 +210,7 @@ public class DatabaseFileReader {
 
         final byte[] hotelSizeBytes = new byte[FIELD_LENGTH_SIZE];
         try{
-            databaseFileInputStream.read(hotelSizeBytes);
+            databaseRandomAccessFile.read(hotelSizeBytes);
         } catch (IOException e) {
             System.out.println("Error Reading Hotel Size");
         }
@@ -208,7 +221,7 @@ public class DatabaseFileReader {
 
         final byte[] hotelSmokingBytes = new byte[FIELD_LENGTH_SMOKING];
         try{
-            databaseFileInputStream.read(hotelSmokingBytes);
+            databaseRandomAccessFile.read(hotelSmokingBytes);
         } catch (IOException e) {
             System.out.println("Error Reading Hotel Smoking");
         }
@@ -224,7 +237,7 @@ public class DatabaseFileReader {
 
         final byte[] hotelRateBytes = new byte[FIELD_LENGTH_RATE];
         try{
-            databaseFileInputStream.read(hotelRateBytes);
+            databaseRandomAccessFile.read(hotelRateBytes);
         } catch (IOException e) {
             System.out.println("Error Reading Hotel Rate");
         }
@@ -235,7 +248,7 @@ public class DatabaseFileReader {
 
         final byte[] hotelDateBytes = new byte[FIELD_LENGTH_DATE];
         try{
-            databaseFileInputStream.read(hotelDateBytes);
+            databaseRandomAccessFile.read(hotelDateBytes);
         } catch (IOException e) {
             System.out.println("Error Reading Hotel Date");
         }
@@ -246,7 +259,7 @@ public class DatabaseFileReader {
 
         final byte[] hotelOwnerBytes = new byte[FIELD_LENGTH_OWNER];
         try{
-            databaseFileInputStream.read(hotelOwnerBytes);
+            databaseRandomAccessFile.read(hotelOwnerBytes);
         } catch (IOException e) {
             System.out.println("Error Reading Hotel Owner");
         }
