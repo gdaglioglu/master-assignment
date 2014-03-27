@@ -1,7 +1,7 @@
-package com.urlybird.database;
+package suncertify.db;
 
-import com.urlybird.exceptions.DuplicateKeyException;
-import com.urlybird.exceptions.RecordNotFoundException;
+import suncertify.exceptions.DuplicateKeyException;
+import suncertify.exceptions.RecordNotFoundException;
 
 /**
  * Created by lukepotter on 06/12/2013.

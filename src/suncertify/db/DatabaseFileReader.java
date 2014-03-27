@@ -1,6 +1,6 @@
-package com.urlybird.database;
+package suncertify.db;
 
-import com.urlybird.model.Hotel;
+import suncertify.model.Hotel;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

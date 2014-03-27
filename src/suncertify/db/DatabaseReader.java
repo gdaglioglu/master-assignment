@@ -11,7 +11,7 @@
  * certification program, must not be used out of this context and must be used exclusively by Oracle and Sun
  * Microsystems, Inc.
  */
-package com.urlybird.database;
+package suncertify.db;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

@@ -1,7 +1,7 @@
-package com.urlybird.controller;
+package suncertify.controller;
 
-import com.urlybird.database.DatabaseFileReader;
-import com.urlybird.model.Hotel;
+import suncertify.db.DatabaseFileReader;
+import suncertify.model.Hotel;
 
 import java.util.ArrayList;
 import java.util.List;

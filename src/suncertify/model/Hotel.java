@@ -1,4 +1,4 @@
-package com.urlybird.model;
+package suncertify.model;
 
 
 /**
