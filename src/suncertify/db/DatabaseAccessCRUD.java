@@ -5,6 +5,10 @@ package suncertify.db;
  */
 public class DatabaseAccessCRUD {
 
+    public static long createRecord(String[] data) {
+        return 0;
+    }
+
     public static String[] readRecord(long recNo) {
         return new String[0];
     }
@@ -15,9 +19,5 @@ public class DatabaseAccessCRUD {
 
     public static void deleteRecord(long recNo, long lockCookie) {
 
-    }
-
-    public static long createRecord(String[] data) {
-        return 0;
     }
 }
