@@ -97,4 +97,31 @@ public class Hotel {
 
         return stringBuffer.toString();
     }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (! (object instanceof Hotel)) {
+            return false;
+        }
+
+        Hotel otherHotel = (Hotel) object;
+
+        if (this.name.equalsIgnoreCase(otherHotel.getName())
+                && this.location.equalsIgnoreCase(otherHotel.getLocation())
+                && this.roomSize == otherHotel.getRoomSize()
+                && this.isSmoking == otherHotel.isSmoking()
+                && this.rate == otherHotel.getRate()) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return (name.hashCode() + location.hashCode());
+    }
 }
