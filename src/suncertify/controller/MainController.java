@@ -13,6 +13,18 @@ public class MainController {
 
     public static void main(String[] args) {
 
+        DatabaseAccessDAO databaseAccessDAO = new DatabaseAccessDAO();
+        ArrayList<Hotel> hotels = databaseAccessDAO.retrieveAllHotels();
+
+        long recordNumber = 1L;
+        for (Hotel hotel : hotels) {
+            System.out.println(recordNumber + ": " + hotel.toString());
+            recordNumber++;
+        }
+    }
+
+    private void readFromDatabaseFileReader() {
+
         DatabaseFileReader databaseFileReader = new DatabaseFileReader();
         List<Hotel> hotels = new ArrayList<Hotel>();
 
