@@ -5,6 +5,8 @@ package suncertify.db;
  */
 public class DatabaseAccessCRUD {
 
+    DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
+
     public static long createRecord(String[] data) {
         return 0;
     }
