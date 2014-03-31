@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by lukepotter on 06/12/2013.
@@ -73,7 +74,8 @@ public class DatabaseFileReader {
     private final int FIELD_LENGTH_OWNER = 8;
 
     // --------------- Constants ---------------- //
-    // The database file location. TODO: make this relative.
+    // The database file location.
+    // TODO: make this relative, or read from a properties file.
     private final String PATH_TO_DATABASE_FILE = "/Users/lukepotter/Eclipse-Workspace/URLyBird/src/db-1x1.db";
     // The bytes that store the "magic cookie" value.
     private final int BYTES_MAGIC_COOKIE = 4;
@@ -81,12 +83,23 @@ public class DatabaseFileReader {
     private final int BYTES_RECORD_LENGTH = 4;
     // The bytes that store the number of fields in each record.
     private final int BYTES_NUMBER_OF_FIELDS = 2;
+    // The bytes that store the length of each field name.
+    private final int BYTES_FIELD_NAME = 2;
+    // The bytes that store the fields length.
+    private final int BYTES_FIELD_LENGTH = 2;
+    // The bytes that store the flag of each record.
+    private final int BYTES_RECORD_FLAG = 1;
+    // The value that identifies a record as being valid.
+    private final boolean IS_VALID_RECORD = false;
+    // The character encoding of the file.
+    private static final String FILE_ENCODING = "US-ASCII";
     // The string representation for rooms that allow smoking.
     private final String SMOKING_ALLOWED = "Y";
 
     // --------------- Instance Variables ---------------- //
     private RandomAccessFile databaseRandomAccessFile;
-    private int magicCookie, recordLength, numberOfFields, headerOffset;
+    private int magicCookie, recordLength, numberOfFields, headerOffset, numberOfRecords;
+    private final Logger log = Logger.getLogger("suncertify.db.DatabaseFileReader");
 
     public DatabaseFileReader() {
 
@@ -97,7 +110,7 @@ public class DatabaseFileReader {
             // Set the magic cookie value, by reading it from the database file's header.
             readMagicCookie();
 
-            // Read the record length, by reading it from the database file's header.
+            // Set the record length, by reading it from the database file's header.
             readRecordLength();
 
             // Set the number of fields, by reading it from the database file's header.
@@ -155,9 +168,22 @@ public class DatabaseFileReader {
         return headerOffset;
     }
 
+    public int getNumberOfRecords() {
+        return numberOfRecords;
+    }
+
+    private void setNumberOfRecords() {
+        try {
+            numberOfRecords = (int)(databaseRandomAccessFile.length() - getHeaderOffset()) / BYTES_RECORD_LENGTH;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void closeDatabaseFileInputStream() {
         try {
             databaseRandomAccessFile.close();
+            log.fine("Database closed.");
         } catch (IOException e) {
             e.printStackTrace();
         }
