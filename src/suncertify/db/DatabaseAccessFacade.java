@@ -6,7 +6,7 @@ import suncertify.exceptions.RecordNotFoundException;
 /**
  * Created by lukepotter on 27/03/2014.
  */
-public class DatabaseAccessDAO implements DBAccess {
+public class DatabaseAccessFacade implements DBAccess {
 
     @Override
     public String[] readRecord(long recNo) throws RecordNotFoundException {
