@@ -1,12 +1,9 @@
 package suncertify.db;
 
-import suncertify.exceptions.DuplicateKeyException;
-import suncertify.exceptions.RecordNotFoundException;
-
 /**
  * Created by lukepotter on 27/03/2014.
  */
-public class DatabaseAccessFacade implements DBAccess {
+public class Data implements DBAccess {
 
     @Override
     public String[] readRecord(long recNo) throws RecordNotFoundException {

@@ -1,21 +1,21 @@
-package suncertify.exceptions;
+package suncertify.db;
 
 /**
  * Created by lukepotter on 06/12/2013.
  */
-public class RecordNotFoundException extends Exception {
+public class DuplicateKeyException extends Exception {
 
     /**
      * Default Constructor.
      */
-    public RecordNotFoundException() {}
+    public DuplicateKeyException() {}
 
     /**
      * Constructor that accepts a parameter.
      *
      * @param message
      */
-    public RecordNotFoundException(String message) {
+    public DuplicateKeyException(String message) {
 
         super(message);
     }

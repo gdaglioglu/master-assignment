@@ -1,8 +1,5 @@
 package suncertify.db;
 
-import suncertify.exceptions.DuplicateKeyException;
-import suncertify.exceptions.RecordNotFoundException;
-
 /**
  * Created by lukepotter on 06/12/2013.
  */

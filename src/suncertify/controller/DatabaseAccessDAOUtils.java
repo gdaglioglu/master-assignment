@@ -1,16 +1,16 @@
 package suncertify.controller;
 
-import suncertify.model.Hotel;
+import suncertify.model.HotelRoom;
 
 /**
  * Created by lukepotter on 31/03/2014.
  */
 public class DatabaseAccessDAOUtils {
-    public static Hotel parseStringArrayIntoHotelPojo(String[] strings) {
+    public static HotelRoom parseStringArrayIntoHotelPojo(String[] strings) {
         return null;
     }
 
-    public static String[] parseHotelPojoIntoStringArray(Hotel hotel) {
+    public static String[] parseHotelPojoIntoStringArray(HotelRoom hotelRoom) {
         return new String[0];
     }
 }

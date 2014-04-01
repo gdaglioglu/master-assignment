@@ -1,9 +1,9 @@
 package suncertify.controller;
 
-import suncertify.db.DatabaseAccessFacade;
-import suncertify.exceptions.DuplicateKeyException;
-import suncertify.exceptions.RecordNotFoundException;
-import suncertify.model.Hotel;
+import suncertify.db.Data;
+import suncertify.db.DuplicateKeyException;
+import suncertify.db.RecordNotFoundException;
+import suncertify.model.HotelRoom;
 
 import java.util.ArrayList;
 
@@ -12,24 +12,24 @@ import java.util.ArrayList;
  */
 public class DatabaseAccessDAO {
 
-    private DatabaseAccessFacade databaseAccessFacade;
+    private Data databaseAccessFacade;
 
     public DatabaseAccessDAO() {
 
-         databaseAccessFacade = new DatabaseAccessFacade();
+         databaseAccessFacade = new Data();
     }
 
-    public boolean createHotel(Hotel newHotel) {
+    public boolean createHotel(HotelRoom newHotelRoom) {
 
         try {
-            databaseAccessFacade.createRecord(DatabaseAccessDAOUtils.parseHotelPojoIntoStringArray(newHotel));
+            databaseAccessFacade.createRecord(DatabaseAccessDAOUtils.parseHotelPojoIntoStringArray(newHotelRoom));
             return true;
         } catch (DuplicateKeyException e) {
             return false;
         }
     }
 
-    public Hotel retrieveHotel(long recordNumber) {
+    public HotelRoom retrieveHotel(long recordNumber) {
 
         try {
             return DatabaseAccessDAOUtils.parseStringArrayIntoHotelPojo(databaseAccessFacade.readRecord(recordNumber));
@@ -38,9 +38,9 @@ public class DatabaseAccessDAO {
         }
     }
 
-    public boolean updateHotel(long recordNumber, Hotel updatedHotel, long lockCookie) {
+    public boolean updateHotel(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie) {
 
-        String[] updatedHotelStrings = DatabaseAccessDAOUtils.parseHotelPojoIntoStringArray(updatedHotel);
+        String[] updatedHotelStrings = DatabaseAccessDAOUtils.parseHotelPojoIntoStringArray(updatedHotelRoom);
 
         try {
             databaseAccessFacade.updateRecord(recordNumber, updatedHotelStrings, lockCookie);
@@ -60,64 +60,64 @@ public class DatabaseAccessDAO {
         }
     }
 
-    public ArrayList<Hotel> findHotels(String ... searchStrings) {
+    public ArrayList<HotelRoom> findHotels(String ... searchStrings) {
 
         long[] recordNumbers = databaseAccessFacade.findByCriteria(searchStrings);
-        ArrayList<Hotel> hotels = null;
+        ArrayList<HotelRoom> hotelRooms = null;
 
         for(long recordNumber : recordNumbers) {
 
-            Hotel hotel = retrieveHotel(recordNumber);
+            HotelRoom hotelRoom = retrieveHotel(recordNumber);
 
-            if (hotel != null) {
+            if (hotelRoom != null) {
 
-                // Initialise the hotels ArrayList the first time we find a hotel to add to the list.
-                if (hotels == null) {
-                    hotels = new ArrayList<Hotel>();
+                // Initialise the hotelRooms ArrayList the first time we find a hotelRoom to add to the list.
+                if (hotelRooms == null) {
+                    hotelRooms = new ArrayList<HotelRoom>();
                 }
 
-                hotels.add(hotel);
+                hotelRooms.add(hotelRoom);
             }
         }
 
-        return hotels;
+        return hotelRooms;
     }
 
-    public ArrayList<Hotel> retrieveAllHotels() {
+    public ArrayList<HotelRoom> retrieveAllHotels() {
 
-        ArrayList<Hotel> hotels = new ArrayList<Hotel>();
-        Hotel tempHotel;
+        ArrayList<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
+        HotelRoom tempHotelRoom;
 
-        for (long recordNumber = 1; (tempHotel = retrieveHotel(recordNumber)) != null; recordNumber++) {
-            hotels.add(tempHotel);
+        for (long recordNumber = 1; (tempHotelRoom = retrieveHotel(recordNumber)) != null; recordNumber++) {
+            hotelRooms.add(tempHotelRoom);
         }
 
-        return hotels;
+        return hotelRooms;
     }
 
     public boolean bookHotel(long recordNumber, String customerName, long lockCookie) {
 
-        Hotel hotelToBook;
+        HotelRoom hotelRoomToBook;
 
-        if ((hotelToBook = retrieveHotel(recordNumber)) == null) {
+        if ((hotelRoomToBook = retrieveHotel(recordNumber)) == null) {
             return false;
         }
 
-        hotelToBook.setOwnerName(customerName);
+        hotelRoomToBook.setOwnerName(customerName);
 
-        return updateHotel(recordNumber, hotelToBook, lockCookie);
+        return updateHotel(recordNumber, hotelRoomToBook, lockCookie);
     }
 
     public boolean cancelHotelBooking(long recordNumber, long lockCookie) {
 
-        Hotel hotelBookingToCancel;
+        HotelRoom hotelRoomBookingToCancel;
 
-        if ((hotelBookingToCancel = retrieveHotel(recordNumber)) == null) {
+        if ((hotelRoomBookingToCancel = retrieveHotel(recordNumber)) == null) {
             return false;
         }
 
-        hotelBookingToCancel.setOwnerName(null);
+        hotelRoomBookingToCancel.setOwnerName(null);
 
-        return updateHotel(recordNumber, hotelBookingToCancel, lockCookie);
+        return updateHotel(recordNumber, hotelRoomBookingToCancel, lockCookie);
     }
 }

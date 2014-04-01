@@ -1,7 +1,7 @@
 package suncertify.controller;
 
 import suncertify.db.DatabaseFileReader;
-import suncertify.model.Hotel;
+import suncertify.model.HotelRoom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ public class MainController {
     public static void main(String[] args) {
 
         DatabaseAccessDAO databaseAccessDAO = new DatabaseAccessDAO();
-        ArrayList<Hotel> hotels = databaseAccessDAO.retrieveAllHotels();
+        ArrayList<HotelRoom> hotelRooms = databaseAccessDAO.retrieveAllHotels();
 
         long recordNumber = 1L;
-        for (Hotel hotel : hotels) {
-            System.out.println(recordNumber + ": " + hotel.toString());
+        for (HotelRoom hotelRoom : hotelRooms) {
+            System.out.println(recordNumber + ": " + hotelRoom.toString());
             recordNumber++;
         }
     }
@@ -26,10 +26,10 @@ public class MainController {
     private void readFromDatabaseFileReader() {
 
         DatabaseFileReader databaseFileReader = new DatabaseFileReader();
-        List<Hotel> hotels = new ArrayList<Hotel>();
+        List<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
 
         int magicCookie = databaseFileReader.getMagicCookie();
-        hotels = databaseFileReader.readDatabaseFile();
+        hotelRooms = databaseFileReader.readDatabaseFile();
 
         databaseFileReader.closeDatabaseFileInputStream();
 
@@ -39,8 +39,8 @@ public class MainController {
         System.out.println("Header Offset is: " + databaseFileReader.getHeaderOffset());
 
         System.out.println("The List of Hotels is :");
-        for(Hotel hotel : hotels) {
-            System.out.println(hotel.toString());
+        for(HotelRoom hotelRoom : hotelRooms) {
+            System.out.println(hotelRoom.toString());
         }
     }
 }

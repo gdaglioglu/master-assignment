@@ -4,7 +4,7 @@ package suncertify.model;
 /**
  * Created by lukepotter on 06/12/2013.
  */
-public class Hotel {
+public class HotelRoom {
 
     private String name;
     private String location;
@@ -15,15 +15,15 @@ public class Hotel {
     private String ownerName;
 
     // Constructors.
-    public Hotel() {}
+    public HotelRoom() {}
 
-    public Hotel(String name, String location, String date, int roomSize, boolean isSmoking, double rate) {
+    public HotelRoom(String name, String location, String date, int roomSize, boolean isSmoking, double rate) {
 
         setName(name); setLocation(location); setDate(date);
         setRoomSize(roomSize); setSmoking(isSmoking); setRate(rate);
     }
 
-    public Hotel(String name, String location, String date, String ownerName, int roomSize, boolean isSmoking, double rate) {
+    public HotelRoom(String name, String location, String date, String ownerName, int roomSize, boolean isSmoking, double rate) {
 
         setName(name); setLocation(location); setDate(date); setOwnerName(ownerName);
         setRoomSize(roomSize); setSmoking(isSmoking); setRate(rate);
@@ -101,17 +101,17 @@ public class Hotel {
     @Override
     public boolean equals(Object object) {
 
-        if (! (object instanceof Hotel)) {
+        if (! (object instanceof HotelRoom)) {
             return false;
         }
 
-        Hotel otherHotel = (Hotel) object;
+        HotelRoom otherHotelRoom = (HotelRoom) object;
 
-        if (this.name.equalsIgnoreCase(otherHotel.getName())
-                && this.location.equalsIgnoreCase(otherHotel.getLocation())
-                && this.roomSize == otherHotel.getRoomSize()
-                && this.isSmoking == otherHotel.isSmoking()
-                && this.rate == otherHotel.getRate()) {
+        if (this.name.equalsIgnoreCase(otherHotelRoom.getName())
+                && this.location.equalsIgnoreCase(otherHotelRoom.getLocation())
+                && this.roomSize == otherHotelRoom.getRoomSize()
+                && this.isSmoking == otherHotelRoom.isSmoking()
+                && this.rate == otherHotelRoom.getRate()) {
 
             return true;
         }

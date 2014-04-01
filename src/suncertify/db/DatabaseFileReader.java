@@ -1,6 +1,6 @@
 package suncertify.db;
 
-import suncertify.model.Hotel;
+import suncertify.model.HotelRoom;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -130,26 +130,26 @@ public class DatabaseFileReader {
         }
     }
 
-    public List<Hotel> readDatabaseFile() {
+    public List<HotelRoom> readDatabaseFile() {
 
-        List<Hotel> hotels = new ArrayList<Hotel>();
+        List<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
 
         for(int i = 0; i < numberOfFields; i++) {
 
-            Hotel hotel = new Hotel();
+            HotelRoom hotelRoom = new HotelRoom();
 
-            hotel.setName(readHotelName());
-            hotel.setLocation(readHotelLocation());
-            hotel.setRoomSize(readHotelRoomSize());
-            hotel.setSmoking(readHotelIsSmoking());
-            hotel.setRate(readHotelRate());
-            hotel.setDate(readHotelDate());
-            hotel.setOwnerName(readHotelOwner());
+            hotelRoom.setName(readHotelName());
+            hotelRoom.setLocation(readHotelLocation());
+            hotelRoom.setRoomSize(readHotelRoomSize());
+            hotelRoom.setSmoking(readHotelIsSmoking());
+            hotelRoom.setRate(readHotelRate());
+            hotelRoom.setDate(readHotelDate());
+            hotelRoom.setOwnerName(readHotelOwner());
 
-            hotels.add(hotel);
+            hotelRooms.add(hotelRoom);
         }
 
-        return hotels;
+        return hotelRooms;
     }
 
     public int getMagicCookie() {
@@ -216,7 +216,7 @@ public class DatabaseFileReader {
         try{
             databaseRandomAccessFile.read(hotelNameBytes);
         } catch (IOException e) {
-            System.out.println("Error Reading Hotel Name");
+            System.out.println("Error Reading HotelRoom Name");
         }
         return retrieveStringFromDatabaseFile(hotelNameBytes);
     }
@@ -227,7 +227,7 @@ public class DatabaseFileReader {
         try{
             databaseRandomAccessFile.read(hotelLocationBytes);
         } catch (IOException e) {
-            System.out.println("Error Reading Hotel Location");
+            System.out.println("Error Reading HotelRoom Location");
         }
         return retrieveStringFromDatabaseFile(hotelLocationBytes);
     }
@@ -238,7 +238,7 @@ public class DatabaseFileReader {
         try{
             databaseRandomAccessFile.read(hotelSizeBytes);
         } catch (IOException e) {
-            System.out.println("Error Reading Hotel Size");
+            System.out.println("Error Reading HotelRoom Size");
         }
         return retrieveIntegerFromDatabaseFile(hotelSizeBytes);
     }
@@ -249,7 +249,7 @@ public class DatabaseFileReader {
         try{
             databaseRandomAccessFile.read(hotelSmokingBytes);
         } catch (IOException e) {
-            System.out.println("Error Reading Hotel Smoking");
+            System.out.println("Error Reading HotelRoom Smoking");
         }
 
         if(retrieveStringFromDatabaseFile(hotelSmokingBytes).equalsIgnoreCase(SMOKING_ALLOWED)) {
@@ -265,7 +265,7 @@ public class DatabaseFileReader {
         try{
             databaseRandomAccessFile.read(hotelRateBytes);
         } catch (IOException e) {
-            System.out.println("Error Reading Hotel Rate");
+            System.out.println("Error Reading HotelRoom Rate");
         }
         return retrieveDoubleFromDatabaseFile(hotelRateBytes);
     }
@@ -276,7 +276,7 @@ public class DatabaseFileReader {
         try{
             databaseRandomAccessFile.read(hotelDateBytes);
         } catch (IOException e) {
-            System.out.println("Error Reading Hotel Date");
+            System.out.println("Error Reading HotelRoom Date");
         }
         return retrieveStringFromDatabaseFile(hotelDateBytes);
     }
@@ -287,7 +287,7 @@ public class DatabaseFileReader {
         try{
             databaseRandomAccessFile.read(hotelOwnerBytes);
         } catch (IOException e) {
-            System.out.println("Error Reading Hotel Owner");
+            System.out.println("Error Reading HotelRoom Owner");
         }
         return retrieveStringFromDatabaseFile(hotelOwnerBytes);
     }
