@@ -1,6 +1,7 @@
 package suncertify.controller;
 
 import suncertify.db.Data;
+import suncertify.db.DatabaseFileUtils;
 import suncertify.db.DuplicateKeyException;
 import suncertify.db.RecordNotFoundException;
 import suncertify.model.HotelRoom;
@@ -23,6 +24,7 @@ public class DatabaseAccessDAO {
 
         try {
             databaseAccessFacade.createRecord(DatabaseAccessDAOUtils.parseHotelPojoIntoStringArray(newHotelRoom));
+            DatabaseFileUtils.getInstance().updateNumberOfRecordsInDatabase();
             return true;
         } catch (DuplicateKeyException e) {
             return false;
@@ -54,6 +56,7 @@ public class DatabaseAccessDAO {
 
         try {
             databaseAccessFacade.deleteRecord(recordNumber, lockCookie);
+            DatabaseFileUtils.getInstance().updateNumberOfRecordsInDatabase();
             return true;
         } catch (RecordNotFoundException e) {
             return false;
