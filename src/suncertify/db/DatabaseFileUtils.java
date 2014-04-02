@@ -1,10 +1,9 @@
 package suncertify.db;
 
-import suncertify.utilities.URLyBirdApplicationConstants;
+import suncertify.utilities.URLyBirdApplicationObjectsFactory;
 
-import java.io.*;
-import java.util.Properties;
-import java.util.logging.Level;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.logging.Logger;
 
 /**
@@ -14,7 +13,6 @@ public class DatabaseFileUtils {
 
     public static DatabaseFileUtils databaseFileUtils;
     private RandomAccessFile databaseRandomAccessFile;
-    private Properties properties;
 
     private int magicCookie, recordLength, numberOfFields;
     private long numberOfRecordsInDatabase, headerOffset;
@@ -23,8 +21,7 @@ public class DatabaseFileUtils {
 
     private DatabaseFileUtils() {
 
-        initialiseProperties();
-        initialiseDatabaseRandomAccessFile();
+        databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
 
         deriveHeaderValues();
         seekPastColumnsHeaders();
@@ -98,47 +95,6 @@ public class DatabaseFileUtils {
     }
 
     // ---------- Private Methods ----------
-    private void initialiseProperties() {
-
-        logger.finest("Entering initialiseProperties method.");
-
-        try {
-            properties = new Properties();
-            properties.load(new FileInputStream(URLyBirdApplicationConstants.PROPERTY_FILE_NAME));
-        }  catch (FileNotFoundException e) {
-            System.out.println("Unable to find the properties file. Looking for file in: "
-                    + System.getProperty("user.dir")
-                    + "/"
-                    + URLyBirdApplicationConstants.PROPERTY_FILE_NAME);
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("Error loading the properties file. File may be corrupt. Looking for file in: "
-                    + URLyBirdApplicationConstants.PROPERTY_FILE_NAME);
-            e.printStackTrace();
-        }
-
-        logger.finest("Entering initialiseProperties method.");
-    }
-
-    private void initialiseDatabaseRandomAccessFile() {
-
-        try {
-            File databaseFile = new File(properties.getProperty(URLyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
-            if (! databaseFile.exists()) {
-                throw new FileNotFoundException();
-            }
-            databaseRandomAccessFile = new RandomAccessFile(
-                    databaseFile,
-                    URLyBirdApplicationConstants.RANDOM_ACCESS_FILE_OPEN_MODE);
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to find the database file. Looking for file in: "
-                    + System.getProperty("user.dir")
-                    + "/"
-                    + properties.getProperty(URLyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
-            e.printStackTrace();
-        }
-    }
-
     private void closeDatabaseRandomAccessFile() {
         try {
             databaseRandomAccessFile.close();

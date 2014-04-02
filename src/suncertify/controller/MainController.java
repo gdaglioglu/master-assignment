@@ -1,13 +1,9 @@
 package suncertify.controller;
 
-import suncertify.db.DatabaseFileReader;
 import suncertify.db.DatabaseFileUtils;
 import suncertify.model.HotelRoom;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by lukepotter on 06/12/2013.

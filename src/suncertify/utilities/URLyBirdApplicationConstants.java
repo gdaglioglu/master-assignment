@@ -28,5 +28,5 @@ public class URLyBirdApplicationConstants {
     public static final String RANDOM_ACCESS_FILE_OPEN_MODE = "rw";
 
     // The character encoding of the database file.
-    private static final String FILE_ENCODING = "US-ASCII";
+    public static final String FILE_ENCODING = "US-ASCII";
 }
