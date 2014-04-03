@@ -13,10 +13,7 @@
  */
 package suncertify.db;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * <p>
@@ -83,7 +80,7 @@ public class DatabaseReader {
     public static void main(final String[] args) {
 
         try {
-            final InputStream database = new FileInputStream(DATABASE_LOCATION);
+            final RandomAccessFile database = new RandomAccessFile(DATABASE_LOCATION, "rw");
 
             final byte[] magicCookieByteArray = new byte[MAGIC_COOKIE_BYTES];
             final byte[] recordLengthByteArray = new byte[RECORD_LENGTH_BYTES];
@@ -128,7 +125,7 @@ public class DatabaseReader {
                 database.read(fieldLength);
                 fieldLengths[i] = getValue(fieldLength);
             }
-
+            System.out.println("Header offset is: " + database.getFilePointer());
             int record = 1;
 
             // The actual content of each record is read here. The file is read until EOF is reached.
