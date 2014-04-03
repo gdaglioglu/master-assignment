@@ -13,10 +13,10 @@
  */
 package suncertify.db;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import suncertify.utilities.URLyBirdApplicationConstants;
+import suncertify.utilities.URLyBirdApplicationObjectsFactory;
+
+import java.io.*;
 
 /**
  * <p>
@@ -40,30 +40,18 @@ public class DatabaseReader {
 
     // The bytes that store the "magic cookie" value.
     private static final int MAGIC_COOKIE_BYTES = 4;
-
     // The bytes that store the total overall length of each record.
     private static final int RECORD_LENGTH_BYTES = 4;
-
     // The bytes that store the number of fields in each record.
     private static final int NUMBER_OF_FIELDS_BYTES = 2;
-
     // The bytes that store the length of each field name.
     private static final int FIELD_NAME_BYTES = 2;
-
     // The bytes that store the fields length.
     private static final int FIELD_LENGTH_BYTES = 2;
-
     // The bytes that store the flag of each record.
     private static final int RECORD_FLAG_BYTES = 1;
-
     // The value that identifies a record as being valid.
     private static final int VALID = 0;
-
-    // The .db file location.
-    private static final String DATABASE_LOCATION = "/Users/lukepotter/Eclipse-Workspace/URLyBird/src/db-1x1.db";
-
-    // The character encoding of the file.
-    private static final String ENCODING = "US-ASCII";
 
     /**
      * Reads the .db file. The values are read according to the information provided in the class-level fields (such as
@@ -83,7 +71,7 @@ public class DatabaseReader {
     public static void main(final String[] args) {
 
         try {
-            final InputStream database = new FileInputStream(DATABASE_LOCATION);
+            final RandomAccessFile database = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
 
             final byte[] magicCookieByteArray = new byte[MAGIC_COOKIE_BYTES];
             final byte[] recordLengthByteArray = new byte[RECORD_LENGTH_BYTES];
@@ -97,15 +85,9 @@ public class DatabaseReader {
             final int recordLength = getValue(recordLengthByteArray);
             final int numberOfFields = getValue(numberOfFieldsByteArray);
 
-            String message = "Magic cookie: " + magicCookie;
-            System.out.println(message);
-
-            message = "Record length: " + recordLength;
-            System.out.println(message);
-
-            message = "Number of fields in each record: " + numberOfFields;
-            System.out.println(message);
-            System.out.println();
+            System.out.println("Magic cookie: " + magicCookie);
+            System.out.println("Record length: " + recordLength);
+            System.out.println("Number of fields in each record: " + numberOfFields);
 
             final String[] fieldNames = new String[numberOfFields];
             final int[] fieldLengths = new int[numberOfFields];
@@ -122,15 +104,17 @@ public class DatabaseReader {
 
                 final byte[] fieldNameByteArray = new byte[nameLength];
                 database.read(fieldNameByteArray);
-                fieldNames[i] = new String(fieldNameByteArray, ENCODING);
+                fieldNames[i] = new String(fieldNameByteArray, URLyBirdApplicationConstants.FILE_ENCODING);
 
                 final byte[] fieldLength = new byte[FIELD_LENGTH_BYTES];
                 database.read(fieldLength);
                 fieldLengths[i] = getValue(fieldLength);
             }
 
-            int record = 1;
+            System.out.println("Header offset is: " + database.getFilePointer());
+            System.out.println();
 
+            int record = 1;
             // The actual content of each record is read here. The file is read until EOF is reached.
             while (true) {
 
@@ -141,37 +125,27 @@ public class DatabaseReader {
 
                 final int flag = getValue(flagByteArray);
 
-                message = "*********** RECORD " + record + " ***********";
-                System.out.println(message);
-
+                System.out.println("*********** RECORD " + record + " ***********");
                 for (int i = 0; i < numberOfFields; i++) {
 
                     final byte[] buffer = new byte[fieldLengths[i]];
                     database.read(buffer);
-                    message = fieldNames[i] + ": " + new String(buffer, ENCODING);
-                    System.out.println(message);
+                    System.out.println(fieldNames[i] + ": " + new String(buffer, URLyBirdApplicationConstants.FILE_ENCODING));
                 }
 
-                if (flag == VALID) message = "Status: valid record";
-                else message = "Status: deleted record";
+                if (flag == VALID) System.out.println("Status: valid record\n");
+                else System.out.println("Status: deleted record\n");
 
-                System.out.println(message);
-                System.out.println();
                 record++;
             }
 
             database.close();
 
         } catch (final FileNotFoundException exception) {
-
-            final String message = "The given file does not exist.";
-            throw new RuntimeException(message, exception);
-
+            throw new RuntimeException("The given file does not exist.", exception);
         } catch (final IOException exception) {
-
-            final String message = "The following error occurred while trying to read the database file: "
-                    + exception.getMessage();
-            throw new RuntimeException(message, exception);
+            throw new RuntimeException("The following error occurred while trying to read the database file: "
+                    + exception.getMessage(), exception);
         }
     }
 
@@ -187,11 +161,9 @@ public class DatabaseReader {
         final int byteArrayLength = byteArray.length;
 
         for (int i = 0; i < byteArrayLength; i++) {
-
             final int shift = (byteArrayLength - 1 - i) * 8;
             value += (byteArray[i] & 0x000000FF) << shift;
         }
-
         return value;
     }
 }
