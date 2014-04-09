@@ -20,24 +20,22 @@ public class DatabaseAccessCRUD {
 
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
 
-        if (recNo < 0 || recNo > databaseFileUtils.getNumberOfRecordsInDatabase()) {
-            throw new RecordNotFoundException("Record Number " + recNo + " is not in the right range.");
-        }
+        isExistingRecordNumber(recNo, databaseFileUtils);
 
         String[] rowContentStrings = new String[databaseFileUtils.getNumberOfFields()];
 
         try {
             RandomAccessFile randomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
-            randomAccessFile.seek(databaseFileUtils.getHeaderOffset() + (databaseFileUtils.getRecordLength() * recNo));
+            randomAccessFile.seek((DatabaseFileSchema.BYTES_RECORD_FLAG + recNo) + databaseFileUtils.getHeaderOffset() + (databaseFileUtils.getRecordLength() * recNo));
 
             for (int i = 0; i < databaseFileUtils.getNumberOfFields(); i++) {
 
-                final byte[] fieldBytes = new byte[DatabaseFileSchema.databaseFieldsLengths[i]];
+                byte[] fieldBytes = new byte[DatabaseFileSchema.databaseFieldLengths.get(i)];
                 randomAccessFile.read(fieldBytes);
                 rowContentStrings[i] = new String(fieldBytes, URLyBirdApplicationConstants.FILE_ENCODING);
             }
-
             randomAccessFile.close();
+
         } catch (IOException e) {
             System.out.println("Error reading from RandomAccessFile.");
             e.printStackTrace();
@@ -52,5 +50,12 @@ public class DatabaseAccessCRUD {
 
     public static void deleteRecord(long recNo, long lockCookie) {
 
+    }
+
+    private static void isExistingRecordNumber(long recordNumber, DatabaseFileUtils databaseFileUtils) throws RecordNotFoundException {
+
+        if (recordNumber < 0 || recordNumber >= databaseFileUtils.getNumberOfRecordsInDatabase()) {
+            throw new RecordNotFoundException("Record Number " + recordNumber + " is not in the right range.");
+        }
     }
 }

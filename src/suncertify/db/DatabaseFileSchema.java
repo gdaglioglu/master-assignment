@@ -1,5 +1,8 @@
 package suncertify.db;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by lukepotter on 01/04/2014.
  */
@@ -44,7 +47,7 @@ public class DatabaseFileSchema {
      * Field length:           8
      * Detailed description:   Charge per night for the room. This field includes the currency symbol.
      */
-    private static final int FIELD_LENGTH_RATE = 6;
+    private static final int FIELD_LENGTH_RATE = 8;
 
     /**
      * Field descriptive name: Date available.
@@ -77,10 +80,13 @@ public class DatabaseFileSchema {
     // The bytes that store the flag of each record.
     public static final int BYTES_RECORD_FLAG = 1;
     // The value that identifies a record as being valid.
-    public static final boolean IS_VALID_RECORD = false;
+    public static final int IS_VALID_RECORD_FLAG = 0;
     // The string representation for rooms that allow smoking.
     public static final String SMOKING_ALLOWED = "Y";
-
-    public static final int[] databaseFieldsLengths = new int[] { FIELD_LENGTH_HOTEL, FIELD_LENGTH_CITY,
-            FIELD_LENGTH_SIZE, FIELD_LENGTH_SMOKING, FIELD_LENGTH_RATE, FIELD_LENGTH_DATE, FIELD_LENGTH_OWNER };
+    // The string representation for rooms that don't allow smoking.
+    public static final String SMOKING_NOT_ALLOWED = "N";
+    // A list to store the lengths of the fields in the Database.
+    public static ArrayList<Integer> databaseFieldLengths = new ArrayList<Integer>();
+    // A list to store the names of the fields in the Database.
+    public static ArrayList<String> databaseFieldNames = new ArrayList<String>();
 }

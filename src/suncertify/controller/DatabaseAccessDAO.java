@@ -91,7 +91,7 @@ public class DatabaseAccessDAO {
         ArrayList<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
         HotelRoom tempHotelRoom;
 
-        for (long recordNumber = 1; (tempHotelRoom = retrieveHotel(recordNumber)) != null; recordNumber++) {
+        for (long recordNumber = 0; (tempHotelRoom = retrieveHotel(recordNumber)) != null; recordNumber++) {
             hotelRooms.add(tempHotelRoom);
         }
 

@@ -1,5 +1,6 @@
 package suncertify.db;
 
+import suncertify.utilities.URLyBirdApplicationConstants;
 import suncertify.utilities.URLyBirdApplicationObjectsFactory;
 
 import java.io.IOException;
@@ -23,9 +24,9 @@ public class DatabaseFileUtils {
 
         databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
 
-        deriveHeaderValues();
-        seekPastColumnsHeaders();
-        deriveHeaderOffset();
+        readHeaderValues();
+        readColumnsHeaders();
+        calculateHeaderOffset();
         updateNumberOfRecordsInDatabase();
 
         closeDatabaseRandomAccessFile();
@@ -68,7 +69,7 @@ public class DatabaseFileUtils {
         return headerOffset;
     }
 
-    public void setHeaderOffset(long headerOffset) {
+    private void setHeaderOffset(long headerOffset) {
         this.headerOffset = headerOffset;
     }
 
@@ -104,7 +105,7 @@ public class DatabaseFileUtils {
         }
     }
 
-    private void deriveHeaderValues() {
+    private void readHeaderValues() {
 
         try {
             final byte[] magicCookieBytes = new byte[DatabaseFileSchema.BYTES_MAGIC_COOKIE];
@@ -134,12 +135,23 @@ public class DatabaseFileUtils {
         }
     }
 
-    private void seekPastColumnsHeaders() {
+    private void readColumnsHeaders() {
 
         for (int i = 0; i < numberOfFields; i++) {
 
             try {
-                databaseRandomAccessFile.seek(new byte[DatabaseFileSchema.BYTES_FIELD_NAME].length);
+                byte[] nameLengthBytes = new byte[DatabaseFileSchema.BYTES_FIELD_NAME];
+                databaseRandomAccessFile.read(nameLengthBytes);
+                int nameLength = getValueFromByteArray(nameLengthBytes);
+
+                byte[] fieldNameBytes = new byte[nameLength];
+                databaseRandomAccessFile.read(fieldNameBytes);
+                DatabaseFileSchema.databaseFieldNames.add(i, new String(fieldNameBytes, URLyBirdApplicationConstants.FILE_ENCODING));
+
+                byte[] fieldLength = new byte[DatabaseFileSchema.BYTES_FIELD_LENGTH];
+                databaseRandomAccessFile.read(fieldLength);
+                DatabaseFileSchema.databaseFieldLengths.add(i, getValueFromByteArray(fieldLength));
+
             } catch (IOException e) {
                 System.out.println("Error seeking past the column headers.");
                 e.printStackTrace();
@@ -147,10 +159,11 @@ public class DatabaseFileUtils {
         }
     }
 
-    private void deriveHeaderOffset() {
+    private void calculateHeaderOffset() {
 
         try {
             setHeaderOffset(databaseRandomAccessFile.getFilePointer());
+
         } catch (IOException e) {
             System.out.println("Error getting the File Pointer for the HeaderOffset.");
             e.printStackTrace();
