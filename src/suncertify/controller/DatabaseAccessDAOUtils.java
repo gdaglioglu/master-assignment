@@ -2,17 +2,17 @@ package suncertify.controller;
 
 import suncertify.db.DatabaseFileSchema;
 import suncertify.model.HotelRoom;
-import suncertify.utilities.URLyBirdApplicationConstants;
 
 /**
- * Created by lukepotter on 31/03/2014.
+ * @author Luke GJ Potter
+ * Date: 31/03/2014
  */
-public class DatabaseAccessDAOUtils {
+class DatabaseAccessDAOUtils {
 
     // ---------- Public Methods ----------
     /**
      * Because the output of the {@code Data.readRecord(String)} method looks like
-     * <code>
+     * {@code
      *     0. |Palace                                                          |
      *     1. |Smallville                                                      |
      *     2. |2   |
@@ -20,7 +20,7 @@ public class DatabaseAccessDAOUtils {
      *     4. |$150.00 |
      *     5. |2005/07/27|
      *     6. |        |
-     * </code>
+     * }
      * for an unbooked room, it must be heavily parsed.
      *
      * @param strings

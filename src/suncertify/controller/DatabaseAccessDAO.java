@@ -9,11 +9,12 @@ import suncertify.model.HotelRoom;
 import java.util.ArrayList;
 
 /**
- * Created by lukepotter on 31/03/2014.
+ * @author Luke GJ Potter
+ * Date: 31/03/2014
  */
 public class DatabaseAccessDAO {
 
-    private Data databaseAccessFacade;
+    private final Data databaseAccessFacade;
 
     public DatabaseAccessDAO() {
 

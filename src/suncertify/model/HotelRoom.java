@@ -2,7 +2,8 @@ package suncertify.model;
 
 
 /**
- * Created by lukepotter on 06/12/2013.
+ * @author Luke GJ Potter
+ * Date: 06/12/2013
  */
 public class HotelRoom {
 
@@ -89,13 +90,7 @@ public class HotelRoom {
     @Override
     public String toString() {
 
-        StringBuffer stringBuffer = new StringBuffer(name);
-
-        stringBuffer.append(", ");
-        stringBuffer.append(location);
-
-
-        return stringBuffer.toString();
+        return name + ", " + location;
     }
 
     @Override
@@ -107,16 +102,12 @@ public class HotelRoom {
 
         HotelRoom otherHotelRoom = (HotelRoom) object;
 
-        if (this.name.equalsIgnoreCase(otherHotelRoom.getName())
+        return this.name.equalsIgnoreCase(otherHotelRoom.getName())
                 && this.location.equalsIgnoreCase(otherHotelRoom.getLocation())
                 && this.roomSize == otherHotelRoom.getRoomSize()
                 && this.isSmoking == otherHotelRoom.isSmoking()
-                && this.rate == otherHotelRoom.getRate()) {
+                && this.rate == otherHotelRoom.getRate();
 
-            return true;
-        }
-
-        return false;
     }
 
     @Override

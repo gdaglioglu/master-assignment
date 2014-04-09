@@ -1,7 +1,8 @@
 package suncertify.db;
 
 /**
- * Created by lukepotter on 06/12/2013.
+ * @author Luke GJ Potter
+ * Date: 06/12/2013
  */
 public class RecordNotFoundException extends Exception {
 

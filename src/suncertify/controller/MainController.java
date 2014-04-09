@@ -6,7 +6,8 @@ import suncertify.model.HotelRoom;
 import java.util.ArrayList;
 
 /**
- * Created by lukepotter on 06/12/2013.
+ * @author Luke GJ Potter
+ * Date: 06/12/2013
  */
 public class MainController {
 

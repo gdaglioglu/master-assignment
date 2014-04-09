@@ -4,7 +4,8 @@ import java.io.*;
 import java.util.Properties;
 
 /**
- * Created by lukepotter on 02/04/2014.
+ * @author Luke GJ Potter
+ * Date: 02/04/2014
  */
 public class URLyBirdApplicationObjectsFactory {
 

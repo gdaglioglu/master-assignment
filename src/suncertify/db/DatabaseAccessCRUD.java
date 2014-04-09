@@ -7,9 +7,10 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /**
- * Created by lukepotter on 27/03/2014.
+ * @author Luke GJ Potter
+ * Date: 27/03/2014
  */
-public class DatabaseAccessCRUD {
+class DatabaseAccessCRUD {
 
 
     public static long createRecord(String[] data) {

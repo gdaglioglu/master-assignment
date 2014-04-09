@@ -1,10 +1,10 @@
 package suncertify.db;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by lukepotter on 01/04/2014.
+ * @author Luke GJ Potter
+ * Date: 01/04/2014
  */
 public class DatabaseFileSchema {
 
@@ -86,7 +86,7 @@ public class DatabaseFileSchema {
     // The string representation for rooms that don't allow smoking.
     public static final String SMOKING_NOT_ALLOWED = "N";
     // A list to store the lengths of the fields in the Database.
-    public static ArrayList<Integer> databaseFieldLengths = new ArrayList<Integer>();
+    public static final ArrayList<Integer> databaseFieldLengths = new ArrayList<Integer>();
     // A list to store the names of the fields in the Database.
-    public static ArrayList<String> databaseFieldNames = new ArrayList<String>();
+    public static final ArrayList<String> databaseFieldNames = new ArrayList<String>();
 }

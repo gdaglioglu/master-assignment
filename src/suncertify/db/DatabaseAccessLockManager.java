@@ -1,9 +1,11 @@
 package suncertify.db;
 
 /**
- * Created by lukepotter on 27/03/2014.
+ * @author Luke GJ Potter
+ * Date: 27/03/2014
  */
-public class DatabaseAccessLockManager {
+class DatabaseAccessLockManager {
+
     public static long lock(long recNo) {
         return 0;
     }

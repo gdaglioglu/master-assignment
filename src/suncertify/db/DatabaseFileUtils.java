@@ -8,17 +8,18 @@ import java.io.RandomAccessFile;
 import java.util.logging.Logger;
 
 /**
- * Created by lukepotter on 31/03/2014.
+ * @author Luke GJ Potter
+ * Date: 31/03/2014
  */
 public class DatabaseFileUtils {
 
-    public static DatabaseFileUtils databaseFileUtils;
-    private RandomAccessFile databaseRandomAccessFile;
+    private static DatabaseFileUtils databaseFileUtils;
+    private final RandomAccessFile databaseRandomAccessFile;
 
     private int magicCookie, recordLength, numberOfFields;
     private long numberOfRecordsInDatabase, headerOffset;
 
-    private static Logger logger = Logger.getLogger("suncertify.db.DatabaseFileUtils");
+    private static final Logger logger = Logger.getLogger("suncertify.db.DatabaseFileUtils");
 
     private DatabaseFileUtils() {
 
@@ -171,10 +172,10 @@ public class DatabaseFileUtils {
     }
 
     /**
-     * Converts the content of a given <code>byte</code> array to an <code>int</code>.
+     * Converts the content of a given {@code byte} array to an {@code int}.
      *
-     * @param bytes The <code>byte</code> array that contains the number to be converted to an <code>int</code>.
-     * @return An <code>int</code> that represents the content of the <code>byte</code> array, provided as an argument.
+     * @param bytes The {@code byte} array that contains the number to be converted to an {@code int}.
+     * @return An {@code int} that represents the content of the {@code byte} array, provided as an argument.
      */
     private int getValueFromByteArray(final byte[] bytes) {
 
