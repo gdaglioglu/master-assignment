@@ -24,7 +24,7 @@ public class DatabaseAccessDAO {
     public boolean createHotel(HotelRoom newHotelRoom) {
 
         try {
-            databaseAccessFacade.createRecord(DatabaseAccessDAOUtils.parseHotelRoomPojoIntoStringArray(newHotelRoom));
+            databaseAccessFacade.createRecord(newHotelRoom.toStringArray());
             DatabaseFileUtils.getInstance().updateNumberOfRecordsInDatabase();
             return true;
         } catch (DuplicateKeyException e) {
@@ -35,7 +35,11 @@ public class DatabaseAccessDAO {
     public HotelRoom retrieveHotel(long recordNumber) {
 
         try {
-            return DatabaseAccessDAOUtils.parseStringArrayIntoHotelRoomPojo(databaseAccessFacade.readRecord(recordNumber));
+            String[] hotelRoomFieldsStrings = databaseAccessFacade.readRecord(recordNumber);
+            if (hotelRoomFieldsStrings == null) {
+                return null;
+            }
+            return new HotelRoom(hotelRoomFieldsStrings);
         } catch (RecordNotFoundException e) {
             return null;
         }
@@ -43,7 +47,7 @@ public class DatabaseAccessDAO {
 
     public boolean updateHotel(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie) {
 
-        String[] updatedHotelStrings = DatabaseAccessDAOUtils.parseHotelRoomPojoIntoStringArray(updatedHotelRoom);
+        String[] updatedHotelStrings = updatedHotelRoom.toStringArray();
 
         try {
             databaseAccessFacade.updateRecord(recordNumber, updatedHotelStrings, lockCookie);

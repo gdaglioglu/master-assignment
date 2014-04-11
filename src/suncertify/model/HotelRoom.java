@@ -1,6 +1,9 @@
 package suncertify.model;
 
 
+import suncertify.db.DatabaseFileSchema;
+import suncertify.utilities.URLyBirdApplicationConstants;
+
 /**
  * @author Luke GJ Potter
  * Date: 06/12/2013
@@ -15,7 +18,7 @@ public class HotelRoom {
     private String date;
     private String ownerName;
 
-    // Constructors.
+    // ---------- Constructors ----------
     public HotelRoom() {}
 
     public HotelRoom(String name, String location, String date, int roomSize, boolean isSmoking, double rate) {
@@ -30,7 +33,33 @@ public class HotelRoom {
         setRoomSize(roomSize); setSmoking(isSmoking); setRate(rate);
     }
 
-    // Getters and Setters.
+    /**
+     * Because the output of the {@code Data.readRecord(String)} method looks like
+     * {@code
+     *     0. |Palace                                                          |
+     *     1. |Smallville                                                      |
+     *     2. |2   |
+     *     3. |Y|
+     *     4. |$150.00 |
+     *     5. |2005/07/27|
+     *     6. |        |
+     * }
+     * for an unbooked room, it must be heavily parsed.
+     *
+     * @param strings An array of strings ordered to follow the output of he {@code Data.readRecord(String)} method.
+     */
+    public HotelRoom(String... strings) {
+
+        setName(strings[0].trim());
+        setLocation(strings[1].trim());
+        setRoomSize(Integer.parseInt(strings[2].trim()));
+        setSmoking(strings[3].equalsIgnoreCase(DatabaseFileSchema.SMOKING_ALLOWED));
+        setRate(extractDoubleFromString(strings[4].trim()));
+        setDate(strings[5].trim());
+        setOwnerName(strings[6].trim());
+    }
+
+    // ---------- Getters and Setters ----------
     public String getName() {
         return name;
     }
@@ -87,12 +116,43 @@ public class HotelRoom {
         this.rate = rate;
     }
 
+    // ---------- Public Methods ----------
+
+    /**
+     *
+     * @return A string representation of the HotelRoom object.
+     */
     @Override
     public String toString() {
 
         return name + ", " + location;
     }
 
+    /**
+     *
+     * @return The fields of the HotelRoom object as a String Array.
+     */
+    public String[] toStringArray() {
+
+        String isSmokingString = "N";
+        if (isSmoking()) isSmokingString = "Y";
+
+        return new String[] {
+                getName(),
+                getLocation(),
+                getRoomSize() + "",
+                isSmokingString,
+                URLyBirdApplicationConstants.CURRENCY_PREFIX + getRate(),
+                getDate(),
+                getOwnerName()
+        };
+    }
+
+    /**
+     *
+     * @param object
+     * @return True, if the objects are the same. False, if they are not the same.
+     */
     @Override
     public boolean equals(Object object) {
 
@@ -110,9 +170,26 @@ public class HotelRoom {
 
     }
 
+    /**
+     *
+     * @return A hash value of the HotelRoom object.
+     */
     @Override
     public int hashCode() {
 
-        return (name.hashCode() + location.hashCode());
+        return (name.hashCode() + location.hashCode() * (1 + (int)rate + roomSize));
+    }
+
+    // ---------- Private Methods ----------
+    private static double extractDoubleFromString(String string) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < string.length(); i++) {
+            if (Character.isDigit(string.charAt(i)) || string.charAt(i) == '.') {
+                stringBuilder.append(string.charAt(i));
+            }
+        }
+        return Double.parseDouble(stringBuilder.toString().substring(0, stringBuilder.length() - 1));
     }
 }

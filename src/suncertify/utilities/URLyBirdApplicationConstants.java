@@ -29,4 +29,7 @@ public class URLyBirdApplicationConstants {
 
     // The character encoding of the database file.
     public static final String FILE_ENCODING = "US-ASCII";
+
+    // The currency prefix for the monetary value in the Database.
+    public static final String CURRENCY_PREFIX = "$";
 }
