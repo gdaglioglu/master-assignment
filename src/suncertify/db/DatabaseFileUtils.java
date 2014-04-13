@@ -29,8 +29,6 @@ public class DatabaseFileUtils {
         readColumnsHeaders();
         calculateHeaderOffset();
         updateNumberOfRecordsInDatabase();
-
-        closeDatabaseRandomAccessFile();
     }
 
     // ---------- Getters and Setters ----------
@@ -91,13 +89,12 @@ public class DatabaseFileUtils {
         try {
             setNumberOfRecordsInDatabase((databaseRandomAccessFile.length() - getHeaderOffset()) / getRecordLength());
         } catch (IOException e) {
-            System.out.println("Error getting the length of the database file");
+            System.out.println("Error getting the length of the database file.");
             e.printStackTrace();
         }
     }
 
-    // ---------- Private Methods ----------
-    private void closeDatabaseRandomAccessFile() {
+    public void closeDatabaseRandomAccessFile() {
         try {
             databaseRandomAccessFile.close();
         } catch (IOException e) {
@@ -106,6 +103,7 @@ public class DatabaseFileUtils {
         }
     }
 
+    // ---------- Private Methods ----------
     private void readHeaderValues() {
 
         try {

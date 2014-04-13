@@ -19,18 +19,37 @@ public class HotelRoom {
     private String ownerName;
 
     // ---------- Constructors ----------
-    public HotelRoom() {}
+    public HotelRoom() {
 
-    public HotelRoom(String name, String location, String date, int roomSize, boolean isSmoking, double rate) {
-
-        setName(name); setLocation(location); setDate(date);
-        setRoomSize(roomSize); setSmoking(isSmoking); setRate(rate);
+        setName("");
+        setLocation("");
+        setRoomSize(0);
+        setSmoking(false);
+        setRate(0);
+        setDate("");
+        setOwnerName("");
     }
 
-    public HotelRoom(String name, String location, String date, String ownerName, int roomSize, boolean isSmoking, double rate) {
+    public HotelRoom(String name, String location, int roomSize, boolean isSmoking, double rate, String date) {
 
-        setName(name); setLocation(location); setDate(date); setOwnerName(ownerName);
-        setRoomSize(roomSize); setSmoking(isSmoking); setRate(rate);
+        setName(name);
+        setLocation(location);
+        setRoomSize(roomSize);
+        setSmoking(isSmoking);
+        setRate(rate);
+        setDate(date);
+        setOwnerName("");
+    }
+
+    public HotelRoom(String name, String location, int roomSize, boolean isSmoking, double rate, String date, String ownerName) {
+
+        setName(name);
+        setLocation(location);
+        setRoomSize(roomSize);
+        setSmoking(isSmoking);
+        setRate(rate);
+        setDate(date);
+        setOwnerName(ownerName);
     }
 
     /**
@@ -134,8 +153,8 @@ public class HotelRoom {
      */
     public String[] toStringArray() {
 
-        String isSmokingString = "N";
-        if (isSmoking()) isSmokingString = "Y";
+        String isSmokingString = DatabaseFileSchema.SMOKING_NOT_ALLOWED;
+        if (isSmoking()) isSmokingString = DatabaseFileSchema.SMOKING_ALLOWED;
 
         return new String[] {
                 getName(),

@@ -1,8 +1,11 @@
 package suncertify.db;
 
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import suncertify.utilities.URLyBirdApplicationConstants;
 import suncertify.utilities.URLyBirdApplicationObjectsFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -12,9 +15,30 @@ import java.io.RandomAccessFile;
  */
 class DatabaseAccessCRUD {
 
-
+    // ---------- Public Methods ----------
     public static long createRecord(String[] data) {
-        return 0;
+
+        DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
+        databaseFileUtils.updateNumberOfRecordsInDatabase();
+        // TODO: Put in check for DuplicateRecordException, but for now just write to the end of the file.
+        long positionToInsertRecord = databaseFileUtils.getNumberOfRecordsInDatabase();
+
+        try {
+
+            RandomAccessFile databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+            databaseRandomAccessFile.seek(distanceToSeek(positionToInsertRecord, databaseFileUtils));
+            databaseRandomAccessFile.writeByte(DatabaseFileSchema.IS_VALID_RECORD_FLAG);
+            databaseRandomAccessFile.write(stringArrayAsByteArray(data));
+
+            databaseRandomAccessFile.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        databaseFileUtils.updateNumberOfRecordsInDatabase();
+        databaseFileUtils.closeDatabaseRandomAccessFile();
+        return positionToInsertRecord;
     }
 
     public static String[] readRecord(long recNo) throws RecordNotFoundException {
@@ -27,7 +51,7 @@ class DatabaseAccessCRUD {
 
         try {
             RandomAccessFile randomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
-            randomAccessFile.seek((DatabaseFileSchema.BYTES_RECORD_FLAG + recNo) + databaseFileUtils.getHeaderOffset() + (databaseFileUtils.getRecordLength() * recNo));
+            randomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
 
             for (int i = 0; i < databaseFileUtils.getNumberOfFields(); i++) {
 
@@ -41,7 +65,7 @@ class DatabaseAccessCRUD {
             System.out.println("Error reading from RandomAccessFile.");
             e.printStackTrace();
         }
-
+        databaseFileUtils.closeDatabaseRandomAccessFile();
         return rowContentStrings;
     }
 
@@ -53,10 +77,50 @@ class DatabaseAccessCRUD {
 
     }
 
+    // ---------- Private Methods ----------
+    private static byte[] stringArrayAsByteArray(String[] data) {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+
+        try {
+            for (int i = 0, j = 0, k = 0; i < DatabaseFileUtils.getInstance().getNumberOfFields(); i++) {
+
+                int fieldLength = DatabaseFileSchema.databaseFieldLengths.get(i);
+                byte[] bytes = new byte[fieldLength];
+
+                if (data[i] == null) data[i] = "";
+
+                for (byte b : data[i].getBytes()) {
+                    bytes[j++] = b;
+                }
+
+                while (k < fieldLength) {
+                    dataOutputStream.write(bytes[k++]);
+                }
+                // Reset the secondary counters each time round.
+                j = 0; k = 0;
+            }
+
+            dataOutputStream.flush();
+            dataOutputStream.close();
+        } catch (IOException e) {
+
+            System.out.println("Error converting the StringArray to a ByteArray.");
+            e.printStackTrace();
+        }
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
     private static void isExistingRecordNumber(long recordNumber, DatabaseFileUtils databaseFileUtils) throws RecordNotFoundException {
 
         if (recordNumber < 0 || recordNumber >= databaseFileUtils.getNumberOfRecordsInDatabase()) {
             throw new RecordNotFoundException("Record Number " + recordNumber + " is not in the right range.");
         }
+    }
+
+    private static long distanceToSeek(long recNo, DatabaseFileUtils databaseFileUtils) {
+        return databaseFileUtils.getHeaderOffset() + (DatabaseFileSchema.BYTES_RECORD_FLAG + recNo) + (DatabaseFileSchema.RECORD_LENGTH * recNo);
     }
 }

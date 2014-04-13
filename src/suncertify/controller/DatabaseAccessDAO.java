@@ -21,14 +21,12 @@ public class DatabaseAccessDAO {
          databaseAccessFacade = new Data();
     }
 
-    public boolean createHotel(HotelRoom newHotelRoom) {
+    public long createHotel(HotelRoom newHotelRoom) {
 
         try {
-            databaseAccessFacade.createRecord(newHotelRoom.toStringArray());
-            DatabaseFileUtils.getInstance().updateNumberOfRecordsInDatabase();
-            return true;
+            return databaseAccessFacade.createRecord(newHotelRoom.toStringArray());
         } catch (DuplicateKeyException e) {
-            return false;
+            return -1;
         }
     }
 
@@ -61,7 +59,6 @@ public class DatabaseAccessDAO {
 
         try {
             databaseAccessFacade.deleteRecord(recordNumber, lockCookie);
-            DatabaseFileUtils.getInstance().updateNumberOfRecordsInDatabase();
             return true;
         } catch (RecordNotFoundException e) {
             return false;

@@ -79,6 +79,8 @@ public class DatabaseFileSchema {
     public static final int BYTES_FIELD_LENGTH = 2;
     // The bytes that store the flag of each record.
     public static final int BYTES_RECORD_FLAG = 1;
+    // The length of the record.
+    public static final int RECORD_LENGTH = FIELD_LENGTH_HOTEL + FIELD_LENGTH_CITY + FIELD_LENGTH_SIZE + FIELD_LENGTH_SMOKING + FIELD_LENGTH_RATE + FIELD_LENGTH_DATE + FIELD_LENGTH_OWNER;
     // The value that identifies a record as being valid.
     public static final int IS_VALID_RECORD_FLAG = 0;
     // The string representation for rooms that allow smoking.

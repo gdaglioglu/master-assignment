@@ -17,6 +17,7 @@ public class MainController {
 
         printDatabaseFileUtilsToConsole(databaseFileUtils);
         printHotelRoomsToConsoleUsingDatabaseAccessDAO();
+        createNewHotelRoomInDatabase();
     }
 
     private static void printDatabaseFileUtilsToConsole(DatabaseFileUtils databaseFileUtils) {
@@ -39,5 +40,24 @@ public class MainController {
             System.out.println(recordNumber + ": " + hotelRoom.toString());
             recordNumber++;
         }
+    }
+
+    private static void createNewHotelRoomInDatabase() {
+
+        HotelRoom hotelRoom = new HotelRoom("Casa de Luca", "Lukeville", 2, true, 150.00, "2014/04/12");
+        DatabaseAccessDAO databaseAccessDAO = new DatabaseAccessDAO();
+
+        System.out.println("\n\nInserting new record into the database.\n"
+                + "Record is:" + hotelRoom.toString() + "\n\n");
+
+        long positionInserted = databaseAccessDAO.createHotel(hotelRoom);
+        System.out.println("Inserted record in position " + positionInserted);
+
+        System.out.println("The hotel in position "
+                + positionInserted
+                + " is:\n"
+                + databaseAccessDAO.retrieveHotel(positionInserted).toString()
+                + "\nThe number of records in the database is now "
+                + DatabaseFileUtils.getInstance().getNumberOfRecordsInDatabase());
     }
 }
