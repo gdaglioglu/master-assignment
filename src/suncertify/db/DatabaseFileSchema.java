@@ -80,9 +80,11 @@ public class DatabaseFileSchema {
     // The bytes that store the flag of each record.
     public static final int BYTES_RECORD_FLAG = 1;
     // The length of the record.
-    public static final int RECORD_LENGTH = FIELD_LENGTH_HOTEL + FIELD_LENGTH_CITY + FIELD_LENGTH_SIZE + FIELD_LENGTH_SMOKING + FIELD_LENGTH_RATE + FIELD_LENGTH_DATE + FIELD_LENGTH_OWNER;
+    public static final int RECORD_LENGTH = BYTES_RECORD_FLAG + FIELD_LENGTH_HOTEL + FIELD_LENGTH_CITY + FIELD_LENGTH_SIZE + FIELD_LENGTH_SMOKING + FIELD_LENGTH_RATE + FIELD_LENGTH_DATE + FIELD_LENGTH_OWNER;
     // The value that identifies a record as being valid.
-    public static final int IS_VALID_RECORD_FLAG = 0;
+    public static final byte VALID_RECORD_FLAG = 0x0;
+    // The value that identifies a record as being invalid, or deleted.
+    public static final byte INVALID_RECORD_FLAG = 0x1;
     // The string representation for rooms that allow smoking.
     public static final String SMOKING_ALLOWED = "Y";
     // The string representation for rooms that don't allow smoking.

@@ -75,13 +75,11 @@ public class DatabaseFileUtils {
     // ---------- Public Methods ----------
     public static DatabaseFileUtils getInstance() {
 
-        if (databaseFileUtils != null) {
-            logger.finest("Returning existing databaseFileUtils");
-            return databaseFileUtils;
-        } else {
-            logger.finest("Creating new databaseFileUtils");
-            return new DatabaseFileUtils();
+        if (databaseFileUtils == null) {
+            databaseFileUtils = new DatabaseFileUtils();
         }
+
+        return databaseFileUtils;
     }
 
     public void updateNumberOfRecordsInDatabase() {
