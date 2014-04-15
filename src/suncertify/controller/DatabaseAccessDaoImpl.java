@@ -47,10 +47,8 @@ public class DatabaseAccessDaoImpl implements DatabaseAccessDao {
     @Override
     public boolean updateHotel(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie) {
 
-        String[] updatedHotelStrings = updatedHotelRoom.toStringArray();
-
         try {
-            databaseAccessFacade.updateRecord(recordNumber, updatedHotelStrings, lockCookie);
+            databaseAccessFacade.updateRecord(recordNumber, updatedHotelRoom.toStringArray(), lockCookie);
             return true;
         } catch (RecordNotFoundException e) {
             return false;

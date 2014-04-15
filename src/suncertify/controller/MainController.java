@@ -16,10 +16,16 @@ public class MainController {
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
 
         printDatabaseFileUtilsToConsole(databaseFileUtils);
+
         printHotelRoomsToConsoleUsingDatabaseAccessDAO();
         createNewHotelRoomInDatabase();
+
         printHotelRoomsToConsoleUsingDatabaseAccessDAO();
         deleteHotelRoomFromDatabase(databaseFileUtils);
+
+        printHotelRoomsToConsoleUsingDatabaseAccessDAO();
+        updateHotelRoomInDatabase();
+
         printHotelRoomsToConsoleUsingDatabaseAccessDAO();
 
         databaseFileUtils.closeDatabaseRandomAccessFile();
@@ -79,5 +85,27 @@ public class MainController {
         System.out.println("Record from the database."
                 + "\nNumber of records in database: "
                 + databaseFileUtils.getNumberOfRecordsInDatabase() + ".");
+    }
+
+    private static void updateHotelRoomInDatabase() {
+
+        long recordNumber = 30;
+        DatabaseAccessDao databaseAccessDao = new DatabaseAccessDaoImpl();
+
+        System.out.println("\n\nUpdating record " + recordNumber + " in Database.");
+
+        HotelRoom updatedHotelRoom = databaseAccessDao.retrieveHotel(recordNumber);
+        System.out.print("Old Record: " + updatedHotelRoom.toString());
+        updatedHotelRoom.setName("Updated");
+        updatedHotelRoom.setLocation("Newtown");
+        System.out.println(" | New Record: " + updatedHotelRoom.toString());
+
+        databaseAccessDao.updateHotel(recordNumber, updatedHotelRoom, 0);
+
+        System.out.println("Database record "
+                + recordNumber
+                + " is "
+                + databaseAccessDao.retrieveHotel(recordNumber).toString()
+                + "\n\n");
     }
 }

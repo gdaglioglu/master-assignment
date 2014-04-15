@@ -61,8 +61,28 @@ class DatabaseAccessCrudOperations {
         return rowContentStrings;
     }
 
-    public static void updateRecord(long recNo, String[] data, long lockCookie) {
+    public static void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException {
 
+        // TODO: Implement the locking logic for the lockCookie.
+        DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
+        databaseFileUtils.updateNumberOfRecordsInDatabase();
+
+        try {
+            RandomAccessFile databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+
+            databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
+            readStringArrayFromDatabaseFile(databaseFileUtils, databaseRandomAccessFile);
+
+            databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
+            databaseRandomAccessFile.writeByte(DatabaseFileSchema.VALID_RECORD_FLAG);
+            databaseRandomAccessFile.write(stringArrayAsByteArray(data));
+
+            databaseRandomAccessFile.close();
+
+        } catch (IOException e) {
+            System.out.println("Error when updating record " + recNo);
+            e.printStackTrace();
+        }
     }
 
     public static void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException {
@@ -87,7 +107,7 @@ class DatabaseAccessCrudOperations {
     }
 
     // ---------- Private Methods ----------
-    private static byte[] stringArrayAsByteArray(String[] data) {
+    private static byte[] stringArrayAsByteArray(String[] strings) {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
@@ -98,9 +118,9 @@ class DatabaseAccessCrudOperations {
                 int fieldLength = DatabaseFileSchema.databaseFieldLengths.get(i);
                 byte[] bytes = new byte[fieldLength];
 
-                if (data[i] == null) data[i] = "";
+                if (strings[i] == null) strings[i] = "";
 
-                for (byte b : data[i].getBytes()) {
+                for (byte b : strings[i].getBytes()) {
                     bytes[j++] = b;
                 }
 
