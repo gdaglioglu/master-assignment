@@ -1,6 +1,5 @@
 package suncertify.db;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import suncertify.utilities.URLyBirdApplicationConstants;
 import suncertify.utilities.URLyBirdApplicationObjectsFactory;
 
@@ -8,13 +7,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
 
 /**
  * @author Luke GJ Potter
  * Date: 27/03/2014
  */
-class DatabaseAccessCRUD {
+class DatabaseAccessCrudOperations {
 
     // ---------- Public Methods ----------
     public static long createRecord(String[] data) {

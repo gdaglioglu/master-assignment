@@ -36,7 +36,7 @@ public class MainController {
 
     private static void printHotelRoomsToConsoleUsingDatabaseAccessDAO() {
 
-        DatabaseAccessDAO databaseAccessDAO = new DatabaseAccessDAO();
+        DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoImpl();
         ArrayList<HotelRoom> hotelRooms = databaseAccessDAO.retrieveAllHotels();
 
         System.out.println("The Hotels in the database are:");
@@ -50,7 +50,7 @@ public class MainController {
     private static void createNewHotelRoomInDatabase() {
 
         HotelRoom hotelRoom = new HotelRoom("Casa de Luca", "Lukeville", 2, true, 150.00, "2014/04/12");
-        DatabaseAccessDAO databaseAccessDAO = new DatabaseAccessDAO();
+        DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoImpl();
 
         System.out.println("\n\nInserting new record into the database.\n"
                 + "Record is:" + hotelRoom.toString() + "\n\n");
@@ -68,7 +68,7 @@ public class MainController {
 
     private static void deleteHotelRoomFromDatabase(DatabaseFileUtils databaseFileUtils) {
 
-        DatabaseAccessDAO databaseAccessDAO = new DatabaseAccessDAO();
+        DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoImpl();
 
         System.out.println("\n\nDeleting record from the database."
                 + "\nNumber of records in database: "

@@ -8,17 +8,17 @@ public class Data implements DBAccess {
 
     @Override
     public String[] readRecord(long recNo) throws RecordNotFoundException {
-        return DatabaseAccessCRUD.readRecord(recNo);
+        return DatabaseAccessCrudOperations.readRecord(recNo);
     }
 
     @Override
     public void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException {
-        DatabaseAccessCRUD.updateRecord(recNo, data, lockCookie);
+        DatabaseAccessCrudOperations.updateRecord(recNo, data, lockCookie);
     }
 
     @Override
     public void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException {
-        DatabaseAccessCRUD.deleteRecord(recNo, lockCookie);
+        DatabaseAccessCrudOperations.deleteRecord(recNo, lockCookie);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class Data implements DBAccess {
 
     @Override
     public long createRecord(String[] data) throws DuplicateKeyException {
-        return DatabaseAccessCRUD.createRecord(data);
+        return DatabaseAccessCrudOperations.createRecord(data);
     }
 
     @Override
