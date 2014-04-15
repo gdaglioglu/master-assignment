@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @author Luke GJ Potter
  * Date: 01/04/2014
  */
-public class DatabaseFileSchema {
+class DatabaseFileSchema {
 
     /**
      * Field descriptive name: Name of the hotel.
@@ -85,10 +85,6 @@ public class DatabaseFileSchema {
     public static final byte VALID_RECORD_FLAG = 0x0;
     // The value that identifies a record as being invalid, or deleted.
     public static final byte INVALID_RECORD_FLAG = 0x1;
-    // The string representation for rooms that allow smoking.
-    public static final String SMOKING_ALLOWED = "Y";
-    // The string representation for rooms that don't allow smoking.
-    public static final String SMOKING_NOT_ALLOWED = "N";
     // A list to store the lengths of the fields in the Database.
     public static final ArrayList<Integer> databaseFieldLengths = new ArrayList<Integer>();
     // A list to store the names of the fields in the Database.

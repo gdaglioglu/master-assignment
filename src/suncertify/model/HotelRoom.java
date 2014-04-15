@@ -1,7 +1,6 @@
 package suncertify.model;
 
 
-import suncertify.db.DatabaseFileSchema;
 import suncertify.utilities.URLyBirdApplicationConstants;
 
 /**
@@ -72,7 +71,7 @@ public class HotelRoom {
         setName(strings[0].trim());
         setLocation(strings[1].trim());
         setRoomSize(Integer.parseInt(strings[2].trim()));
-        setSmoking(strings[3].equalsIgnoreCase(DatabaseFileSchema.SMOKING_ALLOWED));
+        setSmoking(strings[3].equalsIgnoreCase(URLyBirdApplicationConstants.SMOKING_ALLOWED));
         setRate(extractDoubleFromString(strings[4].trim()));
         setDate(strings[5].trim());
         setOwnerName(strings[6].trim());
@@ -153,8 +152,8 @@ public class HotelRoom {
      */
     public String[] toStringArray() {
 
-        String isSmokingString = DatabaseFileSchema.SMOKING_NOT_ALLOWED;
-        if (isSmoking()) isSmokingString = DatabaseFileSchema.SMOKING_ALLOWED;
+        String isSmokingString = URLyBirdApplicationConstants.SMOKING_NOT_ALLOWED;
+        if (isSmoking()) isSmokingString = URLyBirdApplicationConstants.SMOKING_ALLOWED;
 
         return new String[] {
                 getName(),

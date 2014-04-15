@@ -29,7 +29,10 @@ public class URLyBirdApplicationConstants {
 
     // The character encoding of the database file.
     public static final String FILE_ENCODING = "US-ASCII";
-
     // The currency prefix for the monetary value in the Database.
     public static final String CURRENCY_PREFIX = "$";
+    // The string representation for rooms that allow smoking.
+    public static final String SMOKING_ALLOWED = "Y";
+    // The string representation for rooms that don't allow smoking.
+    public static final String SMOKING_NOT_ALLOWED = "N";
 }

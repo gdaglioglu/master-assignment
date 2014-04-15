@@ -43,7 +43,7 @@ public class MainController {
     private static void printHotelRoomsToConsoleUsingDatabaseAccessDAO() {
 
         DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoImpl();
-        ArrayList<HotelRoom> hotelRooms = databaseAccessDAO.retrieveAllHotels();
+        ArrayList<HotelRoom> hotelRooms = databaseAccessDAO.retrieveAllHotelRooms();
 
         System.out.println("The Hotels in the database are:");
         long recordNumber = 1L;
@@ -61,13 +61,13 @@ public class MainController {
         System.out.println("\n\nInserting new record into the database.\n"
                 + "Record is:" + hotelRoom.toString() + "\n\n");
 
-        long positionInserted = databaseAccessDAO.createHotel(hotelRoom);
+        long positionInserted = databaseAccessDAO.createHotelRoom(hotelRoom);
         System.out.println("Inserted record in position " + positionInserted);
 
         System.out.println("The hotel in position "
                 + positionInserted
                 + " is:\n"
-                + databaseAccessDAO.retrieveHotel(positionInserted).toString()
+                + databaseAccessDAO.retrieveHotelRoom(positionInserted).toString()
                 + "\nThe number of records in the database is now "
                 + DatabaseFileUtils.getInstance().getNumberOfRecordsInDatabase());
     }
@@ -80,7 +80,7 @@ public class MainController {
                 + "\nNumber of records in database: "
                 + databaseFileUtils.getNumberOfRecordsInDatabase() + ".");
 
-        databaseAccessDAO.deleteHotel(databaseFileUtils.getNumberOfRecordsInDatabase() - 1, 0L);
+        databaseAccessDAO.deleteHotelRoom(databaseFileUtils.getNumberOfRecordsInDatabase() - 1, 0L);
 
         System.out.println("Record from the database."
                 + "\nNumber of records in database: "
@@ -94,18 +94,18 @@ public class MainController {
 
         System.out.println("\n\nUpdating record " + recordNumber + " in Database.");
 
-        HotelRoom updatedHotelRoom = databaseAccessDao.retrieveHotel(recordNumber);
+        HotelRoom updatedHotelRoom = databaseAccessDao.retrieveHotelRoom(recordNumber);
         System.out.print("Old Record: " + updatedHotelRoom.toString());
         updatedHotelRoom.setName("Updated");
         updatedHotelRoom.setLocation("Newtown");
         System.out.println(" | New Record: " + updatedHotelRoom.toString());
 
-        databaseAccessDao.updateHotel(recordNumber, updatedHotelRoom, 0);
+        databaseAccessDao.updateHotelRoom(recordNumber, updatedHotelRoom, 0);
 
         System.out.println("Database record "
                 + recordNumber
                 + " is "
-                + databaseAccessDao.retrieveHotel(recordNumber).toString()
+                + databaseAccessDao.retrieveHotelRoom(recordNumber).toString()
                 + "\n\n");
     }
 }

@@ -21,7 +21,7 @@ public class DatabaseAccessDaoImpl implements DatabaseAccessDao {
     }
 
     @Override
-    public long createHotel(HotelRoom newHotelRoom) {
+    public long createHotelRoom(HotelRoom newHotelRoom) {
 
         try {
             return databaseAccessFacade.createRecord(newHotelRoom.toStringArray());
@@ -31,7 +31,7 @@ public class DatabaseAccessDaoImpl implements DatabaseAccessDao {
     }
 
     @Override
-    public HotelRoom retrieveHotel(long recordNumber) {
+    public HotelRoom retrieveHotelRoom(long recordNumber) {
 
         try {
             String[] hotelRoomFieldsStrings = databaseAccessFacade.readRecord(recordNumber);
@@ -45,7 +45,7 @@ public class DatabaseAccessDaoImpl implements DatabaseAccessDao {
     }
 
     @Override
-    public boolean updateHotel(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie) {
+    public boolean updateHotelRoom(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie) {
 
         try {
             databaseAccessFacade.updateRecord(recordNumber, updatedHotelRoom.toStringArray(), lockCookie);
@@ -56,7 +56,7 @@ public class DatabaseAccessDaoImpl implements DatabaseAccessDao {
     }
 
     @Override
-    public boolean deleteHotel(long recordNumber, long lockCookie) {
+    public boolean deleteHotelRoom(long recordNumber, long lockCookie) {
 
         try {
             databaseAccessFacade.deleteRecord(recordNumber, lockCookie);
@@ -67,14 +67,14 @@ public class DatabaseAccessDaoImpl implements DatabaseAccessDao {
     }
 
     @Override
-    public ArrayList<HotelRoom> findHotels(String... searchStrings) {
+    public ArrayList<HotelRoom> findHotelRooms(String... searchStrings) {
 
         long[] recordNumbers = databaseAccessFacade.findByCriteria(searchStrings);
         ArrayList<HotelRoom> hotelRooms = null;
 
         for(long recordNumber : recordNumbers) {
 
-            HotelRoom hotelRoom = retrieveHotel(recordNumber);
+            HotelRoom hotelRoom = retrieveHotelRoom(recordNumber);
 
             if (hotelRoom != null) {
 
@@ -91,12 +91,12 @@ public class DatabaseAccessDaoImpl implements DatabaseAccessDao {
     }
 
     @Override
-    public ArrayList<HotelRoom> retrieveAllHotels() {
+    public ArrayList<HotelRoom> retrieveAllHotelRooms() {
 
         ArrayList<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
         HotelRoom tempHotelRoom;
 
-        for (long recordNumber = 0; (tempHotelRoom = retrieveHotel(recordNumber)) != null; recordNumber++) {
+        for (long recordNumber = 0; (tempHotelRoom = retrieveHotelRoom(recordNumber)) != null; recordNumber++) {
             hotelRooms.add(tempHotelRoom);
         }
 
@@ -104,30 +104,30 @@ public class DatabaseAccessDaoImpl implements DatabaseAccessDao {
     }
 
     @Override
-    public boolean bookHotel(long recordNumber, String customerName, long lockCookie) {
+    public boolean bookHotelRoom(long recordNumber, String customerName, long lockCookie) {
 
         HotelRoom hotelRoomToBook;
 
-        if ((hotelRoomToBook = retrieveHotel(recordNumber)) == null) {
+        if ((hotelRoomToBook = retrieveHotelRoom(recordNumber)) == null) {
             return false;
         }
 
         hotelRoomToBook.setOwnerName(customerName);
 
-        return updateHotel(recordNumber, hotelRoomToBook, lockCookie);
+        return updateHotelRoom(recordNumber, hotelRoomToBook, lockCookie);
     }
 
     @Override
-    public boolean cancelHotelBooking(long recordNumber, long lockCookie) {
+    public boolean cancelHotelRoomBooking(long recordNumber, long lockCookie) {
 
         HotelRoom hotelRoomBookingToCancel;
 
-        if ((hotelRoomBookingToCancel = retrieveHotel(recordNumber)) == null) {
+        if ((hotelRoomBookingToCancel = retrieveHotelRoom(recordNumber)) == null) {
             return false;
         }
 
         hotelRoomBookingToCancel.setOwnerName(null);
 
-        return updateHotel(recordNumber, hotelRoomBookingToCancel, lockCookie);
+        return updateHotelRoom(recordNumber, hotelRoomBookingToCancel, lockCookie);
     }
 }
