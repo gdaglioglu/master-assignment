@@ -10,19 +10,19 @@ import java.util.ArrayList;
  */
 public interface DatabaseAccessDao {
 
-    long createHotel(HotelRoom newHotelRoom);
+    long createHotelRoom(HotelRoom newHotelRoom);
 
-    HotelRoom retrieveHotel(long recordNumber);
+    HotelRoom retrieveHotelRoom(long recordNumber);
 
-    boolean updateHotel(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie);
+    boolean updateHotelRoom(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie);
 
-    boolean deleteHotel(long recordNumber, long lockCookie);
+    boolean deleteHotelRoom(long recordNumber, long lockCookie);
 
-    ArrayList<HotelRoom> findHotels(String... searchStrings);
+    ArrayList<HotelRoom> findHotelRooms(String... searchStrings);
 
-    ArrayList<HotelRoom> retrieveAllHotels();
+    ArrayList<HotelRoom> retrieveAllHotelRooms();
 
-    boolean bookHotel(long recordNumber, String customerName, long lockCookie);
+    boolean bookHotelRoom(long recordNumber, String customerName, long lockCookie);
 
-    boolean cancelHotelBooking(long recordNumber, long lockCookie);
+    boolean cancelHotelRoomBooking(long recordNumber, long lockCookie);
 }

@@ -4,6 +4,7 @@ import suncertify.db.DatabaseFileUtils;
 import suncertify.model.HotelRoom;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Luke GJ Potter
@@ -27,10 +28,12 @@ public class MainController {
         updateHotelRoomInDatabase();
 
         printHotelRoomsToConsoleUsingDatabaseAccessDAO();
+        searchForHotelRoom();
 
         databaseFileUtils.closeDatabaseRandomAccessFile();
     }
 
+    // ---------- Private Methods ----------
     private static void printDatabaseFileUtilsToConsole(DatabaseFileUtils databaseFileUtils) {
 
         System.out.println("Magic Cookie is:   " + databaseFileUtils.getMagicCookie());
@@ -107,5 +110,24 @@ public class MainController {
                 + " is "
                 + databaseAccessDao.retrieveHotelRoom(recordNumber).toString()
                 + "\n\n");
+    }
+
+    private static void searchForHotelRoom() {
+
+        DatabaseAccessDao databaseAccessDao = new DatabaseAccessDaoImpl();
+        String[] criteria = new String[] { null, null };
+        System.out.println("Searching for " + Arrays.asList(criteria) + " Found " +databaseAccessDao.findHotelRooms(criteria));
+
+        String[] criteria2 = new String[] { "Palace", "" };
+        System.out.println("Searching for " + Arrays.asList(criteria2) + " Found " +databaseAccessDao.findHotelRooms(criteria2));
+
+        String[] criteria3 = new String[] { "", "Whoville" };
+        System.out.println("Searching for " + Arrays.asList(criteria3) + " Found " +databaseAccessDao.findHotelRooms(criteria3));
+
+        String[] criteria4 = new String[] { "Palace", "Whoville" };
+        System.out.println("Searching for " + Arrays.asList(criteria4) + " Found " +databaseAccessDao.findHotelRooms(criteria4));
+
+        String[] criteria5 = new String[] { "Wrong", "Place" };
+        System.out.println("Searching for " + Arrays.asList(criteria5) + " Found " +databaseAccessDao.findHotelRooms(criteria5));
     }
 }
