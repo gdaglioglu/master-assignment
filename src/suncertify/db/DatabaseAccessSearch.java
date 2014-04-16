@@ -62,7 +62,7 @@ class DatabaseAccessSearch {
                     searchResults.add(recordNumber);
                 }
 
-            } catch (RecordNotFoundException e) { }
+            } catch (RecordNotFoundException ignored) { }
         }
 
         return longListToLongArray(searchResults);
@@ -98,7 +98,7 @@ class DatabaseAccessSearch {
 
                 if (allMatch) searchResults.add(recordNumber);
 
-            } catch (RecordNotFoundException e) { }
+            } catch (RecordNotFoundException ignored) { }
         }
 
         return longListToLongArray(searchResults);
@@ -122,7 +122,7 @@ class DatabaseAccessSearch {
             try {
                 DatabaseAccessCrudOperations.readRecord(recordNumber);
                 validRecordNumbers.add(recordNumber);
-            } catch (RecordNotFoundException e) { }
+            } catch (RecordNotFoundException ignored) { }
         }
 
         return longListToLongArray(validRecordNumbers);

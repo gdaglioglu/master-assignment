@@ -22,7 +22,7 @@ import java.io.RandomAccessFile;
 
 /**
  * <p>
- * The <code>DBFileReader</code> reads the .db file that is provided to each SCJD candidate. Essentially, it displays on
+ * The {@code DBFileReader} reads the .db file that is provided to each SCJD candidate. Essentially, it displays on
  * the console the content of the file, starting by the "magic cookie", total overall length (in bytes) of each record
  * and the number of fields in each record. Finally, it displays the content of each record, in the format "Field name:
  * value". It also informs the status of each record, that is, if it is either valid or deleted. Note that the content
@@ -30,7 +30,7 @@ import java.io.RandomAccessFile;
  * the date).
  * </p>
  * <p>
- * This class was first made with the information provided in the <code>instructions.html</code> provided in the
+ * This class was first made with the information provided in the {@code instructions.html} provided in the
  * URLyBird 1.3.1 assignment, therefore, it is likely that it will require a few changes in order to correctly read the
  * content of the .db files provided in other assignments.
  * </p>
@@ -152,10 +152,10 @@ public class DatabaseReader {
     }
 
     /**
-     * Converts to <code>int</code> the content of a given <code>byte</code> array.
+     * Converts to {@code int} the content of a given {@code byte} array.
      *
-     * @param byteArray The <code>byte</code> array that contains the number to be converted.
-     * @return An <code>int</code> that represents the content of the <code>byte</code> array, provided as argument.
+     * @param byteArray The {@code byte} array that contains the number to be converted.
+     * @return An {@code int} that represents the content of the {@code byte} array, provided as argument.
      */
     private static int getValue(final byte[] byteArray) {
 

@@ -1,2 +1,56 @@
-Choices
-=======
++------------------------------------------------------------------------------+
+|     Luke Potter's URLyBird application design and implementation choices     |
++------------------------------------------------------------------------------+
+
+Table of Contents:
+------------------
+1. Code style
+2. Networking decisions
+3. Database decisions
+4. Property file decisions
+5. Concurrency and locking decisions
+6. GUI and usability decisions
+7. General decision and considerations
+--------------------------------------------------------------------------------
+
+1. Code style
+
+--------------------------------------------------------------------------------
+
+2. Networking decisions
+
+--------------------------------------------------------------------------------
+
+3. Database decisions
+
+Record Creation Process:
+------------------------
+When the CSR wants to create a record, it is appended to the end of the Database
+file.
+
+--------------------------------------------------------------------------------
+
+4. Property file decisions
+
+--------------------------------------------------------------------------------
+
+5. Concurrency and locking decisions
+
+--------------------------------------------------------------------------------
+
+6. GUI and usability decisions
+
+Search Function:
+----------------
+I'm only allowing the user to search on the name and location of the Hotel they
+would like to book into. I'm implementing the search function this way, as a CSR
+may have request for a specific Hotel franchise, or the hotels available in a
+location.
+I decided against implementing price search logic, as that's not a "must"
+feature.
+
+--------------------------------------------------------------------------------
+
+7. General decision and considerations
+
+--------------------------------------------------------------------------------

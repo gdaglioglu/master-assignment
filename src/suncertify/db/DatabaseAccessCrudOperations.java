@@ -15,7 +15,15 @@ import java.io.RandomAccessFile;
 class DatabaseAccessCrudOperations {
 
     // ---------- Public Methods ----------
-    public static long createRecord(String[] data) {
+    /**
+     * Creates a new record in the database (possibly reusing a deleted entry). Inserts the given data, and returns the
+     * record number of the new record.
+     *
+     * @param data
+     * @return
+     * @throws DuplicateKeyException
+     */
+    public static long createRecord(String[] data) throws DuplicateKeyException {
 
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
         databaseFileUtils.updateNumberOfRecordsInDatabase();
@@ -39,6 +47,13 @@ class DatabaseAccessCrudOperations {
         return positionToInsertRecord;
     }
 
+    /**
+     * Reads a record from the file. Returns an array where each element is a record value.
+     *
+     * @param recNo
+     * @return
+     * @throws RecordNotFoundException
+     */
     public static String[] readRecord(long recNo) throws RecordNotFoundException {
 
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
@@ -61,7 +76,17 @@ class DatabaseAccessCrudOperations {
         return rowContentStrings;
     }
 
-    public static void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException {
+    /**
+     * Modifies the fields of a record. The new value for field n appears in data[n]. Throws SecurityException if the
+     * record is locked with a cookie other than lockCookie.
+     *
+     * @param recNo
+     * @param data
+     * @param lockCookie
+     * @throws RecordNotFoundException
+     * @throws SecurityException
+     */
+    public static void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException {
 
         // TODO: Implement the locking logic for the lockCookie.
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
@@ -85,7 +110,16 @@ class DatabaseAccessCrudOperations {
         }
     }
 
-    public static void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException {
+    /**
+     * Deletes a record, making the record number and associated disk storage available for reuse. Throws
+     * SecurityException if the record is locked with a cookie other than lockCookie.
+     *
+     * @param recNo
+     * @param lockCookie
+     * @throws RecordNotFoundException
+     * @throws SecurityException
+     */
+    public static void deleteRecord(long recNo, long lockCookie)  throws RecordNotFoundException, SecurityException {
 
         // TODO: Implement the lockCookie to throw the SecurityException.
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
