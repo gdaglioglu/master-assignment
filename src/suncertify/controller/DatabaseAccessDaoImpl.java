@@ -25,7 +25,7 @@ public class DatabaseAccessDaoImpl implements DatabaseAccessDao {
 
         try {
             return databaseAccessFacade.createRecord(newHotelRoom.toStringArray());
-        } catch (DuplicateKeyException e) {
+        } catch (Exception e) {
             return -1;
         }
     }

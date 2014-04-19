@@ -82,7 +82,7 @@ public class DatabaseFileUtils {
         return databaseFileUtils;
     }
 
-    public void updateNumberOfRecordsInDatabase() {
+    public synchronized void updateNumberOfRecordsInDatabase() {
 
         try {
             setNumberOfRecordsInDatabase((databaseRandomAccessFile.length() - getHeaderOffset()) / getRecordLength());

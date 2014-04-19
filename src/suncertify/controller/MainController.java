@@ -41,6 +41,7 @@ public class MainController {
         System.out.println("No. of Fields is:  " + databaseFileUtils.getNumberOfFields());
         System.out.println("Header Offset is:  " + databaseFileUtils.getHeaderOffset());
         System.out.println("No. of Records is: " + databaseFileUtils.getNumberOfRecordsInDatabase());
+        System.out.println("\n\n");
     }
 
     private static void printHotelRoomsToConsoleUsingDatabaseAccessDAO() {
@@ -61,18 +62,19 @@ public class MainController {
         HotelRoom hotelRoom = new HotelRoom("Casa de Luca", "Lukeville", 2, true, 150.00, "2014/04/12");
         DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoImpl();
 
-        System.out.println("\n\nInserting new record into the database.\n"
-                + "Record is:" + hotelRoom.toString() + "\n\n");
+        System.out.println("\n\nInserting new record into the database. "
+                + "Record is:" + hotelRoom.toString());
 
         long positionInserted = databaseAccessDAO.createHotelRoom(hotelRoom);
-        System.out.println("Inserted record in position " + positionInserted);
+        System.out.println("Inserted record in position " + (positionInserted + 1));
 
         System.out.println("The hotel in position "
-                + positionInserted
-                + " is:\n"
+                + (positionInserted + 1)
+                + " is: "
                 + databaseAccessDAO.retrieveHotelRoom(positionInserted).toString()
                 + "\nThe number of records in the database is now "
-                + DatabaseFileUtils.getInstance().getNumberOfRecordsInDatabase());
+                + DatabaseFileUtils.getInstance().getNumberOfRecordsInDatabase()
+                + "\n\n");
     }
 
     private static void deleteHotelRoomFromDatabase(DatabaseFileUtils databaseFileUtils) {
@@ -83,11 +85,11 @@ public class MainController {
                 + "\nNumber of records in database: "
                 + databaseFileUtils.getNumberOfRecordsInDatabase() + ".");
 
-        databaseAccessDAO.deleteHotelRoom(databaseFileUtils.getNumberOfRecordsInDatabase() - 1, 0L);
+        databaseAccessDAO.deleteHotelRoom(databaseFileUtils.getNumberOfRecordsInDatabase() - 1, Thread.currentThread().getId());
 
-        System.out.println("Record from the database."
+        System.out.println("Deleted record from the database."
                 + "\nNumber of records in database: "
-                + databaseFileUtils.getNumberOfRecordsInDatabase() + ".");
+                + databaseFileUtils.getNumberOfRecordsInDatabase() + ".\n\n");
     }
 
     private static void updateHotelRoomInDatabase() {
@@ -95,7 +97,7 @@ public class MainController {
         long recordNumber = 30;
         DatabaseAccessDao databaseAccessDao = new DatabaseAccessDaoImpl();
 
-        System.out.println("\n\nUpdating record " + recordNumber + " in Database.");
+        System.out.println("\n\nUpdating record " + (recordNumber + 1) + " in Database.");
 
         HotelRoom updatedHotelRoom = databaseAccessDao.retrieveHotelRoom(recordNumber);
         System.out.print("Old Record: " + updatedHotelRoom.toString());
@@ -103,10 +105,10 @@ public class MainController {
         updatedHotelRoom.setLocation("Newtown");
         System.out.println(" | New Record: " + updatedHotelRoom.toString());
 
-        databaseAccessDao.updateHotelRoom(recordNumber, updatedHotelRoom, 0);
+        databaseAccessDao.updateHotelRoom(recordNumber, updatedHotelRoom, Thread.currentThread().getId());
 
         System.out.println("Database record "
-                + recordNumber
+                + (recordNumber + 1)
                 + " is "
                 + databaseAccessDao.retrieveHotelRoom(recordNumber).toString()
                 + "\n\n");
@@ -116,7 +118,7 @@ public class MainController {
 
         DatabaseAccessDao databaseAccessDao = new DatabaseAccessDaoImpl();
         String[] criteria = new String[] { null, null };
-        System.out.println("Searching for " + Arrays.asList(criteria) + " Found " +databaseAccessDao.findHotelRooms(criteria));
+        System.out.println("\n\nSearching for " + Arrays.asList(criteria) + " Found " +databaseAccessDao.findHotelRooms(criteria));
 
         String[] criteria2 = new String[] { "Palace", "" };
         System.out.println("Searching for " + Arrays.asList(criteria2) + " Found " +databaseAccessDao.findHotelRooms(criteria2));

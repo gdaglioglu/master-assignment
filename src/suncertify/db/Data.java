@@ -33,11 +33,11 @@ public class Data implements DBAccess {
 
     @Override
     public long lockRecord(long recNo) throws RecordNotFoundException {
-        return DatabaseAccessLockManager.lock(recNo);
+        return DatabaseAccessLockManager.getInstance().lock(recNo);
     }
 
     @Override
     public void unlock(long recNo, long cookie) throws SecurityException {
-        DatabaseAccessLockManager.unlock(recNo, cookie);
+        DatabaseAccessLockManager.getInstance().unlock(recNo, cookie);
     }
 }

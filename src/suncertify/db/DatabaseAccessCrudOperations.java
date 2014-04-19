@@ -23,12 +23,17 @@ class DatabaseAccessCrudOperations {
      * @return
      * @throws DuplicateKeyException
      */
-    public static long createRecord(String[] data) throws DuplicateKeyException {
+    public static synchronized long createRecord(String[] data) throws DuplicateKeyException {
 
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
         databaseFileUtils.updateNumberOfRecordsInDatabase();
         // TODO: Put in check for DuplicateRecordException, but for now just write to the end of the file.
         long positionToInsertRecord = databaseFileUtils.getNumberOfRecordsInDatabase();
+        long lockCookie = 0;
+
+        try {
+            lockCookie = DatabaseAccessLockManager.getInstance().lockRecordWhenCreatingNewRecord(positionToInsertRecord);
+        } catch (RecordNotFoundException ignored) {}
 
         try {
             RandomAccessFile databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
@@ -39,11 +44,16 @@ class DatabaseAccessCrudOperations {
             databaseRandomAccessFile.close();
 
         } catch (IOException e) {
+
             System.out.println("Error when creating new record.");
             e.printStackTrace();
+
+        } finally {
+
+            databaseFileUtils.updateNumberOfRecordsInDatabase();
+            DatabaseAccessLockManager.getInstance().unlockRecordWhenCreatingOrDeletingRecord(positionToInsertRecord, lockCookie);
         }
 
-        databaseFileUtils.updateNumberOfRecordsInDatabase();
         return positionToInsertRecord;
     }
 
@@ -56,10 +66,11 @@ class DatabaseAccessCrudOperations {
      */
     public static String[] readRecord(long recNo) throws RecordNotFoundException {
 
+        long lockingCookie = DatabaseAccessLockManager.getInstance().lock(recNo);
+
+        isValidRecordNumber(recNo);
+
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
-
-        isExistingRecordNumber(recNo, databaseFileUtils);
-
         String[] rowContentStrings = new String[databaseFileUtils.getNumberOfFields()];
 
         try {
@@ -70,9 +81,15 @@ class DatabaseAccessCrudOperations {
             randomAccessFile.close();
 
         } catch (IOException e) {
+
             System.out.println("Error reading from RandomAccessFile.");
             e.printStackTrace();
+
+        } finally {
+
+            DatabaseAccessLockManager.getInstance().unlock(recNo, lockingCookie);
         }
+
         return rowContentStrings;
     }
 
@@ -88,11 +105,18 @@ class DatabaseAccessCrudOperations {
      */
     public static void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException {
 
-        // TODO: Implement the locking logic for the lockCookie.
-        DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
-        databaseFileUtils.updateNumberOfRecordsInDatabase();
+        DatabaseAccessLockManager databaseAccessLockManager = DatabaseAccessLockManager.getInstance();
+
+        if (databaseAccessLockManager.isRecordLockedBySomeoneElse(recNo, lockCookie)) {
+            throw new SecurityException("Record " + recNo + " locked by another user.");
+        }
 
         try {
+            databaseAccessLockManager.lock(recNo);
+
+            DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
+            databaseFileUtils.updateNumberOfRecordsInDatabase();
+
             RandomAccessFile databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
 
             databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
@@ -105,8 +129,13 @@ class DatabaseAccessCrudOperations {
             databaseRandomAccessFile.close();
 
         } catch (IOException e) {
+
             System.out.println("Error when updating record " + recNo);
             e.printStackTrace();
+
+        } finally {
+
+            databaseAccessLockManager.unlock(recNo, lockCookie);
         }
     }
 
@@ -121,11 +150,19 @@ class DatabaseAccessCrudOperations {
      */
     public static void deleteRecord(long recNo, long lockCookie)  throws RecordNotFoundException, SecurityException {
 
-        // TODO: Implement the lockCookie to throw the SecurityException.
+        DatabaseAccessLockManager databaseAccessLockManager = DatabaseAccessLockManager.getInstance();
+
+        if (databaseAccessLockManager.isRecordLockedBySomeoneElse(recNo, lockCookie)) {
+            throw new SecurityException("Record " + recNo + " locked by another user.");
+        }
+
+        databaseAccessLockManager.lock(recNo);
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
-        isExistingRecordNumber(recNo, databaseFileUtils);
 
         try {
+            databaseFileUtils.updateNumberOfRecordsInDatabase();
+            isValidRecordNumber(recNo);
+
             RandomAccessFile databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
             databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
             readStringArrayFromDatabaseFile(databaseFileUtils, databaseRandomAccessFile);
@@ -135,7 +172,47 @@ class DatabaseAccessCrudOperations {
             databaseRandomAccessFile.close();
 
         } catch (IOException e) {
-            System.out.println("Error when creating new record.");
+
+            System.out.println("Error when deleting record " + recNo);
+            e.printStackTrace();
+
+        } finally {
+
+            databaseFileUtils.updateNumberOfRecordsInDatabase();
+            databaseAccessLockManager.unlockRecordWhenCreatingOrDeletingRecord(recNo, lockCookie);
+        }
+    }
+
+    /**
+     * Checks the database file to see if the supplied {@code recordNumber}
+     * corresponds to an existing record.
+     *
+     * @param recordNumber
+     * @throws RecordNotFoundException
+     */
+    public static void isValidRecordNumber(long recordNumber) throws RecordNotFoundException {
+
+        DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
+
+        isExistingRecordNumber(recordNumber, databaseFileUtils);
+
+        try {
+            byte[] recordBytes = new byte[DatabaseFileSchema.RECORD_LENGTH];
+
+            RandomAccessFile randomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+            randomAccessFile.seek(distanceToSeek(recordNumber, databaseFileUtils));
+
+            if (randomAccessFile.read(recordBytes) < DatabaseFileSchema.RECORD_LENGTH) {
+                throw new RecordNotFoundException("Record does not exist");
+            }
+
+            if (recordBytes[0] == DatabaseFileSchema.INVALID_RECORD_FLAG) {
+                throw new RecordNotFoundException("Record already deleted.");
+            }
+
+        } catch (IOException e) {
+
+            System.out.println("Error reading from file.");
             e.printStackTrace();
         }
     }
@@ -179,12 +256,14 @@ class DatabaseAccessCrudOperations {
     private static void isExistingRecordNumber(long recordNumber, DatabaseFileUtils databaseFileUtils) throws RecordNotFoundException {
 
         databaseFileUtils.updateNumberOfRecordsInDatabase();
+
         if (recordNumber < 0 || recordNumber >= databaseFileUtils.getNumberOfRecordsInDatabase()) {
             throw new RecordNotFoundException("Record Number " + recordNumber + " is not in the right range.");
         }
     }
 
     private static long distanceToSeek(long recordNumber, DatabaseFileUtils databaseFileUtils) {
+
         return databaseFileUtils.getHeaderOffset() + (DatabaseFileSchema.RECORD_LENGTH * recordNumber);
     }
 
@@ -213,5 +292,4 @@ class DatabaseAccessCrudOperations {
 
         return strings;
     }
-
 }
