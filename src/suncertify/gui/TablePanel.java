@@ -15,7 +15,7 @@ class TablePanel extends JPanel {
 
     JPanel tablePanel;
     // The JTable that will hold the records.
-    private static JTable hotelRoomTable;
+    public static JTable hotelRoomTable;
     // Concrete subclass of AbstractTableModel.
     public static HotelRoomTableModel hotelRoomTableModel;
 

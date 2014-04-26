@@ -1,6 +1,7 @@
 package suncertify.gui;
 
 import suncertify.controller.DatabaseAccessDaoImpl;
+import suncertify.utilities.URLyBirdApplicationGuiConstants;
 
 import javax.swing.*;
 import java.awt.FlowLayout;
@@ -23,9 +24,13 @@ class BookingPanel extends JPanel {
         JLabel instructionLabel = new JLabel("Select a record in the table and press 'Book Room' button to book the Hotel Room");
         bookingPanel.add(instructionLabel);
 
-        JButton reserveButton = new JButton(" Book Room ");
-        reserveButton.addActionListener(new BookHotelRoom());
-        bookingPanel.add(reserveButton);
+        JButton bookButton = new JButton(URLyBirdApplicationGuiConstants.BOOK_BUTTON);
+        bookButton.addActionListener(new BookHotelRoom());
+        bookingPanel.add(bookButton);
+
+        JButton cancelBookingButton = new JButton(URLyBirdApplicationGuiConstants.CANCEL_BOOKING_BUTTON);
+        cancelBookingButton.addActionListener(new CancelHotelRoomBooking());
+        bookingPanel.add(cancelBookingButton);
     }
 
     public JPanel getBookingPanel() {
@@ -37,7 +42,7 @@ class BookingPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
 
-            int recordRow = TablePanel.hotelRoomTableModel.getSelectedRow();
+            int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
             String csrNumber = "";
             boolean csrFlag = false;
 
@@ -79,6 +84,22 @@ class BookingPanel extends JPanel {
                 } catch(Exception e) {
                     System.out.println("Reserve room problem found: " + e.getMessage());
                 }
+            }
+        }
+    }
+
+    private class CancelHotelRoomBooking implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+
+            try {
+                int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
+                new DatabaseAccessDaoImpl().cancelHotelRoomBooking(recordRow, Thread.currentThread().getId());
+                TablePanel.hotelRoomTableModel = new HotelRoomTableModel(new DatabaseAccessDaoImpl().retrieveAllHotelRooms());
+                TablePanel.refreshHotelRoomTableModel();
+            } catch(Exception e) {
+                System.out.println("Reserve room problem found: " + e.getMessage());
             }
         }
     }
