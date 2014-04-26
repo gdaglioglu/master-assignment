@@ -1,6 +1,7 @@
 package suncertify.controller;
 
 import suncertify.db.DatabaseFileUtils;
+import suncertify.gui.UrlyBirdClientGui;
 import suncertify.model.HotelRoom;
 
 import java.util.ArrayList;
@@ -16,19 +17,21 @@ public class MainController {
 
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
 
-        printDatabaseFileUtilsToConsole(databaseFileUtils);
+        new UrlyBirdClientGui(args).setVisible(true);
 
-        printHotelRoomsToConsoleUsingDatabaseAccessDAO();
-        createNewHotelRoomInDatabase();
-
-        printHotelRoomsToConsoleUsingDatabaseAccessDAO();
-        deleteHotelRoomFromDatabase(databaseFileUtils);
-
-        printHotelRoomsToConsoleUsingDatabaseAccessDAO();
-        updateHotelRoomInDatabase();
-
-        printHotelRoomsToConsoleUsingDatabaseAccessDAO();
-        searchForHotelRoom();
+//        printDatabaseFileUtilsToConsole(databaseFileUtils);
+//
+//        printHotelRoomsToConsoleUsingDatabaseAccessDAO();
+//        createNewHotelRoomInDatabase();
+//
+//        printHotelRoomsToConsoleUsingDatabaseAccessDAO();
+//        deleteHotelRoomFromDatabase(databaseFileUtils);
+//
+//        printHotelRoomsToConsoleUsingDatabaseAccessDAO();
+//        updateHotelRoomInDatabase();
+//
+//        printHotelRoomsToConsoleUsingDatabaseAccessDAO();
+//        searchForHotelRoom();
 
         databaseFileUtils.closeDatabaseRandomAccessFile();
     }
