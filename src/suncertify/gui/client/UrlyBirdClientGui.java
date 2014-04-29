@@ -15,8 +15,9 @@ public class UrlyBirdClientGui extends JFrame {
 
     public UrlyBirdClientGui(String[] args) {
 
-        setTitle(URLyBirdApplicationGuiConstants.APPLICATION_TITLE);
+        setTitle(URLyBirdApplicationGuiConstants.CLIENT_GUI_APPLICATION_TITLE);
         setSize(URLyBirdApplicationGuiConstants.CLIENT_GUI_DIMENSION);
+
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -16,10 +16,12 @@ public class URLyBirdApplicationConstants {
     public static final String PROPERTY_FILE_NAME = "src/suncertify.properties";
 
     /**
-     * The Constant {@code KEY_PROPERTY_DB_PATH}.
+     * The Constant {@code PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE}.
      * Used to load the path to the database file key in the {@code suncertify.properties} file.
      */
     public static final String PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE = "pathToDatabaseFile";
+    public static final String PROPERTY_FILE_KEY_RMI_HOSTNAME = "rmiHostname";
+    public static final String PROPERTY_FILE_KEY_RMI_PORT_NUMBER = "rmiPortNumber";
 
     /**
      * The Constant {@code RANDOM_ACCESS_FILE_OPEN_MODE}.

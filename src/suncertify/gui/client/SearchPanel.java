@@ -27,12 +27,12 @@ class SearchPanel extends JPanel {
 
         nameLabel = new JLabel("Name");
         searchPanel.add(nameLabel);
-        nameField = new JTextField(URLyBirdApplicationGuiConstants.TEXT_FIELD_LENGTH);
+        nameField = new JTextField(URLyBirdApplicationGuiConstants.CLIENT_SEARCH_TEXT_FIELD_LENGTH);
         searchPanel.add(nameField);
 
         locationLabel = new JLabel("Location");
         searchPanel.add(locationLabel);
-        locationField = new JTextField(URLyBirdApplicationGuiConstants.TEXT_FIELD_LENGTH);
+        locationField = new JTextField(URLyBirdApplicationGuiConstants.CLIENT_SEARCH_TEXT_FIELD_LENGTH);
         searchPanel.add(locationField);
 
         JButton searchButton = new JButton(" Search ");
