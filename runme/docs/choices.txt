@@ -46,6 +46,15 @@ I'm only allowing the user to search on the name and location of the Hotel they
 would like to book into. I'm implementing the search function this way, as a CSR
 may have request for a specific Hotel franchise, or the hotels available in a
 location.
+
+The search feature compares the criteria values specified to every record in the
+database. When making the comparison it uses the lowercase equivalents of the
+strings. Utilising a common case for as a basis for comparison, expands beyond
+the requirement, "Fred" matches "Fred" or "Freddy". This means that "fred"
+matches "fred", "freddy", "Fred" or "Freddy". I implemented it this way, as some
+users may enter lowercase characters, expecting that the search function will
+return the same result for "Fred" and "fred". I catered for these users.
+
 I decided against implementing price search logic, as that's not a "must"
 feature.
 

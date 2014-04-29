@@ -60,7 +60,7 @@ class DatabaseAccessSearch {
             try {
                 String record = DatabaseAccessCrudOperations.readRecord(recordNumber)[positionInCriteria];
 
-                if (record.startsWith(criteria[positionInCriteria])) {
+                if (record.toLowerCase().startsWith(criteria[positionInCriteria].toLowerCase())) {
                     searchResults.add(recordNumber);
                 }
 
@@ -92,7 +92,7 @@ class DatabaseAccessSearch {
 
                 for (int i = 0; i < criteria.length; i++) {
 
-                    if (!records[i].startsWith(criteria[i])) {
+                    if (!records[i].toLowerCase().startsWith(criteria[i].toLowerCase())) {
                         allMatch = false;
                         break;
                     }
