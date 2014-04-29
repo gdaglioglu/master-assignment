@@ -26,6 +26,8 @@ public class URLyBirdApplicationGuiConstants {
             "Rate",
             "Date Available",
             "Customer ID"};
+    public static final String SMOKING_ALLOWED = "Allowed";
+    public static final String SMOKING_NOT_ALLOWED = "Not Allowed";
 
 
     // ---------- Dimension Constants ----------
@@ -33,5 +35,4 @@ public class URLyBirdApplicationGuiConstants {
     public static final int TEXT_FIELD_LENGTH = 20;
     public static final Dimension CLIENT_GUI_DIMENSION = new Dimension(900, 600);
     public static final Dimension CLIENT_GUI_JTABLE_DIMENSION = new Dimension(850, 500);
-
 }

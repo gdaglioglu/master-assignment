@@ -47,10 +47,18 @@ class SearchPanel extends JPanel {
 
     private class SearchForRoomActionListener implements ActionListener {
 
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
+        /**
+         * The handler for the ActionListener for Searching For a Hotel Room.
+         *
+         * @param actionEvent - the event performed.
+         */
+        @Override public void actionPerformed(ActionEvent actionEvent) {
 
-            TablePanel.hotelRoomTableModel = new HotelRoomTableModel(new DatabaseAccessDaoImpl().findHotelRooms(nameField.getText().trim(), locationField.getText().trim()));
+            TablePanel.hotelRoomTableModel = new HotelRoomTableModel(
+                    new DatabaseAccessDaoImpl().findHotelRooms(
+                            nameField.getText().trim(),
+                            locationField.getText().trim()));
+
             TablePanel.refreshHotelRoomTableModel();
         }
     }

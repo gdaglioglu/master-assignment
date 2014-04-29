@@ -35,4 +35,5 @@ public class URLyBirdApplicationConstants {
     public static final String SMOKING_ALLOWED = "Y";
     // The string representation for rooms that don't allow smoking.
     public static final String SMOKING_NOT_ALLOWED = "N";
+    public static final String EMPTY_STRING = "";
 }

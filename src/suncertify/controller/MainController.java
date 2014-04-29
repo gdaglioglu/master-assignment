@@ -32,8 +32,8 @@ public class MainController {
 //
 //        printHotelRoomsToConsoleUsingDatabaseAccessDAO();
 //        searchForHotelRoom();
-
-        databaseFileUtils.closeDatabaseRandomAccessFile();
+//
+//        databaseFileUtils.closeDatabaseRandomAccessFile();
     }
 
     // ---------- Private Methods ----------

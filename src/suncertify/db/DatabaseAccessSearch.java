@@ -1,5 +1,7 @@
 package suncertify.db;
 
+import suncertify.utilities.URLyBirdApplicationConstants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +29,9 @@ class DatabaseAccessSearch {
 
         if (criteria[0] == null && criteria[1] == null) {
             return validRecordNumbers;
-        } else if (!criteria[0].equals("") && criteria[1].equals("")) {
+        } else if (!criteria[0].equals(URLyBirdApplicationConstants.EMPTY_STRING) && criteria[1].equals(URLyBirdApplicationConstants.EMPTY_STRING)) {
             return searchOnCriteria(criteria, 0, validRecordNumbers);
-        } else if (criteria[0].equals("") && !criteria[1].equals("")) {
+        } else if (criteria[0].equals(URLyBirdApplicationConstants.EMPTY_STRING) && !criteria[1].equals(URLyBirdApplicationConstants.EMPTY_STRING)) {
             return searchOnCriteria(criteria, 1, validRecordNumbers);
         } else {
             return searchOnCriteria(criteria, validRecordNumbers);

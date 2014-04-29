@@ -34,8 +34,7 @@ class HotelRoomTableModel extends AbstractTableModel {
      * Gets the number of rows in the table.
      * @return the number of rows in the table.
      */
-    @Override
-    public int getRowCount() {
+    @Override public int getRowCount() {
         return hotelRoomList.size();
     }
 
@@ -45,8 +44,7 @@ class HotelRoomTableModel extends AbstractTableModel {
      *
      * @return the number of columns in the table.
      */
-    @Override
-    public int getColumnCount() {
+    @Override public int getColumnCount() {
         return tableColumns.length;
     }
 
@@ -54,12 +52,11 @@ class HotelRoomTableModel extends AbstractTableModel {
      * Overridden getValueAt method from super class AbstractTableModel.
      * This method gets the value at the specified row and column.
      *
-     * @param row
-     * @param column
+     * @param row - The row to get information from, zero indexed.
+     * @param column - The column to get information from, zero indexed.
      * @return Object in specified row and column
      */
-    @Override
-    public Object getValueAt(int row, int column) {
+    @Override public Object getValueAt(int row, int column) {
 
         HotelRoom hotelRoom = hotelRoomList.get(row);
 
@@ -68,7 +65,7 @@ class HotelRoomTableModel extends AbstractTableModel {
             case 0 : return hotelRoom.getName();
             case 1 : return hotelRoom.getLocation();
             case 2 : return hotelRoom.getRoomSize();
-            case 3 : return hotelRoom.isSmoking() ? "Allowed" : "Not Allowed";
+            case 3 : return hotelRoom.isSmoking() ? URLyBirdApplicationGuiConstants.SMOKING_ALLOWED : URLyBirdApplicationGuiConstants.SMOKING_NOT_ALLOWED;
             case 4 : return URLyBirdApplicationConstants.CURRENCY_PREFIX + hotelRoom.getRate();
             case 5 : return hotelRoom.getDate();
             case 6 : return hotelRoom.getOwnerName();
@@ -83,8 +80,7 @@ class HotelRoomTableModel extends AbstractTableModel {
      * @param i
      * @return the name of the column for the table.
      */
-    @Override
-    public String getColumnName(int i) {
+    @Override public String getColumnName(int i) {
         return tableColumns[i];
     }
 }
