@@ -1,6 +1,5 @@
-package suncertify.gui;
+package suncertify.gui.client;
 
-import suncertify.utilities.URLyBirdApplicationConstants;
 import suncertify.utilities.URLyBirdApplicationGuiConstants;
 
 import javax.swing.*;

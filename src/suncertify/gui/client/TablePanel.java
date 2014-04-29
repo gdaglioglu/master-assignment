@@ -1,7 +1,6 @@
-package suncertify.gui;
+package suncertify.gui.client;
 
 import suncertify.controller.DatabaseAccessDaoImpl;
-import suncertify.utilities.URLyBirdApplicationConstants;
 import suncertify.utilities.URLyBirdApplicationGuiConstants;
 
 import javax.swing.*;

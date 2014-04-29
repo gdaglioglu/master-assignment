@@ -1,4 +1,4 @@
-package suncertify.gui;
+package suncertify.gui.client;
 
 import suncertify.db.DatabaseFileUtils;
 import suncertify.model.HotelRoom;

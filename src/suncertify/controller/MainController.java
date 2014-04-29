@@ -1,11 +1,6 @@
 package suncertify.controller;
 
-import suncertify.db.DatabaseFileUtils;
-import suncertify.gui.UrlyBirdClientGui;
-import suncertify.model.HotelRoom;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import suncertify.gui.client.UrlyBirdClientGui;
 
 /**
  * @author Luke GJ Potter
