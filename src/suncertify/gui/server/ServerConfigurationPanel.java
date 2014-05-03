@@ -6,6 +6,8 @@ import suncertify.utilities.URLyBirdApplicationObjectsFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.util.StringTokenizer;
 
 /**
  * @author Luke GJ Potter
@@ -25,6 +27,34 @@ public class ServerConfigurationPanel {
         initialiseServerConfigurationPanelLabelsAndTextFields();
         layoutServerConfigurationPanel();
 
+    }
+
+    public JPanel getServerConfigurationPanel() {
+        return serverConfigurationPanel;
+    }
+
+    public String getPathToDatabaseFileFromTextField() {
+        return pathToDatabaseFileTextField.getText().trim();
+    }
+
+    public String getRmiHostnameFromTextField() {
+        return rmiHostnameTextField.getText().trim();
+    }
+
+    public String getRmiPortNumberFromTextField() {
+        return rmiPortNumberTextField.getText().trim();
+    }
+
+    public boolean areTextFieldValuesValid() {
+
+        String dbFilePath = getPathToDatabaseFileFromTextField();
+        String rmiHostname = getRmiHostnameFromTextField();
+        String rmiPortNumber = getRmiPortNumberFromTextField();
+        String emptyString = URLyBirdApplicationConstants.EMPTY_STRING;
+
+        boolean emptyFields = dbFilePath.equals(emptyString) || rmiHostname.equals(emptyString) || rmiPortNumber.equals(emptyString);
+
+        return (!emptyFields) && new File(dbFilePath).exists() && isValidHostname(rmiHostname) && isValidPortNumber(rmiPortNumber);
     }
 
     private void layoutServerConfigurationPanel() {
@@ -76,7 +106,35 @@ public class ServerConfigurationPanel {
         rmiPortNumberLabel.setLabelFor(rmiPortNumberTextField);
     }
 
-    public JPanel getServerConfigurationPanel() {
-        return serverConfigurationPanel;
+    private boolean isValidHostname(String rmiHostname) {
+
+        return rmiHostname.equals("localhost") || isValidIpAddress(rmiHostname);
+    }
+
+    private boolean isValidIpAddress(String rmiHostname) {
+
+        StringTokenizer stringTokenizer = new StringTokenizer(rmiHostname, ".");
+
+        if (stringTokenizer.countTokens() != 4) return false;
+
+        while (stringTokenizer.hasMoreTokens()) {
+
+            int ipBlock = 0;
+
+            try {
+                ipBlock = Integer.parseInt(stringTokenizer.nextToken(), 10);
+            } catch (NumberFormatException ignored) { return false; }
+
+            if (ipBlock < 0 || ipBlock > 255) return false;
+        }
+
+        return true;
+    }
+
+    private boolean isValidPortNumber(String rmiPortNumber) {
+
+        try {
+            return Integer.parseInt(rmiPortNumber) > 0 ? true : false;
+        } catch (NumberFormatException ignored) { return false; }
     }
 }
