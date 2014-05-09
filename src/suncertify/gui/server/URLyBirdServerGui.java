@@ -1,5 +1,6 @@
 package suncertify.gui.server;
 
+import suncertify.rmi.RmiServerManager;
 import suncertify.utilities.URLyBirdApplicationConstants;
 import suncertify.utilities.URLyBirdApplicationGuiConstants;
 import suncertify.utilities.URLyBirdApplicationObjectsFactory;
@@ -19,7 +20,8 @@ import java.util.Properties;
  */
 public class UrlyBirdServerGui extends JFrame {
 
-    private ServerConfigurationPanel serverConfigurationPanel;
+    private final ServerConfigurationPanel serverConfigurationPanel;
+    private JButton startServerButton;
 
     public UrlyBirdServerGui() {
 
@@ -39,7 +41,14 @@ public class UrlyBirdServerGui extends JFrame {
     private JPanel getServerControlPanel() {
 
         JPanel serverControlPanel = new JPanel(new FlowLayout());
-        JButton startServerButton = new JButton(URLyBirdApplicationGuiConstants.START_SERVER_BUTTON);
+        startServerButton = new JButton(URLyBirdApplicationGuiConstants.START_SERVER_BUTTON);
+
+        if (RmiServerManager.isRmiServerRunning()) {
+            startServerButton.setEnabled(false);
+        } else {
+            startServerButton.setEnabled(true);
+        }
+
         startServerButton.addActionListener(new StartServer());
         serverControlPanel.add(startServerButton);
 
@@ -65,8 +74,11 @@ public class UrlyBirdServerGui extends JFrame {
                 return;
             }
 
-            // TODO: Implement RMI
-            JOptionPane.showMessageDialog(null, "Such Correct, Much Valid, Wow.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            RmiServerManager.startRmiServer();
+
+            if (RmiServerManager.isRmiServerRunning()) {
+                startServerButton.setEnabled(false);
+            }
         }
 
         private void showErrorMessageDialog(String message) {
