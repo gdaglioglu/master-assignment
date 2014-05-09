@@ -1,6 +1,5 @@
 package suncertify.gui.client;
 
-import suncertify.db.DatabaseFileUtils;
 import suncertify.model.HotelRoom;
 import suncertify.utilities.URLyBirdApplicationConstants;
 import suncertify.utilities.URLyBirdApplicationGuiConstants;
@@ -18,11 +17,9 @@ import java.util.List;
  */
 class HotelRoomTableModel extends AbstractTableModel {
 
-    private int selectedRow;
-
     // The names of the columns in the database which will map to the GUI.
-    private String[] tableColumns = URLyBirdApplicationGuiConstants.COLUMN_NAMES;
-    private List<HotelRoom> hotelRoomList;
+    private final String[] tableColumns = URLyBirdApplicationGuiConstants.COLUMN_NAMES;
+    private final List<HotelRoom> hotelRoomList;
 
     public HotelRoomTableModel(ArrayList<HotelRoom> hotelRooms) {
 
@@ -77,7 +74,7 @@ class HotelRoomTableModel extends AbstractTableModel {
      * Overridden getValueAt method from super class AbstractTableModel.
      * Gets the name of the column for the table.
      *
-     * @param i
+     * @param i the index of the column
      * @return the name of the column for the table.
      */
     @Override public String getColumnName(int i) {

@@ -1,10 +1,10 @@
 package suncertify.gui.client;
 
-import suncertify.controller.DatabaseAccessDaoImpl;
+import suncertify.controller.DatabaseAccessDao;
 import suncertify.utilities.URLyBirdApplicationGuiConstants;
 
 import javax.swing.*;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,9 +14,9 @@ import java.awt.event.ActionListener;
  */
 class BookingPanel extends JPanel {
 
-    JPanel bookingPanel;
+    private final JPanel bookingPanel;
 
-    public BookingPanel() {
+    public BookingPanel(DatabaseAccessDao databaseAccessDao) {
 
         bookingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bookingPanel.setName("Booking");
@@ -25,11 +25,11 @@ class BookingPanel extends JPanel {
         bookingPanel.add(instructionLabel);
 
         JButton bookButton = new JButton(URLyBirdApplicationGuiConstants.BOOK_BUTTON);
-        bookButton.addActionListener(new BookHotelRoom());
+        bookButton.addActionListener(new BookHotelRoom(databaseAccessDao));
         bookingPanel.add(bookButton);
 
         JButton cancelBookingButton = new JButton(URLyBirdApplicationGuiConstants.CANCEL_BOOKING_BUTTON);
-        cancelBookingButton.addActionListener(new CancelHotelRoomBooking());
+        cancelBookingButton.addActionListener(new CancelHotelRoomBooking(databaseAccessDao));
         bookingPanel.add(cancelBookingButton);
     }
 
@@ -39,12 +39,18 @@ class BookingPanel extends JPanel {
 
     private class BookHotelRoom implements ActionListener {
 
+        private final DatabaseAccessDao databaseAccessDao;
+
+        public BookHotelRoom(DatabaseAccessDao databaseAccessDao) {
+            this.databaseAccessDao = databaseAccessDao;
+        }
+
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
 
             int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
             String csrNumber = "";
-            boolean csrFlag = false;
+            boolean csrFlag;
 
             if (recordRow < 0) {
 
@@ -76,10 +82,10 @@ class BookingPanel extends JPanel {
                 }
             }
 
-            if (csrFlag == true) {
+            if (csrFlag) {
                 try {
-                    new DatabaseAccessDaoImpl().bookHotelRoom(recordRow, csrNumber, Thread.currentThread().getId());
-                    TablePanel.hotelRoomTableModel = new HotelRoomTableModel(new DatabaseAccessDaoImpl().retrieveAllHotelRooms());
+                    databaseAccessDao.bookHotelRoom(recordRow, csrNumber, Thread.currentThread().getId());
+                    TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
                     TablePanel.refreshHotelRoomTableModel();
                 } catch(Exception e) {
                     System.out.println("Reserve room problem found: " + e.getMessage());
@@ -90,13 +96,19 @@ class BookingPanel extends JPanel {
 
     private class CancelHotelRoomBooking implements ActionListener {
 
+        private final DatabaseAccessDao databaseAccessDao;
+
+        public CancelHotelRoomBooking(DatabaseAccessDao databaseAccessDao) {
+            this.databaseAccessDao = databaseAccessDao;
+        }
+
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
 
             try {
                 int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
-                new DatabaseAccessDaoImpl().cancelHotelRoomBooking(recordRow, Thread.currentThread().getId());
-                TablePanel.hotelRoomTableModel = new HotelRoomTableModel(new DatabaseAccessDaoImpl().retrieveAllHotelRooms());
+                databaseAccessDao.cancelHotelRoomBooking(recordRow, Thread.currentThread().getId());
+                TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
                 TablePanel.refreshHotelRoomTableModel();
             } catch(Exception e) {
                 System.out.println("Reserve room problem found: " + e.getMessage());

@@ -1,6 +1,6 @@
 package suncertify.gui.client;
 
-import suncertify.controller.DatabaseAccessDaoImpl;
+import suncertify.controller.DatabaseAccessDao;
 import suncertify.utilities.URLyBirdApplicationGuiConstants;
 
 import javax.swing.*;
@@ -12,17 +12,17 @@ import java.awt.*;
  */
 class TablePanel extends JPanel {
 
-    JPanel tablePanel;
+    private final JPanel tablePanel;
     // The JTable that will hold the records.
     public static JTable hotelRoomTable;
     // Concrete subclass of AbstractTableModel.
     public static HotelRoomTableModel hotelRoomTableModel;
 
-    public TablePanel() {
+    public TablePanel(DatabaseAccessDao databaseAccessDao) {
 
         tablePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         tablePanel.setName("Records");
-        hotelRoomTableModel = new HotelRoomTableModel(new DatabaseAccessDaoImpl().retrieveAllHotelRooms());
+        hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
         hotelRoomTable = new JTable(hotelRoomTableModel);
         hotelRoomTable.setPreferredScrollableViewportSize(URLyBirdApplicationGuiConstants.CLIENT_GUI_JTABLE_DIMENSION);
         tablePanel.add(new JScrollPane(hotelRoomTable));

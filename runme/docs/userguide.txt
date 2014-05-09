@@ -1,3 +1,29 @@
 +------------------------------------------------------------------------------+
 |                Luke Potter's URLyBird application User Guide                 |
 +------------------------------------------------------------------------------+
+
+The URLyBird application can be run in three possible modes;
+ * Networked Client,
+ * Server,
+ * and, Standalone Client.
+
+Networked Client
+  This application mode opens a Client GUI instance. The Client connects to a
+running RMI Server Instance. The Client GUI interacts with the Database via the
+network. To start the URLyBird application in networked client mode, pass the
+following Command Line Arguments.
+    java -jar URLyBird.jar
+
+Server
+  This application mode opens a Server GUI instance. When in this mode, the
+URLyBird Application starts the RMI connections. This accepts incoming network
+requests from the URLyBird Client instances. To start the URLyBird Application
+in server mode, pass the following Command Line Arguments.
+    java -jar URLyBird.jar server
+
+Standalone Client
+  This application mode opens a Client GUI instance. The Client connects
+directly to the database. There are no RMI network requests sent. To start the
+URLyBird application in standalone client mode, pass the following Command Line
+Arguments.
+    java -jar URLyBird.jar standalone

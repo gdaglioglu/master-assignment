@@ -10,7 +10,7 @@ import java.util.Arrays;
  * @author Luke GJ Potter
  *         Date: 29/04/2014
  */
-public class DatabaseAccessDaoImplTest {
+class DatabaseAccessDaoImplTest {
 
     public static void main(String args[]) {
 
@@ -46,7 +46,7 @@ public class DatabaseAccessDaoImplTest {
 
     private static void printHotelRoomsToConsoleUsingDatabaseAccessDAO() {
 
-        DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoImpl();
+        DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoLocal();
         ArrayList<HotelRoom> hotelRooms = databaseAccessDAO.retrieveAllHotelRooms();
 
         System.out.println("The Hotels in the database are:");
@@ -60,7 +60,7 @@ public class DatabaseAccessDaoImplTest {
     private static void createNewHotelRoomInDatabase() {
 
         HotelRoom hotelRoom = new HotelRoom("Casa de Luca", "Lukeville", 2, true, 150.00, "2014/04/12");
-        DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoImpl();
+        DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoLocal();
 
         System.out.println("\n\nInserting new record into the database. "
                 + "Record is:" + hotelRoom.toString());
@@ -79,7 +79,7 @@ public class DatabaseAccessDaoImplTest {
 
     private static void deleteHotelRoomFromDatabase(DatabaseFileUtils databaseFileUtils) {
 
-        DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoImpl();
+        DatabaseAccessDao databaseAccessDAO = new DatabaseAccessDaoLocal();
 
         System.out.println("\n\nDeleting record from the database."
                 + "\nNumber of records in database: "
@@ -95,7 +95,7 @@ public class DatabaseAccessDaoImplTest {
     private static void updateHotelRoomInDatabase() {
 
         long recordNumber = 30;
-        DatabaseAccessDao databaseAccessDao = new DatabaseAccessDaoImpl();
+        DatabaseAccessDao databaseAccessDao = new DatabaseAccessDaoLocal();
 
         System.out.println("\n\nUpdating record " + (recordNumber + 1) + " in Database.");
 
@@ -116,7 +116,7 @@ public class DatabaseAccessDaoImplTest {
 
     private static void searchForHotelRoom() {
 
-        DatabaseAccessDao databaseAccessDao = new DatabaseAccessDaoImpl();
+        DatabaseAccessDao databaseAccessDao = new DatabaseAccessDaoLocal();
         String[] criteria = new String[] { null, null };
         System.out.println("\n\nSearching for " + Arrays.asList(criteria) + " Found " +databaseAccessDao.findHotelRooms(criteria));
 

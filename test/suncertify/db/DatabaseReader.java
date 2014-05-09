@@ -38,7 +38,7 @@ import java.io.RandomAccessFile;
  * @author Roberto Perillo
  * @version 1.0 05/13/2009
  */
-public class DatabaseReader {
+class DatabaseReader {
 
     // The bytes that store the "magic cookie" value.
     private static final int MAGIC_COOKIE_BYTES = 4;

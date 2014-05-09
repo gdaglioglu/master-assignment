@@ -1,10 +1,10 @@
 package suncertify.gui.client;
 
-import suncertify.controller.DatabaseAccessDaoImpl;
+import suncertify.controller.DatabaseAccessDao;
 import suncertify.utilities.URLyBirdApplicationGuiConstants;
 
 import javax.swing.*;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,28 +15,26 @@ import java.awt.event.ActionListener;
 class SearchPanel extends JPanel {
 
     private final JPanel searchPanel;
-    private final JLabel nameLabel;
     private final JTextField nameField;
-    private final JLabel locationLabel;
     private final JTextField locationField;
 
-    public SearchPanel() {
+    public SearchPanel(DatabaseAccessDao databaseAccessDao) {
 
         searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         searchPanel.setName("Search");
 
-        nameLabel = new JLabel("Name");
+        JLabel nameLabel = new JLabel("Name");
         searchPanel.add(nameLabel);
         nameField = new JTextField(URLyBirdApplicationGuiConstants.CLIENT_SEARCH_TEXT_FIELD_LENGTH);
         searchPanel.add(nameField);
 
-        locationLabel = new JLabel("Location");
+        JLabel locationLabel = new JLabel("Location");
         searchPanel.add(locationLabel);
         locationField = new JTextField(URLyBirdApplicationGuiConstants.CLIENT_SEARCH_TEXT_FIELD_LENGTH);
         searchPanel.add(locationField);
 
         JButton searchButton = new JButton(" Search ");
-        searchButton.addActionListener(new SearchForRoomActionListener());
+        searchButton.addActionListener(new SearchForRoomActionListener(databaseAccessDao));
         searchPanel.add(searchButton);
     }
 
@@ -46,6 +44,12 @@ class SearchPanel extends JPanel {
 
     private class SearchForRoomActionListener implements ActionListener {
 
+        private final DatabaseAccessDao databaseAccessDao;
+
+        public SearchForRoomActionListener(DatabaseAccessDao databaseAccessDao) {
+            this.databaseAccessDao = databaseAccessDao;
+        }
+
         /**
          * The handler for the ActionListener for Searching For a Hotel Room.
          *
@@ -54,7 +58,7 @@ class SearchPanel extends JPanel {
         @Override public void actionPerformed(ActionEvent actionEvent) {
 
             TablePanel.hotelRoomTableModel = new HotelRoomTableModel(
-                    new DatabaseAccessDaoImpl().findHotelRooms(
+                    databaseAccessDao.findHotelRooms(
                             nameField.getText().trim(),
                             locationField.getText().trim()));
 

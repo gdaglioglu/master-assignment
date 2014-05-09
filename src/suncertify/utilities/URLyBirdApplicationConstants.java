@@ -37,5 +37,9 @@ public class URLyBirdApplicationConstants {
     public static final String SMOKING_ALLOWED = "Y";
     // The string representation for rooms that don't allow smoking.
     public static final String SMOKING_NOT_ALLOWED = "N";
+    // The string representation of the empty string.
     public static final String EMPTY_STRING = "";
+
+    // RMI Application Path
+    public static final String RMI_APPLICATION_PATH = "/URLyBird";
 }

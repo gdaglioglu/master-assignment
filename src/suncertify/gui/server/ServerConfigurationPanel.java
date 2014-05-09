@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
  */
 class ServerConfigurationPanel {
 
-    private JPanel serverConfigurationPanel;
+    private final JPanel serverConfigurationPanel;
     private JLabel pathToDatabaseFileLabel, rmiHostnameLabel, rmiPortNumberLabel;
     private JTextField pathToDatabaseFileTextField, rmiHostnameTextField, rmiPortNumberTextField;
 

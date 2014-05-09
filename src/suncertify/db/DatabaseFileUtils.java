@@ -5,7 +5,6 @@ import suncertify.utilities.URLyBirdApplicationObjectsFactory;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.logging.Logger;
 
 /**
  * @author Luke GJ Potter
@@ -18,8 +17,6 @@ public class DatabaseFileUtils {
 
     private int magicCookie, recordLength, numberOfFields;
     private long numberOfRecordsInDatabase, headerOffset;
-
-    private static final Logger logger = Logger.getLogger("suncertify.db.DatabaseFileUtils");
 
     private DatabaseFileUtils() {
 

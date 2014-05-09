@@ -41,7 +41,7 @@ class DatabaseAccessLockManager {
      * different client, the current thread gives up the CPU and consumes no CPU
      * cycles until the record is unlocked.
      *
-     * @param recNo
+     * @param recNo the record number to lock
      * @return A long representing the lock's owner's id.
      * @throws RecordNotFoundException
      */
@@ -56,8 +56,8 @@ class DatabaseAccessLockManager {
      * Releases the lock on a record. Cookie must be the cookie returned when
      * the record was locked; otherwise throws {@code SecurityException}.
      *
-     * @param recNo
-     * @param cookie
+     * @param recNo the record number to unlock
+     * @param cookie the cookie to unlock the record with
      * @throws SecurityException
      */
     public synchronized void unlock(long recNo, long cookie) throws SecurityException {
@@ -75,7 +75,7 @@ class DatabaseAccessLockManager {
      * This method is used for locking a record number when creating a new
      * record.
      *
-     * @param recordNumber
+     * @param recordNumber the record number to lock
      * @return A long representing the lock's owner's id.
      * @throws RecordNotFoundException
      */
@@ -104,8 +104,8 @@ class DatabaseAccessLockManager {
      * This method is for unlocking a record when creating or deleting a new
      * record.
      *
-     * @param recordNumber
-     * @param lockingCookie
+     * @param recordNumber the record number to unlock
+     * @param lockingCookie the cookie to unlock the record with
      * @throws SecurityException
      */
     public synchronized void unlockRecordWhenCreatingOrDeletingRecord(long recordNumber, long lockingCookie) throws SecurityException{
@@ -123,8 +123,8 @@ class DatabaseAccessLockManager {
      * should the record be in the map, the value of the map's entry for the
      * record is compared to the {@code lockingCookie}.
      *
-     * @param recordNumber
-     * @param lockingCookie
+     * @param recordNumber the record number to investigate
+     * @param lockingCookie the cookie to investigate
      * @return True, if the record is locked by another cookie.
      *         False, if the record is not locked.
      */
@@ -138,12 +138,12 @@ class DatabaseAccessLockManager {
      * should the record be in the map, the value of the map's entry for the
      * record is compared to the {@code lockingCookie}.
      *
-     * @param recordNumber
-     * @param lockingCookie
+     * @param recordNumber the record number to investigate
+     * @param lockingCookie the cookie to investigate
      * @return True, if the record is locked by the cookie.
      *         False, if the record is not locked by this cookie.
      */
-    public boolean isRecordLockedByThisUser(long recordNumber, long lockingCookie) {
+    boolean isRecordLockedByThisUser(long recordNumber, long lockingCookie) {
 
         return isRecordLocked(recordNumber) && getLockOwner(recordNumber) == lockingCookie;
     }
@@ -151,11 +151,11 @@ class DatabaseAccessLockManager {
     /**
      * Checks the {@code lockedMap} to see if {@code recordNumber} is present.
      *
-     * @param recordNumber
+     * @param recordNumber the record number to investigate
      * @return True, if the record is in the map of locked records.
      *         False, if the record is not in the map of locked records.
      */
-    public boolean isRecordLocked(long recordNumber) {
+    boolean isRecordLocked(long recordNumber) {
 
         return lockedMap.containsKey(recordNumber);
     }
@@ -163,10 +163,10 @@ class DatabaseAccessLockManager {
     /**
      * Gets the id number of the current owner of the lock on a record.
      *
-     * @param recordNumber
+     * @param recordNumber the record number to investigate
      * @return A long representing the lock's owner's id.
      */
-    public Long getLockOwner(long recordNumber) {
+    Long getLockOwner(long recordNumber) {
 
         return lockedMap.get(recordNumber);
     }

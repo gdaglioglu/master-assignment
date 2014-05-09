@@ -1,7 +1,6 @@
 package suncertify.controller;
 
 import suncertify.db.Data;
-import suncertify.db.DuplicateKeyException;
 import suncertify.db.RecordNotFoundException;
 import suncertify.model.HotelRoom;
 
@@ -11,11 +10,11 @@ import java.util.ArrayList;
  * @author Luke GJ Potter
  * Date: 31/03/2014
  */
-public class DatabaseAccessDaoImpl implements DatabaseAccessDao {
+public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
 
     private final Data databaseAccessFacade;
 
-    public DatabaseAccessDaoImpl() {
+    public DatabaseAccessDaoLocal() {
 
          databaseAccessFacade = new Data();
     }
