@@ -36,6 +36,8 @@ public class URLyBirdApplicationGuiConstants {
     public static final String RMI_HOSTNAME = "RMI Hostname";
     public static final String RMI_PORT_NUMBER = "RMI Port";
     public static final String START_SERVER_BUTTON = "Start Server";
+    public static final String SERVER_STOPPED = "Server Stopped";
+    public static final String SERVER_STARTED = "Server Running";
 
 
     // ---------- Dimension Constants ----------

@@ -57,6 +57,13 @@ class ServerConfigurationPanel {
         return (!emptyFields) && new File(dbFilePath).exists() && isValidHostname(rmiHostname) && isValidPortNumber(rmiPortNumber);
     }
 
+    public void disableAllFields() {
+
+        pathToDatabaseFileTextField.setEnabled(false);
+        rmiHostnameTextField.setEnabled(false);
+        rmiPortNumberTextField.setEnabled(false);
+    }
+
     private void layoutServerConfigurationPanel() {
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();

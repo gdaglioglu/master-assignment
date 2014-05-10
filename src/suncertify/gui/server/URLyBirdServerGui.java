@@ -22,6 +22,7 @@ public class UrlyBirdServerGui extends JFrame {
 
     private final ServerConfigurationPanel serverConfigurationPanel;
     private JButton startServerButton;
+    private JLabel serverStatusLabel;
 
     public UrlyBirdServerGui() {
 
@@ -43,14 +44,13 @@ public class UrlyBirdServerGui extends JFrame {
         JPanel serverControlPanel = new JPanel(new FlowLayout());
         startServerButton = new JButton(URLyBirdApplicationGuiConstants.START_SERVER_BUTTON);
 
-        if (RmiServerManager.isRmiServerRunning()) {
-            startServerButton.setEnabled(false);
-        } else {
-            startServerButton.setEnabled(true);
-        }
-
+        startServerButton.setEnabled(true);
         startServerButton.addActionListener(new StartServer());
+
         serverControlPanel.add(startServerButton);
+
+        serverStatusLabel = new JLabel(URLyBirdApplicationGuiConstants.SERVER_STOPPED);
+        serverControlPanel.add(serverStatusLabel);
 
         return serverControlPanel;
     }
@@ -58,6 +58,7 @@ public class UrlyBirdServerGui extends JFrame {
     private class StartServer implements ActionListener {
 
         @Override public void actionPerformed(ActionEvent actionEvent) {
+
 
             if (!serverConfigurationPanel.areTextFieldValuesValid()) {
                 showErrorMessageDialog("Please enter valid values in the Text Fields.");
@@ -77,7 +78,9 @@ public class UrlyBirdServerGui extends JFrame {
             RmiServerManager.startRmiServer();
 
             if (RmiServerManager.isRmiServerRunning()) {
+                serverConfigurationPanel.disableAllFields();
                 startServerButton.setEnabled(false);
+                serverStatusLabel.setText(URLyBirdApplicationGuiConstants.SERVER_STARTED);
             }
         }
 

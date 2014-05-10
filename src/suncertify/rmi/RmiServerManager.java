@@ -14,7 +14,7 @@ import java.rmi.registry.LocateRegistry;
  */
 public class RmiServerManager {
 
-    private static final RmiServerStatus rmiServerStatus = RmiServerStatus.STOPPED;
+    private static RmiServerStatus rmiServerStatus = RmiServerStatus.STOPPED;
 
     public static void startRmiServer() {
 
@@ -25,6 +25,7 @@ public class RmiServerManager {
             DatabaseAccessRemoteImpl databaseAccessRemote = new DatabaseAccessRemoteImpl();
             LocateRegistry.createRegistry(Integer.parseInt(URLyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(URLyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER)));
             Naming.rebind(RmiUtils.formRmiUrl(), databaseAccessRemote);
+            rmiServerStatus = RmiServerStatus.RUNNING;
 
         } catch (RemoteException e) {
             e.printStackTrace();
