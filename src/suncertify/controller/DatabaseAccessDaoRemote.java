@@ -16,15 +16,28 @@ import java.util.ArrayList;
  */
 public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
 
+    /*
+     * The reference to the class that directly manipulates the String Arrays in
+     * the database file, via the network.
+     */
     private final DatabaseAccessRemote databaseAccessRemote;
 
+    /**
+     * The default constructor for the {@code DatabaseAccessDaoRemote} class.
+     */
     public DatabaseAccessDaoRemote() throws RemoteException {
 
         databaseAccessRemote = RmiClientManager.connectToRemoteServerViaRmi();
     }
 
-    @Override
-    public long createHotelRoom(HotelRoom newHotelRoom) {
+    /**
+     * Creates a new {@code HotelRoom} object in the database.
+     *
+     * @param newHotelRoom The {@code HotelRoom} to create in the database.
+     * @return The record number of the newly created record. Or NULL if there
+     *         was a problem creating the record in the database.
+     */
+    @Override public long createHotelRoom(HotelRoom newHotelRoom) {
 
         try {
             return databaseAccessRemote.createRecord(newHotelRoom.toStringArray());
@@ -33,8 +46,15 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
         }
     }
 
-    @Override
-    public HotelRoom retrieveHotelRoom(long recordNumber) {
+    /**
+     * Retrieves a {@code HotelRoom} object from the database.
+     *
+     * @param recordNumber The record number of the desired {@code HotelRoom}.
+     * @return The {@code HotelRoom} object that corresponds to the
+     *         {@code recordNumber}. Or NULL if there was a problem retrieving
+     *         the record from the database.
+     */
+    @Override public HotelRoom retrieveHotelRoom(long recordNumber) {
 
         try {
             String[] hotelRoomFieldsStrings = databaseAccessRemote.readRecord(recordNumber);
@@ -49,8 +69,17 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
         }
     }
 
-    @Override
-    public boolean updateHotelRoom(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie) {
+    /**
+     * Updates a {@code HotelRoom} record in the database.
+     *
+     * @param recordNumber The record number of the desired {@code HotelRoom}.
+     * @param updatedHotelRoom The {@code HotelRoom} pojo to Overwrite the
+     *                         existing record.
+     * @param lockCookie The key to lock the record with.
+     * @return True, if the update was successful.
+     *         False, if the update was not successful.
+     */
+    @Override public boolean updateHotelRoom(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie) {
 
         try {
             databaseAccessRemote.updateRecord(recordNumber, updatedHotelRoom.toStringArray(), lockCookie);
@@ -62,8 +91,15 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
         }
     }
 
-    @Override
-    public boolean deleteHotelRoom(long recordNumber, long lockCookie) {
+    /**
+     * Deletes a {@code HotelRoom} record in the database.
+     *
+     * @param recordNumber The record number of the desired {@code HotelRoom}.
+     * @param lockCookie The key to lock the record with.
+     * @return True, if the deletion was successful.
+     *         False, if the deletion was not successful.
+     */
+    @Override public boolean deleteHotelRoom(long recordNumber, long lockCookie) {
 
         try {
             databaseAccessRemote.deleteRecord(recordNumber, lockCookie);
@@ -75,8 +111,14 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
         }
     }
 
-    @Override
-    public ArrayList<HotelRoom> findHotelRooms(String... searchStrings) {
+    /**
+     * Finds the {@code HotelRoom} records that match the arguments.
+     *
+     * @param searchStrings The criteria to compare the database records to.
+     * @return An ArrayList of the {@code HotelRoom} object that match the
+     *         criteria.
+     */
+    @Override public ArrayList<HotelRoom> findHotelRooms(String... searchStrings) {
 
         try {
             long[] recordNumbers = databaseAccessRemote.findByCriteria(searchStrings);
@@ -104,8 +146,13 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
         }
     }
 
-    @Override
-    public ArrayList<HotelRoom> retrieveAllHotelRooms() {
+    /**
+     * Gets all the {@code HotelRoom} objects in the database.
+     *
+     * @return An ArrayList of the all the {@code HotelRoom} objects in the
+     *         database.
+     */
+    @Override public ArrayList<HotelRoom> retrieveAllHotelRooms() {
 
         ArrayList<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
         HotelRoom tempHotelRoom;
@@ -117,8 +164,16 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
         return hotelRooms;
     }
 
-    @Override
-    public boolean bookHotelRoom(long recordNumber, String customerName, long lockCookie) {
+    /**
+     * This method allows the booking of a {@code HotelRoom}.
+     *
+     * @param recordNumber The record number of the desired {@code HotelRoom}.
+     * @param customerName The CSR number of the booker.
+     * @param lockCookie The key to lock the record with.
+     * @return True, if the booking was successful.
+     *         False, if the booking was not successful.
+     */
+    @Override public boolean bookHotelRoom(long recordNumber, String customerName, long lockCookie) {
 
         HotelRoom hotelRoomToBook;
 
@@ -131,8 +186,15 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
         return updateHotelRoom(recordNumber, hotelRoomToBook, lockCookie);
     }
 
-    @Override
-    public boolean cancelHotelRoomBooking(long recordNumber, long lockCookie) {
+    /**
+     * This method allows the cancellation of a {@code HotelRoom} booking.
+     *
+     * @param recordNumber The record number of the desired {@code HotelRoom}.
+     * @param lockCookie The key to lock the record with.
+     * @return True, if the cancellation of the booking was successful.
+     *         False, if the cancellation of the booking was not successful.
+     */
+    @Override public boolean cancelHotelRoomBooking(long recordNumber, long lockCookie) {
 
         HotelRoom hotelRoomBookingToCancel;
 

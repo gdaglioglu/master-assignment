@@ -5,28 +5,30 @@ import suncertify.gui.server.UrlyBirdServerGui;
 import suncertify.utilities.URLyBirdApplicationMode;
 
 /**
+ * This is the class that handles the starting of the URLyBird Application.
+ *
  * @author Luke GJ Potter
  * Date: 06/12/2013
  */
 public class MainController {
 
-    private static URLyBirdApplicationMode urlyBirdApplicationMode;
-
+    /**
+     * The entry point of the URLyBird Application.
+     *
+     * @param args The switch to set the {@code URLyBirdApplicationMode}.
+     */
     public static void main(String[] args) {
 
         if (args.length == 0) {
 
-            urlyBirdApplicationMode = URLyBirdApplicationMode.NETWORKED_CLIENT;
-            new UrlyBirdClientGui(urlyBirdApplicationMode).setVisible(true);
+            new UrlyBirdClientGui(URLyBirdApplicationMode.NETWORKED_CLIENT).setVisible(true);
 
         } else if (args[0].equalsIgnoreCase("standalone")) {
 
-            urlyBirdApplicationMode = URLyBirdApplicationMode.STANDALONE_CLIENT;
-            new UrlyBirdClientGui(urlyBirdApplicationMode).setVisible(true);
+            new UrlyBirdClientGui(URLyBirdApplicationMode.STANDALONE_CLIENT).setVisible(true);
 
         } else if (args[0].equalsIgnoreCase("server")) {
 
-            urlyBirdApplicationMode = URLyBirdApplicationMode.SERVER_ONLY;
             new UrlyBirdServerGui().setVisible(true);
 
         } else {

@@ -11,7 +11,7 @@ import java.awt.*;
 import java.rmi.RemoteException;
 
 /**
- * This is the main GUI for the URLyBird Application.
+ * This is the Client GUI for the URLyBird Application.
  *
  * @author Luke GJ Potter
  * Date: 22/04/2014
