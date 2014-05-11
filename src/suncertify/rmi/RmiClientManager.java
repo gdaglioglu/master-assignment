@@ -12,10 +12,10 @@ import java.rmi.RemoteException;
  */
 public class RmiClientManager {
 
-    public static DatabaseAccessRemoteImpl connectToRemoteServerViaRmi() {
+    public static DatabaseAccessRemote connectToRemoteServerViaRmi() {
 
         try {
-            return (DatabaseAccessRemoteImpl) Naming.lookup(RmiUtils.formRmiUrl());
+            return (DatabaseAccessRemote) Naming.lookup(RmiUtils.formRmiUrl());
 
         } catch (NotBoundException e) {
             e.printStackTrace();
