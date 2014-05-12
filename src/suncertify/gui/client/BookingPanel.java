@@ -16,20 +16,20 @@ class BookingPanel extends JPanel {
 
     private final JPanel bookingPanel;
 
-    public BookingPanel(DatabaseAccessDao databaseAccessDao) {
+    public BookingPanel(DatabaseAccessDao databaseAccessDao, String csrNumber) {
 
         bookingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bookingPanel.setName("Booking");
 
-        JLabel instructionLabel = new JLabel("Select a record in the table and press 'Book Room' button to book the Hotel Room");
+        JLabel instructionLabel = new JLabel(URLyBirdApplicationGuiConstants.BOOKING_HINT);
         bookingPanel.add(instructionLabel);
 
         JButton bookButton = new JButton(URLyBirdApplicationGuiConstants.BOOK_BUTTON);
-        bookButton.addActionListener(new BookHotelRoom(databaseAccessDao));
+        bookButton.addActionListener(new BookHotelRoom(databaseAccessDao, csrNumber));
         bookingPanel.add(bookButton);
 
         JButton cancelBookingButton = new JButton(URLyBirdApplicationGuiConstants.CANCEL_BOOKING_BUTTON);
-        cancelBookingButton.addActionListener(new CancelHotelRoomBooking(databaseAccessDao));
+        cancelBookingButton.addActionListener(new CancelHotelRoomBooking(databaseAccessDao, csrNumber));
         bookingPanel.add(cancelBookingButton);
     }
 
@@ -40,49 +40,22 @@ class BookingPanel extends JPanel {
     private class BookHotelRoom implements ActionListener {
 
         private final DatabaseAccessDao databaseAccessDao;
+        private final String csrNumber;
 
-        public BookHotelRoom(DatabaseAccessDao databaseAccessDao) {
+        public BookHotelRoom(DatabaseAccessDao databaseAccessDao, String csrNumber) {
             this.databaseAccessDao = databaseAccessDao;
+            this.csrNumber = csrNumber;
         }
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
 
             int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
-            String csrNumber = "";
-            boolean csrFlag;
 
             if (recordRow < 0) {
-
                 JOptionPane.showMessageDialog(bookingPanel, "Please select a row");
-                csrFlag = false;
 
             } else {
-
-                csrNumber = JOptionPane.showInputDialog(bookingPanel, "Enter CSR number of 8 digits");
-
-                if (csrNumber == null) {
-
-                    csrFlag = false;
-
-                } else if (csrNumber.length() != 8) {
-
-                    JOptionPane.showMessageDialog(bookingPanel, "CSR length must be 8 digits, you have entered " + csrNumber.length() + " characters.");
-                    csrFlag = false;
-
-                } else if (!isAllDigits(csrNumber)) {
-
-                    JOptionPane.showMessageDialog(bookingPanel, "CSR length must be all digits");
-                    csrFlag = false;
-
-                } else {
-
-                    csrFlag = true;
-
-                }
-            }
-
-            if (csrFlag) {
                 try {
                     databaseAccessDao.bookHotelRoom(recordRow, csrNumber, Thread.currentThread().getId());
                     TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
@@ -97,9 +70,12 @@ class BookingPanel extends JPanel {
     private class CancelHotelRoomBooking implements ActionListener {
 
         private final DatabaseAccessDao databaseAccessDao;
+        // Todo: Use CSR Number to only allow that CSR to cancel a booking.
+        private final String csrNumber;
 
-        public CancelHotelRoomBooking(DatabaseAccessDao databaseAccessDao) {
+        public CancelHotelRoomBooking(DatabaseAccessDao databaseAccessDao, String csrNumber) {
             this.databaseAccessDao = databaseAccessDao;
+            this.csrNumber = csrNumber;
         }
 
         @Override
@@ -113,16 +89,6 @@ class BookingPanel extends JPanel {
             } catch(Exception e) {
                 System.out.println("Reserve room problem found: " + e.getMessage());
             }
-        }
-    }
-
-    private boolean isAllDigits(String csrNumber) {
-
-        try {
-            Integer.parseInt(csrNumber);
-            return true;
-        } catch (NumberFormatException ignored) {
-            return false;
         }
     }
 }

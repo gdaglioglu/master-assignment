@@ -30,8 +30,7 @@ public class URLyBirdApplicationGuiConstants {
             "Customer ID"};
     public static final String SMOKING_ALLOWED = "Allowed";
     public static final String SMOKING_NOT_ALLOWED = "Not Allowed";
-
-
+    public static final String BOOKING_HINT = "Select a record in the table and press one of the following buttons to perform that action.";
     public static final String PATH_TO_DATABASE_FILE = "Path to Database File";
     public static final String RMI_HOSTNAME = "RMI Hostname";
     public static final String RMI_PORT_NUMBER = "RMI Port";

@@ -20,9 +20,18 @@ public class UrlyBirdClientGui extends JFrame {
 
     public UrlyBirdClientGui(URLyBirdApplicationMode urlyBirdApplicationMode) {
 
+        // ToDo: Check application configuration is correct.
+
+        String csrNumber = null;
+        try {
+            csrNumber = receiveCsrNumber();
+        } catch (Exception ignored) {
+            System.exit(1);
+        }
+
         DatabaseAccessDao databaseAccessDao = retrieveCorrectDao(urlyBirdApplicationMode);
 
-        setTitle(URLyBirdApplicationGuiConstants.CLIENT_GUI_APPLICATION_TITLE);
+        setTitle(URLyBirdApplicationGuiConstants.CLIENT_GUI_APPLICATION_TITLE + " - " + csrNumber);
         setSize(URLyBirdApplicationGuiConstants.CLIENT_GUI_DIMENSION);
 
         setResizable(false);
@@ -31,7 +40,38 @@ public class UrlyBirdClientGui extends JFrame {
 
         add(new SearchPanel(databaseAccessDao).getSearchPanel(), BorderLayout.NORTH);
         add(new TablePanel(databaseAccessDao).getTablePanel(), BorderLayout.CENTER);
-        add(new BookingPanel(databaseAccessDao).getBookingPanel(), BorderLayout.SOUTH);
+        add(new BookingPanel(databaseAccessDao, csrNumber).getBookingPanel(), BorderLayout.SOUTH);
+    }
+
+    private String receiveCsrNumber() {
+
+        String csrNumber = null;
+        boolean correctCsrNumberEntered = false;
+
+        while (!correctCsrNumberEntered) {
+
+            csrNumber =  JOptionPane.showInputDialog(null, "Login with your CSR number (8 digits)", "Login", JOptionPane.INFORMATION_MESSAGE).trim();
+
+            if (csrNumber.length() != 8) {
+                JOptionPane.showMessageDialog(null, "CSR length must be 8 digits, you have entered " + csrNumber.length() + " digits.");
+            } else if (!isAllDigits(csrNumber)) {
+                JOptionPane.showMessageDialog(null, "CSR length must be all digits");
+            } else {
+                correctCsrNumberEntered = true;
+            }
+        }
+
+        return csrNumber;
+    }
+
+    private boolean isAllDigits(String csrNumber) {
+
+        try {
+            Integer.parseInt(csrNumber);
+            return true;
+        } catch (NumberFormatException ignored) {
+            return false;
+        }
     }
 
     /**
