@@ -13,8 +13,8 @@
  */
 package suncertify.db;
 
-import suncertify.utilities.URLyBirdApplicationConstants;
-import suncertify.utilities.URLyBirdApplicationObjectsFactory;
+import suncertify.utilities.UrlyBirdApplicationConstants;
+import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -73,7 +73,7 @@ class DatabaseReader {
     public static void main(final String[] args) {
 
         try {
-            final RandomAccessFile database = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+            final RandomAccessFile database = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
 
             final byte[] magicCookieByteArray = new byte[MAGIC_COOKIE_BYTES];
             final byte[] recordLengthByteArray = new byte[RECORD_LENGTH_BYTES];
@@ -106,7 +106,7 @@ class DatabaseReader {
 
                 final byte[] fieldNameByteArray = new byte[nameLength];
                 database.read(fieldNameByteArray);
-                fieldNames[i] = new String(fieldNameByteArray, URLyBirdApplicationConstants.FILE_ENCODING);
+                fieldNames[i] = new String(fieldNameByteArray, UrlyBirdApplicationConstants.FILE_ENCODING);
 
                 final byte[] fieldLength = new byte[FIELD_LENGTH_BYTES];
                 database.read(fieldLength);
@@ -132,7 +132,7 @@ class DatabaseReader {
 
                     final byte[] buffer = new byte[fieldLengths[i]];
                     database.read(buffer);
-                    System.out.println(fieldNames[i] + ": " + new String(buffer, URLyBirdApplicationConstants.FILE_ENCODING));
+                    System.out.println(fieldNames[i] + ": " + new String(buffer, UrlyBirdApplicationConstants.FILE_ENCODING));
                 }
 
                 if (flag == VALID) System.out.println("Status: valid record\n");

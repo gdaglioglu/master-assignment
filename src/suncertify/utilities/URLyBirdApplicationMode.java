@@ -6,7 +6,7 @@ package suncertify.utilities;
  * @author Luke GJ Potter
  *         Date: 08/05/2014
  */
-public enum URLyBirdApplicationMode {
+public enum UrlyBirdApplicationMode {
 
     /**
      * Network mode; only display the

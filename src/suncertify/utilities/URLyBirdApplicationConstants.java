@@ -7,7 +7,7 @@ package suncertify.utilities;
  *
  * Created by lukepotter on 01/04/2014.
  */
-public class URLyBirdApplicationConstants {
+public class UrlyBirdApplicationConstants {
 
     /**
      * The Constant {@code PROPERTY_FILE_NAME}.

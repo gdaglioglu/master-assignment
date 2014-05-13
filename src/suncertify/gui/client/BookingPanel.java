@@ -1,7 +1,7 @@
 package suncertify.gui.client;
 
 import suncertify.controller.DatabaseAccessDao;
-import suncertify.utilities.URLyBirdApplicationGuiConstants;
+import suncertify.utilities.UrlyBirdApplicationGuiConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,14 +21,14 @@ class BookingPanel extends JPanel {
         bookingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bookingPanel.setName("Booking");
 
-        JLabel instructionLabel = new JLabel(URLyBirdApplicationGuiConstants.BOOKING_HINT);
+        JLabel instructionLabel = new JLabel(UrlyBirdApplicationGuiConstants.BOOKING_HINT);
         bookingPanel.add(instructionLabel);
 
-        JButton bookButton = new JButton(URLyBirdApplicationGuiConstants.BOOK_BUTTON);
+        JButton bookButton = new JButton(UrlyBirdApplicationGuiConstants.BOOK_BUTTON);
         bookButton.addActionListener(new BookHotelRoom(databaseAccessDao, csrNumber));
         bookingPanel.add(bookButton);
 
-        JButton cancelBookingButton = new JButton(URLyBirdApplicationGuiConstants.CANCEL_BOOKING_BUTTON);
+        JButton cancelBookingButton = new JButton(UrlyBirdApplicationGuiConstants.CANCEL_BOOKING_BUTTON);
         cancelBookingButton.addActionListener(new CancelHotelRoomBooking(databaseAccessDao, csrNumber));
         bookingPanel.add(cancelBookingButton);
     }

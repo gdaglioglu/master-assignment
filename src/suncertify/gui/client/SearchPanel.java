@@ -1,7 +1,7 @@
 package suncertify.gui.client;
 
 import suncertify.controller.DatabaseAccessDao;
-import suncertify.utilities.URLyBirdApplicationGuiConstants;
+import suncertify.utilities.UrlyBirdApplicationGuiConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,12 +25,12 @@ class SearchPanel extends JPanel {
 
         JLabel nameLabel = new JLabel("Name");
         searchPanel.add(nameLabel);
-        nameField = new JTextField(URLyBirdApplicationGuiConstants.CLIENT_SEARCH_TEXT_FIELD_LENGTH);
+        nameField = new JTextField(UrlyBirdApplicationGuiConstants.CLIENT_SEARCH_TEXT_FIELD_LENGTH);
         searchPanel.add(nameField);
 
         JLabel locationLabel = new JLabel("Location");
         searchPanel.add(locationLabel);
-        locationField = new JTextField(URLyBirdApplicationGuiConstants.CLIENT_SEARCH_TEXT_FIELD_LENGTH);
+        locationField = new JTextField(UrlyBirdApplicationGuiConstants.CLIENT_SEARCH_TEXT_FIELD_LENGTH);
         searchPanel.add(locationField);
 
         JButton searchButton = new JButton(" Search ");

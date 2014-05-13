@@ -1,8 +1,8 @@
 package suncertify.gui.client;
 
 import suncertify.model.HotelRoom;
-import suncertify.utilities.URLyBirdApplicationConstants;
-import suncertify.utilities.URLyBirdApplicationGuiConstants;
+import suncertify.utilities.UrlyBirdApplicationConstants;
+import suncertify.utilities.UrlyBirdApplicationGuiConstants;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.List;
 class HotelRoomTableModel extends AbstractTableModel {
 
     // The names of the columns in the database which will map to the GUI.
-    private final String[] tableColumns = URLyBirdApplicationGuiConstants.COLUMN_NAMES;
+    private final String[] tableColumns = UrlyBirdApplicationGuiConstants.COLUMN_NAMES;
     private final List<HotelRoom> hotelRoomList;
 
     public HotelRoomTableModel(ArrayList<HotelRoom> hotelRooms) {
@@ -62,8 +62,8 @@ class HotelRoomTableModel extends AbstractTableModel {
             case 0 : return hotelRoom.getName();
             case 1 : return hotelRoom.getLocation();
             case 2 : return hotelRoom.getRoomSize();
-            case 3 : return hotelRoom.isSmoking() ? URLyBirdApplicationGuiConstants.SMOKING_ALLOWED : URLyBirdApplicationGuiConstants.SMOKING_NOT_ALLOWED;
-            case 4 : return URLyBirdApplicationConstants.CURRENCY_PREFIX + hotelRoom.getRate();
+            case 3 : return hotelRoom.isSmoking() ? UrlyBirdApplicationGuiConstants.SMOKING_ALLOWED : UrlyBirdApplicationGuiConstants.SMOKING_NOT_ALLOWED;
+            case 4 : return UrlyBirdApplicationConstants.CURRENCY_PREFIX + hotelRoom.getRate();
             case 5 : return hotelRoom.getDate();
             case 6 : return hotelRoom.getOwnerName();
             default: return null;

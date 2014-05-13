@@ -1,7 +1,7 @@
 package suncertify.db;
 
-import suncertify.utilities.URLyBirdApplicationConstants;
-import suncertify.utilities.URLyBirdApplicationObjectsFactory;
+import suncertify.utilities.UrlyBirdApplicationConstants;
+import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -19,8 +19,8 @@ class DatabaseAccessCrudOperations {
      * Creates a new record in the database (possibly reusing a deleted entry). Inserts the given data, and returns the
      * record number of the new record.
      *
-     * @param data
-     * @return
+     * @param data The string array representation of a database record.
+     * @return The record number of the position that the record was created.
      * @throws DuplicateKeyException
      */
     public static synchronized long createRecord(String[] data) throws DuplicateKeyException {
@@ -36,7 +36,7 @@ class DatabaseAccessCrudOperations {
         } catch (RecordNotFoundException ignored) {}
 
         try {
-            RandomAccessFile databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+            RandomAccessFile databaseRandomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
             databaseRandomAccessFile.seek(distanceToSeek(positionToInsertRecord, databaseFileUtils));
             databaseRandomAccessFile.writeByte(DatabaseFileSchema.VALID_RECORD_FLAG);
             databaseRandomAccessFile.write(stringArrayAsByteArray(data));
@@ -74,7 +74,7 @@ class DatabaseAccessCrudOperations {
         String[] rowContentStrings = new String[databaseFileUtils.getNumberOfFields()];
 
         try {
-            RandomAccessFile randomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+            RandomAccessFile randomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
             randomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
 
             rowContentStrings = readStringArrayFromDatabaseFile(databaseFileUtils, randomAccessFile);
@@ -117,7 +117,7 @@ class DatabaseAccessCrudOperations {
             DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
             databaseFileUtils.updateNumberOfRecordsInDatabase();
 
-            RandomAccessFile databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+            RandomAccessFile databaseRandomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
 
             databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
             readStringArrayFromDatabaseFile(databaseFileUtils, databaseRandomAccessFile);
@@ -163,7 +163,7 @@ class DatabaseAccessCrudOperations {
             databaseFileUtils.updateNumberOfRecordsInDatabase();
             isValidRecordNumber(recNo);
 
-            RandomAccessFile databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+            RandomAccessFile databaseRandomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
             databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
             readStringArrayFromDatabaseFile(databaseFileUtils, databaseRandomAccessFile);
             databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
@@ -199,7 +199,7 @@ class DatabaseAccessCrudOperations {
         try {
             byte[] recordBytes = new byte[DatabaseFileSchema.RECORD_LENGTH];
 
-            RandomAccessFile randomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+            RandomAccessFile randomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
             randomAccessFile.seek(distanceToSeek(recordNumber, databaseFileUtils));
 
             if (randomAccessFile.read(recordBytes) < DatabaseFileSchema.RECORD_LENGTH) {
@@ -279,7 +279,7 @@ class DatabaseAccessCrudOperations {
             throw new RecordNotFoundException("Record already deleted.");
         }
 
-        String record = new String(recordBytes, URLyBirdApplicationConstants.FILE_ENCODING);
+        String record = new String(recordBytes, UrlyBirdApplicationConstants.FILE_ENCODING);
         String[] strings = new String[databaseFileUtils.getNumberOfFields()];
         int flagIndentation = 1;
 

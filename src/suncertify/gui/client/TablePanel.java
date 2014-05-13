@@ -1,7 +1,7 @@
 package suncertify.gui.client;
 
 import suncertify.controller.DatabaseAccessDao;
-import suncertify.utilities.URLyBirdApplicationGuiConstants;
+import suncertify.utilities.UrlyBirdApplicationGuiConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +24,7 @@ class TablePanel extends JPanel {
         tablePanel.setName("Records");
         hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
         hotelRoomTable = new JTable(hotelRoomTableModel);
-        hotelRoomTable.setPreferredScrollableViewportSize(URLyBirdApplicationGuiConstants.CLIENT_GUI_JTABLE_DIMENSION);
+        hotelRoomTable.setPreferredScrollableViewportSize(UrlyBirdApplicationGuiConstants.CLIENT_GUI_JTABLE_DIMENSION);
         tablePanel.add(new JScrollPane(hotelRoomTable));
     }
 

@@ -6,7 +6,7 @@ import java.awt.*;
  * @author Luke GJ Potter
  *         Date: 26/04/2014
  */
-public class URLyBirdApplicationGuiConstants {
+public class UrlyBirdApplicationGuiConstants {
 
     // ---------- String Constants ----------
     // The title of the application.

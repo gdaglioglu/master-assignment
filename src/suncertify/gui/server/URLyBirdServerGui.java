@@ -1,9 +1,9 @@
 package suncertify.gui.server;
 
 import suncertify.rmi.RmiServerManager;
-import suncertify.utilities.URLyBirdApplicationConstants;
-import suncertify.utilities.URLyBirdApplicationGuiConstants;
-import suncertify.utilities.URLyBirdApplicationObjectsFactory;
+import suncertify.utilities.UrlyBirdApplicationConstants;
+import suncertify.utilities.UrlyBirdApplicationGuiConstants;
+import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,12 +26,12 @@ public class UrlyBirdServerGui extends JFrame {
 
     public UrlyBirdServerGui() {
 
-        setTitle(URLyBirdApplicationGuiConstants.SERVER_GUI_APPLICATION_TITLE);
-        setSize(URLyBirdApplicationGuiConstants.SERVER_GUI_DIMENSION);
+        setTitle(UrlyBirdApplicationGuiConstants.SERVER_GUI_APPLICATION_TITLE);
+        setSize(UrlyBirdApplicationGuiConstants.SERVER_GUI_DIMENSION);
 
         setResizable(false);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         serverConfigurationPanel = new ServerConfigurationPanel();
 
@@ -42,14 +42,14 @@ public class UrlyBirdServerGui extends JFrame {
     private JPanel getServerControlPanel() {
 
         JPanel serverControlPanel = new JPanel(new FlowLayout());
-        startServerButton = new JButton(URLyBirdApplicationGuiConstants.START_SERVER_BUTTON);
+        startServerButton = new JButton(UrlyBirdApplicationGuiConstants.START_SERVER_BUTTON);
 
         startServerButton.setEnabled(true);
         startServerButton.addActionListener(new StartServer());
 
         serverControlPanel.add(startServerButton);
 
-        serverStatusLabel = new JLabel(URLyBirdApplicationGuiConstants.SERVER_STOPPED);
+        serverStatusLabel = new JLabel(UrlyBirdApplicationGuiConstants.SERVER_STOPPED);
         serverControlPanel.add(serverStatusLabel);
 
         return serverControlPanel;
@@ -80,7 +80,7 @@ public class UrlyBirdServerGui extends JFrame {
             if (RmiServerManager.isRmiServerRunning()) {
                 serverConfigurationPanel.disableAllFields();
                 startServerButton.setEnabled(false);
-                serverStatusLabel.setText(URLyBirdApplicationGuiConstants.SERVER_STARTED);
+                serverStatusLabel.setText(UrlyBirdApplicationGuiConstants.SERVER_STARTED);
             }
         }
 
@@ -90,35 +90,35 @@ public class UrlyBirdServerGui extends JFrame {
 
         private void updatePropertiesToReflectServerGui() throws IOException {
 
-            Properties properties = URLyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties();
+            Properties properties = UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties();
 
             if (hasDatabasePathPropertyChanged(properties)) {
 
                 properties.setProperty(
-                        URLyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE,
+                        UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE,
                         serverConfigurationPanel.getPathToDatabaseFileFromTextField());
 
                 properties.setProperty(
-                        URLyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_HOSTNAME,
+                        UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_HOSTNAME,
                         serverConfigurationPanel.getRmiHostnameFromTextField());
 
                 properties.setProperty(
-                        URLyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER,
+                        UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER,
                         serverConfigurationPanel.getRmiPortNumberFromTextField());
 
-                properties.store(new FileOutputStream(URLyBirdApplicationConstants.PROPERTY_FILE_NAME), null);
+                properties.store(new FileOutputStream(UrlyBirdApplicationConstants.PROPERTY_FILE_NAME), null);
             }
         }
 
         private boolean hasDatabasePathPropertyChanged(Properties properties) {
 
-            return !(properties.getProperty(URLyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE)
+            return !(properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE)
                     .equals(serverConfigurationPanel.getPathToDatabaseFileFromTextField())
 
-                    && properties.getProperty(URLyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_HOSTNAME)
+                    && properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_HOSTNAME)
                     .equals(serverConfigurationPanel.getRmiHostnameFromTextField())
 
-                    && properties.getProperty(URLyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER)
+                    && properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER)
                     .equals(serverConfigurationPanel.getRmiPortNumberFromTextField()));
         }
     }

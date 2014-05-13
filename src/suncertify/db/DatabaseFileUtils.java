@@ -1,7 +1,7 @@
 package suncertify.db;
 
-import suncertify.utilities.URLyBirdApplicationConstants;
-import suncertify.utilities.URLyBirdApplicationObjectsFactory;
+import suncertify.utilities.UrlyBirdApplicationConstants;
+import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -20,7 +20,7 @@ public class DatabaseFileUtils {
 
     private DatabaseFileUtils() {
 
-        databaseRandomAccessFile = URLyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+        databaseRandomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
 
         readHeaderValues();
         readColumnsHeaders();
@@ -140,7 +140,7 @@ public class DatabaseFileUtils {
 
                 byte[] fieldNameBytes = new byte[nameLength];
                 databaseRandomAccessFile.read(fieldNameBytes);
-                DatabaseFileSchema.databaseFieldNames.add(i, new String(fieldNameBytes, URLyBirdApplicationConstants.FILE_ENCODING));
+                DatabaseFileSchema.databaseFieldNames.add(i, new String(fieldNameBytes, UrlyBirdApplicationConstants.FILE_ENCODING));
 
                 byte[] fieldLength = new byte[DatabaseFileSchema.BYTES_FIELD_LENGTH];
                 databaseRandomAccessFile.read(fieldLength);

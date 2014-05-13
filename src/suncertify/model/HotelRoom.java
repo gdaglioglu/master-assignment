@@ -1,7 +1,7 @@
 package suncertify.model;
 
 
-import suncertify.utilities.URLyBirdApplicationConstants;
+import suncertify.utilities.UrlyBirdApplicationConstants;
 
 /**
  * @author Luke GJ Potter
@@ -18,17 +18,6 @@ public class HotelRoom {
     private String ownerName;
 
     // ---------- Constructors ----------
-    public HotelRoom() {
-
-        setName("");
-        setLocation("");
-        setRoomSize(0);
-        setSmoking(false);
-        setRate(0);
-        setDate("");
-        setOwnerName("");
-    }
-
     public HotelRoom(String name, String location, int roomSize, boolean isSmoking, double rate, String date) {
 
         setName(name);
@@ -38,17 +27,6 @@ public class HotelRoom {
         setRate(rate);
         setDate(date);
         setOwnerName("");
-    }
-
-    public HotelRoom(String name, String location, int roomSize, boolean isSmoking, double rate, String date, String ownerName) {
-
-        setName(name);
-        setLocation(location);
-        setRoomSize(roomSize);
-        setSmoking(isSmoking);
-        setRate(rate);
-        setDate(date);
-        setOwnerName(ownerName);
     }
 
     /**
@@ -71,7 +49,7 @@ public class HotelRoom {
         setName(strings[0].trim());
         setLocation(strings[1].trim());
         setRoomSize(Integer.parseInt(strings[2].trim()));
-        setSmoking(strings[3].equalsIgnoreCase(URLyBirdApplicationConstants.SMOKING_ALLOWED));
+        setSmoking(strings[3].equalsIgnoreCase(UrlyBirdApplicationConstants.SMOKING_ALLOWED));
         setRate(extractDoubleFromString(strings[4].trim()));
         setDate(strings[5].trim());
         setOwnerName(strings[6].trim());
@@ -140,8 +118,7 @@ public class HotelRoom {
      *
      * @return A string representation of the HotelRoom object.
      */
-    @Override
-    public String toString() {
+    @Override public String toString() {
 
         return name + ", " + location;
     }
@@ -152,27 +129,27 @@ public class HotelRoom {
      */
     public String[] toStringArray() {
 
-        String isSmokingString = URLyBirdApplicationConstants.SMOKING_NOT_ALLOWED;
-        if (isSmoking()) isSmokingString = URLyBirdApplicationConstants.SMOKING_ALLOWED;
+        String isSmokingString = UrlyBirdApplicationConstants.SMOKING_NOT_ALLOWED;
+        if (isSmoking()) isSmokingString = UrlyBirdApplicationConstants.SMOKING_ALLOWED;
 
         return new String[] {
                 getName(),
                 getLocation(),
                 getRoomSize() + "",
                 isSmokingString,
-                URLyBirdApplicationConstants.CURRENCY_PREFIX + getRate(),
+                UrlyBirdApplicationConstants.CURRENCY_PREFIX + getRate(),
                 getDate(),
                 getOwnerName()
         };
     }
 
     /**
+     * This method is used for comparing against other objects.
      *
-     * @param object
+     * @param object Object to compare against.
      * @return True, if the objects are the same. False, if they are not the same.
      */
-    @Override
-    public boolean equals(Object object) {
+    @Override public boolean equals(Object object) {
 
         if (! (object instanceof HotelRoom)) {
             return false;
@@ -189,11 +166,11 @@ public class HotelRoom {
     }
 
     /**
+     * Used for making a comparison against other objects.
      *
      * @return A hash value of the HotelRoom object.
      */
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
 
         return (name.hashCode() + location.hashCode() * (1 + (int)rate + roomSize));
     }

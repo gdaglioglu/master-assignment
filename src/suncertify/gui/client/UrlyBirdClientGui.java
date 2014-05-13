@@ -3,8 +3,8 @@ package suncertify.gui.client;
 import suncertify.controller.DatabaseAccessDao;
 import suncertify.controller.DatabaseAccessDaoLocal;
 import suncertify.controller.DatabaseAccessDaoRemote;
-import suncertify.utilities.URLyBirdApplicationGuiConstants;
-import suncertify.utilities.URLyBirdApplicationMode;
+import suncertify.utilities.UrlyBirdApplicationGuiConstants;
+import suncertify.utilities.UrlyBirdApplicationMode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ import java.rmi.RemoteException;
  */
 public class UrlyBirdClientGui extends JFrame {
 
-    public UrlyBirdClientGui(URLyBirdApplicationMode urlyBirdApplicationMode) {
+    public UrlyBirdClientGui(UrlyBirdApplicationMode urlyBirdApplicationMode) {
 
         // ToDo: Check application configuration is correct.
 
@@ -31,12 +31,12 @@ public class UrlyBirdClientGui extends JFrame {
 
         DatabaseAccessDao databaseAccessDao = retrieveCorrectDao(urlyBirdApplicationMode);
 
-        setTitle(URLyBirdApplicationGuiConstants.CLIENT_GUI_APPLICATION_TITLE + " - " + csrNumber);
-        setSize(URLyBirdApplicationGuiConstants.CLIENT_GUI_DIMENSION);
+        setTitle(UrlyBirdApplicationGuiConstants.CLIENT_GUI_APPLICATION_TITLE + " - " + csrNumber);
+        setSize(UrlyBirdApplicationGuiConstants.CLIENT_GUI_DIMENSION);
 
         setResizable(false);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         add(new SearchPanel(databaseAccessDao).getSearchPanel(), BorderLayout.NORTH);
         add(new TablePanel(databaseAccessDao).getTablePanel(), BorderLayout.CENTER);
@@ -84,15 +84,15 @@ public class UrlyBirdClientGui extends JFrame {
      *         a {@code DatabaseAccessDaoLocal} instance, if the application is
      *         set to {@code STANDALONE_CLIENT}.
      */
-    private DatabaseAccessDao retrieveCorrectDao(URLyBirdApplicationMode urlyBirdApplicationMode) {
+    private DatabaseAccessDao retrieveCorrectDao(UrlyBirdApplicationMode urlyBirdApplicationMode) {
 
-        if (urlyBirdApplicationMode == URLyBirdApplicationMode.NETWORKED_CLIENT) {
+        if (urlyBirdApplicationMode == UrlyBirdApplicationMode.NETWORKED_CLIENT) {
             try {
                 return new DatabaseAccessDaoRemote();
             } catch (RemoteException ignored) {
                 return null;
             }
-        } else if (urlyBirdApplicationMode == URLyBirdApplicationMode.STANDALONE_CLIENT) {
+        } else if (urlyBirdApplicationMode == UrlyBirdApplicationMode.STANDALONE_CLIENT) {
             return new DatabaseAccessDaoLocal();
         } else {
             return null;

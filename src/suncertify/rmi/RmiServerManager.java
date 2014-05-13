@@ -1,7 +1,7 @@
 package suncertify.rmi;
 
-import suncertify.utilities.URLyBirdApplicationConstants;
-import suncertify.utilities.URLyBirdApplicationObjectsFactory;
+import suncertify.utilities.UrlyBirdApplicationConstants;
+import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -23,7 +23,7 @@ public class RmiServerManager {
 
         try {
             DatabaseAccessRemoteImpl databaseAccessRemote = new DatabaseAccessRemoteImpl();
-            LocateRegistry.createRegistry(Integer.parseInt(URLyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(URLyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER)));
+            LocateRegistry.createRegistry(Integer.parseInt(UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER)));
             Naming.rebind(RmiUtils.formRmiUrl(), databaseAccessRemote);
             rmiServerStatus = RmiServerStatus.RUNNING;
 

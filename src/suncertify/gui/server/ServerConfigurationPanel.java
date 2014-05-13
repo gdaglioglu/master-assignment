@@ -1,8 +1,8 @@
 package suncertify.gui.server;
 
-import suncertify.utilities.URLyBirdApplicationConstants;
-import suncertify.utilities.URLyBirdApplicationGuiConstants;
-import suncertify.utilities.URLyBirdApplicationObjectsFactory;
+import suncertify.utilities.UrlyBirdApplicationConstants;
+import suncertify.utilities.UrlyBirdApplicationGuiConstants;
+import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,7 +50,7 @@ class ServerConfigurationPanel {
         String dbFilePath = getPathToDatabaseFileFromTextField();
         String rmiHostname = getRmiHostnameFromTextField();
         String rmiPortNumber = getRmiPortNumberFromTextField();
-        String emptyString = URLyBirdApplicationConstants.EMPTY_STRING;
+        String emptyString = UrlyBirdApplicationConstants.EMPTY_STRING;
 
         boolean emptyFields = dbFilePath.equals(emptyString) || rmiHostname.equals(emptyString) || rmiPortNumber.equals(emptyString);
 
@@ -97,19 +97,19 @@ class ServerConfigurationPanel {
 
     private void initialiseServerConfigurationPanelLabelsAndTextFields() {
 
-        pathToDatabaseFileLabel = new JLabel(URLyBirdApplicationGuiConstants.PATH_TO_DATABASE_FILE, JLabel.TRAILING);
-        pathToDatabaseFileTextField = new JTextField(URLyBirdApplicationGuiConstants.SERVER_CONFIG_TEXT_FIELD_LENGTH);
-        pathToDatabaseFileTextField.setText(URLyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(URLyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
+        pathToDatabaseFileLabel = new JLabel(UrlyBirdApplicationGuiConstants.PATH_TO_DATABASE_FILE, JLabel.TRAILING);
+        pathToDatabaseFileTextField = new JTextField(UrlyBirdApplicationGuiConstants.SERVER_CONFIG_TEXT_FIELD_LENGTH);
+        pathToDatabaseFileTextField.setText(UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
         pathToDatabaseFileLabel.setLabelFor(pathToDatabaseFileTextField);
 
-        rmiHostnameLabel = new JLabel(URLyBirdApplicationGuiConstants.RMI_HOSTNAME, JLabel.TRAILING);
-        rmiHostnameTextField = new JTextField(URLyBirdApplicationGuiConstants.SERVER_CONFIG_TEXT_FIELD_LENGTH);
-        rmiHostnameTextField.setText(URLyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(URLyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_HOSTNAME));
+        rmiHostnameLabel = new JLabel(UrlyBirdApplicationGuiConstants.RMI_HOSTNAME, JLabel.TRAILING);
+        rmiHostnameTextField = new JTextField(UrlyBirdApplicationGuiConstants.SERVER_CONFIG_TEXT_FIELD_LENGTH);
+        rmiHostnameTextField.setText(UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_HOSTNAME));
         rmiHostnameLabel.setLabelFor(rmiHostnameTextField);
 
-        rmiPortNumberLabel = new JLabel(URLyBirdApplicationGuiConstants.RMI_PORT_NUMBER, JLabel.TRAILING);
-        rmiPortNumberTextField = new JTextField(URLyBirdApplicationGuiConstants.SERVER_CONFIG_TEXT_FIELD_LENGTH);
-        rmiPortNumberTextField.setText(URLyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(URLyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER));
+        rmiPortNumberLabel = new JLabel(UrlyBirdApplicationGuiConstants.RMI_PORT_NUMBER, JLabel.TRAILING);
+        rmiPortNumberTextField = new JTextField(UrlyBirdApplicationGuiConstants.SERVER_CONFIG_TEXT_FIELD_LENGTH);
+        rmiPortNumberTextField.setText(UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER));
         rmiPortNumberLabel.setLabelFor(rmiPortNumberTextField);
     }
 
