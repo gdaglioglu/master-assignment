@@ -42,4 +42,6 @@ public class UrlyBirdApplicationConstants {
 
     // RMI Application Path
     public static final String RMI_APPLICATION_PATH = "/URLyBird";
+    public static final String CLI_ARG_STANDALONE_MODE = "alone";
+    public static final String CLI_ARG_SERVER_MODE = "server";
 }

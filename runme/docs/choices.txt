@@ -15,9 +15,33 @@ Table of Contents:
 
 1. Code style
 
+I've used many one-liner statements in this project.
+
+Instead of:
+    public int sumNumbers(int x, int y) {
+        int sum = x + y;
+        return sum;
+    }
+
+I've used:
+    public int sumNumbers(int x, int y) {
+        return x + y;
+    }
+
+I see my responsibility as a mentor of junior programmers to demonstrate how to
+write clear, concise code and eliminate redundant lines of code.
+
 --------------------------------------------------------------------------------
 
 2. Networking decisions
+
+I decided to use RMI in this implementation of URLyBird. Rather than use a RMI
+Factory Pattern, I used the suncertify.controller.DatabaseAccessDaoRemote object
+to handle the communication across the network. Each Networked Client GUI gets a
+reference to a DatabaseAccessDaoRemote object, which it uses to make the remote
+calls to the database, via the server.
+
+The server needs to be running for the clients to connect to it.
 
 --------------------------------------------------------------------------------
 
@@ -57,6 +81,15 @@ return the same result for "Fred" and "fred". I catered for these users.
 
 I decided against implementing price search logic, as that's not a "must"
 feature.
+
+
+Future GUI Enhancements:
+------------------------
+I build the GUIs, client and server, out of panels where it was possible. This
+will allow the GUIs to be extended in future. Create the newly extended JPanel
+class and add it to the UrlyBirdClientGui, or UrlyBirdServerGui, class.
+
+Should functionality to create, edit and delete records be added to the Client GUI in future,
 
 --------------------------------------------------------------------------------
 

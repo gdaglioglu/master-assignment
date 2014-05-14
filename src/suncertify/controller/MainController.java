@@ -2,6 +2,7 @@ package suncertify.controller;
 
 import suncertify.gui.client.UrlyBirdClientGui;
 import suncertify.gui.server.UrlyBirdServerGui;
+import suncertify.utilities.UrlyBirdApplicationConstants;
 import suncertify.utilities.UrlyBirdApplicationMode;
 
 /**
@@ -23,11 +24,11 @@ public class MainController {
 
             new UrlyBirdClientGui(UrlyBirdApplicationMode.NETWORKED_CLIENT).setVisible(true);
 
-        } else if (args[0].equalsIgnoreCase("standalone")) {
+        } else if (args[0].equalsIgnoreCase(UrlyBirdApplicationConstants.CLI_ARG_STANDALONE_MODE)) {
 
             new UrlyBirdClientGui(UrlyBirdApplicationMode.STANDALONE_CLIENT).setVisible(true);
 
-        } else if (args[0].equalsIgnoreCase("server")) {
+        } else if (args[0].equalsIgnoreCase(UrlyBirdApplicationConstants.CLI_ARG_SERVER_MODE)) {
 
             new UrlyBirdServerGui().setVisible(true);
 
@@ -36,8 +37,8 @@ public class MainController {
             System.err.println("    [error]    Incorrect Usage.\n"
                     + "Usage options are:\n\n"
                     + " 1. java -jar URLyBird.jar\n"
-                    + " 2. java -jar URLyBird.jar standalone\n"
-                    + " 3. java -jar URLyBird.jar server\n"
+                    + " 2. java -jar URLyBird.jar " + UrlyBirdApplicationConstants.CLI_ARG_STANDALONE_MODE + "\n"
+                    + " 3. java -jar URLyBird.jar " + UrlyBirdApplicationConstants.CLI_ARG_SERVER_MODE + "\n"
                     + "\n\nRefer to the userguide.txt document for more information.");
             System.exit(1);
         }
