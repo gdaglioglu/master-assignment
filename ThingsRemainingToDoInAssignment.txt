@@ -4,12 +4,12 @@ Determine duration of stay when booking.
 Free up rooms after their "booked until" date has passed.
 Implement DuplicateKeyException.
 JavaDoc comments of every field and method.
-Standalone Client GUI accepting the database file.
 Networked Client GUI accepting RMI Host and RMI Port.
 Implement the Observer Pattern.
 Fix bugs listed in repository.
 Implement Java7 MultiCatch.
-Put the suncertify.properties into the "current working directory".
+Done: Standalone Client GUI accepting the database file.
+Done: Put the suncertify.properties into the "current working directory".
 
 
 

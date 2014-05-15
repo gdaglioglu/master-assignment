@@ -1,5 +1,6 @@
 package suncertify.gui.server;
 
+import suncertify.gui.common.CommonGuiUtils;
 import suncertify.rmi.RmiServerManager;
 import suncertify.utilities.UrlyBirdApplicationConstants;
 import suncertify.utilities.UrlyBirdApplicationGuiConstants;
@@ -61,17 +62,17 @@ public class UrlyBirdServerGui extends JFrame {
 
 
             if (!serverConfigurationPanel.areTextFieldValuesValid()) {
-                showErrorMessageDialog("Please enter valid values in the Text Fields.");
+                CommonGuiUtils.showErrorMessageDialog("Please enter valid values in the Text Fields.");
                 return;
             }
 
             try {
                 updatePropertiesToReflectServerGui();
             } catch (FileNotFoundException ignored) {
-                showErrorMessageDialog("The Application's Properties File does not exist.");
+                CommonGuiUtils.showErrorMessageDialog("The Application's Properties File does not exist.");
                 return;
             } catch (IOException ignored) {
-                showErrorMessageDialog("There was an error updating the Application's Properties File.");
+                CommonGuiUtils.showErrorMessageDialog("There was an error updating the Application's Properties File.");
                 return;
             }
 
@@ -82,10 +83,6 @@ public class UrlyBirdServerGui extends JFrame {
                 startServerButton.setEnabled(false);
                 serverStatusLabel.setText(UrlyBirdApplicationGuiConstants.SERVER_STARTED);
             }
-        }
-
-        private void showErrorMessageDialog(String message) {
-            JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         private void updatePropertiesToReflectServerGui() throws IOException {

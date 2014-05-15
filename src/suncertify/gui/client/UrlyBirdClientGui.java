@@ -1,14 +1,11 @@
 package suncertify.gui.client;
 
 import suncertify.controller.DatabaseAccessDao;
-import suncertify.controller.DatabaseAccessDaoLocal;
-import suncertify.controller.DatabaseAccessDaoRemote;
 import suncertify.utilities.UrlyBirdApplicationGuiConstants;
 import suncertify.utilities.UrlyBirdApplicationMode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.rmi.RemoteException;
 
 /**
  * This is the Client GUI for the URLyBird Application.
@@ -20,16 +17,14 @@ public class UrlyBirdClientGui extends JFrame {
 
     public UrlyBirdClientGui(UrlyBirdApplicationMode urlyBirdApplicationMode) {
 
-        // ToDo: Check application configuration is correct.
+        UrlyBirdClientGuiUtils clientUtils = UrlyBirdClientGuiUtils.getInstance();
+        clientUtils.ensurePropertiesAreValid(urlyBirdApplicationMode);
+        DatabaseAccessDao databaseAccessDao = clientUtils.retrieveCorrectDao(urlyBirdApplicationMode);
 
         String csrNumber = null;
         try {
-            csrNumber = receiveCsrNumber();
-        } catch (Exception ignored) {
-            System.exit(1);
-        }
-
-        DatabaseAccessDao databaseAccessDao = retrieveCorrectDao(urlyBirdApplicationMode);
+            csrNumber = clientUtils.receiveCsrNumber();
+        } catch (NullPointerException ignored) { System.exit(1); }
 
         setTitle(UrlyBirdApplicationGuiConstants.CLIENT_GUI_APPLICATION_TITLE + " - " + csrNumber);
         setSize(UrlyBirdApplicationGuiConstants.CLIENT_GUI_DIMENSION);
@@ -41,61 +36,5 @@ public class UrlyBirdClientGui extends JFrame {
         add(new SearchPanel(databaseAccessDao).getSearchPanel(), BorderLayout.NORTH);
         add(new TablePanel(databaseAccessDao).getTablePanel(), BorderLayout.CENTER);
         add(new BookingPanel(databaseAccessDao, csrNumber).getBookingPanel(), BorderLayout.SOUTH);
-    }
-
-    private String receiveCsrNumber() {
-
-        String csrNumber = null;
-        boolean correctCsrNumberEntered = false;
-
-        while (!correctCsrNumberEntered) {
-
-            csrNumber =  JOptionPane.showInputDialog(null, "Login with your CSR number (8 digits)", "Login", JOptionPane.INFORMATION_MESSAGE).trim();
-
-            if (csrNumber.length() != 8) {
-                JOptionPane.showMessageDialog(null, "CSR length must be 8 digits, you have entered " + csrNumber.length() + " digits.");
-            } else if (!isAllDigits(csrNumber)) {
-                JOptionPane.showMessageDialog(null, "CSR length must be all digits");
-            } else {
-                correctCsrNumberEntered = true;
-            }
-        }
-
-        return csrNumber;
-    }
-
-    private boolean isAllDigits(String csrNumber) {
-
-        try {
-            Integer.parseInt(csrNumber);
-            return true;
-        } catch (NumberFormatException ignored) {
-            return false;
-        }
-    }
-
-    /**
-     * Returns a local or remote DatabaseAccessDao instance, depending on the
-     * Application Mode.
-     *
-     * @param urlyBirdApplicationMode The mode of the application.
-     * @return a {@code DatabaseAccessDaoRemote} instance, if the application is
-     *         set to {@code NETWORKED_CLIENT}.
-     *         a {@code DatabaseAccessDaoLocal} instance, if the application is
-     *         set to {@code STANDALONE_CLIENT}.
-     */
-    private DatabaseAccessDao retrieveCorrectDao(UrlyBirdApplicationMode urlyBirdApplicationMode) {
-
-        if (urlyBirdApplicationMode == UrlyBirdApplicationMode.NETWORKED_CLIENT) {
-            try {
-                return new DatabaseAccessDaoRemote();
-            } catch (RemoteException ignored) {
-                return null;
-            }
-        } else if (urlyBirdApplicationMode == UrlyBirdApplicationMode.STANDALONE_CLIENT) {
-            return new DatabaseAccessDaoLocal();
-        } else {
-            return null;
-        }
     }
 }
