@@ -4,6 +4,7 @@ import suncertify.controller.DatabaseAccessDao;
 import suncertify.controller.DatabaseAccessDaoLocal;
 import suncertify.controller.DatabaseAccessDaoRemote;
 import suncertify.gui.common.CommonGuiUtils;
+import suncertify.rmi.RmiClientManager;
 import suncertify.utilities.UrlyBirdApplicationConstants;
 import suncertify.utilities.UrlyBirdApplicationMode;
 import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
@@ -50,7 +51,13 @@ public class UrlyBirdClientGuiUtils {
                 databaseFile = new File(properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
             }
         } else if (urlyBirdApplicationMode == UrlyBirdApplicationMode.NETWORKED_CLIENT) {
-            // ToDo: Check that the port and hostname are pingable in Networked mode.
+            if (RmiClientManager.connectToRemoteServerViaRmi() == null) {
+                CommonGuiUtils.showErrorMessageDialog("Could not connect to Server.\n\n" +
+                        "Troubleshooting Tips:\n" +
+                        "Is the server running?\n" +
+                        "Is the server URL correct?");
+                System.exit(1);
+            }
         }
     }
 

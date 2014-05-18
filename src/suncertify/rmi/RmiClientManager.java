@@ -2,6 +2,7 @@ package suncertify.rmi;
 
 
 import java.net.MalformedURLException;
+import java.rmi.ConnectException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -16,14 +17,10 @@ public class RmiClientManager {
 
         try {
             return (DatabaseAccessRemote) Naming.lookup(RmiUtils.formRmiUrl());
-
-        } catch (NotBoundException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        } catch (ConnectException ignored) {
+        } catch (NotBoundException ignored) {
+        } catch (MalformedURLException ignored) {
+        } catch (RemoteException ignored) {}
 
         return null;
     }
