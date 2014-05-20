@@ -64,9 +64,12 @@ class BookingPanel extends JPanel {
             } else {
                 try {
                     if (areStartDateAndEndDateOfBookingSet()) {
-                        databaseAccessDao.bookHotelRoom(recordRow, csrNumber, startDate, endDate, Thread.currentThread().getId());
+
+                        databaseAccessDao.bookHotelRoom(recordRow, csrNumber, endDate, Thread.currentThread().getId());
+
                         TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
                         TablePanel.refreshHotelRoomTableModel();
+
                         endDate = startDate = UrlyBirdApplicationConstants.EMPTY_STRING;
                     }
                 } catch(Exception e) {
@@ -79,11 +82,11 @@ class BookingPanel extends JPanel {
 
             String[] choices = {"Today", "Tomorrow"};
             startDate = (String) JOptionPane.showInputDialog(bookingPanel, "Choose booking start date.", "Booking Start Date", JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
-            System.out.println(startDate);
+
             if (startDate.equals(UrlyBirdApplicationConstants.EMPTY_STRING)) return false;
 
             while (! isValidEndDate()) {
-                endDate = JOptionPane.showInputDialog(bookingPanel, "Enter the date to end the booking " + UrlyBirdApplicationConstants.DATE_FORMAT, "Booking End Date");
+                endDate = JOptionPane.showInputDialog(bookingPanel, "Enter the date to end the booking (" + UrlyBirdApplicationConstants.DATE_FORMAT + ")");
             }
 
             return true;
@@ -95,7 +98,7 @@ class BookingPanel extends JPanel {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(UrlyBirdApplicationConstants.DATE_FORMAT);
                 simpleDateFormat.setLenient(false);
                 simpleDateFormat.parse(endDate);
-                System.out.println(endDate);
+
                 return true;
 
             } catch (ParseException ignored) { return false; }

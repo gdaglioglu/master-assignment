@@ -5,7 +5,10 @@ import suncertify.utilities.UrlyBirdApplicationConstants;
 import suncertify.utilities.UrlyBirdApplicationGuiConstants;
 
 import javax.swing.table.AbstractTableModel;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,7 +67,7 @@ class HotelRoomTableModel extends AbstractTableModel {
             case 2 : return hotelRoom.getRoomSize();
             case 3 : return hotelRoom.isSmoking() ? UrlyBirdApplicationGuiConstants.SMOKING_ALLOWED : UrlyBirdApplicationGuiConstants.SMOKING_NOT_ALLOWED;
             case 4 : return UrlyBirdApplicationConstants.CURRENCY_PREFIX + hotelRoom.getRate();
-            case 5 : return hotelRoom.getDate();
+            case 5 : return isAvailableOrBooked(hotelRoom.getDate());
             case 6 : return hotelRoom.getOwnerName();
             default: return null;
         }
@@ -79,5 +82,19 @@ class HotelRoomTableModel extends AbstractTableModel {
      */
     @Override public String getColumnName(int i) {
         return tableColumns[i];
+    }
+
+    private String isAvailableOrBooked(String date) {
+
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(UrlyBirdApplicationConstants.DATE_FORMAT);
+            simpleDateFormat.setLenient(false);
+            Date databaseDate = simpleDateFormat.parse(date);
+
+            if (new Date().after(databaseDate)) return "Available";
+
+        } catch (ParseException e) { e.printStackTrace(); }
+
+        return date;
     }
 }

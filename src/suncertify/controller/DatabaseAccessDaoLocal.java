@@ -154,12 +154,10 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
      *
      * @param recordNumber The record number of the desired {@code HotelRoom}.
      * @param customerName The CSR number of the booker.
-     * @param startDate
-     *@param endDate
+     * @param endDate The string representation of the date when the booking is due to expire.
      * @param lockCookie The key to lock the record with.  @return True, if the booking was successful.
-     *         False, if the booking was not successful.
-     */
-    @Override public boolean bookHotelRoom(long recordNumber, String customerName, String startDate, String endDate, long lockCookie) {
+     * */
+    @Override public boolean bookHotelRoom(long recordNumber, String customerName, String endDate, long lockCookie) {
 
         HotelRoom hotelRoomToBook;
 
@@ -168,6 +166,7 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
         }
 
         hotelRoomToBook.setOwnerName(customerName);
+        hotelRoomToBook.setDate(endDate);
 
         return updateHotelRoom(recordNumber, hotelRoomToBook, lockCookie);
     }

@@ -11,7 +11,8 @@ public class UrlyBirdApplicationConstants {
 
     /**
      * The Constant {@code PROPERTY_FILE_NAME}.
-     * Used as filename for the properties file, {@code suncertify.properties}, which was asked for in the assignment.
+     * Used as filename for the properties file, {@code suncertify.properties},
+     * which was asked for in the assignment.
      */
     public static String PROPERTY_FILE_NAME = System.getProperty("user.dir") + "/suncertify.properties";
 
@@ -39,6 +40,8 @@ public class UrlyBirdApplicationConstants {
     public static final String SMOKING_NOT_ALLOWED = "N";
     // The string representation of the empty string.
     public static final String EMPTY_STRING = "";
+    // The format of the date used throughout the application.
+    public static final String DATE_FORMAT = "yyyy/MM/dd";
 
     // RMI Application Path
     public static final String RMI_APPLICATION_PATH = "/URLyBird";

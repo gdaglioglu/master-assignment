@@ -1,6 +1,4 @@
 Code:
-Only allow booking within 48 hours.
-Determine duration of stay when booking.
 Free up rooms after their "booked until" date has passed.
 Implement DuplicateKeyException.
 Fix bugs listed in repository.
@@ -10,6 +8,8 @@ Implement the Observer Pattern.
 Done: Standalone Client GUI accepting the database file.
 Done: Put the suncertify.properties into the "current working directory".
 Done: Networked Client GUI fails gracefully when it cannot find the server.
+Done: Only allow booking within 48 hours.
+Done: Determine duration of stay when booking.
 
 
 
