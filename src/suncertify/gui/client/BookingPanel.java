@@ -1,12 +1,15 @@
 package suncertify.gui.client;
 
 import suncertify.controller.DatabaseAccessDao;
+import suncertify.utilities.UrlyBirdApplicationConstants;
 import suncertify.utilities.UrlyBirdApplicationGuiConstants;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * @author Luke GJ Potter
@@ -41,10 +44,13 @@ class BookingPanel extends JPanel {
 
         private final DatabaseAccessDao databaseAccessDao;
         private final String csrNumber;
+        private String startDate, endDate;
 
         public BookHotelRoom(DatabaseAccessDao databaseAccessDao, String csrNumber) {
             this.databaseAccessDao = databaseAccessDao;
             this.csrNumber = csrNumber;
+            startDate = UrlyBirdApplicationConstants.EMPTY_STRING;
+            endDate = UrlyBirdApplicationConstants.EMPTY_STRING;
         }
 
         @Override
@@ -57,13 +63,42 @@ class BookingPanel extends JPanel {
 
             } else {
                 try {
-                    databaseAccessDao.bookHotelRoom(recordRow, csrNumber, Thread.currentThread().getId());
-                    TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
-                    TablePanel.refreshHotelRoomTableModel();
+                    if (areStartDateAndEndDateOfBookingSet()) {
+                        databaseAccessDao.bookHotelRoom(recordRow, csrNumber, startDate, endDate, Thread.currentThread().getId());
+                        TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
+                        TablePanel.refreshHotelRoomTableModel();
+                        endDate = startDate = UrlyBirdApplicationConstants.EMPTY_STRING;
+                    }
                 } catch(Exception e) {
                     System.out.println("Reserve room problem found: " + e.getMessage());
                 }
             }
+        }
+
+        private boolean areStartDateAndEndDateOfBookingSet() {
+
+            String[] choices = {"Today", "Tomorrow"};
+            startDate = (String) JOptionPane.showInputDialog(bookingPanel, "Choose booking start date.", "Booking Start Date", JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
+            System.out.println(startDate);
+            if (startDate.equals(UrlyBirdApplicationConstants.EMPTY_STRING)) return false;
+
+            while (! isValidEndDate()) {
+                endDate = JOptionPane.showInputDialog(bookingPanel, "Enter the date to end the booking " + UrlyBirdApplicationConstants.DATE_FORMAT, "Booking End Date");
+            }
+
+            return true;
+        }
+
+        private boolean isValidEndDate() {
+
+            try {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(UrlyBirdApplicationConstants.DATE_FORMAT);
+                simpleDateFormat.setLenient(false);
+                simpleDateFormat.parse(endDate);
+                System.out.println(endDate);
+                return true;
+
+            } catch (ParseException ignored) { return false; }
         }
     }
 

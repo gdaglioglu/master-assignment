@@ -20,14 +20,8 @@ public class UrlyBirdApplicationGuiConstants {
     public static final String UPDATE_BUTTON = "Update";
     public static final String DELETE_BUTTON = "Delete";
     public static final String REFRESH_BUTTON = "Refresh Table";
-    public static final String[] COLUMN_NAMES = {
-            "Hotel Name",
-            "Location",
-            "Room Size",
-            "Smoking",
-            "Rate",
-            "Date Available",
-            "Customer ID"};
+    public static final String[] COLUMN_NAMES = { "Hotel Name", "Location",
+            "Room Size", "Smoking", "Rate", "Date Available", "Customer ID"};
     public static final String SMOKING_ALLOWED = "Allowed";
     public static final String SMOKING_NOT_ALLOWED = "Not Allowed";
     public static final String BOOKING_HINT = "Select a record in the table and press one of the following buttons to perform that action.";
@@ -37,6 +31,7 @@ public class UrlyBirdApplicationGuiConstants {
     public static final String START_SERVER_BUTTON = "Start Server";
     public static final String SERVER_STOPPED = "Server Stopped";
     public static final String SERVER_STARTED = "Server Running";
+    public static final String BOOKING_DATES_DIALOG_TITLE = "Booking Dates";
 
 
     // ---------- Dimension Constants ----------
@@ -46,4 +41,6 @@ public class UrlyBirdApplicationGuiConstants {
     public static final Dimension CLIENT_GUI_DIMENSION = new Dimension(900, 600);
     public static final Dimension CLIENT_GUI_JTABLE_DIMENSION = new Dimension(850, 500);
     public static final Dimension SERVER_GUI_DIMENSION = new Dimension(500, 200);
+    public static final Dimension BOOKING_DATES_DIALOG_DIMENSION = new Dimension(400, 200);
+    public static final int BOOKING_DATES_DIALOG_TEXT_FIELD_LENGTH = 5;
 }

@@ -73,11 +73,12 @@ public interface DatabaseAccessDao {
      *
      * @param recordNumber The record number of the desired {@code HotelRoom}.
      * @param customerName The CSR number of the booker.
-     * @param lockCookie The key to lock the record with.
-     * @return True, if the booking was successful.
+     * @param startDate
+     *@param endDate
+     * @param lockCookie The key to lock the record with.  @return True, if the booking was successful.
      *         False, if the booking was not successful.
      */
-    boolean bookHotelRoom(long recordNumber, String customerName, long lockCookie);
+    boolean bookHotelRoom(long recordNumber, String customerName, String startDate, String endDate, long lockCookie);
 
     /**
      * This method allows the cancellation of a {@code HotelRoom} booking.
