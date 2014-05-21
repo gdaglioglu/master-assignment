@@ -7,6 +7,11 @@ package suncertify.db;
 public class Data implements DBAccess {
 
     @Override
+    public long createRecord(String[] data) throws DuplicateKeyException {
+        return DatabaseAccessCrudOperations.createRecord(data);
+    }
+
+    @Override
     public String[] readRecord(long recNo) throws RecordNotFoundException {
         return DatabaseAccessCrudOperations.readRecord(recNo);
     }
@@ -24,11 +29,6 @@ public class Data implements DBAccess {
     @Override
     public long[] findByCriteria(String[] criteria) {
         return DatabaseAccessSearch.findByCriteria(criteria);
-    }
-
-    @Override
-    public long createRecord(String[] data) throws DuplicateKeyException {
-        return DatabaseAccessCrudOperations.createRecord(data);
     }
 
     @Override

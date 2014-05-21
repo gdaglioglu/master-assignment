@@ -1,6 +1,5 @@
 Code:
 Free up rooms after their "booked until" date has passed.
-Implement DuplicateKeyException.
 Fix bugs listed in repository.
 JavaDoc comments of every field and method.
 Implement Java7 MultiCatch.
@@ -10,6 +9,7 @@ Done: Put the suncertify.properties into the "current working directory".
 Done: Networked Client GUI fails gracefully when it cannot find the server.
 Done: Only allow booking within 48 hours.
 Done: Determine duration of stay when booking.
+Done: Implement DuplicateKeyException.
 
 
 
@@ -24,7 +24,7 @@ Testing:
 Run JavaRanch's locking tester.
 Run the server with multiple clients.
 Run the networked client and the standalone client at the same time.
-   * Locking messages when booking.
+   * Locking messages when booking, seems to be an RMI issue.
 
 
 

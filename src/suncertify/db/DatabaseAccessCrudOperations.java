@@ -25,9 +25,12 @@ class DatabaseAccessCrudOperations {
      */
     public static synchronized long createRecord(String[] data) throws DuplicateKeyException {
 
+        if (DatabaseAccessSearch.findByCriteria(new String[] {data[0], data[1]}).length != 0) {
+            throw new DuplicateKeyException("The record " + data.toString() + " already exists in the database.");
+        }
+
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
         databaseFileUtils.updateNumberOfRecordsInDatabase();
-        // TODO: Put in check for DuplicateRecordException, but for now just write to the end of the file.
         long positionToInsertRecord = databaseFileUtils.getNumberOfRecordsInDatabase();
         long lockCookie = 0;
 
