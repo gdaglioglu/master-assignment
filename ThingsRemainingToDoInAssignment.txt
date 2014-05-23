@@ -1,7 +1,8 @@
 Code:
-Free up rooms after their "booked until" date has passed.
-Fix bugs listed in repository.
 JavaDoc comments of every field and method.
+Free up rooms after their "booked until" date has passed.
+    * Note this in documentation.
+Fix bugs listed in repository.
 Implement Java7 MultiCatch.
 Implement the Observer Pattern.
 Done: Standalone Client GUI accepting the database file.

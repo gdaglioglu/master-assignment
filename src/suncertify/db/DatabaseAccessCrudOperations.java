@@ -9,24 +9,35 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /**
+ * This class handles the CRUD operations on the database file. With the methods
+ * in this class it it possible to create a record, retrieve a record, update a
+ * record and delete a record.
+ *
  * @author Luke GJ Potter
- * Date: 27/03/2014
+ * @since  27/03/2014
  */
 class DatabaseAccessCrudOperations {
 
     // ---------- Public Methods ----------
     /**
-     * Creates a new record in the database (possibly reusing a deleted entry). Inserts the given data, and returns the
-     * record number of the new record.
+     * Creates a new record in the database. Inserts the given data, and returns
+     * the record number of the new record.
      *
      * @param data The string array representation of a database record.
      * @return The record number of the position that the record was created.
-     * @throws DuplicateKeyException
+     * @throws DuplicateKeyException When trying to create a record that already
+     *                               exists in the database.
      */
     public static synchronized long createRecord(String[] data) throws DuplicateKeyException {
 
+        // Search on the name and location fields of the data object.
         if (DatabaseAccessSearch.findByCriteria(new String[] {data[0], data[1]}).length != 0) {
-            throw new DuplicateKeyException("The record " + data.toString() + " already exists in the database.");
+            String record = "";
+            for (String field : data) record += field + ", ";
+
+            throw new DuplicateKeyException("The record "
+                    + record.substring(0, record.length() - 2)
+                    + " already exists in the database.");
         }
 
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
@@ -61,11 +72,13 @@ class DatabaseAccessCrudOperations {
     }
 
     /**
-     * Reads a record from the file. Returns an array where each element is a record value.
+     * Reads a record from the file. Returns an array where each element is a
+     * record field.
      *
-     * @param recNo
-     * @return
-     * @throws RecordNotFoundException
+     * @param recNo The record number in the database to retrieve.
+     * @return A String array representation of the database record.
+     * @throws RecordNotFoundException When locating a record that does not
+     *                                 exist, or had been previously deleted.
      */
     public static String[] readRecord(long recNo) throws RecordNotFoundException {
 
@@ -97,14 +110,18 @@ class DatabaseAccessCrudOperations {
     }
 
     /**
-     * Modifies the fields of a record. The new value for field n appears in data[n]. Throws SecurityException if the
-     * record is locked with a cookie other than lockCookie.
+     * Modifies the fields of a record. The new value for field n appears in
+     * data[n]. Throws SecurityException if the record is locked with a cookie
+     * other than lockCookie.
      *
-     * @param recNo
-     * @param data
-     * @param lockCookie
-     * @throws RecordNotFoundException
-     * @throws SecurityException
+     * @param recNo The record number in the database to update.
+     * @param data The string array representation of a database record,
+     *             containing the updates.
+     * @param lockCookie The cookie that the row is locked with.
+     * @throws RecordNotFoundException When locating a record that does not
+     *                                 exist, or had been previously deleted.
+     * @throws SecurityException If the record is locked by a user other than
+     *                           the user trying to update the record.
      */
     public static void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException {
 
@@ -143,13 +160,17 @@ class DatabaseAccessCrudOperations {
     }
 
     /**
-     * Deletes a record, making the record number and associated disk storage available for reuse. Throws
-     * SecurityException if the record is locked with a cookie other than lockCookie.
+     * Deletes a record, making the record number and associated disk storage
+     * unavailable for reuse by setting an "invalid" flag for the record. Throws
+     * SecurityException if the record is locked with a cookie other than
+     * lockCookie.
      *
-     * @param recNo
-     * @param lockCookie
-     * @throws RecordNotFoundException
-     * @throws SecurityException
+     * @param recNo The record number in the database to delete.
+     * @param lockCookie The cookie that the row is locked with.
+     * @throws RecordNotFoundException When locating a record that does not
+     *                                 exist, or had been previously deleted.
+     * @throws SecurityException If the record is locked by a user other than
+     *                           the user trying to update the record.
      */
     public static void deleteRecord(long recNo, long lockCookie)  throws RecordNotFoundException, SecurityException {
 
@@ -188,10 +209,11 @@ class DatabaseAccessCrudOperations {
 
     /**
      * Checks the database file to see if the supplied {@code recordNumber}
-     * corresponds to an existing record.
+     * corresponds to an existing valid record.
      *
-     * @param recordNumber
-     * @throws RecordNotFoundException
+     * @param recordNumber The record number in the database to retrieve.
+     * @throws RecordNotFoundException When locating a record that does not
+     *                                 exist, or had been previously deleted.
      */
     public static void isValidRecordNumber(long recordNumber) throws RecordNotFoundException {
 

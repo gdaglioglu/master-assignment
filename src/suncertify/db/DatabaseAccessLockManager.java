@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * This singleton class handles the locking and unlocking of the database
+ * records.
+ *
  * @author Luke GJ Potter
- * Date: 27/03/2014
+ * @since  27/03/2014
  */
 class DatabaseAccessLockManager {
 

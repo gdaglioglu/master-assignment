@@ -7,8 +7,12 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /**
+ * The utilities for the database file. This is a singleton. It offers
+ * information on the database file, such as number of records in the database
+ * file.
+ *
  * @author Luke GJ Potter
- * Date: 31/03/2014
+ * @since 31/03/2014
  */
 public class DatabaseFileUtils {
 
@@ -29,6 +33,11 @@ public class DatabaseFileUtils {
     }
 
     // ---------- Getters and Setters ----------
+    /**
+     * Gets the value of the magic cookie at the beginning of the database file.
+     *
+     * @return The magic cookie value.
+     */
     public int getMagicCookie() {
         return magicCookie;
     }
@@ -37,6 +46,11 @@ public class DatabaseFileUtils {
         this.magicCookie = magicCookie;
     }
 
+    /**
+     * Gets the number of a bytes in a record.
+     *
+     * @return The number of bytes in a record.
+     */
     public int getRecordLength() {
         return recordLength;
     }
@@ -45,6 +59,11 @@ public class DatabaseFileUtils {
         this.recordLength = recordLength;
     }
 
+    /**
+     * Gets the number of fields in a record.
+     *
+     * @return The number of fields in a record.
+     */
     public int getNumberOfFields() {
         return numberOfFields;
     }
@@ -53,6 +72,12 @@ public class DatabaseFileUtils {
         this.numberOfFields = numberOfFields;
     }
 
+    /**
+     * Gets the number of records in the database, including deleted records.
+     *
+     * @return The number of records in the database, including the deleted
+     *         records.
+     */
     public long getNumberOfRecordsInDatabase() {
         return numberOfRecordsInDatabase;
     }
@@ -61,6 +86,13 @@ public class DatabaseFileUtils {
         this.numberOfRecordsInDatabase = numberOfRecordsInDatabase;
     }
 
+    /**
+     * Gets the offset, in terms of bytes, from where the database file's header
+     * information and where the records start.
+     *
+     * @return The number of bytes from where the file's header information
+     *         ends.
+     */
     public long getHeaderOffset() {
         return headerOffset;
     }
@@ -70,6 +102,11 @@ public class DatabaseFileUtils {
     }
 
     // ---------- Public Methods ----------
+    /**
+     * Get an instance of the {@code DatabaseFileUtils} class.
+     *
+     * @return A
+     */
     public static DatabaseFileUtils getInstance() {
 
         if (databaseFileUtils == null) {
@@ -79,6 +116,9 @@ public class DatabaseFileUtils {
         return databaseFileUtils;
     }
 
+    /**
+     * Get the current number of records in the database including deleted records.
+     */
     public synchronized void updateNumberOfRecordsInDatabase() {
 
         try {
@@ -89,6 +129,9 @@ public class DatabaseFileUtils {
         }
     }
 
+    /**
+     * A helper method to close the {@code databaseRandomAccessFile}.
+     */
     public void closeDatabaseRandomAccessFile() {
         try {
             databaseRandomAccessFile.close();
@@ -167,8 +210,10 @@ public class DatabaseFileUtils {
     /**
      * Converts the content of a given {@code byte} array to an {@code int}.
      *
-     * @param bytes The {@code byte} array that contains the number to be converted to an {@code int}.
-     * @return An {@code int} that represents the content of the {@code byte} array, provided as an argument.
+     * @param bytes The {@code byte} array that contains the number to be
+     *              converted to an {@code int}.
+     * @return An {@code int} that represents the content of the {@code byte}
+     *         array, provided as an argument.
      */
     private int getValueFromByteArray(final byte[] bytes) {
 

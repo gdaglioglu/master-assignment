@@ -3,8 +3,10 @@ package suncertify.db;
 import java.util.ArrayList;
 
 /**
+ * Holds the information on teh schema of the database file.
+ *
  * @author Luke GJ Potter
- * Date: 01/04/2014
+ * @since 01/04/2014
  */
 class DatabaseFileSchema {
 
@@ -67,26 +69,26 @@ class DatabaseFileSchema {
      */
     private static final int FIELD_LENGTH_OWNER = 8;
 
-    // The bytes that store the "magic cookie" value.
+    /** The bytes that store the "magic cookie" value. */
     public static final int BYTES_MAGIC_COOKIE = 4;
-    // The bytes that store the total overall length of each record.
+    /** The bytes that store the total overall length of each record. */
     public static final int BYTES_RECORD_LENGTH = 4;
-    // The bytes that store the number of fields in each record.
+    /** The bytes that store the number of fields in each record. */
     public static final int BYTES_NUMBER_OF_FIELDS = 2;
-    // The bytes that store the length of each field name.
+    /** The bytes that store the length of each field name. */
     public static final int BYTES_FIELD_NAME = 2;
-    // The bytes that store the fields length.
+    /** The bytes that store the fields length. */
     public static final int BYTES_FIELD_LENGTH = 2;
-    // The bytes that store the flag of each record.
+    /** The bytes that store the flag of each record. */
     public static final int BYTES_RECORD_FLAG = 1;
-    // The length of the record.
+    /** The length of the record. */
     public static final int RECORD_LENGTH = BYTES_RECORD_FLAG + FIELD_LENGTH_HOTEL + FIELD_LENGTH_CITY + FIELD_LENGTH_SIZE + FIELD_LENGTH_SMOKING + FIELD_LENGTH_RATE + FIELD_LENGTH_DATE + FIELD_LENGTH_OWNER;
-    // The value that identifies a record as being valid.
+    /** The value that identifies a record as being valid. */
     public static final byte VALID_RECORD_FLAG = 0x0;
-    // The value that identifies a record as being invalid, or deleted.
+    /** The value that identifies a record as being invalid, or deleted. */
     public static final byte INVALID_RECORD_FLAG = 0x1;
-    // A list to store the lengths of the fields in the Database.
+    /** A list to store the lengths of the fields in the Database. */
     public static final ArrayList<Integer> databaseFieldLengths = new ArrayList<Integer>();
-    // A list to store the names of the fields in the Database.
+    /** A list to store the names of the fields in the Database. */
     public static final ArrayList<String> databaseFieldNames = new ArrayList<String>();
 }

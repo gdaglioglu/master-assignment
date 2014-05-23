@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This class has the logic for handling the searching for records in the
+ * database file.
+ *
  * @author Luke GJ Potter
- * Date: 27/03/2014
+ * @since 27/03/2014
  */
 class DatabaseAccessSearch {
 
@@ -20,7 +23,7 @@ class DatabaseAccessSearch {
      *
      * For example, "Fred" matches "Fred" or "Freddy".
      *
-     * @param criteria
+     * @param criteria The search criteria to match against.
      * @return An array of record numbers that match the {@code criteria}.
      */
     public static long[] findByCriteria(String[] criteria) {
@@ -45,9 +48,11 @@ class DatabaseAccessSearch {
      * position that start with {@code criteria[positionInCriteria]} and returns
      * their record numbers as an array.
      *
-     * @param criteria
-     * @param positionInCriteria
-     * @param validRecordNumbers
+     * @param criteria The criteria to match against.
+     * @param positionInCriteria The position in the criteria String array to
+     *                           perform the match against.
+     * @param validRecordNumbers An array of the valid database record numbers
+     *                           to search against.
      * @return A {@code long[]} containing the record numbers of the database
      *         records that match {@code criteria[positionInStrings]}.
      */
@@ -76,9 +81,11 @@ class DatabaseAccessSearch {
      * the {@code criteria} parameter and returns
      * their record numbers as an array.
      *
-     * @param criteria
-     * @param validRecordNumbers
-     * @return
+     * @param criteria The criteria to match against.
+     * @param validRecordNumbers An array of the valid database record numbers
+     *                           to search against.
+     * @return A {@code long[]} containing the record numbers of the database
+     *         records that fully match {@code criteria}.
      */
     private static long[] searchOnCriteria(String[] criteria, long[] validRecordNumbers) {
 
@@ -133,7 +140,8 @@ class DatabaseAccessSearch {
     /**
      * This method converts a {@code List<Long>} to an array of {@code long}.
      *
-     * @param searchResults
+     * @param searchResults A list of the records numbers to be converted to an
+     *                      array.
      * @return A {@code long[]} containing contents of {@code searchResults}.
      */
     private static long[] longListToLongArray(List<Long> searchResults) {

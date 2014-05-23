@@ -2,7 +2,7 @@ package suncertify.db;
 
 /**
  * @author Luke GJ Potter
- * Date: 06/12/2013
+ * @since  06/12/2013
  */
 public class DuplicateKeyException extends Exception {
 
@@ -14,7 +14,7 @@ public class DuplicateKeyException extends Exception {
     /**
      * Constructor that accepts a parameter.
      *
-     * @param message
+     * @param message The message to be printed with the stack trace.
      */
     public DuplicateKeyException(String message) {
 
