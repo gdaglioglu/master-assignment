@@ -17,20 +17,41 @@ import java.rmi.RemoteException;
 import java.util.Properties;
 
 /**
+ * This singleton class contains the utility methods for the client GUI. It
+ * allows the {@link suncertify.gui.client.UrlyBirdClientGui} to only contain
+ * code for the displaying of the UI Components.
+ *
  * @author Luke GJ Potter
- *         Date: 15/05/2014
+ * @since  15/05/2014
  */
 public class UrlyBirdClientGuiUtils {
 
-    private static UrlyBirdClientGuiUtils ourInstance = new UrlyBirdClientGuiUtils();
+    private static UrlyBirdClientGuiUtils instance = new UrlyBirdClientGuiUtils();
 
+    /**
+     * The singleton constructor.
+     *
+     * @return An instance of {@code UrlyBirdClientGuiUtils}.
+     */
     public static UrlyBirdClientGuiUtils getInstance() {
-        return ourInstance;
+        return instance;
     }
 
-    private UrlyBirdClientGuiUtils() {
-    }
+    private UrlyBirdClientGuiUtils() {}
 
+    /**
+     * Ensures that the properties in the properties file are correct for the
+     * GUI to function in the current application mode.
+     * <p>If the application is started in standalone mode, it checks that the
+     * database file, supplied in the properties file, exists. If the database
+     * file does not exist, the User is asked for it's location.</p>
+     * <p>If the application is started in networked mode, it checks that the
+     * RMI host and port are correct, by attempting to connect to the server.
+     * Should the connection attempt fail, the client aborts.</p>
+     *
+     * @param urlyBirdApplicationMode The mode that the application is running
+     *                                in.
+     */
     public void ensurePropertiesAreValid(UrlyBirdApplicationMode urlyBirdApplicationMode) {
 
         Properties properties = UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties();
@@ -61,8 +82,13 @@ public class UrlyBirdClientGuiUtils {
         }
     }
 
-
-
+    /**
+     * Asks the GUI User for their CSR Number by launching a
+     * {@code JOptionPane.showInputDialog} window. It performs checks on the CSR
+     * number that is entered to ensure that the CSR number is 8 digits.
+     *
+     * @return The correctly formatted CSR number.
+     */
     public String receiveCsrNumber() {
 
         String csrNumber = null;
@@ -85,14 +111,14 @@ public class UrlyBirdClientGuiUtils {
     }
 
     /**
-     * Returns a local or remote DatabaseAccessDao instance, depending on the
-     * Application Mode.
+     * Returns a local or remote {@link suncertify.controller.DatabaseAccessDao}
+     * instance, depending on the Application Mode.
      *
      * @param urlyBirdApplicationMode The mode of the application.
-     * @return A {@code DatabaseAccessDaoRemote} instance, if the application is
-     *         set to {@code NETWORKED_CLIENT}.
-     *         A {@code DatabaseAccessDaoLocal} instance, if the application is
-     *         set to {@code STANDALONE_CLIENT}.
+     * @return A {@link suncertify.controller.DatabaseAccessDaoRemote} instance,
+     *         if the application is set to {@code NETWORKED_CLIENT}.
+     *         A {@link suncertify.controller.DatabaseAccessDaoLocal} instance,
+     *         if the application is set to {@code STANDALONE_CLIENT}.
      */
     public DatabaseAccessDao retrieveCorrectDao(UrlyBirdApplicationMode urlyBirdApplicationMode) {
 
@@ -109,6 +135,15 @@ public class UrlyBirdClientGuiUtils {
         }
     }
 
+    // ----- Private Methods -----
+    /**
+     * Checks that the CSR Number string that has been passed contains only
+     * digits.
+     *
+     * @param csrNumber The CSR Number of the GUI User.
+     * @return True, if the CSR Number is all digits.
+     *         False, if the CSR Number is not all digits.
+     */
     private boolean isAllDigits(String csrNumber) {
 
         try {

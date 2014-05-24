@@ -31,7 +31,8 @@ public class UrlyBirdApplicationGuiConstants {
     public static final String START_SERVER_BUTTON = "Start Server";
     public static final String SERVER_STOPPED = "Server Stopped";
     public static final String SERVER_STARTED = "Server Running";
-    public static final String BOOKING_DATES_DIALOG_TITLE = "Booking Dates";
+    public static final String SEARCH_PANEL_NAME_LABEL = "Name";
+    public static final String SEARCH_PANEL_LOCATION_LABEL = "Location";
 
 
     // ---------- Dimension Constants ----------
@@ -41,6 +42,4 @@ public class UrlyBirdApplicationGuiConstants {
     public static final Dimension CLIENT_GUI_DIMENSION = new Dimension(900, 600);
     public static final Dimension CLIENT_GUI_JTABLE_DIMENSION = new Dimension(850, 500);
     public static final Dimension SERVER_GUI_DIMENSION = new Dimension(500, 200);
-    public static final Dimension BOOKING_DATES_DIALOG_DIMENSION = new Dimension(400, 200);
-    public static final int BOOKING_DATES_DIALOG_TEXT_FIELD_LENGTH = 5;
 }

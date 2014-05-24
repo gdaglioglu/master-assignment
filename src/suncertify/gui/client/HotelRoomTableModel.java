@@ -12,11 +12,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * The implemetation of the {@code AbstractTableModel} to allow the displaying
+ * The implementation of the {@code AbstractTableModel} to allow the displaying
  * of {@code HotelRoom} pojos on the User Interface of the URLyBird Application.
  *
  * @author Luke GJ Potter
- * Date: 22/04/2014
+ * @since  22/04/2014
  */
 class HotelRoomTableModel extends AbstractTableModel {
 
@@ -24,14 +24,19 @@ class HotelRoomTableModel extends AbstractTableModel {
     private final String[] tableColumns = UrlyBirdApplicationGuiConstants.COLUMN_NAMES;
     private final List<HotelRoom> hotelRoomList;
 
+    /**
+     * The constructor for the HotelRoomTableModel class.
+     *
+     * @param hotelRooms
+     */
     public HotelRoomTableModel(ArrayList<HotelRoom> hotelRooms) {
-
         hotelRoomList = hotelRooms;
     }
 
     /**
      * Overridden getValueAt method from super class AbstractTableModel.
      * Gets the number of rows in the table.
+     *
      * @return the number of rows in the table.
      */
     @Override public int getRowCount() {
@@ -84,6 +89,7 @@ class HotelRoomTableModel extends AbstractTableModel {
         return tableColumns[i];
     }
 
+    // ----- Private Methods -----
     private String isAvailableOrBooked(String date) {
 
         try {

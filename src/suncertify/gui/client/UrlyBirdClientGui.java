@@ -8,13 +8,20 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * This is the Client GUI for the URLyBird Application.
+ * This is the Client GUI for the URLyBird Application. It only contains the
+ * logic for displaying the GUI components.
  *
  * @author Luke GJ Potter
- * Date: 22/04/2014
+ * @since  22/04/2014
  */
 public class UrlyBirdClientGui extends JFrame {
 
+    /**
+     * The constructor for the Client GUI. It sets up the JFrame and the panels.
+     *
+     * @param urlyBirdApplicationMode The mode that the application is running
+     *                                in.
+     */
     public UrlyBirdClientGui(UrlyBirdApplicationMode urlyBirdApplicationMode) {
 
         UrlyBirdClientGuiUtils clientUtils = UrlyBirdClientGuiUtils.getInstance();

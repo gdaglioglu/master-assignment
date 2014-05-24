@@ -12,13 +12,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
+ * The JPanel that displays and handles the resources for booking a Hotel Room.
+ *
  * @author Luke GJ Potter
- * Date: 22/04/2014
+ * @since  22/04/2014
  */
 class BookingPanel extends JPanel {
 
     private final JPanel bookingPanel;
 
+    /**
+     * The constructor for the BookingPanel, it initialises the GUI components
+     * used for booking a Hotel Room.
+     *
+     * @param databaseAccessDao The Client's {@code DatabaseAccessDao} to use
+     *                          for booking a room using the GUI.
+     * @param csrNumber The CSR Number of the GUI Operator.
+     */
     public BookingPanel(DatabaseAccessDao databaseAccessDao, String csrNumber) {
 
         bookingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -36,16 +46,31 @@ class BookingPanel extends JPanel {
         bookingPanel.add(cancelBookingButton);
     }
 
+    /**
+     * Returns the JPanel instance.
+     *
+     * @return the JPanel instance.
+     */
     public JPanel getBookingPanel() {
         return bookingPanel;
     }
 
+    /**
+     * The ActionListener for the Book JButton.
+     */
     private class BookHotelRoom implements ActionListener {
 
         private final DatabaseAccessDao databaseAccessDao;
         private final String csrNumber;
         private String startDate, endDate;
 
+        /**
+         * The constructor for the BookHotelRoom class.
+         *
+         * @param databaseAccessDao The Client's {@code DatabaseAccessDao} to
+         *                          use for creating a booking using the GUI.
+         * @param csrNumber The CSR Number of the GUI Operator.
+         */
         public BookHotelRoom(DatabaseAccessDao databaseAccessDao, String csrNumber) {
             this.databaseAccessDao = databaseAccessDao;
             this.csrNumber = csrNumber;
@@ -53,8 +78,15 @@ class BookingPanel extends JPanel {
             endDate = UrlyBirdApplicationConstants.EMPTY_STRING;
         }
 
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
+        /**
+         * The handler for the ActionListener for booking a Hotel Room. It takes
+         * the room to be booked, the CSR number, and the end date of the
+         * booking. It updates the database with this information. It then
+         * refreshes the HotelRoomTableModel with the new booking.
+         *
+         * @param actionEvent The event performed.
+         */
+        @Override public void actionPerformed(ActionEvent actionEvent) {
 
             int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
 
@@ -105,19 +137,36 @@ class BookingPanel extends JPanel {
         }
     }
 
+    /**
+     * The ActionListener for the Cancel Booking JButton.
+     */
     private class CancelHotelRoomBooking implements ActionListener {
 
         private final DatabaseAccessDao databaseAccessDao;
         // Todo: Use CSR Number to only allow that CSR to cancel a booking.
         private final String csrNumber;
 
+        /**
+         * The constructor for the CancelHotelRoomBooking class.
+         *
+         * @param databaseAccessDao The Client's {@code DatabaseAccessDao} to
+         *                          use for canceling a booking using the GUI.
+         * @param csrNumber The CSR Number of the GUI Operator.
+         */
         public CancelHotelRoomBooking(DatabaseAccessDao databaseAccessDao, String csrNumber) {
             this.databaseAccessDao = databaseAccessDao;
             this.csrNumber = csrNumber;
         }
 
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
+        /**
+         * The handler for the ActionListener for canceling a booking of a Hotel
+         * Room. It updates the database to cancel the booking. Then it
+         * refreshes the HotelRoomTableModel to show that the room is no longer
+         * booked.
+         *
+         * @param actionEvent The event performed.
+         */
+        @Override public void actionPerformed(ActionEvent actionEvent) {
 
             try {
                 int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
