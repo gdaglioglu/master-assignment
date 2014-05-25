@@ -16,8 +16,11 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
+ * The Server GUI, it contains the UI components and the logic for Starting the
+ * server.
+ *
  * @author Luke GJ Potter
- *         Date: 29/04/2014
+ * @since  29/04/2014
  */
 public class UrlyBirdServerGui extends JFrame {
 
@@ -25,6 +28,10 @@ public class UrlyBirdServerGui extends JFrame {
     private JButton startServerButton;
     private JLabel serverStatusLabel;
 
+    /**
+     * The constructor for the UrlyBirdServerGui class. It initialises the GUI
+     * components.
+     */
     public UrlyBirdServerGui() {
 
         setTitle(UrlyBirdApplicationGuiConstants.SERVER_GUI_APPLICATION_TITLE);
@@ -40,6 +47,11 @@ public class UrlyBirdServerGui extends JFrame {
         add(getServerControlPanel(), BorderLayout.SOUTH);
     }
 
+    /**
+     * Creates a instance of a JPanel with the start server button.
+     *
+     * @return a JPanel with the button to start the server.
+     */
     private JPanel getServerControlPanel() {
 
         JPanel serverControlPanel = new JPanel(new FlowLayout());
@@ -56,10 +68,19 @@ public class UrlyBirdServerGui extends JFrame {
         return serverControlPanel;
     }
 
+    /**
+     * The ActionListener for the Start Server JButton.
+     */
     private class StartServer implements ActionListener {
 
+        /**
+         * Handles starting the server. It checks that the JTextFields are
+         * correct. Then it uses RMI to start the server and make it available
+         * for incoming client connections.
+         *
+         * @param actionEvent The event performed.
+         */
         @Override public void actionPerformed(ActionEvent actionEvent) {
-
 
             if (!serverConfigurationPanel.areTextFieldValuesValid()) {
                 CommonGuiUtils.showErrorMessageDialog("Please enter valid values in the Text Fields.");
@@ -85,6 +106,13 @@ public class UrlyBirdServerGui extends JFrame {
             }
         }
 
+        /**
+         * Updates the {@code suncertify.properties} file with the latest
+         * properties.
+         *
+         * @throws IOException If there's a problem with accessing the
+         *         {@code suncertify.properties} file.
+         */
         private void updatePropertiesToReflectServerGui() throws IOException {
 
             Properties properties = UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties();
@@ -107,6 +135,14 @@ public class UrlyBirdServerGui extends JFrame {
             }
         }
 
+        /**
+         * Compares the URLyBird Application's properties to the text in the
+         * JTextFields on the {@code ServerConfigurationPanel}.
+         *
+         * @param properties The current properties of the URLyBird Application.
+         * @return True, if the properties have been changed.
+         *         False, if the properties have not been changed.
+         */
         private boolean hasDatabasePathPropertyChanged(Properties properties) {
 
             return !(properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE)

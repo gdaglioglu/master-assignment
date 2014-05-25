@@ -10,8 +10,11 @@ import java.io.File;
 import java.util.StringTokenizer;
 
 /**
+ * The JPanel that contains the JTextFields for the database location, RMI
+ * hostname and RMI port which are used by the server GUI.
+ *
  * @author Luke GJ Potter
- *         Date: 29/04/2014
+ * @since  29/04/2014
  */
 class ServerConfigurationPanel {
 
@@ -19,6 +22,10 @@ class ServerConfigurationPanel {
     private JLabel pathToDatabaseFileLabel, rmiHostnameLabel, rmiPortNumberLabel;
     private JTextField pathToDatabaseFileTextField, rmiHostnameTextField, rmiPortNumberTextField;
 
+    /**
+     * The constructor for the ServerConfigurationPanel. It initialises and lays
+     * out the GUI components.
+     */
     public ServerConfigurationPanel() {
 
         serverConfigurationPanel = new JPanel();
@@ -29,22 +36,50 @@ class ServerConfigurationPanel {
 
     }
 
+    /**
+     * Gets the ServerConfigurationPanel.
+     *
+     * @return the ServerConfigurationPanel.
+     */
     public JPanel getServerConfigurationPanel() {
         return serverConfigurationPanel;
     }
 
+    /**
+     * Get the text in the "database path" JTextField.
+     *
+     * @return The text in the "database path" JTextField.
+     */
     public String getPathToDatabaseFileFromTextField() {
         return pathToDatabaseFileTextField.getText().trim();
     }
 
+    /**
+     * Get the text in the "rmi hostname" JTextField.
+     *
+     * @return The text in the "rmi hostname" JTextField.
+     */
     public String getRmiHostnameFromTextField() {
         return rmiHostnameTextField.getText().trim();
     }
 
+    /**
+     * Get the text in the "rmi port" JTextField.
+     *
+     * @return The text in the "rmi port" JTextField.
+     */
     public String getRmiPortNumberFromTextField() {
         return rmiPortNumberTextField.getText().trim();
     }
 
+    /**
+     * Ensures that the values in the ServerConfigurationPanel's JTextFields are
+     * valid values. This method examines if the database file exists in the
+     * location specified.
+     *
+     * @return True, if the values are valid.
+     *         False, if the values are invalid.
+     */
     public boolean areTextFieldValuesValid() {
 
         String dbFilePath = getPathToDatabaseFileFromTextField();
@@ -57,6 +92,10 @@ class ServerConfigurationPanel {
         return (!emptyFields) && new File(dbFilePath).exists() && isValidHostname(rmiHostname) && isValidPortNumber(rmiPortNumber);
     }
 
+    /**
+     * Disables all the ServerConfigurationPanel's JTextFields, so they cannot
+     * be edited.
+     */
     public void disableAllFields() {
 
         pathToDatabaseFileTextField.setEnabled(false);
@@ -64,6 +103,11 @@ class ServerConfigurationPanel {
         rmiPortNumberTextField.setEnabled(false);
     }
 
+    // ----- Private Methods -----
+
+    /**
+     * Lays out the ServerConfigurationPanel using a GridBagLayout.
+     */
     private void layoutServerConfigurationPanel() {
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -76,7 +120,6 @@ class ServerConfigurationPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridwidth = 2;
         serverConfigurationPanel.add(pathToDatabaseFileTextField, gridBagConstraints);
-        // TODO: Implement JFileChooser
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -95,6 +138,9 @@ class ServerConfigurationPanel {
         serverConfigurationPanel.add(rmiPortNumberTextField, gridBagConstraints);
     }
 
+    /**
+     * Initialises the ServerConfigurationPanel UI components.
+     */
     private void initialiseServerConfigurationPanelLabelsAndTextFields() {
 
         pathToDatabaseFileLabel = new JLabel(UrlyBirdApplicationGuiConstants.PATH_TO_DATABASE_FILE, JLabel.TRAILING);
@@ -113,11 +159,26 @@ class ServerConfigurationPanel {
         rmiPortNumberLabel.setLabelFor(rmiPortNumberTextField);
     }
 
+    /**
+     * Examines if the rmi hostname is valid.
+     *
+     * @param rmiHostname The RMI hostname to validate.
+     * @return True, if the hostname is valid.
+     *         False, if the hostname is invalid.
+     */
     private boolean isValidHostname(String rmiHostname) {
 
         return rmiHostname.equals("localhost") || isValidIpAddress(rmiHostname);
     }
 
+    /**
+     * Examines the ip address of the rmi hostname.
+     *
+     * @param rmiHostname The hostname for the RMI server in the dotted decimal
+     *                    format of an IP address.
+     * @return True, if the hostname is a valid IP address.
+     *         False, if the hostname is an invalid IP address.
+     */
     private boolean isValidIpAddress(String rmiHostname) {
 
         StringTokenizer stringTokenizer = new StringTokenizer(rmiHostname, ".");
@@ -138,6 +199,13 @@ class ServerConfigurationPanel {
         return true;
     }
 
+    /**
+     * Checks that the RMI Port is a valid port number.
+     *
+     * @param rmiPortNumber The port number to validate.
+     * @return True, if the port is valid.
+     *         False, if the port is invalid.
+     */
     private boolean isValidPortNumber(String rmiPortNumber) {
 
         try {
