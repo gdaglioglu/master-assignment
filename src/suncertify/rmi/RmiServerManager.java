@@ -9,13 +9,20 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 /**
+ * This class manages the lifecycle of the RMI Server for the URLyBird
+ * Application.
+ *
  * @author Luke GJ Potter
- *         Date: 07/05/2014
+ * @since  07/05/2014
  */
 public class RmiServerManager {
 
     private static RmiServerStatus rmiServerStatus = RmiServerStatus.STOPPED;
 
+    /**
+     * Starts the RMI Server for the URLyBird Application. It creates the
+     * Registry and binds a DatabaseAccessRemoteImpl object to the URL.
+     */
     public static void startRmiServer() {
 
         // Check to see if the server is already running.
@@ -34,6 +41,12 @@ public class RmiServerManager {
         }
     }
 
+    /**
+     * Checks the status of the RMI Server for the URLyBird Application.
+     *
+     * @return True, if the server is running.
+     *         False, if the server is not running.
+     */
     public static boolean isRmiServerRunning() {
         return (rmiServerStatus == RmiServerStatus.RUNNING);
     }

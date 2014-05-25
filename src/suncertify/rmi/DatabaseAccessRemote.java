@@ -7,19 +7,23 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
+ * The interface to allow the Networked Client to make calls to the database
+ * with the same API as the Standalone Client.
+ *
  * @author Luke GJ Potter
- *         Date: 07/05/2014
+ * @since  07/05/2014
  */
 public interface DatabaseAccessRemote extends Remote {
 
     /**
      * Reads a record from the file. Returns an array where each element is a
-     * record value.
+     * record field.
      *
-     * @param recNo the record number
-     * @return a string array of the records fields
-     * @throws RecordNotFoundException
-     * @throws RemoteException
+     * @param recNo The record number in the database to retrieve.
+     * @return A String array representation of the database record.
+     * @throws RecordNotFoundException When locating a record that does not
+     *                                 exist, or had been previously deleted.
+     * @throws RemoteException If there is a problem with the network.
      */
     public String[] readRecord(long recNo) throws RecordNotFoundException, RemoteException;
 
@@ -28,49 +32,58 @@ public interface DatabaseAccessRemote extends Remote {
      * data[n]. Throws SecurityException if the record is locked with a cookie
      * other than lockCookie.
      *
-     * @param recNo the record number
-     * @param data a string array of the fields of the record
-     * @param lockCookie the cookie that the record is locked with
-     * @throws RecordNotFoundException
-     * @throws SecurityException
-     * @throws RemoteException
+     * @param recNo The record number in the database to update.
+     * @param data The string array representation of a database record,
+     *             containing the updates.
+     * @param lockCookie The cookie that the row is locked with.
+     * @throws RecordNotFoundException When locating a record that does not
+     *                                 exist, or had been previously deleted.
+     * @throws SecurityException If the record is locked by a user other than
+     *                           the user trying to update the record.
+     * @throws RemoteException If there is a problem with the network.
      */
     public void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException, RemoteException;
 
     /**
      * Deletes a record, making the record number and associated disk storage
-     * available for reuse. Throws SecurityException if the record is locked
-     * with a cookie other than lockCookie.
+     * unavailable for reuse by setting an "invalid" flag for the record. Throws
+     * SecurityException if the record is locked with a cookie other than
+     * lockCookie.
      *
-     * @param recNo the record number
-     * @param lockCookie the cookie that the record is locked with
-     * @throws RecordNotFoundException
-     * @throws SecurityException
-     * @throws RemoteException
+     * @param recNo The record number in the database to delete.
+     * @param lockCookie The cookie that the row is locked with.
+     * @throws RecordNotFoundException When locating a record that does not
+     *                                 exist, or had been previously deleted.
+     * @throws SecurityException If the record is locked by a user other than
+     *                           the user trying to update the record.
+     * @throws RemoteException If there is a problem with the network.
      */
     public void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException, RemoteException;
 
     /**
-     * Returns an array of record numbers that match the specified criteria.
-     * Field n in the database file is described by criteria[n]. A null value in
-     * criteria[n] matches any field value. A non-null  value in criteria[n]
-     * matches any field value that begins with criteria[n]. (For example,
-     * "Fred" matches "Fred" or "Freddy".)
+     * Returns an array of record numbers that match the specified
+     * {@code criteria}. Field {@code n} in the database file is described by
+     * {@code criteria[n]}. A null value in {@code criteria[n]} matches any
+     * field value. A non-null value in {@code criteria[n]} matches any field
+     * value that begins with {@code criteria[n]}.
      *
-     * @param criteria a string array of criteria to match against the database
-     * @return an array of record numbers that match the criteria
-     * @throws RemoteException
+     * For example, "Fred" matches "Fred" or "Freddy".
+     *
+     * @param criteria The search criteria to match against.
+     * @return An array of record numbers that match the {@code criteria}.
+     * @throws RemoteException If there is a problem with the network.
      */
     public long[] findByCriteria(String[] criteria) throws RemoteException;
 
     /**
-     * Creates a new record in the database (possibly reusing a deleted entry).
-     * Inserts the given data, and returns the record number of the new record.
+     * Creates a new record in the database. Inserts the given data, and returns
+     * the record number of the new record.
      *
-     * @param data a string array of the fields of the record
-     * @return the record number of the created record
-     * @throws DuplicateKeyException
-     * @throws RemoteException
+     * @param data The string array representation of a database record.
+     * @return The record number of the position that the record was created.
+     * @throws DuplicateKeyException When trying to create a record that already
+     *                               exists in the database.
+     * @throws RemoteException If there is a problem with the network.
      */
     public long createRecord(String[] data) throws DuplicateKeyException, RemoteException;
 
@@ -81,21 +94,23 @@ public interface DatabaseAccessRemote extends Remote {
      * different client, the current thread gives up the CPU and consumes no CPU
      * cycles until the record is unlocked.
      *
-     * @param recNo the record number
-     * @return the cookie that the row was locked with
-     * @throws RecordNotFoundException
-     * @throws RemoteException
+     * @param recNo the record number to lock
+     * @return A long representing the lock's owner's id.
+     * @throws RecordNotFoundException When locating a record that does not
+     *                                 exist, or had been previously deleted.
+     * @throws RemoteException If there is a problem with the network.
      */
     public long lockRecord(long recNo) throws RecordNotFoundException, RemoteException;
 
     /**
      * Releases the lock on a record. Cookie must be the cookie returned when
-     * the record was locked; otherwise throws SecurityException.
+     * the record was locked; otherwise throws {@code SecurityException}.
      *
-     * @param recNo the record number
-     * @param cookie the cookie that the record is locked with
-     * @throws SecurityException
-     * @throws RemoteException
+     * @param recNo the record number to unlock
+     * @param cookie the cookie to unlock the record with
+     * @throws SecurityException If the record is locked by a user other than
+     *                           the user trying to update the record.
+     * @throws RemoteException If there is a problem with the network.
      */
     public void unlock(long recNo, long cookie) throws SecurityException, RemoteException;
 }
