@@ -4,11 +4,20 @@ import java.io.*;
 import java.util.Properties;
 
 /**
+ * Contains objects that are frequently used in the URLyBird Application.
+ * Retrieving the object using this factory cuts down on the code that needs to
+ * be written and maintained.
+ *
  * @author Luke GJ Potter
- * Date: 02/04/2014
+ * @since  02/04/2014
  */
 public class UrlyBirdApplicationObjectsFactory {
 
+    /**
+     * Gets the initialised properties object for the URLyBird Application.
+     *
+     * @return The initialised properties object for the URLyBird Application.
+     */
     public static Properties getURLyBirdApplicationProperties() {
 
         Properties properties = new Properties();
@@ -30,6 +39,13 @@ public class UrlyBirdApplicationObjectsFactory {
         return properties;
     }
 
+    /**
+     * Gets the RandomAccessFile to access the database file in the URLyBird
+     * Application.
+     *
+     * @return The RandomAccessFile to access the database file in the URLyBird
+     *         Application.
+     */
     public static RandomAccessFile getDatabaseRandomAccessFile() {
 
         Properties properties = getURLyBirdApplicationProperties();

@@ -3,43 +3,66 @@ package suncertify.utilities;
 import java.awt.*;
 
 /**
+ * Holds the constants for the GUI classes.
+ *
  * @author Luke GJ Potter
- *         Date: 26/04/2014
+ * @since  26/04/2014
  */
 public class UrlyBirdApplicationGuiConstants {
 
     // ---------- String Constants ----------
-    // The title of the application.
+    // ----- Client GUI -----
+    /** The title of the Client GUI. */
     public static final String CLIENT_GUI_APPLICATION_TITLE = "URLyBird Application";
-    public static final String SERVER_GUI_APPLICATION_TITLE = "URLyBird Application Server";
-
+    /** The text of the Book JButton. */
     public static final String BOOK_BUTTON = "Book";
+    /** The text of the Cancel Booking JButton. */
     public static final String CANCEL_BOOKING_BUTTON = "Cancel Booking";
+    /** The text of the Search JButton. */
     public static final String SEARCH_BUTTON = "Search";
-    public static final String CREATE_BUTTON = "Create";
-    public static final String UPDATE_BUTTON = "Update";
-    public static final String DELETE_BUTTON = "Delete";
-    public static final String REFRESH_BUTTON = "Refresh Table";
+    /** The column names for the JTable in the Client GUI. */
     public static final String[] COLUMN_NAMES = { "Hotel Name", "Location",
             "Room Size", "Smoking", "Rate", "Date Available", "Customer ID"};
+    /** The string representation when a room allows smoking. */
     public static final String SMOKING_ALLOWED = "Allowed";
+    /** The string representation when a room disallows smoking. */
     public static final String SMOKING_NOT_ALLOWED = "Not Allowed";
+    /** The text that instructs how to book a room using the Client GUI. */
     public static final String BOOKING_HINT = "Select a record in the table and press one of the following buttons to perform that action.";
-    public static final String PATH_TO_DATABASE_FILE = "Path to Database File";
-    public static final String RMI_HOSTNAME = "RMI Hostname";
-    public static final String RMI_PORT_NUMBER = "RMI Port";
-    public static final String START_SERVER_BUTTON = "Start Server";
-    public static final String SERVER_STOPPED = "Server Stopped";
-    public static final String SERVER_STARTED = "Server Running";
+    /** The label for the name search criteria. */
     public static final String SEARCH_PANEL_NAME_LABEL = "Name";
+    /** The label for the location search criteria. */
     public static final String SEARCH_PANEL_LOCATION_LABEL = "Location";
 
+    // ----- Server GUI -----
+    /** The title of the Server GUI. */
+    public static final String SERVER_GUI_APPLICATION_TITLE = "URLyBird Application Server";
+    /** The label for the database path JTextField on the Server GUI. */
+    public static final String PATH_TO_DATABASE_FILE = "Path to Database File";
+    /** The label for the rmi hostname JTextField on the Server GUI. */
+    public static final String RMI_HOSTNAME = "RMI Hostname";
+    /** The label for the rmi port JTextField on the Server GUI. */
+    public static final String RMI_PORT_NUMBER = "RMI Port";
+    /** The text of the Start Server JButton on the Server GUI. */
+    public static final String START_SERVER_BUTTON = "Start Server";
+    /** The label to be displayed, on the Server GUI, when the server is not
+     * running. */
+    public static final String SERVER_STOPPED = "Server Stopped";
+    /** The label to be displayed, on the Server GUI, when the server is
+     * running. */
+    public static final String SERVER_STARTED = "Server Running";
 
     // ---------- Dimension Constants ----------
-    // The length of the JTextFields in the application.
+    // ----- Client GUI -----
+    /** The length of the JTextFields in the Client GUI. */
     public static final int CLIENT_SEARCH_TEXT_FIELD_LENGTH = 20;
-    public static final int SERVER_CONFIG_TEXT_FIELD_LENGTH = 20;
+    /** The dimensions of the Client GUI. */
     public static final Dimension CLIENT_GUI_DIMENSION = new Dimension(900, 600);
+    /** The dimension of the JTable in the Client GUI. */
     public static final Dimension CLIENT_GUI_JTABLE_DIMENSION = new Dimension(850, 500);
+    // ----- Server GUI -----
+    /** The length of the JTextFields in the Server GUI. */
+    public static final int SERVER_CONFIG_TEXT_FIELD_LENGTH = 20;
+    /** The dimension of the Server GUI. */
     public static final Dimension SERVER_GUI_DIMENSION = new Dimension(500, 200);
 }

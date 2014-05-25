@@ -4,7 +4,7 @@ package suncertify.utilities;
  * This Enumeration will hold the state to run the application.
  *
  * @author Luke GJ Potter
- *         Date: 08/05/2014
+ * @since  08/05/2014
  */
 public enum UrlyBirdApplicationMode {
 
