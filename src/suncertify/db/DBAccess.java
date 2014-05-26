@@ -6,7 +6,7 @@ package suncertify.db;
  * @author Luke GJ Potter
  * @since  06/12/2013
  */
-public interface DBAccess {
+interface DBAccess {
 
     /**
      * Reads a record from the file. Returns an array where each element is a

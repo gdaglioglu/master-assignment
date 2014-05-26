@@ -28,7 +28,7 @@ public class UrlyBirdApplicationGuiConstants {
     /** The string representation when a room disallows smoking. */
     public static final String SMOKING_NOT_ALLOWED = "Not Allowed";
     /** The text that instructs how to book a room using the Client GUI. */
-    public static final String BOOKING_HINT = "Select a record in the table and press one of the following buttons to perform that action.";
+    public static final String BOOKING_HINT = "Select a record in the table and press the \"Book\" button to book that room.";
     /** The label for the name search criteria. */
     public static final String SEARCH_PANEL_NAME_LABEL = "Name";
     /** The label for the location search criteria. */

@@ -40,10 +40,6 @@ class BookingPanel extends JPanel {
         JButton bookButton = new JButton(UrlyBirdApplicationGuiConstants.BOOK_BUTTON);
         bookButton.addActionListener(new BookHotelRoom(databaseAccessDao, csrNumber));
         bookingPanel.add(bookButton);
-
-        JButton cancelBookingButton = new JButton(UrlyBirdApplicationGuiConstants.CANCEL_BOOKING_BUTTON);
-        cancelBookingButton.addActionListener(new CancelHotelRoomBooking(databaseAccessDao, csrNumber));
-        bookingPanel.add(cancelBookingButton);
     }
 
     /**
@@ -134,48 +130,6 @@ class BookingPanel extends JPanel {
                 return true;
 
             } catch (ParseException ignored) { return false; }
-        }
-    }
-
-    /**
-     * The ActionListener for the Cancel Booking JButton.
-     */
-    private class CancelHotelRoomBooking implements ActionListener {
-
-        private final DatabaseAccessDao databaseAccessDao;
-        // Todo: Use CSR Number to only allow that CSR to cancel a booking.
-        private final String csrNumber;
-
-        /**
-         * The constructor for the CancelHotelRoomBooking class.
-         *
-         * @param databaseAccessDao The Client's {@code DatabaseAccessDao} to
-         *                          use for canceling a booking using the GUI.
-         * @param csrNumber The CSR Number of the GUI Operator.
-         */
-        public CancelHotelRoomBooking(DatabaseAccessDao databaseAccessDao, String csrNumber) {
-            this.databaseAccessDao = databaseAccessDao;
-            this.csrNumber = csrNumber;
-        }
-
-        /**
-         * The handler for the ActionListener for canceling a booking of a Hotel
-         * Room. It updates the database to cancel the booking. Then it
-         * refreshes the HotelRoomTableModel to show that the room is no longer
-         * booked.
-         *
-         * @param actionEvent The event performed.
-         */
-        @Override public void actionPerformed(ActionEvent actionEvent) {
-
-            try {
-                int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
-                databaseAccessDao.cancelHotelRoomBooking(recordRow, Thread.currentThread().getId());
-                TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
-                TablePanel.refreshHotelRoomTableModel();
-            } catch(Exception e) {
-                System.out.println("Reserve room problem found: " + e.getMessage());
-            }
         }
     }
 }

@@ -44,15 +44,15 @@ public class HotelRoom {
      * Constructor for the HotelRoom pojo.
      *
      * Because the output of the {@code Data.readRecord(String)} method looks like
-     * {@code
-     *     0. |Palace                                                          |
-     *     1. |Smallville                                                      |
-     *     2. |2   |
-     *     3. |Y|
-     *     4. |$150.00 |
-     *     5. |2005/07/27|
-     *     6. |        |
-     * }
+     * <pre>{@code
+     * 0. |Palace                                                          |
+     *1. |Smallville                                                      |
+     *2. |2   |
+     *3. |Y|
+     *4. |$150.00 |
+     *5. |2005/07/27|
+     *6. |        |
+     * }</pre>
      * for an unbooked room, it must be heavily parsed.
      *
      * @param strings An array of strings ordered to follow the output of he

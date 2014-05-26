@@ -26,7 +26,7 @@ import java.util.Properties;
  */
 public class UrlyBirdClientGuiUtils {
 
-    private static UrlyBirdClientGuiUtils instance = new UrlyBirdClientGuiUtils();
+    private static final UrlyBirdClientGuiUtils instance = new UrlyBirdClientGuiUtils();
 
     /**
      * The singleton constructor.

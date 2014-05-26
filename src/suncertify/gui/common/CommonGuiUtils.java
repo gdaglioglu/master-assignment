@@ -12,7 +12,7 @@ public class CommonGuiUtils {
 
     /**
      * Displays a error message dialog using the
-     * {@code JOptionPane.showMessageDialog} window..
+     * {@code JOptionPane.showMessageDialog} window.
      *
      * @param message The error message to be displayed.
      */

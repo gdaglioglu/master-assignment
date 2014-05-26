@@ -5,8 +5,10 @@ import suncertify.model.HotelRoom;
 import java.util.ArrayList;
 
 /**
+ * The interface of the DAO pattern implementation for the URLyBird Application.
+ *
  * @author Luke GJ Potter
- * Date: 15/04/2014
+ * @since  15/04/2014
  */
 public interface DatabaseAccessDao {
 
@@ -79,14 +81,4 @@ public interface DatabaseAccessDao {
      *         False, if the booking was not successful.
      */
     boolean bookHotelRoom(long recordNumber, String customerName, String endDate, long lockCookie);
-
-    /**
-     * This method allows the cancellation of a {@code HotelRoom} booking.
-     *
-     * @param recordNumber The record number of the desired {@code HotelRoom}.
-     * @param lockCookie The key to lock the record with.
-     * @return True, if the cancellation of the booking was successful.
-     *         False, if the cancellation of the booking was not successful.
-     */
-    boolean cancelHotelRoomBooking(long recordNumber, long lockCookie);
 }

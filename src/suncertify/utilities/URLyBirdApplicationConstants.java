@@ -11,7 +11,7 @@ public class UrlyBirdApplicationConstants {
 
     /** Used as filename for the properties file, {@code suncertify.properties},
      * which was asked for in the assignment. */
-    public static String PROPERTY_FILE_NAME = System.getProperty("user.dir") + "/suncertify.properties";
+    public static final String PROPERTY_FILE_NAME = System.getProperty("user.dir") + "/suncertify.properties";
     /** Used to load the path to the database file key in the
      * {@code suncertify.properties} file. */
     public static final String PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE = "pathToDatabaseFile";

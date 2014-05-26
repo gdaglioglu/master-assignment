@@ -1,22 +1,24 @@
 Code:
-JavaDoc comments of every field and method.
-Free up rooms after their "booked until" date has passed.
-    * Note this in documentation.
-Fix bugs listed in repository.
 Implement Java7 MultiCatch.
-Implement the Observer Pattern.
+Nope: Free up rooms after their "booked until" date has passed.
+    * Note this in documentation.
+Nope: Fix bugs listed in repository.
+    * Not in the requirements.
+Nope: Implement the Observer Pattern.
 Done: Standalone Client GUI accepting the database file.
 Done: Put the suncertify.properties into the "current working directory".
 Done: Networked Client GUI fails gracefully when it cannot find the server.
 Done: Only allow booking within 48 hours.
 Done: Determine duration of stay when booking.
 Done: Implement DuplicateKeyException.
+Done: JavaDoc comments of every field and method.
 
 
 
 Documentation:
 User Guide.
 Generate JavaDoc.
+    * javadoc -d ../runme/docs/javadoc/ suncertify/controller/* suncertify/db/* suncertify/gui/*/* suncertify/model/* suncertify/rmi/* suncertify/utilities/*
 Review JavaDoc.
 
 
@@ -26,6 +28,7 @@ Run JavaRanch's locking tester.
 Run the server with multiple clients.
 Run the networked client and the standalone client at the same time.
    * Locking messages when booking, seems to be an RMI issue.
+   * RMI GUI is not asking for second, or subsequent, end booking dates.
 
 
 

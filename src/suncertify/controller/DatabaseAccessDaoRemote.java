@@ -187,25 +187,4 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
 
         return updateHotelRoom(recordNumber, hotelRoomToBook, lockCookie);
     }
-
-    /**
-     * This method allows the cancellation of a {@code HotelRoom} booking.
-     *
-     * @param recordNumber The record number of the desired {@code HotelRoom}.
-     * @param lockCookie The key to lock the record with.
-     * @return True, if the cancellation of the booking was successful.
-     *         False, if the cancellation of the booking was not successful.
-     */
-    @Override public boolean cancelHotelRoomBooking(long recordNumber, long lockCookie) {
-
-        HotelRoom hotelRoomBookingToCancel;
-
-        if ((hotelRoomBookingToCancel = retrieveHotelRoom(recordNumber)) == null) {
-            return false;
-        }
-
-        hotelRoomBookingToCancel.setOwnerName(null);
-
-        return updateHotelRoom(recordNumber, hotelRoomBookingToCancel, lockCookie);
-    }
 }
