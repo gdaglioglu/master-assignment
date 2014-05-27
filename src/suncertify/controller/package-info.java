@@ -4,6 +4,6 @@
  * It contains the classes in the DAO pattern and the MainController class.
  *
  * @author Luke GJ Potter
- * @since  26/05/2014
+ * @since 26/05/2014
  */
 package suncertify.controller;

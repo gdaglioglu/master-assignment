@@ -12,7 +12,7 @@ import java.rmi.RemoteException;
  * Application.
  *
  * @author Luke GJ Potter
- * @since  08/05/2014
+ * @since 08/05/2014
  */
 public class RmiClientManager {
 
@@ -28,7 +28,8 @@ public class RmiClientManager {
         } catch (ConnectException ignored) {
         } catch (NotBoundException ignored) {
         } catch (MalformedURLException ignored) {
-        } catch (RemoteException ignored) {}
+        } catch (RemoteException ignored) {
+        }
 
         return null;
     }

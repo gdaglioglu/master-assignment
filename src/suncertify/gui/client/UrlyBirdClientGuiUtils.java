@@ -22,11 +22,14 @@ import java.util.Properties;
  * code for the displaying of the UI Components.
  *
  * @author Luke GJ Potter
- * @since  15/05/2014
+ * @since 15/05/2014
  */
 public class UrlyBirdClientGuiUtils {
 
     private static final UrlyBirdClientGuiUtils instance = new UrlyBirdClientGuiUtils();
+
+    private UrlyBirdClientGuiUtils() {
+    }
 
     /**
      * The singleton constructor.
@@ -36,8 +39,6 @@ public class UrlyBirdClientGuiUtils {
     public static UrlyBirdClientGuiUtils getInstance() {
         return instance;
     }
-
-    private UrlyBirdClientGuiUtils() {}
 
     /**
      * Ensures that the properties in the properties file are correct for the
@@ -60,7 +61,7 @@ public class UrlyBirdClientGuiUtils {
 
             File databaseFile = new File(properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
 
-            while (! databaseFile.exists()) {
+            while (!databaseFile.exists()) {
 
                 properties.setProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE, JOptionPane.showInputDialog(null, "Enter the location of the database file"));
                 try {
@@ -96,7 +97,7 @@ public class UrlyBirdClientGuiUtils {
 
         while (!correctCsrNumberEntered) {
 
-            csrNumber =  JOptionPane.showInputDialog(null, "Login with your CSR number (8 digits)", "Login", JOptionPane.INFORMATION_MESSAGE).trim();
+            csrNumber = JOptionPane.showInputDialog(null, "Login with your CSR number (8 digits)", "Login", JOptionPane.INFORMATION_MESSAGE).trim();
 
             if (csrNumber.length() != 8) {
                 JOptionPane.showMessageDialog(null, "CSR length must be 8 digits, you have entered " + csrNumber.length() + " digits.");
@@ -116,9 +117,9 @@ public class UrlyBirdClientGuiUtils {
      *
      * @param urlyBirdApplicationMode The mode of the application.
      * @return A {@link suncertify.controller.DatabaseAccessDaoRemote} instance,
-     *         if the application is set to {@code NETWORKED_CLIENT}.
-     *         A {@link suncertify.controller.DatabaseAccessDaoLocal} instance,
-     *         if the application is set to {@code STANDALONE_CLIENT}.
+     * if the application is set to {@code NETWORKED_CLIENT}.
+     * A {@link suncertify.controller.DatabaseAccessDaoLocal} instance,
+     * if the application is set to {@code STANDALONE_CLIENT}.
      */
     public DatabaseAccessDao retrieveCorrectDao(UrlyBirdApplicationMode urlyBirdApplicationMode) {
 
@@ -136,13 +137,14 @@ public class UrlyBirdClientGuiUtils {
     }
 
     // ----- Private Methods -----
+
     /**
      * Checks that the CSR Number string that has been passed contains only
      * digits.
      *
      * @param csrNumber The CSR Number of the GUI User.
      * @return True, if the CSR Number is all digits.
-     *         False, if the CSR Number is not all digits.
+     * False, if the CSR Number is not all digits.
      */
     private boolean isAllDigits(String csrNumber) {
 

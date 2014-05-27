@@ -12,7 +12,7 @@ import java.awt.*;
  * logic for displaying the GUI components.
  *
  * @author Luke GJ Potter
- * @since  22/04/2014
+ * @since 22/04/2014
  */
 public class UrlyBirdClientGui extends JFrame {
 
@@ -31,7 +31,9 @@ public class UrlyBirdClientGui extends JFrame {
         String csrNumber = null;
         try {
             csrNumber = clientUtils.receiveCsrNumber();
-        } catch (NullPointerException ignored) { System.exit(1); }
+        } catch (NullPointerException ignored) {
+            System.exit(1);
+        }
 
         setTitle(UrlyBirdApplicationGuiConstants.CLIENT_GUI_APPLICATION_TITLE + " - " + csrNumber);
         setSize(UrlyBirdApplicationGuiConstants.CLIENT_GUI_DIMENSION);

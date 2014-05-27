@@ -6,7 +6,7 @@ import suncertify.utilities.UrlyBirdApplicationConstants;
  * The pojo to represent a Hotel Room.
  *
  * @author Luke GJ Potter
- * @since  06/12/2013
+ * @since 06/12/2013
  */
 public class HotelRoom {
 
@@ -16,15 +16,16 @@ public class HotelRoom {
     private double rate;
 
     // ---------- Constructors ----------
+
     /**
      * Constructor for the HotelRoom pojo.
      *
-     * @param name The name of the hotel.
-     * @param location The city that the hotel is located in.
-     * @param roomSize The size of the room.
+     * @param name      The name of the hotel.
+     * @param location  The city that the hotel is located in.
+     * @param roomSize  The size of the room.
      * @param isSmoking Weather the room allows occupants to smoke.
-     * @param rate The cost of the room.
-     * @param date The date that the room will be available from.
+     * @param rate      The cost of the room.
+     * @param date      The date that the room will be available from.
      */
     public HotelRoom(String name, String location, int roomSize, boolean isSmoking, double rate, String date) {
 
@@ -39,7 +40,7 @@ public class HotelRoom {
 
     /**
      * Constructor for the HotelRoom pojo.
-     *
+     * <p/>
      * Because the output of the {@code Data.readRecord(String)} method looks like
      * <pre>{@code
      * 0. |Palace                                                          |
@@ -53,7 +54,7 @@ public class HotelRoom {
      * for an unbooked room, it must be heavily parsed.
      *
      * @param strings An array of strings ordered to follow the output of he
-     * {@code Data.readRecord(String)} method.
+     *                {@code Data.readRecord(String)} method.
      */
     public HotelRoom(String... strings) {
 
@@ -67,6 +68,26 @@ public class HotelRoom {
     }
 
     // ---------- Getters and Setters ----------
+
+    /**
+     * Extracts a double value from a string.
+     *
+     * @param string The string containing the double.
+     * @return The double value contained in the string.
+     */
+    private static double extractDoubleFromString(String string) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < string.length(); i++) {
+
+            if (Character.isDigit(string.charAt(i)) || string.charAt(i) == '.') {
+                stringBuilder.append(string.charAt(i));
+            }
+        }
+        return Double.parseDouble(stringBuilder.toString().substring(0, stringBuilder.length() - 1));
+    }
+
     /**
      * Gets the name.
      *
@@ -184,6 +205,8 @@ public class HotelRoom {
         return rate;
     }
 
+    // ---------- Public Methods ----------
+
     /**
      * Sets the rate.
      *
@@ -193,13 +216,13 @@ public class HotelRoom {
         this.rate = rate;
     }
 
-    // ---------- Public Methods ----------
     /**
      * Converts the HotelRoom as a String.
      *
      * @return A string representation of the HotelRoom object.
      */
-    @Override public String toString() {
+    @Override
+    public String toString() {
 
         return name + ", " + location;
     }
@@ -212,9 +235,10 @@ public class HotelRoom {
     public String[] toStringArray() {
 
         String isSmokingString = UrlyBirdApplicationConstants.SMOKING_NOT_ALLOWED;
-        if (isSmoking()) isSmokingString = UrlyBirdApplicationConstants.SMOKING_ALLOWED;
+        if (isSmoking())
+            isSmokingString = UrlyBirdApplicationConstants.SMOKING_ALLOWED;
 
-        return new String[] {
+        return new String[]{
                 getName(),
                 getLocation(),
                 getRoomSize() + "",
@@ -229,11 +253,13 @@ public class HotelRoom {
      * This method is used for comparing against other objects.
      *
      * @param object Object to compare against.
-     * @return True, if the objects are the same. False, if they are not the same.
+     * @return True, if the objects are the same. False, if they are not the
+     * same.
      */
-    @Override public boolean equals(Object object) {
+    @Override
+    public boolean equals(Object object) {
 
-        if (! (object instanceof HotelRoom)) {
+        if (!(object instanceof HotelRoom)) {
             return false;
         }
 
@@ -247,33 +273,16 @@ public class HotelRoom {
 
     }
 
+    // ---------- Private Methods ----------
+
     /**
      * Used for making a comparison against other objects.
      *
      * @return A hash value of the HotelRoom object.
      */
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
 
-        return (name.hashCode() + location.hashCode() * (1 + (int)rate + roomSize));
-    }
-
-    // ---------- Private Methods ----------
-    /**
-     * Extracts a double value from a string.
-     *
-     * @param string The string containing the double.
-     * @return The double value contained in the string.
-     */
-    private static double extractDoubleFromString(String string) {
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (int i = 0; i < string.length(); i++) {
-
-            if (Character.isDigit(string.charAt(i)) || string.charAt(i) == '.') {
-                stringBuilder.append(string.charAt(i));
-            }
-        }
-        return Double.parseDouble(stringBuilder.toString().substring(0, stringBuilder.length() - 1));
+        return (name.hashCode() + location.hashCode() * (1 + (int) rate + roomSize));
     }
 }

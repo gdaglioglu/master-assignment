@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * @author Luke GJ Potter
- * Date: 31/03/2014
+ * @since 31/03/2014
  */
 public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
 
@@ -23,7 +23,7 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
      */
     public DatabaseAccessDaoLocal() {
 
-         databaseAccessFacade = new Data();
+        databaseAccessFacade = new Data();
     }
 
     /**
@@ -33,18 +33,20 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
      * @return An ArrayList of the {@code HotelRoom} object that match the
      *         criteria.
      */
-    @Override public ArrayList<HotelRoom> findHotelRooms(String... searchStrings) {
+    @Override
+    public ArrayList<HotelRoom> findHotelRooms(String... searchStrings) {
 
         long[] recordNumbers = databaseAccessFacade.findByCriteria(searchStrings);
         ArrayList<HotelRoom> hotelRooms = null;
 
-        for(long recordNumber : recordNumbers) {
+        for (long recordNumber : recordNumbers) {
 
             HotelRoom hotelRoom = retrieveHotelRoom(recordNumber);
 
             if (hotelRoom != null) {
 
-                // Initialise the hotelRooms ArrayList the first time we find a hotelRoom to add to the list.
+                // Initialise the hotelRooms ArrayList the first time we find a
+                // hotelRoom to add to the list.
                 if (hotelRooms == null) {
                     hotelRooms = new ArrayList<HotelRoom>();
                 }
@@ -60,9 +62,10 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
      * Gets all the {@code HotelRoom} objects in the database.
      *
      * @return An ArrayList of the all the {@code HotelRoom} objects in the
-     *         database.
+     * database.
      */
-    @Override public ArrayList<HotelRoom> retrieveAllHotelRooms() {
+    @Override
+    public ArrayList<HotelRoom> retrieveAllHotelRooms() {
 
         ArrayList<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
         HotelRoom tempHotelRoom;
@@ -79,12 +82,14 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
      *
      * @param recordNumber The record number of the desired {@code HotelRoom}.
      * @param customerName The CSR number of the booker.
-     * @param endDate The string representation of the date when the booking is due to expire.
-     * @param lockCookie The key to lock the record with.
+     * @param endDate      The string representation of the date when the
+     *                     booking is due to expire.
+     * @param lockCookie   The key to lock the record with.
      * @return True, if the booking was successful.
      *         False, if the booking was not successful.
      */
-    @Override public boolean bookHotelRoom(long recordNumber, String customerName, String endDate, long lockCookie) {
+    @Override
+    public boolean bookHotelRoom(long recordNumber, String customerName, String endDate, long lockCookie) {
 
         HotelRoom hotelRoomToBook;
 
@@ -99,6 +104,7 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
     }
 
     // ----- Private Methods -----
+
     /**
      * Retrieves a {@code HotelRoom} object from the database.
      *
@@ -123,10 +129,10 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
     /**
      * Updates a {@code HotelRoom} record in the database.
      *
-     * @param recordNumber The record number of the desired {@code HotelRoom}.
+     * @param recordNumber     The record number of the desired {@code HotelRoom}.
      * @param updatedHotelRoom The {@code HotelRoom} pojo to Overwrite the
      *                         existing record.
-     * @param lockCookie The key to lock the record with.
+     * @param lockCookie       The key to lock the record with.
      * @return True, if the update was successful.
      *         False, if the update was not successful.
      */

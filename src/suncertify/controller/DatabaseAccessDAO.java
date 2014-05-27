@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * The interface of the DAO pattern implementation for the URLyBird Application.
  *
  * @author Luke GJ Potter
- * @since  15/04/2014
+ * @since 15/04/2014
  */
 public interface DatabaseAccessDao {
 
@@ -34,8 +34,9 @@ public interface DatabaseAccessDao {
      *
      * @param recordNumber The record number of the desired {@code HotelRoom}.
      * @param customerName The CSR number of the booker.
-     * @param endDate The string representation of the date when the booking is due to expire.
-     * @param lockCookie The key to lock the record with.
+     * @param endDate      The string representation of the date when the
+     *                     booking is due to expire.
+     * @param lockCookie   The key to lock the record with.
      * @return True, if the booking was successful.
      *         False, if the booking was not successful.
      */

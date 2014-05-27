@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
  * The JPanel that displays and handles the resources for booking a Hotel Room.
  *
  * @author Luke GJ Potter
- * @since  22/04/2014
+ * @since 22/04/2014
  */
 class BookingPanel extends JPanel {
 
@@ -27,7 +27,7 @@ class BookingPanel extends JPanel {
      *
      * @param databaseAccessDao The Client's {@code DatabaseAccessDao} to use
      *                          for booking a room using the GUI.
-     * @param csrNumber The CSR Number of the GUI Operator.
+     * @param csrNumber         The CSR Number of the GUI Operator.
      */
     public BookingPanel(DatabaseAccessDao databaseAccessDao, String csrNumber) {
 
@@ -65,7 +65,7 @@ class BookingPanel extends JPanel {
          *
          * @param databaseAccessDao The Client's {@code DatabaseAccessDao} to
          *                          use for creating a booking using the GUI.
-         * @param csrNumber The CSR Number of the GUI Operator.
+         * @param csrNumber         The CSR Number of the GUI Operator.
          */
         public BookHotelRoom(DatabaseAccessDao databaseAccessDao, String csrNumber) {
             this.databaseAccessDao = databaseAccessDao;
@@ -82,7 +82,8 @@ class BookingPanel extends JPanel {
          *
          * @param actionEvent The event performed.
          */
-        @Override public void actionPerformed(ActionEvent actionEvent) {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
 
             int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
 
@@ -95,7 +96,7 @@ class BookingPanel extends JPanel {
 
                         databaseAccessDao.bookHotelRoom(recordRow, csrNumber, endDate, Thread.currentThread().getId());
                     }
-                } catch(Exception ignored) {
+                } catch (Exception ignored) {
 
                 } finally {
                     TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
@@ -111,9 +112,10 @@ class BookingPanel extends JPanel {
             String[] choices = {"Today", "Tomorrow"};
             startDate = (String) JOptionPane.showInputDialog(bookingPanel, "Choose booking start date.", "Booking Start Date", JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
 
-            if (startDate.equals(UrlyBirdApplicationConstants.EMPTY_STRING)) return false;
+            if (startDate.equals(UrlyBirdApplicationConstants.EMPTY_STRING))
+                return false;
 
-            while (! isValidEndDate()) {
+            while (!isValidEndDate()) {
                 endDate = JOptionPane.showInputDialog(bookingPanel, "Enter the date to end the booking (" + UrlyBirdApplicationConstants.DATE_FORMAT + ")");
             }
 
@@ -129,7 +131,9 @@ class BookingPanel extends JPanel {
 
                 return true;
 
-            } catch (ParseException ignored) { return false; }
+            } catch (ParseException ignored) {
+                return false;
+            }
         }
     }
 }

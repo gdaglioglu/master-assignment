@@ -5,7 +5,7 @@ package suncertify.db;
  * interface.
  *
  * @author Luke GJ Potter
- * @since  27/03/2014
+ * @since 27/03/2014
  */
 public class Data implements DBAccess {
 
@@ -18,7 +18,8 @@ public class Data implements DBAccess {
      * @throws DuplicateKeyException When trying to create a record that already
      *                               exists in the database.
      */
-    @Override public long createRecord(String[] data) throws DuplicateKeyException {
+    @Override
+    public long createRecord(String[] data) throws DuplicateKeyException {
         return DatabaseAccessCrudOperations.createRecord(data);
     }
 
@@ -31,7 +32,8 @@ public class Data implements DBAccess {
      * @throws RecordNotFoundException When locating a record that does not
      *                                 exist, or had been previously deleted.
      */
-    @Override public String[] readRecord(long recNo) throws RecordNotFoundException {
+    @Override
+    public String[] readRecord(long recNo) throws RecordNotFoundException {
         return DatabaseAccessCrudOperations.readRecord(recNo);
     }
 
@@ -40,16 +42,18 @@ public class Data implements DBAccess {
      * data[n]. Throws SecurityException if the record is locked with a cookie
      * other than lockCookie.
      *
-     * @param recNo The record number in the database to update.
-     * @param data The string array representation of a database record,
-     *             containing the updates.
+     * @param recNo      The record number in the database to update.
+     * @param data       The string array representation of a database record,
+     *                   containing the updates.
      * @param lockCookie The cookie that the row is locked with.
      * @throws RecordNotFoundException When locating a record that does not
      *                                 exist, or had been previously deleted.
-     * @throws SecurityException If the record is locked by a user other than
-     *                           the user trying to update the record.
+     * @throws SecurityException       If the record is locked by a user other
+     *                                 than the user trying to update the
+     *                                 record.
      */
-    @Override public void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException {
+    @Override
+    public void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException {
         DatabaseAccessCrudOperations.updateRecord(recNo, data, lockCookie);
     }
 
@@ -59,14 +63,16 @@ public class Data implements DBAccess {
      * SecurityException if the record is locked with a cookie other than
      * lockCookie.
      *
-     * @param recNo The record number in the database to delete.
+     * @param recNo      The record number in the database to delete.
      * @param lockCookie The cookie that the row is locked with.
      * @throws RecordNotFoundException When locating a record that does not
      *                                 exist, or had been previously deleted.
-     * @throws SecurityException If the record is locked by a user other than
-     *                           the user trying to update the record.
+     * @throws SecurityException       If the record is locked by a user other
+     *                                 than the user trying to update the
+     *                                 record.
      */
-    @Override public void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException {
+    @Override
+    public void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException {
         DatabaseAccessCrudOperations.deleteRecord(recNo, lockCookie);
     }
 
@@ -76,13 +82,14 @@ public class Data implements DBAccess {
      * {@code criteria[n]}. A null value in {@code criteria[n]} matches any
      * field value. A non-null value in {@code criteria[n]} matches any field
      * value that begins with {@code criteria[n]}.
-     *
+     * <p/>
      * For example, "Fred" matches "Fred" or "Freddy".
      *
      * @param criteria The search criteria to match against.
      * @return An array of record numbers that match the {@code criteria}.
      */
-    @Override public long[] findByCriteria(String[] criteria) {
+    @Override
+    public long[] findByCriteria(String[] criteria) {
         return DatabaseAccessSearch.findByCriteria(criteria);
     }
 
@@ -98,7 +105,8 @@ public class Data implements DBAccess {
      * @throws RecordNotFoundException When locating a record that does not
      *                                 exist, or had been previously deleted.
      */
-    @Override public long lockRecord(long recNo) throws RecordNotFoundException {
+    @Override
+    public long lockRecord(long recNo) throws RecordNotFoundException {
         return DatabaseAccessLockManager.getInstance().lock(recNo);
     }
 
@@ -106,12 +114,13 @@ public class Data implements DBAccess {
      * Releases the lock on a record. Cookie must be the cookie returned when
      * the record was locked; otherwise throws {@code SecurityException}.
      *
-     * @param recNo the record number to unlock
+     * @param recNo  the record number to unlock
      * @param cookie the cookie to unlock the record with
      * @throws SecurityException If the record is locked by a user other than
      *                           the user trying to update the record.
      */
-    @Override public void unlock(long recNo, long cookie) throws SecurityException {
+    @Override
+    public void unlock(long recNo, long cookie) throws SecurityException {
         DatabaseAccessLockManager.getInstance().unlock(recNo, cookie);
     }
 }

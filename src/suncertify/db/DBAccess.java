@@ -4,7 +4,7 @@ package suncertify.db;
  * The interface to the database file, supplied for the OCMJD certification.
  *
  * @author Luke GJ Potter
- * @since  06/12/2013
+ * @since 06/12/2013
  */
 interface DBAccess {
 
@@ -24,14 +24,15 @@ interface DBAccess {
      * data[n]. Throws SecurityException if the record is locked with a cookie
      * other than lockCookie.
      *
-     * @param recNo The record number in the database to update.
-     * @param data The string array representation of a database record,
-     *             containing the updates.
+     * @param recNo      The record number in the database to update.
+     * @param data       The string array representation of a database record,
+     *                   containing the updates.
      * @param lockCookie The cookie that the row is locked with.
      * @throws RecordNotFoundException When locating a record that does not
      *                                 exist, or had been previously deleted.
-     * @throws SecurityException If the record is locked by a user other than
-     *                           the user trying to update the record.
+     * @throws SecurityException       If the record is locked by a user other
+     *                                 than the user trying to update the
+     *                                 record.
      */
     public void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException;
 
@@ -40,12 +41,13 @@ interface DBAccess {
      * available for reuse. Throws SecurityException if the record is locked
      * with a cookie other than lockCookie.
      *
-     * @param recNo The record number in the database to delete.
+     * @param recNo      The record number in the database to delete.
      * @param lockCookie The cookie that the row is locked with.
      * @throws RecordNotFoundException When locating a record that does not
      *                                 exist, or had been previously deleted.
-     * @throws SecurityException If the record is locked by a user other than
-     *                           the user trying to update the record.
+     * @throws SecurityException       If the record is locked by a user other
+     *                                 than the user trying to update the
+     *                                 record.
      */
     public void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException;
 
@@ -90,7 +92,7 @@ interface DBAccess {
      * Releases the lock on a record. Cookie must be the cookie returned when
      * the record was locked; otherwise throws SecurityException.
      *
-     * @param recNo the record number to unlock
+     * @param recNo  the record number to unlock
      * @param cookie the cookie to unlock the record with
      * @throws SecurityException If the record is locked by a user other than
      *                           the user trying to update the record.

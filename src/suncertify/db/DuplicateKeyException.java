@@ -2,14 +2,15 @@ package suncertify.db;
 
 /**
  * @author Luke GJ Potter
- * @since  06/12/2013
+ * @since 06/12/2013
  */
 public class DuplicateKeyException extends Exception {
 
     /**
      * Default Constructor.
      */
-    public DuplicateKeyException() {}
+    public DuplicateKeyException() {
+    }
 
     /**
      * Constructor that accepts a parameter.

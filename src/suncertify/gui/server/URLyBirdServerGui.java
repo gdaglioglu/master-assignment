@@ -20,7 +20,7 @@ import java.util.Properties;
  * server.
  *
  * @author Luke GJ Potter
- * @since  29/04/2014
+ * @since 29/04/2014
  */
 public class UrlyBirdServerGui extends JFrame {
 
@@ -80,7 +80,8 @@ public class UrlyBirdServerGui extends JFrame {
          *
          * @param actionEvent The event performed.
          */
-        @Override public void actionPerformed(ActionEvent actionEvent) {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
 
             if (!serverConfigurationPanel.areTextFieldValuesValid()) {
                 CommonGuiUtils.showErrorMessageDialog("Please enter valid values in the Text Fields.");
@@ -111,7 +112,7 @@ public class UrlyBirdServerGui extends JFrame {
          * properties.
          *
          * @throws IOException If there's a problem with accessing the
-         *         {@code suncertify.properties} file.
+         *                     {@code suncertify.properties} file.
          */
         private void updatePropertiesToReflectServerGui() throws IOException {
 
@@ -141,7 +142,7 @@ public class UrlyBirdServerGui extends JFrame {
          *
          * @param properties The current properties of the URLyBird Application.
          * @return True, if the properties have been changed.
-         *         False, if the properties have not been changed.
+         * False, if the properties have not been changed.
          */
         private boolean hasDatabasePathPropertyChanged(Properties properties) {
 

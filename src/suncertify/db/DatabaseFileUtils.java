@@ -32,7 +32,22 @@ public class DatabaseFileUtils {
         updateNumberOfRecordsInDatabase();
     }
 
+    /**
+     * Get an instance of the {@code DatabaseFileUtils} class.
+     *
+     * @return A
+     */
+    public static DatabaseFileUtils getInstance() {
+
+        if (databaseFileUtils == null) {
+            databaseFileUtils = new DatabaseFileUtils();
+        }
+
+        return databaseFileUtils;
+    }
+
     // ---------- Getters and Setters ----------
+
     /**
      * Gets the value of the magic cookie at the beginning of the database file.
      *
@@ -76,7 +91,7 @@ public class DatabaseFileUtils {
      * Gets the number of records in the database, including deleted records.
      *
      * @return The number of records in the database, including the deleted
-     *         records.
+     * records.
      */
     public long getNumberOfRecordsInDatabase() {
         return numberOfRecordsInDatabase;
@@ -91,7 +106,7 @@ public class DatabaseFileUtils {
      * information and where the records start.
      *
      * @return The number of bytes from where the file's header information
-     *         ends.
+     * ends.
      */
     public long getHeaderOffset() {
         return headerOffset;
@@ -102,22 +117,10 @@ public class DatabaseFileUtils {
     }
 
     // ---------- Public Methods ----------
-    /**
-     * Get an instance of the {@code DatabaseFileUtils} class.
-     *
-     * @return A
-     */
-    public static DatabaseFileUtils getInstance() {
-
-        if (databaseFileUtils == null) {
-            databaseFileUtils = new DatabaseFileUtils();
-        }
-
-        return databaseFileUtils;
-    }
 
     /**
-     * Get the current number of records in the database including deleted records.
+     * Get the current number of records in the database including deleted
+     * records.
      */
     public synchronized void updateNumberOfRecordsInDatabase() {
 
@@ -213,7 +216,7 @@ public class DatabaseFileUtils {
      * @param bytes The {@code byte} array that contains the number to be
      *              converted to an {@code int}.
      * @return An {@code int} that represents the content of the {@code byte}
-     *         array, provided as an argument.
+     * array, provided as an argument.
      */
     private int getValueFromByteArray(final byte[] bytes) {
 

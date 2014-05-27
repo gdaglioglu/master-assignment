@@ -10,15 +10,19 @@ import java.awt.*;
  * The JPanel that holds the JTable to display the records.
  *
  * @author Luke GJ Potter
- * @since  22/04/2014
+ * @since 22/04/2014
  */
 class TablePanel extends JPanel {
 
-    private final JPanel tablePanel;
-    /** The JTable that will hold the records. */
+    /**
+     * The JTable that will hold the records.
+     */
     public static JTable hotelRoomTable;
-    /** Concrete subclass of AbstractTableModel. */
+    /**
+     * Concrete subclass of AbstractTableModel.
+     */
     public static HotelRoomTableModel hotelRoomTableModel;
+    private final JPanel tablePanel;
 
     /**
      * The constructor for the TablePanel. It populates its JTable with all the
@@ -38,18 +42,18 @@ class TablePanel extends JPanel {
     }
 
     /**
+     * Refreshes the JTable with the current status of the HotelRoomTableModel.
+     */
+    public static void refreshHotelRoomTableModel() {
+        hotelRoomTable.setModel(hotelRoomTableModel);
+    }
+
+    /**
      * Returns the JPanel instance.
      *
      * @return the JPanel instance.
      */
     public JPanel getTablePanel() {
         return tablePanel;
-    }
-
-    /**
-     * Refreshes the JTable with the current status of the HotelRoomTableModel.
-     */
-    public static void refreshHotelRoomTableModel() {
-        hotelRoomTable.setModel(hotelRoomTableModel);
     }
 }

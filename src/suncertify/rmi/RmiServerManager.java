@@ -13,7 +13,7 @@ import java.rmi.registry.LocateRegistry;
  * Application.
  *
  * @author Luke GJ Potter
- * @since  07/05/2014
+ * @since 07/05/2014
  */
 public class RmiServerManager {
 
@@ -45,7 +45,7 @@ public class RmiServerManager {
      * Checks the status of the RMI Server for the URLyBird Application.
      *
      * @return True, if the server is running.
-     *         False, if the server is not running.
+     * False, if the server is not running.
      */
     public static boolean isRmiServerRunning() {
         return (rmiServerStatus == RmiServerStatus.RUNNING);

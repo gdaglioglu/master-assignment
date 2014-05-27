@@ -7,11 +7,12 @@ import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
  * A class containing utility methods for the RMI package.
  *
  * @author Luke GJ Potter
- * @since  07/05/2014
+ * @since 07/05/2014
  */
 class RmiUtils {
 
     // ----- Public Methods -----
+
     /**
      * Forms the RMI URL from the values in the suncertify.properties file.
      *

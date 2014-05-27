@@ -8,14 +8,20 @@ import java.util.Map;
  * records.
  *
  * @author Luke GJ Potter
- * @since  27/03/2014
+ * @since 27/03/2014
  */
 class DatabaseAccessLockManager {
 
-    // A map to record which records (key) are locked by which thread (value).
-    private final Map<Long,Long> lockedMap = new HashMap<Long,Long>();
     // Singleton instance of this {@code DatabaseAccessLockManager} class.
     private static DatabaseAccessLockManager databaseAccessLockManager;
+    // A map to record which records (key) are locked by which thread (value).
+    private final Map<Long, Long> lockedMap = new HashMap<Long, Long>();
+
+    /**
+     * Private constructor for the singleton.
+     */
+    private DatabaseAccessLockManager() {
+    }
 
     /**
      * This method returns the single instance of the
@@ -31,11 +37,6 @@ class DatabaseAccessLockManager {
 
         return databaseAccessLockManager;
     }
-
-    /**
-     * Private constructor for the singleton.
-     */
-    private DatabaseAccessLockManager() {}
 
     /**
      * Locks a record so that it can only be updated or deleted by this client.
@@ -59,7 +60,7 @@ class DatabaseAccessLockManager {
      * Releases the lock on a record. Cookie must be the cookie returned when
      * the record was locked; otherwise throws {@code SecurityException}.
      *
-     * @param recNo the record number to unlock
+     * @param recNo  the record number to unlock
      * @param cookie the cookie to unlock the record with
      * @throws SecurityException
      */
@@ -107,11 +108,11 @@ class DatabaseAccessLockManager {
      * This method is for unlocking a record when creating or deleting a new
      * record.
      *
-     * @param recordNumber the record number to unlock
+     * @param recordNumber  the record number to unlock
      * @param lockingCookie the cookie to unlock the record with
      * @throws SecurityException
      */
-    public synchronized void unlockRecordWhenCreatingOrDeletingRecord(long recordNumber, long lockingCookie) throws SecurityException{
+    public synchronized void unlockRecordWhenCreatingOrDeletingRecord(long recordNumber, long lockingCookie) throws SecurityException {
 
         if (isRecordLockedByThisUser(recordNumber, lockingCookie)) {
             lockedMap.remove(recordNumber);
@@ -126,7 +127,7 @@ class DatabaseAccessLockManager {
      * should the record be in the map, the value of the map's entry for the
      * record is compared to the {@code lockingCookie}.
      *
-     * @param recordNumber the record number to investigate
+     * @param recordNumber  the record number to investigate
      * @param lockingCookie the cookie to investigate
      * @return True, if the record is locked by another cookie.
      *         False, if the record is not locked.
@@ -141,7 +142,7 @@ class DatabaseAccessLockManager {
      * should the record be in the map, the value of the map's entry for the
      * record is compared to the {@code lockingCookie}.
      *
-     * @param recordNumber the record number to investigate
+     * @param recordNumber  the record number to investigate
      * @param lockingCookie the cookie to investigate
      * @return True, if the record is locked by the cookie.
      *         False, if the record is not locked by this cookie.

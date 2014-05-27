@@ -20,7 +20,7 @@ class DatabaseAccessSearch {
      * {@code criteria[n]}. A null value in {@code criteria[n]} matches any
      * field value. A non-null value in {@code criteria[n]} matches any field
      * value that begins with {@code criteria[n]}.
-     *
+     * <p/>
      * For example, "Fred" matches "Fred" or "Freddy".
      *
      * @param criteria The search criteria to match against.
@@ -42,13 +42,14 @@ class DatabaseAccessSearch {
     }
 
     // ---------- Private Methods ----------
+
     /**
      * This method searches the database records that correspond to
      * {@code validRecordNumbers} for values in the {@code positionInCriteria}
      * position that start with {@code criteria[positionInCriteria]} and returns
      * their record numbers as an array.
      *
-     * @param criteria The criteria to match against.
+     * @param criteria           The criteria to match against.
      * @param positionInCriteria The position in the criteria String array to
      *                           perform the match against.
      * @param validRecordNumbers An array of the valid database record numbers
@@ -69,7 +70,8 @@ class DatabaseAccessSearch {
                     searchResults.add(recordNumber);
                 }
 
-            } catch (RecordNotFoundException ignored) { }
+            } catch (RecordNotFoundException ignored) {
+            }
         }
 
         return longListToLongArray(searchResults);
@@ -81,7 +83,7 @@ class DatabaseAccessSearch {
      * the {@code criteria} parameter and returns
      * their record numbers as an array.
      *
-     * @param criteria The criteria to match against.
+     * @param criteria           The criteria to match against.
      * @param validRecordNumbers An array of the valid database record numbers
      *                           to search against.
      * @return A {@code long[]} containing the record numbers of the database
@@ -107,7 +109,8 @@ class DatabaseAccessSearch {
 
                 if (allMatch) searchResults.add(recordNumber);
 
-            } catch (RecordNotFoundException ignored) { }
+            } catch (RecordNotFoundException ignored) {
+            }
         }
 
         return longListToLongArray(searchResults);
@@ -131,7 +134,8 @@ class DatabaseAccessSearch {
             try {
                 DatabaseAccessCrudOperations.readRecord(recordNumber);
                 validRecordNumbers.add(recordNumber);
-            } catch (RecordNotFoundException ignored) { }
+            } catch (RecordNotFoundException ignored) {
+            }
         }
 
         return longListToLongArray(validRecordNumbers);

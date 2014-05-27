@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
  * in the URLyBird Application.
  *
  * @author Luke GJ Potter
- * @since  22/04/2014
+ * @since 22/04/2014
  */
 class SearchPanel extends JPanel {
 
@@ -67,8 +67,8 @@ class SearchPanel extends JPanel {
         /**
          * The constructor for the SearchForRoomActionListener class.
          *
-         * @param databaseAccessDao The Client's {@code DatabaseAccessDao} to use
-         *                          for searching the data for the GUI.
+         * @param databaseAccessDao The Client's {@code DatabaseAccessDao} to
+         *                          use for searching the data for the GUI.
          */
         public SearchForRoomActionListener(DatabaseAccessDao databaseAccessDao) {
             this.databaseAccessDao = databaseAccessDao;
@@ -82,7 +82,8 @@ class SearchPanel extends JPanel {
          *
          * @param actionEvent The event performed.
          */
-        @Override public void actionPerformed(ActionEvent actionEvent) {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
 
             TablePanel.hotelRoomTableModel = new HotelRoomTableModel(
                     databaseAccessDao.findHotelRooms(

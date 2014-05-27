@@ -14,11 +14,12 @@ import java.io.RandomAccessFile;
  * record and delete a record.
  *
  * @author Luke GJ Potter
- * @since  27/03/2014
+ * @since 27/03/2014
  */
 class DatabaseAccessCrudOperations {
 
     // ---------- Public Methods ----------
+
     /**
      * Creates a new record in the database. Inserts the given data, and returns
      * the record number of the new record.
@@ -31,7 +32,7 @@ class DatabaseAccessCrudOperations {
     public static synchronized long createRecord(String[] data) throws DuplicateKeyException {
 
         // Search on the name and location fields of the data object.
-        if (DatabaseAccessSearch.findByCriteria(new String[] {data[0], data[1]}).length != 0) {
+        if (DatabaseAccessSearch.findByCriteria(new String[]{data[0], data[1]}).length != 0) {
             String record = "";
             for (String field : data) record += field + ", ";
 
@@ -47,7 +48,8 @@ class DatabaseAccessCrudOperations {
 
         try {
             lockCookie = DatabaseAccessLockManager.getInstance().lockRecordWhenCreatingNewRecord(positionToInsertRecord);
-        } catch (RecordNotFoundException ignored) {}
+        } catch (RecordNotFoundException ignored) {
+        }
 
         try {
             RandomAccessFile databaseRandomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
@@ -114,14 +116,15 @@ class DatabaseAccessCrudOperations {
      * data[n]. Throws SecurityException if the record is locked with a cookie
      * other than lockCookie.
      *
-     * @param recNo The record number in the database to update.
-     * @param data The string array representation of a database record,
-     *             containing the updates.
+     * @param recNo      The record number in the database to update.
+     * @param data       The string array representation of a database record,
+     *                   containing the updates.
      * @param lockCookie The cookie that the row is locked with.
      * @throws RecordNotFoundException When locating a record that does not
      *                                 exist, or had been previously deleted.
-     * @throws SecurityException If the record is locked by a user other than
-     *                           the user trying to update the record.
+     * @throws SecurityException       If the record is locked by a user other
+     *                                 than the user trying to update the
+     *                                 record.
      */
     public static void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException {
 
@@ -165,14 +168,15 @@ class DatabaseAccessCrudOperations {
      * SecurityException if the record is locked with a cookie other than
      * lockCookie.
      *
-     * @param recNo The record number in the database to delete.
+     * @param recNo      The record number in the database to delete.
      * @param lockCookie The cookie that the row is locked with.
      * @throws RecordNotFoundException When locating a record that does not
      *                                 exist, or had been previously deleted.
-     * @throws SecurityException If the record is locked by a user other than
-     *                           the user trying to update the record.
+     * @throws SecurityException       If the record is locked by a user other
+     *                                 than the user trying to update the
+     *                                 record.
      */
-    public static void deleteRecord(long recNo, long lockCookie)  throws RecordNotFoundException, SecurityException {
+    public static void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException {
 
         DatabaseAccessLockManager databaseAccessLockManager = DatabaseAccessLockManager.getInstance();
 
@@ -264,7 +268,8 @@ class DatabaseAccessCrudOperations {
                     dataOutputStream.write(bytes[k++]);
                 }
                 // Reset the secondary counters each time round.
-                j = 0; k = 0;
+                j = 0;
+                k = 0;
             }
 
             dataOutputStream.flush();

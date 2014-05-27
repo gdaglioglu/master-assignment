@@ -5,6 +5,6 @@
  * the exceptions that are thrown by the interface class.
  *
  * @author Luke GJ Potter
- * @since  26/05/2014
+ * @since 26/05/2014
  */
 package suncertify.db;

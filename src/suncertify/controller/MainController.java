@@ -9,7 +9,7 @@ import suncertify.utilities.UrlyBirdApplicationMode;
  * This is the class that handles the starting of the URLyBird Application.
  *
  * @author Luke GJ Potter
- * Date: 06/12/2013
+ * @since 06/12/2013
  */
 public class MainController {
 

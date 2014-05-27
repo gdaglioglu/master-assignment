@@ -6,7 +6,7 @@ import javax.swing.*;
  * A utilities class to be used across all the GUIs
  *
  * @author Luke GJ Potter
- * @since  15/05/2014
+ * @since 15/05/2014
  */
 public class CommonGuiUtils {
 

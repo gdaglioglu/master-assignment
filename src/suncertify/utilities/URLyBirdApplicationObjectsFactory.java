@@ -9,7 +9,7 @@ import java.util.Properties;
  * be written and maintained.
  *
  * @author Luke GJ Potter
- * @since  02/04/2014
+ * @since 02/04/2014
  */
 public class UrlyBirdApplicationObjectsFactory {
 
@@ -24,7 +24,7 @@ public class UrlyBirdApplicationObjectsFactory {
 
         try {
             properties.load(new FileInputStream(UrlyBirdApplicationConstants.PROPERTY_FILE_NAME));
-        }  catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             System.out.println("Unable to find the properties file. Looking for file in: "
                     + System.getProperty("user.dir")
                     + "/"
@@ -44,7 +44,7 @@ public class UrlyBirdApplicationObjectsFactory {
      * Application.
      *
      * @return The RandomAccessFile to access the database file in the URLyBird
-     *         Application.
+     * Application.
      */
     public static RandomAccessFile getDatabaseRandomAccessFile() {
 
@@ -52,7 +52,7 @@ public class UrlyBirdApplicationObjectsFactory {
 
         try {
             File databaseFile = new File(properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
-            if (! databaseFile.exists()) {
+            if (!databaseFile.exists()) {
                 throw new FileNotFoundException();
             }
             return new RandomAccessFile(

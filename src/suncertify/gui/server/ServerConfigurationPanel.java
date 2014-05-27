@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
  * hostname and RMI port which are used by the server GUI.
  *
  * @author Luke GJ Potter
- * @since  29/04/2014
+ * @since 29/04/2014
  */
 class ServerConfigurationPanel {
 
@@ -78,7 +78,7 @@ class ServerConfigurationPanel {
      * location specified.
      *
      * @return True, if the values are valid.
-     *         False, if the values are invalid.
+     * False, if the values are invalid.
      */
     public boolean areTextFieldValuesValid() {
 
@@ -164,7 +164,7 @@ class ServerConfigurationPanel {
      *
      * @param rmiHostname The RMI hostname to validate.
      * @return True, if the hostname is valid.
-     *         False, if the hostname is invalid.
+     * False, if the hostname is invalid.
      */
     private boolean isValidHostname(String rmiHostname) {
 
@@ -177,7 +177,7 @@ class ServerConfigurationPanel {
      * @param rmiHostname The hostname for the RMI server in the dotted decimal
      *                    format of an IP address.
      * @return True, if the hostname is a valid IP address.
-     *         False, if the hostname is an invalid IP address.
+     * False, if the hostname is an invalid IP address.
      */
     private boolean isValidIpAddress(String rmiHostname) {
 
@@ -191,7 +191,9 @@ class ServerConfigurationPanel {
 
             try {
                 ipBlock = Integer.parseInt(stringTokenizer.nextToken(), 10);
-            } catch (NumberFormatException ignored) { return false; }
+            } catch (NumberFormatException ignored) {
+                return false;
+            }
 
             if (ipBlock < 0 || ipBlock > 255) return false;
         }
@@ -204,12 +206,14 @@ class ServerConfigurationPanel {
      *
      * @param rmiPortNumber The port number to validate.
      * @return True, if the port is valid.
-     *         False, if the port is invalid.
+     * False, if the port is invalid.
      */
     private boolean isValidPortNumber(String rmiPortNumber) {
 
         try {
             return (Integer.parseInt(rmiPortNumber) > 0);
-        } catch (NumberFormatException ignored) { return false; }
+        } catch (NumberFormatException ignored) {
+            return false;
+        }
     }
 }

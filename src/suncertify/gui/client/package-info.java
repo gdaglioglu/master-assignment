@@ -5,6 +5,6 @@
  * design and a Utils class for the GUI logic.
  *
  * @author Luke GJ Potter
- * @since  26/05/2014
+ * @since 26/05/2014
  */
 package suncertify.gui.client;
