@@ -19,8 +19,7 @@ Done: Remove extra functionality.
 
 Documentation:
 User Guide.
-Generate JavaDoc.
-    * javadoc -d ../runme/docs/javadoc/ suncertify/controller/* suncertify/db/* suncertify/gui/*/* suncertify/model/* suncertify/rmi/* suncertify/utilities/*
+Done: Generate JavaDoc.
 Review JavaDoc.
 
 
@@ -35,3 +34,4 @@ Done: Run the networked client and the standalone client at the same time.
 Other:
 Know why you chose RMI over Sockets.
 Know how the Locking is implemented.
+Build the runme.jar file from the instructions.
