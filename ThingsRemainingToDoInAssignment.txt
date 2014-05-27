@@ -27,10 +27,8 @@ Review JavaDoc.
 
 Testing:
 Run JavaRanch's locking tester.
-Run the server with multiple clients.
-Run the networked client and the standalone client at the same time.
-   * Locking messages when booking, seems to be an RMI issue.
-   * RMI GUI is not asking for second, or subsequent, end booking dates.
+Done: Run the server with multiple clients.
+Done: Run the networked client and the standalone client at the same time.
 
 
 

@@ -94,14 +94,14 @@ class BookingPanel extends JPanel {
                     if (areStartDateAndEndDateOfBookingSet()) {
 
                         databaseAccessDao.bookHotelRoom(recordRow, csrNumber, endDate, Thread.currentThread().getId());
-
-                        TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
-                        TablePanel.refreshHotelRoomTableModel();
-
-                        endDate = startDate = UrlyBirdApplicationConstants.EMPTY_STRING;
                     }
-                } catch(Exception e) {
-                    System.out.println("Reserve room problem found: " + e.getMessage());
+                } catch(Exception ignored) {
+
+                } finally {
+                    TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
+                    TablePanel.refreshHotelRoomTableModel();
+
+                    endDate = startDate = UrlyBirdApplicationConstants.EMPTY_STRING;
                 }
             }
         }
