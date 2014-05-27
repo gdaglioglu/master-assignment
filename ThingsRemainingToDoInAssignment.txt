@@ -19,8 +19,9 @@ Done: Remove extra functionality.
 
 Documentation:
 User Guide.
+Choices.txt
 Done: Generate JavaDoc.
-Review JavaDoc.
+Done: Review JavaDoc.
 
 
 
