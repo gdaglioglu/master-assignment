@@ -16,8 +16,6 @@ public class UrlyBirdApplicationGuiConstants {
     public static final String CLIENT_GUI_APPLICATION_TITLE = "URLyBird Application";
     /** The text of the Book JButton. */
     public static final String BOOK_BUTTON = "Book";
-    /** The text of the Cancel Booking JButton. */
-    public static final String CANCEL_BOOKING_BUTTON = "Cancel Booking";
     /** The text of the Search JButton. */
     public static final String SEARCH_BUTTON = "Search";
     /** The column names for the JTable in the Client GUI. */
@@ -33,7 +31,6 @@ public class UrlyBirdApplicationGuiConstants {
     public static final String SEARCH_PANEL_NAME_LABEL = "Name";
     /** The label for the location search criteria. */
     public static final String SEARCH_PANEL_LOCATION_LABEL = "Location";
-
     // ----- Server GUI -----
     /** The title of the Server GUI. */
     public static final String SERVER_GUI_APPLICATION_TITLE = "URLyBird Application Server";

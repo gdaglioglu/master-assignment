@@ -1,6 +1,4 @@
 Code:
-Remove extra functionality.
-    * Mention it as an area for future improvement.
 Implement Java7 MultiCatch.
 Nope: Free up rooms after their "booked until" date has passed.
     * Note this in documentation.
@@ -14,6 +12,8 @@ Done: Only allow booking within 48 hours.
 Done: Determine duration of stay when booking.
 Done: Implement DuplicateKeyException.
 Done: JavaDoc comments of every field and method.
+Done: Remove extra functionality.
+    * Mention it as an area for future improvement.
 
 
 

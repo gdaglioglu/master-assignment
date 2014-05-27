@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Holds the information on teh schema of the database file.
  *
  * @author Luke GJ Potter
- * @since 01/04/2014
+ * @since  01/04/2014
  */
 class DatabaseFileSchema {
 

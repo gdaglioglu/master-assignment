@@ -27,7 +27,7 @@ class HotelRoomTableModel extends AbstractTableModel {
     /**
      * The constructor for the HotelRoomTableModel class.
      *
-     * @param hotelRooms
+     * @param hotelRooms The list of {@code HotelRooms} to display in the table.
      */
     public HotelRoomTableModel(ArrayList<HotelRoom> hotelRooms) {
         hotelRoomList = hotelRooms;

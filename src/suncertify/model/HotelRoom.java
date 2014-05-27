@@ -10,13 +10,10 @@ import suncertify.utilities.UrlyBirdApplicationConstants;
  */
 public class HotelRoom {
 
-    private String name;
-    private String location;
+    private String name, location, date, ownerName;
     private int roomSize;
     private boolean isSmoking;
     private double rate;
-    private String date;
-    private String ownerName;
 
     // ---------- Constructors ----------
     /**
