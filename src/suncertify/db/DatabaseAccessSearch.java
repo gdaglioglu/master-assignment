@@ -55,7 +55,7 @@ class DatabaseAccessSearch {
      * @param validRecordNumbers An array of the valid database record numbers
      *                           to search against.
      * @return A {@code long[]} containing the record numbers of the database
-     *         records that match {@code criteria[positionInStrings]}.
+     * records that match {@code criteria[positionInStrings]}.
      */
     private static long[] searchOnCriteria(String[] criteria, int positionInCriteria, long[] validRecordNumbers) {
 
@@ -87,7 +87,7 @@ class DatabaseAccessSearch {
      * @param validRecordNumbers An array of the valid database record numbers
      *                           to search against.
      * @return A {@code long[]} containing the record numbers of the database
-     *         records that fully match {@code criteria}.
+     * records that fully match {@code criteria}.
      */
     private static long[] searchOnCriteria(String[] criteria, long[] validRecordNumbers) {
 

@@ -130,7 +130,7 @@ class DatabaseAccessLockManager {
      * @param recordNumber  the record number to investigate
      * @param lockingCookie the cookie to investigate
      * @return True, if the record is locked by another cookie.
-     *         False, if the record is not locked.
+     * False, if the record is not locked.
      */
     public boolean isRecordLockedBySomeoneElse(long recordNumber, long lockingCookie) {
 
@@ -145,7 +145,7 @@ class DatabaseAccessLockManager {
      * @param recordNumber  the record number to investigate
      * @param lockingCookie the cookie to investigate
      * @return True, if the record is locked by the cookie.
-     *         False, if the record is not locked by this cookie.
+     * False, if the record is not locked by this cookie.
      */
     boolean isRecordLockedByThisUser(long recordNumber, long lockingCookie) {
 
@@ -157,7 +157,7 @@ class DatabaseAccessLockManager {
      *
      * @param recordNumber the record number to investigate
      * @return True, if the record is in the map of locked records.
-     *         False, if the record is not in the map of locked records.
+     * False, if the record is not in the map of locked records.
      */
     boolean isRecordLocked(long recordNumber) {
 

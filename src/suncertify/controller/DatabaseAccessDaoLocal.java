@@ -31,7 +31,7 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
      *
      * @param searchStrings The criteria to compare the database records to.
      * @return An ArrayList of the {@code HotelRoom} object that match the
-     *         criteria.
+     * criteria.
      */
     @Override
     public ArrayList<HotelRoom> findHotelRooms(String... searchStrings) {
@@ -86,7 +86,7 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
      *                     booking is due to expire.
      * @param lockCookie   The key to lock the record with.
      * @return True, if the booking was successful.
-     *         False, if the booking was not successful.
+     * False, if the booking was not successful.
      */
     @Override
     public boolean bookHotelRoom(long recordNumber, String customerName, String endDate, long lockCookie) {
@@ -110,8 +110,8 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
      *
      * @param recordNumber The record number of the desired {@code HotelRoom}.
      * @return The {@code HotelRoom} object that corresponds to the
-     *         {@code recordNumber}. Or NULL if there was a problem retrieving
-     *         the record from the database.
+     * {@code recordNumber}. Or NULL if there was a problem retrieving
+     * the record from the database.
      */
     private HotelRoom retrieveHotelRoom(long recordNumber) {
 
@@ -134,7 +134,7 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
      *                         existing record.
      * @param lockCookie       The key to lock the record with.
      * @return True, if the update was successful.
-     *         False, if the update was not successful.
+     * False, if the update was not successful.
      */
     private boolean updateHotelRoom(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie) {
 
