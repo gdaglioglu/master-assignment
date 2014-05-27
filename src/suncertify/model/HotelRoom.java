@@ -27,7 +27,8 @@ public class HotelRoom {
      * @param rate      The cost of the room.
      * @param date      The date that the room will be available from.
      */
-    public HotelRoom(String name, String location, int roomSize, boolean isSmoking, double rate, String date) {
+    public HotelRoom(String name, String location, int roomSize,
+                     boolean isSmoking, double rate, String date) {
 
         setName(name);
         setLocation(location);
@@ -41,7 +42,8 @@ public class HotelRoom {
     /**
      * Constructor for the HotelRoom pojo.
      * <p/>
-     * Because the output of the {@code Data.readRecord(String)} method looks like
+     * Because the output of the {@code Data.readRecord(String)} method looks
+     * like
      * <pre>{@code
      * 0. |Palace                                                          |
      *1. |Smallville                                                      |
@@ -53,7 +55,7 @@ public class HotelRoom {
      * }</pre>
      * for an unbooked room, it must be heavily parsed.
      *
-     * @param strings An array of strings ordered to follow the output of he
+     * @param strings An array of strings ordered to follow the output of the
      *                {@code Data.readRecord(String)} method.
      */
     public HotelRoom(String... strings) {
@@ -61,7 +63,8 @@ public class HotelRoom {
         setName(strings[0].trim());
         setLocation(strings[1].trim());
         setRoomSize(Integer.parseInt(strings[2].trim()));
-        setSmoking(strings[3].equalsIgnoreCase(UrlyBirdApplicationConstants.SMOKING_ALLOWED));
+        setSmoking(strings[3].equalsIgnoreCase(
+                UrlyBirdApplicationConstants.SMOKING_ALLOWED));
         setRate(extractDoubleFromString(strings[4].trim()));
         setDate(strings[5].trim());
         setOwnerName(strings[6].trim());
@@ -81,11 +84,14 @@ public class HotelRoom {
 
         for (int i = 0; i < string.length(); i++) {
 
-            if (Character.isDigit(string.charAt(i)) || string.charAt(i) == '.') {
+            if (Character.isDigit(string.charAt(i))
+                    || string.charAt(i) == '.') {
                 stringBuilder.append(string.charAt(i));
             }
         }
-        return Double.parseDouble(stringBuilder.toString().substring(0, stringBuilder.length() - 1));
+        return Double.parseDouble(stringBuilder
+                .toString()
+                .substring(0, stringBuilder.length() - 1));
     }
 
     /**
@@ -234,7 +240,8 @@ public class HotelRoom {
      */
     public String[] toStringArray() {
 
-        String isSmokingString = UrlyBirdApplicationConstants.SMOKING_NOT_ALLOWED;
+        String isSmokingString =
+                UrlyBirdApplicationConstants.SMOKING_NOT_ALLOWED;
         if (isSmoking())
             isSmokingString = UrlyBirdApplicationConstants.SMOKING_ALLOWED;
 
@@ -283,6 +290,8 @@ public class HotelRoom {
     @Override
     public int hashCode() {
 
-        return (name.hashCode() + location.hashCode() * (1 + (int) rate + roomSize));
+        return (name.hashCode()
+                + location.hashCode()
+                * (1 + (int) rate + roomSize));
     }
 }

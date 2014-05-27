@@ -45,11 +45,13 @@ class DatabaseFileSchema {
     /**
      * A list to store the lengths of the fields in the Database.
      */
-    public static final ArrayList<Integer> databaseFieldLengths = new ArrayList<Integer>();
+    public static final ArrayList<Integer> databaseFieldLengths =
+            new ArrayList<Integer>();
     /**
      * A list to store the names of the fields in the Database.
      */
-    public static final ArrayList<String> databaseFieldNames = new ArrayList<String>();
+    public static final ArrayList<String> databaseFieldNames =
+            new ArrayList<String>();
     /**
      * Field descriptive name: Name of the hotel.
      * Database field name:    name
@@ -111,5 +113,8 @@ class DatabaseFileSchema {
     /**
      * The length of the record.
      */
-    public static final int RECORD_LENGTH = BYTES_RECORD_FLAG + FIELD_LENGTH_HOTEL + FIELD_LENGTH_CITY + FIELD_LENGTH_SIZE + FIELD_LENGTH_SMOKING + FIELD_LENGTH_RATE + FIELD_LENGTH_DATE + FIELD_LENGTH_OWNER;
+    public static final int RECORD_LENGTH = BYTES_RECORD_FLAG
+            + FIELD_LENGTH_HOTEL + FIELD_LENGTH_CITY + FIELD_LENGTH_SIZE
+            + FIELD_LENGTH_SMOKING + FIELD_LENGTH_RATE + FIELD_LENGTH_DATE
+            + FIELD_LENGTH_OWNER;
 }

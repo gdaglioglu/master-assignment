@@ -41,7 +41,8 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
     public ArrayList<HotelRoom> findHotelRooms(String... searchStrings) {
 
         try {
-            long[] recordNumbers = databaseAccessRemote.findByCriteria(searchStrings);
+            long[] recordNumbers =
+                    databaseAccessRemote.findByCriteria(searchStrings);
             ArrayList<HotelRoom> hotelRooms = null;
 
             for (long recordNumber : recordNumbers) {
@@ -79,7 +80,10 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
         ArrayList<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
         HotelRoom tempHotelRoom;
 
-        for (long recordNumber = 0; (tempHotelRoom = retrieveHotelRoom(recordNumber)) != null; recordNumber++) {
+        for (long recordNumber = 0;
+             (tempHotelRoom = retrieveHotelRoom(recordNumber)) != null;
+             recordNumber++) {
+
             hotelRooms.add(tempHotelRoom);
         }
 
@@ -98,7 +102,8 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
      * False, if the booking was not successful.
      */
     @Override
-    public boolean bookHotelRoom(long recordNumber, String customerName, String endDate, long lockCookie) {
+    public boolean bookHotelRoom(long recordNumber, String customerName,
+                                 String endDate, long lockCookie) {
 
         HotelRoom hotelRoomToBook;
 
@@ -125,7 +130,8 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
     private HotelRoom retrieveHotelRoom(long recordNumber) {
 
         try {
-            String[] hotelRoomFieldsStrings = databaseAccessRemote.readRecord(recordNumber);
+            String[] hotelRoomFieldsStrings =
+                    databaseAccessRemote.readRecord(recordNumber);
             if (hotelRoomFieldsStrings == null) {
                 return null;
             }
@@ -148,10 +154,13 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
      * @return True, if the update was successful.
      * False, if the update was not successful.
      */
-    private boolean updateHotelRoom(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie) {
+    private boolean updateHotelRoom(long recordNumber,
+                                    HotelRoom updatedHotelRoom,
+                                    long lockCookie) {
 
         try {
-            databaseAccessRemote.updateRecord(recordNumber, updatedHotelRoom.toStringArray(), lockCookie);
+            databaseAccessRemote.updateRecord(recordNumber,
+                    updatedHotelRoom.toStringArray(), lockCookie);
             return true;
         } catch (RecordNotFoundException e) {
             return false;

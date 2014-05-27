@@ -29,8 +29,15 @@ public class RmiServerManager {
         if (isRmiServerRunning()) return;
 
         try {
-            DatabaseAccessRemoteImpl databaseAccessRemote = new DatabaseAccessRemoteImpl();
-            LocateRegistry.createRegistry(Integer.parseInt(UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER)));
+            DatabaseAccessRemoteImpl databaseAccessRemote =
+                    new DatabaseAccessRemoteImpl();
+            LocateRegistry.createRegistry(
+                    Integer.parseInt(
+                            UrlyBirdApplicationObjectsFactory
+                                    .getURLyBirdApplicationProperties()
+                                    .getProperty(UrlyBirdApplicationConstants
+                                            .PROPERTY_FILE_KEY_RMI_PORT_NUMBER
+                                    )));
             Naming.rebind(RmiUtils.formRmiUrl(), databaseAccessRemote);
             rmiServerStatus = RmiServerStatus.RUNNING;
 

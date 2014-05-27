@@ -34,7 +34,8 @@ interface DBAccess {
      *                                 than the user trying to update the
      *                                 record.
      */
-    public void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException;
+    public void updateRecord(long recNo, String[] data, long lockCookie)
+            throws RecordNotFoundException, SecurityException;
 
     /**
      * Deletes a record, making the record number and associated disk storage
@@ -49,7 +50,8 @@ interface DBAccess {
      *                                 than the user trying to update the
      *                                 record.
      */
-    public void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException;
+    public void deleteRecord(long recNo, long lockCookie)
+            throws RecordNotFoundException, SecurityException;
 
     /**
      * Returns an array of record numbers that match the specified criteria.

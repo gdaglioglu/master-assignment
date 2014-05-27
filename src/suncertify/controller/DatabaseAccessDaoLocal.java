@@ -36,7 +36,8 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
     @Override
     public ArrayList<HotelRoom> findHotelRooms(String... searchStrings) {
 
-        long[] recordNumbers = databaseAccessFacade.findByCriteria(searchStrings);
+        long[] recordNumbers =
+                databaseAccessFacade.findByCriteria(searchStrings);
         ArrayList<HotelRoom> hotelRooms = null;
 
         for (long recordNumber : recordNumbers) {
@@ -70,7 +71,10 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
         ArrayList<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
         HotelRoom tempHotelRoom;
 
-        for (long recordNumber = 0; (tempHotelRoom = retrieveHotelRoom(recordNumber)) != null; recordNumber++) {
+        for (long recordNumber = 0;
+             (tempHotelRoom = retrieveHotelRoom(recordNumber)) != null;
+             recordNumber++) {
+
             hotelRooms.add(tempHotelRoom);
         }
 
@@ -89,7 +93,8 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
      * False, if the booking was not successful.
      */
     @Override
-    public boolean bookHotelRoom(long recordNumber, String customerName, String endDate, long lockCookie) {
+    public boolean bookHotelRoom(long recordNumber, String customerName,
+                                 String endDate, long lockCookie) {
 
         HotelRoom hotelRoomToBook;
 
@@ -116,7 +121,8 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
     private HotelRoom retrieveHotelRoom(long recordNumber) {
 
         try {
-            String[] hotelRoomFieldsStrings = databaseAccessFacade.readRecord(recordNumber);
+            String[] hotelRoomFieldsStrings =
+                    databaseAccessFacade.readRecord(recordNumber);
             if (hotelRoomFieldsStrings == null) {
                 return null;
             }
@@ -129,17 +135,21 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
     /**
      * Updates a {@code HotelRoom} record in the database.
      *
-     * @param recordNumber     The record number of the desired {@code HotelRoom}.
+     * @param recordNumber     The record number of the desired
+     *                         {@code HotelRoom}.
      * @param updatedHotelRoom The {@code HotelRoom} pojo to Overwrite the
      *                         existing record.
      * @param lockCookie       The key to lock the record with.
      * @return True, if the update was successful.
      * False, if the update was not successful.
      */
-    private boolean updateHotelRoom(long recordNumber, HotelRoom updatedHotelRoom, long lockCookie) {
+    private boolean updateHotelRoom(long recordNumber,
+                                    HotelRoom updatedHotelRoom,
+                                    long lockCookie) {
 
         try {
-            databaseAccessFacade.updateRecord(recordNumber, updatedHotelRoom.toStringArray(), lockCookie);
+            databaseAccessFacade.updateRecord(recordNumber,
+                    updatedHotelRoom.toStringArray(), lockCookie);
             return true;
         } catch (RecordNotFoundException e) {
             return false;

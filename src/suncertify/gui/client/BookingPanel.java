@@ -34,11 +34,14 @@ class BookingPanel extends JPanel {
         bookingPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bookingPanel.setName("Booking");
 
-        JLabel instructionLabel = new JLabel(UrlyBirdApplicationGuiConstants.BOOKING_HINT);
+        JLabel instructionLabel = new JLabel(
+                UrlyBirdApplicationGuiConstants.BOOKING_HINT);
         bookingPanel.add(instructionLabel);
 
-        JButton bookButton = new JButton(UrlyBirdApplicationGuiConstants.BOOK_BUTTON);
-        bookButton.addActionListener(new BookHotelRoom(databaseAccessDao, csrNumber));
+        JButton bookButton = new JButton(
+                UrlyBirdApplicationGuiConstants.BOOK_BUTTON);
+        bookButton.addActionListener(
+                new BookHotelRoom(databaseAccessDao, csrNumber));
         bookingPanel.add(bookButton);
     }
 
@@ -67,7 +70,8 @@ class BookingPanel extends JPanel {
          *                          use for creating a booking using the GUI.
          * @param csrNumber         The CSR Number of the GUI Operator.
          */
-        public BookHotelRoom(DatabaseAccessDao databaseAccessDao, String csrNumber) {
+        public BookHotelRoom(DatabaseAccessDao databaseAccessDao,
+                             String csrNumber) {
             this.databaseAccessDao = databaseAccessDao;
             this.csrNumber = csrNumber;
             startDate = UrlyBirdApplicationConstants.EMPTY_STRING;
@@ -88,21 +92,25 @@ class BookingPanel extends JPanel {
             int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
 
             if (recordRow < 0) {
-                JOptionPane.showMessageDialog(bookingPanel, "Please select a row");
+                JOptionPane.showMessageDialog(bookingPanel,
+                        "Please select a row");
 
             } else {
                 try {
                     if (areStartDateAndEndDateOfBookingSet()) {
 
-                        databaseAccessDao.bookHotelRoom(recordRow, csrNumber, endDate, Thread.currentThread().getId());
+                        databaseAccessDao.bookHotelRoom(recordRow, csrNumber,
+                                endDate, Thread.currentThread().getId());
                     }
                 } catch (Exception ignored) {
 
                 } finally {
-                    TablePanel.hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
+                    TablePanel.hotelRoomTableModel = new HotelRoomTableModel(
+                            databaseAccessDao.retrieveAllHotelRooms());
                     TablePanel.refreshHotelRoomTableModel();
 
-                    endDate = startDate = UrlyBirdApplicationConstants.EMPTY_STRING;
+                    endDate = startDate =
+                            UrlyBirdApplicationConstants.EMPTY_STRING;
                 }
             }
         }
@@ -110,13 +118,18 @@ class BookingPanel extends JPanel {
         private boolean areStartDateAndEndDateOfBookingSet() {
 
             String[] choices = {"Today", "Tomorrow"};
-            startDate = (String) JOptionPane.showInputDialog(bookingPanel, "Choose booking start date.", "Booking Start Date", JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
+            startDate = (String) JOptionPane.showInputDialog(bookingPanel,
+                    "Choose booking start date.", "Booking Start Date",
+                    JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
 
             if (startDate.equals(UrlyBirdApplicationConstants.EMPTY_STRING))
                 return false;
 
             while (!isValidEndDate()) {
-                endDate = JOptionPane.showInputDialog(bookingPanel, "Enter the date to end the booking (" + UrlyBirdApplicationConstants.DATE_FORMAT + ")");
+                endDate = JOptionPane.showInputDialog(bookingPanel,
+                        "Enter the date to end the booking ("
+                                + UrlyBirdApplicationConstants.DATE_FORMAT
+                                + ")");
             }
 
             return true;
@@ -125,7 +138,8 @@ class BookingPanel extends JPanel {
         private boolean isValidEndDate() {
 
             try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(UrlyBirdApplicationConstants.DATE_FORMAT);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                        UrlyBirdApplicationConstants.DATE_FORMAT);
                 simpleDateFormat.setLenient(false);
                 simpleDateFormat.parse(endDate);
 

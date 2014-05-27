@@ -43,7 +43,8 @@ public class UrlyBirdServerGui extends JFrame {
 
         serverConfigurationPanel = new ServerConfigurationPanel();
 
-        add(serverConfigurationPanel.getServerConfigurationPanel(), BorderLayout.CENTER);
+        add(serverConfigurationPanel.getServerConfigurationPanel(),
+                BorderLayout.CENTER);
         add(getServerControlPanel(), BorderLayout.SOUTH);
     }
 
@@ -55,14 +56,16 @@ public class UrlyBirdServerGui extends JFrame {
     private JPanel getServerControlPanel() {
 
         JPanel serverControlPanel = new JPanel(new FlowLayout());
-        startServerButton = new JButton(UrlyBirdApplicationGuiConstants.START_SERVER_BUTTON);
+        startServerButton = new JButton(
+                UrlyBirdApplicationGuiConstants.START_SERVER_BUTTON);
 
         startServerButton.setEnabled(true);
         startServerButton.addActionListener(new StartServer());
 
         serverControlPanel.add(startServerButton);
 
-        serverStatusLabel = new JLabel(UrlyBirdApplicationGuiConstants.SERVER_STOPPED);
+        serverStatusLabel = new JLabel(
+                UrlyBirdApplicationGuiConstants.SERVER_STOPPED);
         serverControlPanel.add(serverStatusLabel);
 
         return serverControlPanel;
@@ -84,17 +87,21 @@ public class UrlyBirdServerGui extends JFrame {
         public void actionPerformed(ActionEvent actionEvent) {
 
             if (!serverConfigurationPanel.areTextFieldValuesValid()) {
-                CommonGuiUtils.showErrorMessageDialog("Please enter valid values in the Text Fields.");
+                CommonGuiUtils.showErrorMessageDialog(
+                        "Please enter valid values in the Text Fields.");
                 return;
             }
 
             try {
                 updatePropertiesToReflectServerGui();
             } catch (FileNotFoundException ignored) {
-                CommonGuiUtils.showErrorMessageDialog("The Application's Properties File does not exist.");
+                CommonGuiUtils.showErrorMessageDialog(
+                        "The Application's Properties File does not exist.");
                 return;
             } catch (IOException ignored) {
-                CommonGuiUtils.showErrorMessageDialog("There was an error updating the Application's Properties File.");
+                CommonGuiUtils.showErrorMessageDialog(
+                        "There was an error updating the Application's"
+                                + " Properties File.");
                 return;
             }
 
@@ -103,7 +110,8 @@ public class UrlyBirdServerGui extends JFrame {
             if (RmiServerManager.isRmiServerRunning()) {
                 serverConfigurationPanel.disableAllFields();
                 startServerButton.setEnabled(false);
-                serverStatusLabel.setText(UrlyBirdApplicationGuiConstants.SERVER_STARTED);
+                serverStatusLabel.setText(
+                        UrlyBirdApplicationGuiConstants.SERVER_STARTED);
             }
         }
 
@@ -116,23 +124,31 @@ public class UrlyBirdServerGui extends JFrame {
          */
         private void updatePropertiesToReflectServerGui() throws IOException {
 
-            Properties properties = UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties();
+            Properties properties =
+                    UrlyBirdApplicationObjectsFactory
+                            .getURLyBirdApplicationProperties();
 
             if (hasDatabasePathPropertyChanged(properties)) {
 
                 properties.setProperty(
-                        UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE,
-                        serverConfigurationPanel.getPathToDatabaseFileFromTextField());
+                        UrlyBirdApplicationConstants
+                                .PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE,
+                        serverConfigurationPanel
+                                .getPathToDatabaseFileFromTextField());
 
                 properties.setProperty(
-                        UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_HOSTNAME,
+                        UrlyBirdApplicationConstants
+                                .PROPERTY_FILE_KEY_RMI_HOSTNAME,
                         serverConfigurationPanel.getRmiHostnameFromTextField());
 
                 properties.setProperty(
-                        UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER,
-                        serverConfigurationPanel.getRmiPortNumberFromTextField());
+                        UrlyBirdApplicationConstants
+                                .PROPERTY_FILE_KEY_RMI_PORT_NUMBER,
+                        serverConfigurationPanel
+                                .getRmiPortNumberFromTextField());
 
-                properties.store(new FileOutputStream(UrlyBirdApplicationConstants.PROPERTY_FILE_NAME), null);
+                properties.store(new FileOutputStream(
+                        UrlyBirdApplicationConstants.PROPERTY_FILE_NAME), null);
             }
         }
 
@@ -146,14 +162,23 @@ public class UrlyBirdServerGui extends JFrame {
          */
         private boolean hasDatabasePathPropertyChanged(Properties properties) {
 
-            return !(properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE)
-                    .equals(serverConfigurationPanel.getPathToDatabaseFileFromTextField())
+            return !(properties.getProperty(
+                    UrlyBirdApplicationConstants
+                            .PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE)
+                    .equals(serverConfigurationPanel
+                            .getPathToDatabaseFileFromTextField())
 
-                    && properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_HOSTNAME)
-                    .equals(serverConfigurationPanel.getRmiHostnameFromTextField())
+                    && properties.getProperty(
+                    UrlyBirdApplicationConstants
+                            .PROPERTY_FILE_KEY_RMI_HOSTNAME)
+                    .equals(serverConfigurationPanel
+                            .getRmiHostnameFromTextField())
 
-                    && properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER)
-                    .equals(serverConfigurationPanel.getRmiPortNumberFromTextField()));
+                    && properties.getProperty(
+                    UrlyBirdApplicationConstants
+                            .PROPERTY_FILE_KEY_RMI_PORT_NUMBER)
+                    .equals(serverConfigurationPanel
+                            .getRmiPortNumberFromTextField()));
         }
     }
 }

@@ -13,12 +13,14 @@ public class UrlyBirdApplicationConstants {
      * Used as filename for the properties file, {@code suncertify.properties},
      * which was asked for in the assignment.
      */
-    public static final String PROPERTY_FILE_NAME = System.getProperty("user.dir") + "/suncertify.properties";
+    public static final String PROPERTY_FILE_NAME =
+            System.getProperty("user.dir") + "/suncertify.properties";
     /**
      * Used to load the path to the database file key in the
      * {@code suncertify.properties} file.
      */
-    public static final String PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE = "pathToDatabaseFile";
+    public static final String PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE =
+            "pathToDatabaseFile";
     /**
      * Used to RMI hostname key in the {@code suncertify.properties} file.
      */
@@ -26,7 +28,8 @@ public class UrlyBirdApplicationConstants {
     /**
      * Used to RMI port key in the {@code suncertify.properties} file.
      */
-    public static final String PROPERTY_FILE_KEY_RMI_PORT_NUMBER = "rmiPortNumber";
+    public static final String PROPERTY_FILE_KEY_RMI_PORT_NUMBER =
+            "rmiPortNumber";
     /**
      * Used to specify the mode to open the database file across the
      * application.

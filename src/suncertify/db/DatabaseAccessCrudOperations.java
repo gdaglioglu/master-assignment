@@ -29,10 +29,12 @@ class DatabaseAccessCrudOperations {
      * @throws DuplicateKeyException When trying to create a record that already
      *                               exists in the database.
      */
-    public static synchronized long createRecord(String[] data) throws DuplicateKeyException {
+    public static synchronized long createRecord(String[] data)
+            throws DuplicateKeyException {
 
         // Search on the name and location fields of the data object.
-        if (DatabaseAccessSearch.findByCriteria(new String[]{data[0], data[1]}).length != 0) {
+        if (DatabaseAccessSearch.findByCriteria(
+                new String[]{data[0], data[1]}).length != 0) {
             String record = "";
             for (String field : data) record += field + ", ";
 
@@ -43,18 +45,25 @@ class DatabaseAccessCrudOperations {
 
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
         databaseFileUtils.updateNumberOfRecordsInDatabase();
-        long positionToInsertRecord = databaseFileUtils.getNumberOfRecordsInDatabase();
+        long positionToInsertRecord =
+                databaseFileUtils.getNumberOfRecordsInDatabase();
         long lockCookie = 0;
 
         try {
-            lockCookie = DatabaseAccessLockManager.getInstance().lockRecordWhenCreatingNewRecord(positionToInsertRecord);
+            lockCookie = DatabaseAccessLockManager
+                    .getInstance()
+                    .lockRecordWhenCreatingNewRecord(positionToInsertRecord);
         } catch (RecordNotFoundException ignored) {
         }
 
         try {
-            RandomAccessFile databaseRandomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
-            databaseRandomAccessFile.seek(distanceToSeek(positionToInsertRecord, databaseFileUtils));
-            databaseRandomAccessFile.writeByte(DatabaseFileSchema.VALID_RECORD_FLAG);
+            RandomAccessFile databaseRandomAccessFile =
+                    UrlyBirdApplicationObjectsFactory
+                            .getDatabaseRandomAccessFile();
+            databaseRandomAccessFile.seek(
+                    distanceToSeek(positionToInsertRecord, databaseFileUtils));
+            databaseRandomAccessFile.writeByte(
+                    DatabaseFileSchema.VALID_RECORD_FLAG);
             databaseRandomAccessFile.write(stringArrayAsByteArray(data));
 
             databaseRandomAccessFile.close();
@@ -67,7 +76,10 @@ class DatabaseAccessCrudOperations {
         } finally {
 
             databaseFileUtils.updateNumberOfRecordsInDatabase();
-            DatabaseAccessLockManager.getInstance().unlockRecordWhenCreatingOrDeletingRecord(positionToInsertRecord, lockCookie);
+            DatabaseAccessLockManager
+                    .getInstance()
+                    .unlockRecordWhenCreatingOrDeletingRecord(
+                            positionToInsertRecord, lockCookie);
         }
 
         return positionToInsertRecord;
@@ -82,20 +94,27 @@ class DatabaseAccessCrudOperations {
      * @throws RecordNotFoundException When locating a record that does not
      *                                 exist, or had been previously deleted.
      */
-    public static String[] readRecord(long recNo) throws RecordNotFoundException {
+    public static String[] readRecord(long recNo)
+            throws RecordNotFoundException {
 
-        long lockingCookie = DatabaseAccessLockManager.getInstance().lock(recNo);
+        long lockingCookie = DatabaseAccessLockManager
+                .getInstance().lock(recNo);
 
         isValidRecordNumber(recNo);
 
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
-        String[] rowContentStrings = new String[databaseFileUtils.getNumberOfFields()];
+        String[] rowContentStrings =
+                new String[databaseFileUtils.getNumberOfFields()];
 
         try {
-            RandomAccessFile randomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+            RandomAccessFile randomAccessFile =
+                    UrlyBirdApplicationObjectsFactory
+                            .getDatabaseRandomAccessFile();
             randomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
 
-            rowContentStrings = readStringArrayFromDatabaseFile(databaseFileUtils, randomAccessFile);
+            rowContentStrings =
+                    readStringArrayFromDatabaseFile(databaseFileUtils,
+                            randomAccessFile);
             randomAccessFile.close();
 
         } catch (IOException e) {
@@ -105,7 +124,8 @@ class DatabaseAccessCrudOperations {
 
         } finally {
 
-            DatabaseAccessLockManager.getInstance().unlock(recNo, lockingCookie);
+            DatabaseAccessLockManager
+                    .getInstance().unlock(recNo, lockingCookie);
         }
 
         return rowContentStrings;
@@ -126,27 +146,39 @@ class DatabaseAccessCrudOperations {
      *                                 than the user trying to update the
      *                                 record.
      */
-    public static void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException {
+    public static void updateRecord(long recNo, String[] data, long lockCookie)
+            throws RecordNotFoundException, SecurityException {
 
-        DatabaseAccessLockManager databaseAccessLockManager = DatabaseAccessLockManager.getInstance();
+        DatabaseAccessLockManager databaseAccessLockManager =
+                DatabaseAccessLockManager.getInstance();
 
-        if (databaseAccessLockManager.isRecordLockedBySomeoneElse(recNo, lockCookie)) {
-            throw new SecurityException("Record " + recNo + " locked by another user.");
+        if (databaseAccessLockManager
+                .isRecordLockedBySomeoneElse(recNo, lockCookie)) {
+            throw new SecurityException("Record "
+                    + recNo
+                    + " locked by another user.");
         }
 
         try {
             databaseAccessLockManager.lock(recNo);
 
-            DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
+            DatabaseFileUtils databaseFileUtils =
+                    DatabaseFileUtils.getInstance();
             databaseFileUtils.updateNumberOfRecordsInDatabase();
 
-            RandomAccessFile databaseRandomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+            RandomAccessFile databaseRandomAccessFile =
+                    UrlyBirdApplicationObjectsFactory
+                            .getDatabaseRandomAccessFile();
 
-            databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
-            readStringArrayFromDatabaseFile(databaseFileUtils, databaseRandomAccessFile);
+            databaseRandomAccessFile.seek(
+                    distanceToSeek(recNo, databaseFileUtils));
+            readStringArrayFromDatabaseFile(
+                    databaseFileUtils, databaseRandomAccessFile);
 
-            databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
-            databaseRandomAccessFile.writeByte(DatabaseFileSchema.VALID_RECORD_FLAG);
+            databaseRandomAccessFile.seek(distanceToSeek(
+                    recNo, databaseFileUtils));
+            databaseRandomAccessFile.writeByte(
+                    DatabaseFileSchema.VALID_RECORD_FLAG);
             databaseRandomAccessFile.write(stringArrayAsByteArray(data));
 
             databaseRandomAccessFile.close();
@@ -176,12 +208,17 @@ class DatabaseAccessCrudOperations {
      *                                 than the user trying to update the
      *                                 record.
      */
-    public static void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException {
+    public static void deleteRecord(long recNo, long lockCookie)
+            throws RecordNotFoundException, SecurityException {
 
-        DatabaseAccessLockManager databaseAccessLockManager = DatabaseAccessLockManager.getInstance();
+        DatabaseAccessLockManager databaseAccessLockManager =
+                DatabaseAccessLockManager.getInstance();
 
-        if (databaseAccessLockManager.isRecordLockedBySomeoneElse(recNo, lockCookie)) {
-            throw new SecurityException("Record " + recNo + " locked by another user.");
+        if (databaseAccessLockManager
+                .isRecordLockedBySomeoneElse(recNo, lockCookie)) {
+            throw new SecurityException("Record "
+                    + recNo
+                    + " locked by another user.");
         }
 
         databaseAccessLockManager.lock(recNo);
@@ -191,11 +228,17 @@ class DatabaseAccessCrudOperations {
             databaseFileUtils.updateNumberOfRecordsInDatabase();
             isValidRecordNumber(recNo);
 
-            RandomAccessFile databaseRandomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
-            databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
-            readStringArrayFromDatabaseFile(databaseFileUtils, databaseRandomAccessFile);
-            databaseRandomAccessFile.seek(distanceToSeek(recNo, databaseFileUtils));
-            databaseRandomAccessFile.write(DatabaseFileSchema.INVALID_RECORD_FLAG);
+            RandomAccessFile databaseRandomAccessFile =
+                    UrlyBirdApplicationObjectsFactory
+                            .getDatabaseRandomAccessFile();
+            databaseRandomAccessFile.seek(
+                    distanceToSeek(recNo, databaseFileUtils));
+            readStringArrayFromDatabaseFile(
+                    databaseFileUtils, databaseRandomAccessFile);
+            databaseRandomAccessFile.seek(
+                    distanceToSeek(recNo, databaseFileUtils));
+            databaseRandomAccessFile.write(
+                    DatabaseFileSchema.INVALID_RECORD_FLAG);
 
             databaseRandomAccessFile.close();
 
@@ -207,7 +250,9 @@ class DatabaseAccessCrudOperations {
         } finally {
 
             databaseFileUtils.updateNumberOfRecordsInDatabase();
-            databaseAccessLockManager.unlockRecordWhenCreatingOrDeletingRecord(recNo, lockCookie);
+            databaseAccessLockManager
+                    .unlockRecordWhenCreatingOrDeletingRecord(
+                            recNo, lockCookie);
         }
     }
 
@@ -219,7 +264,8 @@ class DatabaseAccessCrudOperations {
      * @throws RecordNotFoundException When locating a record that does not
      *                                 exist, or had been previously deleted.
      */
-    public static void isValidRecordNumber(long recordNumber) throws RecordNotFoundException {
+    public static void isValidRecordNumber(long recordNumber)
+            throws RecordNotFoundException {
 
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
 
@@ -228,10 +274,14 @@ class DatabaseAccessCrudOperations {
         try {
             byte[] recordBytes = new byte[DatabaseFileSchema.RECORD_LENGTH];
 
-            RandomAccessFile randomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
-            randomAccessFile.seek(distanceToSeek(recordNumber, databaseFileUtils));
+            RandomAccessFile randomAccessFile =
+                    UrlyBirdApplicationObjectsFactory
+                            .getDatabaseRandomAccessFile();
+            randomAccessFile.seek(
+                    distanceToSeek(recordNumber, databaseFileUtils));
 
-            if (randomAccessFile.read(recordBytes) < DatabaseFileSchema.RECORD_LENGTH) {
+            if (randomAccessFile.read(recordBytes)
+                    < DatabaseFileSchema.RECORD_LENGTH) {
                 throw new RecordNotFoundException("Record does not exist");
             }
 
@@ -249,13 +299,17 @@ class DatabaseAccessCrudOperations {
     // ---------- Private Methods ----------
     private static byte[] stringArrayAsByteArray(String[] strings) {
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+        ByteArrayOutputStream byteArrayOutputStream =
+                new ByteArrayOutputStream();
+        DataOutputStream dataOutputStream =
+                new DataOutputStream(byteArrayOutputStream);
 
         try {
-            for (int i = 0, j = 0, k = 0; i < DatabaseFileUtils.getInstance().getNumberOfFields(); i++) {
+            for (int i = 0, j = 0, k = 0;
+                 i < DatabaseFileUtils.getInstance().getNumberOfFields(); i++) {
 
-                int fieldLength = DatabaseFileSchema.databaseFieldLengths.get(i);
+                int fieldLength =
+                        DatabaseFileSchema.databaseFieldLengths.get(i);
                 byte[] bytes = new byte[fieldLength];
 
                 if (strings[i] == null) strings[i] = "";
@@ -276,32 +330,45 @@ class DatabaseAccessCrudOperations {
             dataOutputStream.close();
         } catch (IOException e) {
 
-            System.out.println("Error converting the StringArray to a ByteArray.");
+            System.out.println(
+                    "Error converting the StringArray to a ByteArray.");
             e.printStackTrace();
         }
 
         return byteArrayOutputStream.toByteArray();
     }
 
-    private static void isExistingRecordNumber(long recordNumber, DatabaseFileUtils databaseFileUtils) throws RecordNotFoundException {
+    private static void isExistingRecordNumber(
+            long recordNumber, DatabaseFileUtils databaseFileUtils)
+            throws RecordNotFoundException {
 
         databaseFileUtils.updateNumberOfRecordsInDatabase();
 
-        if (recordNumber < 0 || recordNumber >= databaseFileUtils.getNumberOfRecordsInDatabase()) {
-            throw new RecordNotFoundException("Record Number " + recordNumber + " is not in the right range.");
+        if (recordNumber < 0 ||
+                recordNumber >=
+                        databaseFileUtils.getNumberOfRecordsInDatabase()) {
+            throw new RecordNotFoundException("Record Number "
+                    + recordNumber
+                    + " is not in the right range.");
         }
     }
 
-    private static long distanceToSeek(long recordNumber, DatabaseFileUtils databaseFileUtils) {
+    private static long distanceToSeek(long recordNumber,
+                                       DatabaseFileUtils databaseFileUtils) {
 
-        return databaseFileUtils.getHeaderOffset() + (DatabaseFileSchema.RECORD_LENGTH * recordNumber);
+        return databaseFileUtils.getHeaderOffset()
+                + (DatabaseFileSchema.RECORD_LENGTH * recordNumber);
     }
 
-    private static String[] readStringArrayFromDatabaseFile(DatabaseFileUtils databaseFileUtils, RandomAccessFile randomAccessFile) throws IOException, RecordNotFoundException {
+    private static String[] readStringArrayFromDatabaseFile(
+            DatabaseFileUtils databaseFileUtils,
+            RandomAccessFile randomAccessFile)
+            throws IOException, RecordNotFoundException {
 
         byte[] recordBytes = new byte[DatabaseFileSchema.RECORD_LENGTH];
 
-        if (randomAccessFile.read(recordBytes) < DatabaseFileSchema.RECORD_LENGTH) {
+        if (randomAccessFile.read(recordBytes)
+                < DatabaseFileSchema.RECORD_LENGTH) {
             throw new RecordNotFoundException("Record does not exist");
         }
 
@@ -309,14 +376,16 @@ class DatabaseAccessCrudOperations {
             throw new RecordNotFoundException("Record already deleted.");
         }
 
-        String record = new String(recordBytes, UrlyBirdApplicationConstants.FILE_ENCODING);
+        String record = new String(recordBytes,
+                UrlyBirdApplicationConstants.FILE_ENCODING);
         String[] strings = new String[databaseFileUtils.getNumberOfFields()];
         int flagIndentation = 1;
 
         for (int i = 0; i < databaseFileUtils.getNumberOfFields(); i++) {
 
             int fieldLength = DatabaseFileSchema.databaseFieldLengths.get(i);
-            strings[i] = record.substring(flagIndentation, flagIndentation + fieldLength);
+            strings[i] = record.substring(flagIndentation,
+                    flagIndentation + fieldLength);
             flagIndentation = flagIndentation + fieldLength;
         }
 

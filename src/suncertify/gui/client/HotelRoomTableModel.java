@@ -21,7 +21,8 @@ import java.util.List;
 class HotelRoomTableModel extends AbstractTableModel {
 
     // The names of the columns in the database which will map to the GUI.
-    private final String[] tableColumns = UrlyBirdApplicationGuiConstants.COLUMN_NAMES;
+    private final String[] tableColumns =
+            UrlyBirdApplicationGuiConstants.COLUMN_NAMES;
     private final List<HotelRoom> hotelRoomList;
 
     /**
@@ -77,9 +78,12 @@ class HotelRoomTableModel extends AbstractTableModel {
             case 2:
                 return hotelRoom.getRoomSize();
             case 3:
-                return hotelRoom.isSmoking() ? UrlyBirdApplicationGuiConstants.SMOKING_ALLOWED : UrlyBirdApplicationGuiConstants.SMOKING_NOT_ALLOWED;
+                return hotelRoom.isSmoking() ?
+                        UrlyBirdApplicationGuiConstants.SMOKING_ALLOWED
+                        : UrlyBirdApplicationGuiConstants.SMOKING_NOT_ALLOWED;
             case 4:
-                return UrlyBirdApplicationConstants.CURRENCY_PREFIX + hotelRoom.getRate();
+                return UrlyBirdApplicationConstants.CURRENCY_PREFIX
+                        + hotelRoom.getRate();
             case 5:
                 return isAvailableOrBooked(hotelRoom.getDate());
             case 6:
@@ -105,7 +109,8 @@ class HotelRoomTableModel extends AbstractTableModel {
     private String isAvailableOrBooked(String date) {
 
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(UrlyBirdApplicationConstants.DATE_FORMAT);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                    UrlyBirdApplicationConstants.DATE_FORMAT);
             simpleDateFormat.setLenient(false);
             Date databaseDate = simpleDateFormat.parse(date);
 

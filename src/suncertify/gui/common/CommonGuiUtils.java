@@ -17,6 +17,7 @@ public class CommonGuiUtils {
      * @param message The error message to be displayed.
      */
     public static void showErrorMessageDialog(String message) {
-        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(
+                null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

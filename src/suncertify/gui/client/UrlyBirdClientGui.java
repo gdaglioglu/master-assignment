@@ -24,9 +24,11 @@ public class UrlyBirdClientGui extends JFrame {
      */
     public UrlyBirdClientGui(UrlyBirdApplicationMode urlyBirdApplicationMode) {
 
-        UrlyBirdClientGuiUtils clientUtils = UrlyBirdClientGuiUtils.getInstance();
+        UrlyBirdClientGuiUtils clientUtils =
+                UrlyBirdClientGuiUtils.getInstance();
         clientUtils.ensurePropertiesAreValid(urlyBirdApplicationMode);
-        DatabaseAccessDao databaseAccessDao = clientUtils.retrieveCorrectDao(urlyBirdApplicationMode);
+        DatabaseAccessDao databaseAccessDao = clientUtils.retrieveCorrectDao(
+                urlyBirdApplicationMode);
 
         String csrNumber = null;
         try {
@@ -35,15 +37,20 @@ public class UrlyBirdClientGui extends JFrame {
             System.exit(1);
         }
 
-        setTitle(UrlyBirdApplicationGuiConstants.CLIENT_GUI_APPLICATION_TITLE + " - " + csrNumber);
+        setTitle(UrlyBirdApplicationGuiConstants.CLIENT_GUI_APPLICATION_TITLE
+                + " - "
+                + csrNumber);
         setSize(UrlyBirdApplicationGuiConstants.CLIENT_GUI_DIMENSION);
 
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        add(new SearchPanel(databaseAccessDao).getSearchPanel(), BorderLayout.NORTH);
-        add(new TablePanel(databaseAccessDao).getTablePanel(), BorderLayout.CENTER);
-        add(new BookingPanel(databaseAccessDao, csrNumber).getBookingPanel(), BorderLayout.SOUTH);
+        add(new SearchPanel(databaseAccessDao).getSearchPanel(),
+                BorderLayout.NORTH);
+        add(new TablePanel(databaseAccessDao).getTablePanel(),
+                BorderLayout.CENTER);
+        add(new BookingPanel(databaseAccessDao, csrNumber).getBookingPanel(),
+                BorderLayout.SOUTH);
     }
 }

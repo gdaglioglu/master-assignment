@@ -64,7 +64,8 @@ class DatabaseAccessLockManager {
      * @param cookie the cookie to unlock the record with
      * @throws SecurityException
      */
-    public synchronized void unlock(long recNo, long cookie) throws SecurityException {
+    public synchronized void unlock(long recNo, long cookie)
+            throws SecurityException {
 
         try {
             DatabaseAccessCrudOperations.isValidRecordNumber(recNo);
@@ -83,7 +84,8 @@ class DatabaseAccessLockManager {
      * @return A long representing the lock's owner's id.
      * @throws RecordNotFoundException
      */
-    public synchronized long lockRecordWhenCreatingNewRecord(long recordNumber) throws RecordNotFoundException {
+    public synchronized long lockRecordWhenCreatingNewRecord(long recordNumber)
+            throws RecordNotFoundException {
 
         try {
             final long lockingCookie = Thread.currentThread().getId();
@@ -112,13 +114,16 @@ class DatabaseAccessLockManager {
      * @param lockingCookie the cookie to unlock the record with
      * @throws SecurityException
      */
-    public synchronized void unlockRecordWhenCreatingOrDeletingRecord(long recordNumber, long lockingCookie) throws SecurityException {
+    public synchronized void unlockRecordWhenCreatingOrDeletingRecord(
+            long recordNumber, long lockingCookie) throws SecurityException {
 
         if (isRecordLockedByThisUser(recordNumber, lockingCookie)) {
             lockedMap.remove(recordNumber);
             notifyAll();
         } else {
-            throw new SecurityException("Record " + recordNumber + " locked by another user.");
+            throw new SecurityException("Record "
+                    + recordNumber
+                    + " locked by another user.");
         }
     }
 
@@ -132,9 +137,11 @@ class DatabaseAccessLockManager {
      * @return True, if the record is locked by another cookie.
      * False, if the record is not locked.
      */
-    public boolean isRecordLockedBySomeoneElse(long recordNumber, long lockingCookie) {
+    public boolean isRecordLockedBySomeoneElse(
+            long recordNumber, long lockingCookie) {
 
-        return isRecordLocked(recordNumber) && getLockOwner(recordNumber) != lockingCookie;
+        return isRecordLocked(recordNumber)
+                && getLockOwner(recordNumber) != lockingCookie;
     }
 
     /**
@@ -149,7 +156,8 @@ class DatabaseAccessLockManager {
      */
     boolean isRecordLockedByThisUser(long recordNumber, long lockingCookie) {
 
-        return isRecordLocked(recordNumber) && getLockOwner(recordNumber) == lockingCookie;
+        return isRecordLocked(recordNumber)
+                && getLockOwner(recordNumber) == lockingCookie;
     }
 
     /**

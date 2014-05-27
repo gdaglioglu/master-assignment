@@ -33,18 +33,26 @@ class SearchPanel extends JPanel {
         searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         searchPanel.setName("Search");
 
-        JLabel nameLabel = new JLabel(UrlyBirdApplicationGuiConstants.SEARCH_PANEL_NAME_LABEL);
+        JLabel nameLabel = new JLabel(
+                UrlyBirdApplicationGuiConstants.SEARCH_PANEL_NAME_LABEL);
         searchPanel.add(nameLabel);
-        nameField = new JTextField(UrlyBirdApplicationGuiConstants.CLIENT_SEARCH_TEXT_FIELD_LENGTH);
+        nameField = new JTextField(
+                UrlyBirdApplicationGuiConstants
+                        .CLIENT_SEARCH_TEXT_FIELD_LENGTH);
         searchPanel.add(nameField);
 
-        JLabel locationLabel = new JLabel(UrlyBirdApplicationGuiConstants.SEARCH_PANEL_LOCATION_LABEL);
+        JLabel locationLabel = new JLabel(
+                UrlyBirdApplicationGuiConstants.SEARCH_PANEL_LOCATION_LABEL);
         searchPanel.add(locationLabel);
-        locationField = new JTextField(UrlyBirdApplicationGuiConstants.CLIENT_SEARCH_TEXT_FIELD_LENGTH);
+        locationField = new JTextField(
+                UrlyBirdApplicationGuiConstants
+                        .CLIENT_SEARCH_TEXT_FIELD_LENGTH);
         searchPanel.add(locationField);
 
-        JButton searchButton = new JButton(UrlyBirdApplicationGuiConstants.SEARCH_BUTTON);
-        searchButton.addActionListener(new SearchForRoomActionListener(databaseAccessDao));
+        JButton searchButton = new JButton(
+                UrlyBirdApplicationGuiConstants.SEARCH_BUTTON);
+        searchButton.addActionListener(
+                new SearchForRoomActionListener(databaseAccessDao));
         searchPanel.add(searchButton);
     }
 
@@ -70,7 +78,8 @@ class SearchPanel extends JPanel {
          * @param databaseAccessDao The Client's {@code DatabaseAccessDao} to
          *                          use for searching the data for the GUI.
          */
-        public SearchForRoomActionListener(DatabaseAccessDao databaseAccessDao) {
+        public SearchForRoomActionListener(
+                DatabaseAccessDao databaseAccessDao) {
             this.databaseAccessDao = databaseAccessDao;
         }
 

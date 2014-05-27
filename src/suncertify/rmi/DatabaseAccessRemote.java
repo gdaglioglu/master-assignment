@@ -25,7 +25,8 @@ public interface DatabaseAccessRemote extends Remote {
      *                                 exist, or had been previously deleted.
      * @throws RemoteException         If there is a problem with the network.
      */
-    public String[] readRecord(long recNo) throws RecordNotFoundException, RemoteException;
+    public String[] readRecord(long recNo)
+            throws RecordNotFoundException, RemoteException;
 
     /**
      * Modifies the fields of a record. The new value for field n appears in
@@ -43,7 +44,8 @@ public interface DatabaseAccessRemote extends Remote {
      *                                 record.
      * @throws RemoteException         If there is a problem with the network.
      */
-    public void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException, RemoteException;
+    public void updateRecord(long recNo, String[] data, long lockCookie)
+            throws RecordNotFoundException, SecurityException, RemoteException;
 
     /**
      * Deletes a record, making the record number and associated disk storage
@@ -60,7 +62,8 @@ public interface DatabaseAccessRemote extends Remote {
      *                                 record.
      * @throws RemoteException         If there is a problem with the network.
      */
-    public void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException, RemoteException;
+    public void deleteRecord(long recNo, long lockCookie)
+            throws RecordNotFoundException, SecurityException, RemoteException;
 
     /**
      * Returns an array of record numbers that match the specified
@@ -87,7 +90,8 @@ public interface DatabaseAccessRemote extends Remote {
      *                               exists in the database.
      * @throws RemoteException       If there is a problem with the network.
      */
-    public long createRecord(String[] data) throws DuplicateKeyException, RemoteException;
+    public long createRecord(String[] data)
+            throws DuplicateKeyException, RemoteException;
 
     /**
      * Locks a record so that it can only be updated or deleted by this client.
@@ -102,7 +106,8 @@ public interface DatabaseAccessRemote extends Remote {
      *                                 exist, or had been previously deleted.
      * @throws RemoteException         If there is a problem with the network.
      */
-    public long lockRecord(long recNo) throws RecordNotFoundException, RemoteException;
+    public long lockRecord(long recNo)
+            throws RecordNotFoundException, RemoteException;
 
     /**
      * Releases the lock on a record. Cookie must be the cookie returned when
@@ -114,5 +119,6 @@ public interface DatabaseAccessRemote extends Remote {
      *                           the user trying to update the record.
      * @throws RemoteException   If there is a problem with the network.
      */
-    public void unlock(long recNo, long cookie) throws SecurityException, RemoteException;
+    public void unlock(long recNo, long cookie)
+            throws SecurityException, RemoteException;
 }

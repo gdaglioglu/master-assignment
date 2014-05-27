@@ -17,7 +17,7 @@ public interface DatabaseAccessDao {
      *
      * @param searchStrings The criteria to compare the database records to.
      * @return An ArrayList of the {@code HotelRoom} object that match the
-     *         criteria.
+     * criteria.
      */
     ArrayList<HotelRoom> findHotelRooms(String... searchStrings);
 
@@ -25,7 +25,7 @@ public interface DatabaseAccessDao {
      * Gets all the {@code HotelRoom} objects in the database.
      *
      * @return An ArrayList of the all the {@code HotelRoom} objects in the
-     *         database.
+     * database.
      */
     ArrayList<HotelRoom> retrieveAllHotelRooms();
 
@@ -38,7 +38,8 @@ public interface DatabaseAccessDao {
      *                     booking is due to expire.
      * @param lockCookie   The key to lock the record with.
      * @return True, if the booking was successful.
-     *         False, if the booking was not successful.
+     * False, if the booking was not successful.
      */
-    boolean bookHotelRoom(long recordNumber, String customerName, String endDate, long lockCookie);
+    boolean bookHotelRoom(long recordNumber, String customerName,
+                          String endDate, long lockCookie);
 }

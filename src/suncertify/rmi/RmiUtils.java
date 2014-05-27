@@ -20,15 +20,27 @@ class RmiUtils {
      */
     public static String formRmiUrl() {
 
-        return "rmi://" + attainRmiHostnameFromPropertiesFile() + ":" + attainRmiPortNumberFromPropertiesFile() + UrlyBirdApplicationConstants.RMI_APPLICATION_PATH;
+        return "rmi://"
+                + attainRmiHostnameFromPropertiesFile()
+                + ":"
+                + attainRmiPortNumberFromPropertiesFile()
+                + UrlyBirdApplicationConstants.RMI_APPLICATION_PATH;
     }
 
     // ----- Private Methods -----
     private static String attainRmiHostnameFromPropertiesFile() {
-        return UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_HOSTNAME);
+        return UrlyBirdApplicationObjectsFactory
+                .getURLyBirdApplicationProperties()
+                .getProperty(
+                        UrlyBirdApplicationConstants
+                                .PROPERTY_FILE_KEY_RMI_HOSTNAME);
     }
 
     private static String attainRmiPortNumberFromPropertiesFile() {
-        return UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER);
+        return UrlyBirdApplicationObjectsFactory
+                .getURLyBirdApplicationProperties()
+                .getProperty(
+                        UrlyBirdApplicationConstants
+                                .PROPERTY_FILE_KEY_RMI_PORT_NUMBER);
     }
 }

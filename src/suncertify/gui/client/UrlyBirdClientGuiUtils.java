@@ -26,7 +26,8 @@ import java.util.Properties;
  */
 public class UrlyBirdClientGuiUtils {
 
-    private static final UrlyBirdClientGuiUtils instance = new UrlyBirdClientGuiUtils();
+    private static final UrlyBirdClientGuiUtils instance =
+            new UrlyBirdClientGuiUtils();
 
     private UrlyBirdClientGuiUtils() {
     }
@@ -53,31 +54,52 @@ public class UrlyBirdClientGuiUtils {
      * @param urlyBirdApplicationMode The mode that the application is running
      *                                in.
      */
-    public void ensurePropertiesAreValid(UrlyBirdApplicationMode urlyBirdApplicationMode) {
+    public void ensurePropertiesAreValid(
+            UrlyBirdApplicationMode urlyBirdApplicationMode) {
 
-        Properties properties = UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties();
+        Properties properties =
+                UrlyBirdApplicationObjectsFactory
+                        .getURLyBirdApplicationProperties();
 
-        if (urlyBirdApplicationMode == UrlyBirdApplicationMode.STANDALONE_CLIENT) {
+        if (urlyBirdApplicationMode
+                == UrlyBirdApplicationMode.STANDALONE_CLIENT) {
 
-            File databaseFile = new File(properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
+            File databaseFile = new File(properties.getProperty(
+                    UrlyBirdApplicationConstants
+                            .PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
 
             while (!databaseFile.exists()) {
 
-                properties.setProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE, JOptionPane.showInputDialog(null, "Enter the location of the database file"));
+                properties.setProperty(
+                        UrlyBirdApplicationConstants
+                                .PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE,
+                        JOptionPane.showInputDialog(
+                                null,
+                                "Enter the location of the database file"));
                 try {
-                    properties.store(new FileOutputStream(UrlyBirdApplicationConstants.PROPERTY_FILE_NAME), null);
+                    properties.store(
+                            new FileOutputStream(
+                                    UrlyBirdApplicationConstants
+                                            .PROPERTY_FILE_NAME), null);
                 } catch (IOException e) {
-                    CommonGuiUtils.showErrorMessageDialog("The Application's Properties File does not exist.");
+                    CommonGuiUtils
+                            .showErrorMessageDialog(
+                                    "The Application's Properties File does not"
+                                            + " exist.");
                 }
 
-                databaseFile = new File(properties.getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
+                databaseFile = new File(properties.getProperty(
+                        UrlyBirdApplicationConstants
+                                .PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
             }
-        } else if (urlyBirdApplicationMode == UrlyBirdApplicationMode.NETWORKED_CLIENT) {
+        } else if (urlyBirdApplicationMode
+                == UrlyBirdApplicationMode.NETWORKED_CLIENT) {
             if (RmiClientManager.connectToRemoteServerViaRmi() == null) {
-                CommonGuiUtils.showErrorMessageDialog("Could not connect to Server.\n\n" +
-                        "Troubleshooting Tips:\n" +
-                        "Is the server running?\n" +
-                        "Is the server URL correct?");
+                CommonGuiUtils.showErrorMessageDialog(
+                        "Could not connect to Server.\n\n"
+                        + "Troubleshooting Tips:\n"
+                        + "Is the server running?\n"
+                        + "Is the server URL correct?");
                 System.exit(1);
             }
         }
@@ -97,12 +119,19 @@ public class UrlyBirdClientGuiUtils {
 
         while (!correctCsrNumberEntered) {
 
-            csrNumber = JOptionPane.showInputDialog(null, "Login with your CSR number (8 digits)", "Login", JOptionPane.INFORMATION_MESSAGE).trim();
+            csrNumber = JOptionPane.showInputDialog(null,
+                    "Login with your CSR number (8 digits)",
+                    "Login",
+                    JOptionPane.INFORMATION_MESSAGE).trim();
 
             if (csrNumber.length() != 8) {
-                JOptionPane.showMessageDialog(null, "CSR length must be 8 digits, you have entered " + csrNumber.length() + " digits.");
+                JOptionPane.showMessageDialog(null,
+                        "CSR length must be 8 digits, you have entered "
+                                + csrNumber.length()
+                                + " digits.");
             } else if (!isAllDigits(csrNumber)) {
-                JOptionPane.showMessageDialog(null, "CSR length must be all digits");
+                JOptionPane.showMessageDialog(null,
+                        "CSR length must be all digits");
             } else {
                 correctCsrNumberEntered = true;
             }
@@ -121,15 +150,18 @@ public class UrlyBirdClientGuiUtils {
      * A {@link suncertify.controller.DatabaseAccessDaoLocal} instance,
      * if the application is set to {@code STANDALONE_CLIENT}.
      */
-    public DatabaseAccessDao retrieveCorrectDao(UrlyBirdApplicationMode urlyBirdApplicationMode) {
+    public DatabaseAccessDao retrieveCorrectDao(
+            UrlyBirdApplicationMode urlyBirdApplicationMode) {
 
-        if (urlyBirdApplicationMode == UrlyBirdApplicationMode.NETWORKED_CLIENT) {
+        if (urlyBirdApplicationMode
+                == UrlyBirdApplicationMode.NETWORKED_CLIENT) {
             try {
                 return new DatabaseAccessDaoRemote();
             } catch (RemoteException ignored) {
                 return null;
             }
-        } else if (urlyBirdApplicationMode == UrlyBirdApplicationMode.STANDALONE_CLIENT) {
+        } else if (urlyBirdApplicationMode
+                == UrlyBirdApplicationMode.STANDALONE_CLIENT) {
             return new DatabaseAccessDaoLocal();
         } else {
             return null;

@@ -14,7 +14,8 @@ import java.rmi.server.UnicastRemoteObject;
  * @author Luke GJ Potter
  * @since 07/05/2014
  */
-public class DatabaseAccessRemoteImpl extends UnicastRemoteObject implements DatabaseAccessRemote {
+public class DatabaseAccessRemoteImpl extends UnicastRemoteObject
+        implements DatabaseAccessRemote {
 
     /**
      * The constructor for the DatabaseAccessRemoteImpl class.
@@ -34,7 +35,8 @@ public class DatabaseAccessRemoteImpl extends UnicastRemoteObject implements Dat
      * @throws RemoteException         If there is a problem with the network.
      */
     @Override
-    public String[] readRecord(long recNo) throws RecordNotFoundException, RemoteException {
+    public String[] readRecord(long recNo)
+            throws RecordNotFoundException, RemoteException {
         return new Data().readRecord(recNo);
     }
 
@@ -55,7 +57,8 @@ public class DatabaseAccessRemoteImpl extends UnicastRemoteObject implements Dat
      * @throws RemoteException         If there is a problem with the network.
      */
     @Override
-    public void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException, RemoteException {
+    public void updateRecord(long recNo, String[] data, long lockCookie)
+            throws RecordNotFoundException, SecurityException, RemoteException {
         new Data().updateRecord(recNo, data, lockCookie);
     }
 
@@ -75,7 +78,8 @@ public class DatabaseAccessRemoteImpl extends UnicastRemoteObject implements Dat
      * @throws RemoteException         If there is a problem with the network.
      */
     @Override
-    public void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException, RemoteException {
+    public void deleteRecord(long recNo, long lockCookie)
+            throws RecordNotFoundException, SecurityException, RemoteException {
         new Data().deleteRecord(recNo, lockCookie);
     }
 
@@ -108,7 +112,8 @@ public class DatabaseAccessRemoteImpl extends UnicastRemoteObject implements Dat
      * @throws RemoteException       If there is a problem with the network.
      */
     @Override
-    public long createRecord(String[] data) throws DuplicateKeyException, RemoteException {
+    public long createRecord(String[] data)
+            throws DuplicateKeyException, RemoteException {
         return new Data().createRecord(data);
     }
 
@@ -141,7 +146,8 @@ public class DatabaseAccessRemoteImpl extends UnicastRemoteObject implements Dat
      * @throws RemoteException   If there is a problem with the network.
      */
     @Override
-    public void unlock(long recNo, long cookie) throws SecurityException, RemoteException {
+    public void unlock(long recNo, long cookie)
+            throws SecurityException, RemoteException {
         new Data().unlock(recNo, cookie);
     }
 }

@@ -35,9 +35,11 @@ class TablePanel extends JPanel {
 
         tablePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         tablePanel.setName("Records");
-        hotelRoomTableModel = new HotelRoomTableModel(databaseAccessDao.retrieveAllHotelRooms());
+        hotelRoomTableModel = new HotelRoomTableModel(
+                databaseAccessDao.retrieveAllHotelRooms());
         hotelRoomTable = new JTable(hotelRoomTableModel);
-        hotelRoomTable.setPreferredScrollableViewportSize(UrlyBirdApplicationGuiConstants.CLIENT_GUI_JTABLE_DIMENSION);
+        hotelRoomTable.setPreferredScrollableViewportSize(
+                UrlyBirdApplicationGuiConstants.CLIENT_GUI_JTABLE_DIMENSION);
         tablePanel.add(new JScrollPane(hotelRoomTable));
     }
 

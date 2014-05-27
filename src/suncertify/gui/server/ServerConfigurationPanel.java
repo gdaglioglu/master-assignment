@@ -19,8 +19,10 @@ import java.util.StringTokenizer;
 class ServerConfigurationPanel {
 
     private final JPanel serverConfigurationPanel;
-    private JLabel pathToDatabaseFileLabel, rmiHostnameLabel, rmiPortNumberLabel;
-    private JTextField pathToDatabaseFileTextField, rmiHostnameTextField, rmiPortNumberTextField;
+    private JLabel pathToDatabaseFileLabel, rmiHostnameLabel,
+            rmiPortNumberLabel;
+    private JTextField pathToDatabaseFileTextField, rmiHostnameTextField,
+            rmiPortNumberTextField;
 
     /**
      * The constructor for the ServerConfigurationPanel. It initialises and lays
@@ -87,9 +89,13 @@ class ServerConfigurationPanel {
         String rmiPortNumber = getRmiPortNumberFromTextField();
         String emptyString = UrlyBirdApplicationConstants.EMPTY_STRING;
 
-        boolean emptyFields = dbFilePath.equals(emptyString) || rmiHostname.equals(emptyString) || rmiPortNumber.equals(emptyString);
+        boolean emptyFields = dbFilePath.equals(emptyString)
+                || rmiHostname.equals(emptyString)
+                || rmiPortNumber.equals(emptyString);
 
-        return (!emptyFields) && new File(dbFilePath).exists() && isValidHostname(rmiHostname) && isValidPortNumber(rmiPortNumber);
+        return (!emptyFields) && new File(dbFilePath).exists()
+                && isValidHostname(rmiHostname)
+                && isValidPortNumber(rmiPortNumber);
     }
 
     /**
@@ -116,10 +122,12 @@ class ServerConfigurationPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 1;
-        serverConfigurationPanel.add(pathToDatabaseFileLabel, gridBagConstraints);
+        serverConfigurationPanel.add(pathToDatabaseFileLabel,
+                gridBagConstraints);
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridwidth = 2;
-        serverConfigurationPanel.add(pathToDatabaseFileTextField, gridBagConstraints);
+        serverConfigurationPanel.add(pathToDatabaseFileTextField,
+                gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -135,7 +143,8 @@ class ServerConfigurationPanel {
         serverConfigurationPanel.add(rmiPortNumberLabel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridwidth = 2;
-        serverConfigurationPanel.add(rmiPortNumberTextField, gridBagConstraints);
+        serverConfigurationPanel.add(rmiPortNumberTextField,
+                gridBagConstraints);
     }
 
     /**
@@ -143,19 +152,42 @@ class ServerConfigurationPanel {
      */
     private void initialiseServerConfigurationPanelLabelsAndTextFields() {
 
-        pathToDatabaseFileLabel = new JLabel(UrlyBirdApplicationGuiConstants.PATH_TO_DATABASE_FILE, JLabel.TRAILING);
-        pathToDatabaseFileTextField = new JTextField(UrlyBirdApplicationGuiConstants.SERVER_CONFIG_TEXT_FIELD_LENGTH);
-        pathToDatabaseFileTextField.setText(UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
+        pathToDatabaseFileLabel = new JLabel(
+                UrlyBirdApplicationGuiConstants.PATH_TO_DATABASE_FILE,
+                JLabel.TRAILING);
+        pathToDatabaseFileTextField = new JTextField(
+                UrlyBirdApplicationGuiConstants
+                        .SERVER_CONFIG_TEXT_FIELD_LENGTH);
+        pathToDatabaseFileTextField.setText(
+                UrlyBirdApplicationObjectsFactory
+                        .getURLyBirdApplicationProperties()
+                        .getProperty(UrlyBirdApplicationConstants
+                                .PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
         pathToDatabaseFileLabel.setLabelFor(pathToDatabaseFileTextField);
 
-        rmiHostnameLabel = new JLabel(UrlyBirdApplicationGuiConstants.RMI_HOSTNAME, JLabel.TRAILING);
-        rmiHostnameTextField = new JTextField(UrlyBirdApplicationGuiConstants.SERVER_CONFIG_TEXT_FIELD_LENGTH);
-        rmiHostnameTextField.setText(UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_HOSTNAME));
+        rmiHostnameLabel = new JLabel(
+                UrlyBirdApplicationGuiConstants.RMI_HOSTNAME, JLabel.TRAILING);
+        rmiHostnameTextField = new JTextField(
+                UrlyBirdApplicationGuiConstants
+                        .SERVER_CONFIG_TEXT_FIELD_LENGTH);
+        rmiHostnameTextField.setText(
+                UrlyBirdApplicationObjectsFactory
+                        .getURLyBirdApplicationProperties()
+                        .getProperty(UrlyBirdApplicationConstants
+                                .PROPERTY_FILE_KEY_RMI_HOSTNAME));
         rmiHostnameLabel.setLabelFor(rmiHostnameTextField);
 
-        rmiPortNumberLabel = new JLabel(UrlyBirdApplicationGuiConstants.RMI_PORT_NUMBER, JLabel.TRAILING);
-        rmiPortNumberTextField = new JTextField(UrlyBirdApplicationGuiConstants.SERVER_CONFIG_TEXT_FIELD_LENGTH);
-        rmiPortNumberTextField.setText(UrlyBirdApplicationObjectsFactory.getURLyBirdApplicationProperties().getProperty(UrlyBirdApplicationConstants.PROPERTY_FILE_KEY_RMI_PORT_NUMBER));
+        rmiPortNumberLabel = new JLabel(
+                UrlyBirdApplicationGuiConstants.RMI_PORT_NUMBER,
+                JLabel.TRAILING);
+        rmiPortNumberTextField = new JTextField(
+                UrlyBirdApplicationGuiConstants
+                        .SERVER_CONFIG_TEXT_FIELD_LENGTH);
+        rmiPortNumberTextField.setText(
+                UrlyBirdApplicationObjectsFactory
+                        .getURLyBirdApplicationProperties()
+                        .getProperty(UrlyBirdApplicationConstants
+                                .PROPERTY_FILE_KEY_RMI_PORT_NUMBER));
         rmiPortNumberLabel.setLabelFor(rmiPortNumberTextField);
     }
 

@@ -53,7 +53,8 @@ public class Data implements DBAccess {
      *                                 record.
      */
     @Override
-    public void updateRecord(long recNo, String[] data, long lockCookie) throws RecordNotFoundException, SecurityException {
+    public void updateRecord(long recNo, String[] data, long lockCookie)
+            throws RecordNotFoundException, SecurityException {
         DatabaseAccessCrudOperations.updateRecord(recNo, data, lockCookie);
     }
 
@@ -72,7 +73,8 @@ public class Data implements DBAccess {
      *                                 record.
      */
     @Override
-    public void deleteRecord(long recNo, long lockCookie) throws RecordNotFoundException, SecurityException {
+    public void deleteRecord(long recNo, long lockCookie)
+            throws RecordNotFoundException, SecurityException {
         DatabaseAccessCrudOperations.deleteRecord(recNo, lockCookie);
     }
 

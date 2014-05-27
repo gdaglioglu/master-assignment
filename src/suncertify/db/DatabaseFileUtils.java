@@ -24,7 +24,8 @@ public class DatabaseFileUtils {
 
     private DatabaseFileUtils() {
 
-        databaseRandomAccessFile = UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
+        databaseRandomAccessFile =
+                UrlyBirdApplicationObjectsFactory.getDatabaseRandomAccessFile();
 
         readHeaderValues();
         readColumnsHeaders();
@@ -125,9 +126,12 @@ public class DatabaseFileUtils {
     public synchronized void updateNumberOfRecordsInDatabase() {
 
         try {
-            setNumberOfRecordsInDatabase((databaseRandomAccessFile.length() - getHeaderOffset()) / getRecordLength());
+            setNumberOfRecordsInDatabase(
+                    (databaseRandomAccessFile.length() - getHeaderOffset())
+                            / getRecordLength());
         } catch (IOException e) {
-            System.out.println("Error getting the length of the database file.");
+            System.out.println(
+                    "Error getting the length of the database file.");
             e.printStackTrace();
         }
     }
@@ -148,29 +152,35 @@ public class DatabaseFileUtils {
     private void readHeaderValues() {
 
         try {
-            final byte[] magicCookieBytes = new byte[DatabaseFileSchema.BYTES_MAGIC_COOKIE];
+            final byte[] magicCookieBytes =
+                    new byte[DatabaseFileSchema.BYTES_MAGIC_COOKIE];
             databaseRandomAccessFile.read(magicCookieBytes);
             setMagicCookie(getValueFromByteArray(magicCookieBytes));
         } catch (IOException e) {
-            System.out.println("Error reading Magic Cookie from database file");
+            System.out.println(
+                    "Error reading Magic Cookie from database file");
             e.printStackTrace();
         }
 
         try {
-            final byte[] recordLengthBytes = new byte[DatabaseFileSchema.BYTES_RECORD_LENGTH];
+            final byte[] recordLengthBytes =
+                    new byte[DatabaseFileSchema.BYTES_RECORD_LENGTH];
             databaseRandomAccessFile.read(recordLengthBytes);
             setRecordLength(getValueFromByteArray(recordLengthBytes));
         } catch (IOException e) {
-            System.out.println("Error reading Record Length from database file");
+            System.out.println(
+                    "Error reading Record Length from database file");
             e.printStackTrace();
         }
 
         try {
-            final byte[] numberOfFieldsBytes = new byte[DatabaseFileSchema.BYTES_NUMBER_OF_FIELDS];
+            final byte[] numberOfFieldsBytes =
+                    new byte[DatabaseFileSchema.BYTES_NUMBER_OF_FIELDS];
             databaseRandomAccessFile.read(numberOfFieldsBytes);
             setNumberOfFields(getValueFromByteArray(numberOfFieldsBytes));
         } catch (IOException e) {
-            System.out.println("Error reading Number of Fields from database file");
+            System.out.println(
+                    "Error reading Number of Fields from database file");
             e.printStackTrace();
         }
     }
@@ -180,17 +190,22 @@ public class DatabaseFileUtils {
         for (int i = 0; i < numberOfFields; i++) {
 
             try {
-                byte[] nameLengthBytes = new byte[DatabaseFileSchema.BYTES_FIELD_NAME];
+                byte[] nameLengthBytes =
+                        new byte[DatabaseFileSchema.BYTES_FIELD_NAME];
                 databaseRandomAccessFile.read(nameLengthBytes);
                 int nameLength = getValueFromByteArray(nameLengthBytes);
 
                 byte[] fieldNameBytes = new byte[nameLength];
                 databaseRandomAccessFile.read(fieldNameBytes);
-                DatabaseFileSchema.databaseFieldNames.add(i, new String(fieldNameBytes, UrlyBirdApplicationConstants.FILE_ENCODING));
+                DatabaseFileSchema.databaseFieldNames.add(i,
+                        new String(fieldNameBytes,
+                                UrlyBirdApplicationConstants.FILE_ENCODING));
 
-                byte[] fieldLength = new byte[DatabaseFileSchema.BYTES_FIELD_LENGTH];
+                byte[] fieldLength =
+                        new byte[DatabaseFileSchema.BYTES_FIELD_LENGTH];
                 databaseRandomAccessFile.read(fieldLength);
-                DatabaseFileSchema.databaseFieldLengths.add(i, getValueFromByteArray(fieldLength));
+                DatabaseFileSchema.databaseFieldLengths.add(i,
+                        getValueFromByteArray(fieldLength));
 
             } catch (IOException e) {
                 System.out.println("Error seeking past the column headers.");
@@ -205,7 +220,8 @@ public class DatabaseFileUtils {
             setHeaderOffset(databaseRandomAccessFile.getFilePointer());
 
         } catch (IOException e) {
-            System.out.println("Error getting the File Pointer for the HeaderOffset.");
+            System.out.println(
+                    "Error getting the File Pointer for the HeaderOffset.");
             e.printStackTrace();
         }
     }
@@ -224,7 +240,8 @@ public class DatabaseFileUtils {
         final int bytesLength = bytes.length;
 
         for (int i = 0; i < bytesLength; i++) {
-            valueInByteArray += (bytes[i] & 0x000000FF) << ((bytesLength - 1 - i) * 8);
+            valueInByteArray += (bytes[i] & 0x000000FF)
+                    << ((bytesLength - 1 - i) * 8);
         }
 
         return valueInByteArray;

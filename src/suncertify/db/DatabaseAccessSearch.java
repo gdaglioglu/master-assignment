@@ -32,9 +32,14 @@ class DatabaseAccessSearch {
 
         if (criteria[0] == null && criteria[1] == null) {
             return validRecordNumbers;
-        } else if (!criteria[0].equals(UrlyBirdApplicationConstants.EMPTY_STRING) && criteria[1].equals(UrlyBirdApplicationConstants.EMPTY_STRING)) {
+        } else if (!criteria[0].equals(
+                UrlyBirdApplicationConstants.EMPTY_STRING)
+                && criteria[1].equals(
+                UrlyBirdApplicationConstants.EMPTY_STRING)) {
             return searchOnCriteria(criteria, 0, validRecordNumbers);
-        } else if (criteria[0].equals(UrlyBirdApplicationConstants.EMPTY_STRING) && !criteria[1].equals(UrlyBirdApplicationConstants.EMPTY_STRING)) {
+        } else if (criteria[0].equals(UrlyBirdApplicationConstants.EMPTY_STRING)
+                && !criteria[1].equals(
+                UrlyBirdApplicationConstants.EMPTY_STRING)) {
             return searchOnCriteria(criteria, 1, validRecordNumbers);
         } else {
             return searchOnCriteria(criteria, validRecordNumbers);
@@ -57,16 +62,21 @@ class DatabaseAccessSearch {
      * @return A {@code long[]} containing the record numbers of the database
      * records that match {@code criteria[positionInStrings]}.
      */
-    private static long[] searchOnCriteria(String[] criteria, int positionInCriteria, long[] validRecordNumbers) {
+    private static long[] searchOnCriteria(String[] criteria,
+                                           int positionInCriteria,
+                                           long[] validRecordNumbers) {
 
         List<Long> searchResults = new ArrayList<Long>();
 
         for (long recordNumber : validRecordNumbers) {
 
             try {
-                String record = DatabaseAccessCrudOperations.readRecord(recordNumber)[positionInCriteria];
+                String record =
+                        DatabaseAccessCrudOperations
+                                .readRecord(recordNumber)[positionInCriteria];
 
-                if (record.toLowerCase().startsWith(criteria[positionInCriteria].toLowerCase())) {
+                if (record.toLowerCase().startsWith(
+                        criteria[positionInCriteria].toLowerCase())) {
                     searchResults.add(recordNumber);
                 }
 
@@ -89,7 +99,8 @@ class DatabaseAccessSearch {
      * @return A {@code long[]} containing the record numbers of the database
      * records that fully match {@code criteria}.
      */
-    private static long[] searchOnCriteria(String[] criteria, long[] validRecordNumbers) {
+    private static long[] searchOnCriteria(String[] criteria,
+                                           long[] validRecordNumbers) {
 
         List<Long> searchResults = new ArrayList<Long>();
 
@@ -97,11 +108,13 @@ class DatabaseAccessSearch {
 
             try {
                 boolean allMatch = true;
-                String[] records = DatabaseAccessCrudOperations.readRecord(recordNumber);
+                String[] records =
+                        DatabaseAccessCrudOperations.readRecord(recordNumber);
 
                 for (int i = 0; i < criteria.length; i++) {
 
-                    if (!records[i].toLowerCase().startsWith(criteria[i].toLowerCase())) {
+                    if (!records[i].toLowerCase().startsWith(
+                            criteria[i].toLowerCase())) {
                         allMatch = false;
                         break;
                     }
@@ -126,10 +139,12 @@ class DatabaseAccessSearch {
 
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
         databaseFileUtils.updateNumberOfRecordsInDatabase();
-        long recordsInDatabase = databaseFileUtils.getNumberOfRecordsInDatabase();
+        long recordsInDatabase =
+                databaseFileUtils.getNumberOfRecordsInDatabase();
         List<Long> validRecordNumbers = new ArrayList<Long>();
 
-        for (long recordNumber = 0; recordNumber < recordsInDatabase; recordNumber++) {
+        for (long recordNumber = 0; recordNumber < recordsInDatabase;
+             recordNumber++) {
 
             try {
                 DatabaseAccessCrudOperations.readRecord(recordNumber);

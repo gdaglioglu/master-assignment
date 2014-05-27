@@ -15,7 +15,8 @@ public class UrlyBirdApplicationGuiConstants {
     /**
      * The title of the Client GUI.
      */
-    public static final String CLIENT_GUI_APPLICATION_TITLE = "URLyBird Application";
+    public static final String CLIENT_GUI_APPLICATION_TITLE =
+            "URLyBird Application";
     /**
      * The text of the Book JButton.
      */
@@ -40,7 +41,9 @@ public class UrlyBirdApplicationGuiConstants {
     /**
      * The text that instructs how to book a room using the Client GUI.
      */
-    public static final String BOOKING_HINT = "Select a record in the table and press the \"Book\" button to book that room.";
+    public static final String BOOKING_HINT =
+            "Select a record in the table and press the \"Book\" button to"
+                    + " book that room.";
     /**
      * The label for the name search criteria.
      */
@@ -53,7 +56,8 @@ public class UrlyBirdApplicationGuiConstants {
     /**
      * The title of the Server GUI.
      */
-    public static final String SERVER_GUI_APPLICATION_TITLE = "URLyBird Application Server";
+    public static final String SERVER_GUI_APPLICATION_TITLE =
+            "URLyBird Application Server";
     /**
      * The label for the database path JTextField on the Server GUI.
      */
@@ -90,11 +94,13 @@ public class UrlyBirdApplicationGuiConstants {
     /**
      * The dimensions of the Client GUI.
      */
-    public static final Dimension CLIENT_GUI_DIMENSION = new Dimension(900, 600);
+    public static final Dimension CLIENT_GUI_DIMENSION =
+            new Dimension(900, 600);
     /**
      * The dimension of the JTable in the Client GUI.
      */
-    public static final Dimension CLIENT_GUI_JTABLE_DIMENSION = new Dimension(850, 500);
+    public static final Dimension CLIENT_GUI_JTABLE_DIMENSION =
+            new Dimension(850, 500);
     // ----- Server GUI -----
     /**
      * The length of the JTextFields in the Server GUI.
@@ -103,5 +109,6 @@ public class UrlyBirdApplicationGuiConstants {
     /**
      * The dimension of the Server GUI.
      */
-    public static final Dimension SERVER_GUI_DIMENSION = new Dimension(500, 200);
+    public static final Dimension SERVER_GUI_DIMENSION =
+            new Dimension(500, 200);
 }
