@@ -2,39 +2,106 @@
 |                Luke Potter's URLyBird application User Guide                 |
 +------------------------------------------------------------------------------+
 
-1 Running the URLyBird Application
+Table of Contents:
+1. Overview
+2. Running the URLyBird Application
+3. Application Properties
+4. Using the Client GUI
+5. Using the Server GUI
+
+
+
+
+
+1. URLyBird Application Overview
+The URLyBird application is designed to enable Customer Service Representatives
+(CSRs) to book hotel rooms on behalf their customers. It also allows the CSR to
+view available rooms and to search for rooms by hotel name and/or location
+values. The list of rooms is retrieved from a database file, which can be
+accessed either locally or over the network.
+
+
+
+
+
+2. Running the URLyBird Application
 The URLyBird application can be run in three possible modes;
  * Networked Client,
  * Server,
  * and, Standalone Client.
 
-1.1. Networked Client
-  This application mode opens a Client GUI instance. The Client connects to a
-running RMI Server Instance. The Client GUI interacts with the Database via the
+
+2.1. Networked Client
+This application mode opens a Client GUI instance. The Client connects to a
+running RMI Server Instance. The Client GUI interacts with the database via the
 network. To start the URLyBird application in networked client mode, pass the
-following Command Line Arguments.
-    java -jar URLyBird.jar
+following Command Line arguments.
+    java -jar runme.jar
 
-1.2. Server
-  This application mode opens a Server GUI instance. When in this mode, the
-URLyBird Application starts the RMI connections. This accepts incoming network
-requests from the URLyBird Client instances. To start the URLyBird Application
-in server mode, pass the following Command Line Arguments.
-    java -jar URLyBird.jar server
 
-1.3. Standalone Client
-  This application mode opens a Client GUI instance. The Client connects
+2.2. Server
+This application mode opens a Server GUI instance. When in this mode, the
+URLyBird application starts the RMI connections. This accepts incoming network
+requests from the URLyBird Client instances. To start the URLyBird application
+in server mode, pass the following Command Line arguments.
+    java -jar runme.jar server
+
+
+2.3. Standalone Client
+This application mode opens a Client GUI instance. The Client connects
 directly to the database. There are no RMI network requests sent. To start the
 URLyBird application in standalone client mode, pass the following Command Line
 Arguments.
-    java -jar URLyBird.jar alone
+    java -jar runme.jar alone
 
 
-2. Using the Client GUI
-2.1. Search Function
-To search for a room, enter its Hotel name and/or its location in the text boxes
-marked "Name" and "Location". If one or more of the text boxes are left blank,
-they will be taken as wildcards and match all values.
+
+
+
+
+3. Application Properties
+Each of the three modes that the URLyBird application can be started in requires
+properties.
+ * The Networked Client mode requires the "rmiHostname" and
+   "rmiPortNumber" properties.
+ * The Server mode requires the "pathToDatabaseFile", "rmiHostname" and
+   "rmiPortNumber" properties.
+ * The Standalone Client mode requires the "pathToDatabaseFile" property.
+
+These properties need to be defined in the suncertify.properties file, which
+must be located in the current directory.
+
+Example of the suncertify.properties file.
+    pathToDatabaseFile=db-1x1.db
+    rmiHostname=localhost
+    rmiPortNumber=1234
+
+The suncertify.properties file needs to be present before the application is
+run.
+
+
+
+
+
+4. Using the Client GUI
+
+4.1. Opening the Client GUI
+On starting, the Client GUI will check for the properties it requires. It will
+fail if the required properties are not present in the suncertify.properties
+file.
+
+Then the Client GUI will prompt you for your CSR number. This will be the id
+used to book rows for the duration of this GUI's existence. Enter your CSR
+number, which is eight digits, and click the "OK" button.
+
+The Client GUI will open and display the current contents of the database file
+in its table.
+
+
+4.2. Search Function
+To search for a room, enter its Hotel name and/or its location in the text
+fields labeled "Name" and "Location". If one or more of the text boxes are left
+blank, they will be taken as wildcards and match all values.
 
 Consider the following cases;
  * If the "Name" text box is left blank and the "Location" text box has the
@@ -50,7 +117,49 @@ Consider the following cases;
 To reset the search filter, and display all the records again, remove any text
 from the "Name" and "Location" text boxes and click the "Search" button.
 
-2.2. Making a Booking
+
+4.3. Making a Booking
+To book a hotel room, click on the record you wish to book, then click the
+"Book" button. A dialog box will appear asking for the start date, either
+"Today" or "Tomorrow". After a selection is made, a second dialog box will
+appear, asking for the end date of the booking. The end date must be supplied in
+the format of "yyyy/MM/dd", e.g. "2014/05/30" for May 30th 2014. The record will
+be booked and the table of records in the GUI will be refreshed.
 
 
-2.3. Cancelling a Booking
+4.4. Refreshing the Table of Results
+To get the latest information on which rooms are free you need to manually
+refresh the client GUI's table. This is done by completing the following steps.
+ 1. Clear the "Name" and "Location" Text Fields.
+ 2. Click the "Search" Button.
+
+The table of records in the Client GUI will be refreshed with the latest data.
+
+
+4.5. Exiting the Client GUI
+To exit the Client GUI, click the "x" button on the application window.
+
+
+
+
+5. Using the Server GUI
+
+5.1. Opening the Server GUI
+On starting, the Server GUI will check for the properties it requires. It will
+fail if the required properties are not present in the suncertify.properties
+file.
+
+The Server GUI will appear. It will have values loaded into its text fields from
+the suncertify.properties file. These properties can be edited. The updated
+properties will have their values persisted in the suncertify.properties file.
+
+Clicking the "Start Server" button will cause the RMI server to start. It will
+use the values in the text fields to locate the database file, and to create the
+RMI URL that the Networked Client will need to use to connect to the server in
+order to function.
+
+
+5.2 Exiting the Server GUI
+To exit the Server GUI, click the "x" button on the application window. This
+will end the RMI server process. Networked clients will no longer be able to
+connect to this server instance.
