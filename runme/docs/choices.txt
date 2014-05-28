@@ -3,7 +3,6 @@
 +------------------------------------------------------------------------------+
 
 Table of Contents:
-------------------
 1. Code style
 2. Networking decisions
 3. Database decisions
@@ -11,10 +10,23 @@ Table of Contents:
 5. Concurrency and locking decisions
 6. GUI and usability decisions
 7. General decision and considerations
---------------------------------------------------------------------------------
+
+
+
+
+
 
 1. Code style
 
+JavaDoc:
+
+
+
+Class and Method naming:
+
+
+
+Code Style:
 One of the requirements of the project was to write code that a junior
 programmer could easily understand. I think I completed this requirement.
 
@@ -34,10 +46,19 @@ I've used:
 I see my responsibility as a mentor of junior programmers to demonstrate how to
 write clear, concise code and eliminate redundant lines of code.
 
---------------------------------------------------------------------------------
+
+
+
+
+
 
 2. Networking decisions
 
+RMI vs Sockets:
+
+
+
+RMI Implementation:
 I decided to use RMI in this implementation of URLyBird. Rather than use a RMI
 Factory Pattern, I used the suncertify.controller.DatabaseAccessDaoRemote object
 to handle the communication across the network. Each Networked Client GUI gets a
@@ -60,24 +81,60 @@ database specified.
 Example of the required entries in suncertify.properties.
     pathToDatabaseFile=db-1x1.db
 
---------------------------------------------------------------------------------
+DAO Pattern:
+
+
+
+Extra Remote Interface:
+
+
+
+
+
+
 
 3. Database decisions
 
+Object Orientated Approach:
+
+
+
+Facade Pattern:
+
+
+
+
 Record Creation Process:
-------------------------
 When the CSR wants to create a record, it is appended to the end of the Database
 file.
 
+
 Record Deletion Process:
-------------------------
 When the CSR want to delete a record, only the bit at the start of the record
 changed. The contents of the record are still present in the database file.
 
---------------------------------------------------------------------------------
+
+Random Access File:
+
+
+Caching Records:
+
+
+Limitations:
+
+
+
+
+
+
 
 4. Property file decisions
 
+Property Management:
+
+
+
+Required Properties:
 The properties file must be in the current user directory. It must be called
 "suncertify.properties".
 
@@ -97,7 +154,11 @@ Example of the suncertify.properties.
     rmiHostname=localhost
     rmiPortNumber=1234
 
---------------------------------------------------------------------------------
+
+
+
+
+
 
 5. Concurrency and locking decisions
 
@@ -134,19 +195,35 @@ It then puts the entry in the HashMap, thereby obtaining the lock.
 When trying to unlock a record it checks if there is an entry in the HashMap for
 the record and cookie. It then removes the record, there by releasing the lock.
 
---------------------------------------------------------------------------------
+
+
+
+
+
 
 6. GUI and usability decisions
 
-Logging into the GUI:
----------------------
+Logging into the Client GUI:
 When opening the Client GUI, you will be prompted for your CSR number. This will
 be the id used to book rows for the duration of this GUI's existence. Asking for
 the CSR number at the start eliminates the process of having to repeatedly enter
 it when booking.
 
-Search Function:
-----------------
+Client GUI's Table of Records:
+The Client GUI is populated with a table of records. These are the valid records
+that are present in the database file. The "Date Available" column will display
+the date that the room is available on, if that date is in the future. Otherwise
+it will presume that the room's booking has expires and display "Available". I
+think that this is a good feature, as it displays the information in as an
+easily recognisable way to distinguish between the booked and available records.
+
+There is one issue, if the room is showing "Available", it may also show the CSR
+number of the last user to book that room. This is because there is no process
+that is constantly checking the database for expired bookings and deleting the
+CSR number from these records.
+
+
+Client GUI's Search Function:
 I'm only allowing the user to search on the name and location of the Hotel they
 would like to book into. I'm implementing the search function this way, as a CSR
 may have request for a specific Hotel franchise, or the hotels available in a
@@ -163,8 +240,8 @@ return the same result for "Fred" and "fred". I catered for these users.
 I decided against implementing price search logic, as that's not a "must"
 feature.
 
-Booking a Room:
----------------
+
+Booking a Room using the Client GUI:
 When booking a room a row in the table must be selected. A dialog box will pop
 up, and ask for the CSR which day they would like the booking to start on, this
 is to enforce the 48 hour booking start time requirement. Overall this choice of
@@ -176,8 +253,8 @@ booking. This must be in the format "yyyy/MM/DD", e.g. "2014/05/30" for May 30th
 
 The record is then booked and the table is refreshed for the booking GUI.
 
-Refreshing the client GUI:
---------------------------
+
+Refreshing the Client GUI's table of records:
 In a situation where multiple clients are booking rooms, it is necessary to have
 up to have the latest information on which rooms are free.
 
@@ -186,8 +263,8 @@ To refresh your GUI's table records;
   2. Click the "Search" Button.
 
 
-Future GUI Enhancements:
-------------------------
+
+Future Client GUI Enhancements:
 I built the GUIs, client and server, out of panels, where it was possible. This
 will allow the GUIs to be extended in future. Create the newly extended JPanel
 class and add it to the UrlyBirdClientGui, or UrlyBirdServerGui, class.
@@ -203,8 +280,25 @@ Say a search returns three results, and the client tries to book result number
 three. Only the table row number is recorded, so record three in the database
 will be booked. This is an area for future enhancement of the GUI.
 
---------------------------------------------------------------------------------
+
+Server GUI:
+The server GUI has three text fields, representing an entry in the
+suncertify.properties file. The server GUI will be preloaded with the
+properties, if the properties file is present. Otherwise it will be blank. The
+server will not start unless the suncertify.properties file is present and
+pre-populated with values.
+
+Example of the suncertify.properties.
+    pathToDatabaseFile=db-1x1.db
+    rmiHostname=localhost
+    rmiPortNumber=1234
+
+
+
 
 7. General decision and considerations
 
---------------------------------------------------------------------------------
+
+
+
+
