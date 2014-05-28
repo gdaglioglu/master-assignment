@@ -100,7 +100,7 @@ class DatabaseAccessLockManager {
         } catch (InterruptedException interruptedException) {
 
             throw new RecordNotFoundException(
-                    "There was a problem encountered when trying to lock record: "
+                    "Encountered a problem when trying to lock record: "
                             + recordNumber + ".\n"
                             + interruptedException.getMessage());
         }
