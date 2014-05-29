@@ -160,7 +160,7 @@ class DatabaseAccessCrudOperations {
         }
 
         try {
-            databaseAccessLockManager.lock(recNo);
+            lockCookie = databaseAccessLockManager.lock(recNo);
 
             DatabaseFileUtils databaseFileUtils =
                     DatabaseFileUtils.getInstance();
@@ -221,7 +221,7 @@ class DatabaseAccessCrudOperations {
                     + " locked by another user.");
         }
 
-        databaseAccessLockManager.lock(recNo);
+        lockCookie = databaseAccessLockManager.lock(recNo);
         DatabaseFileUtils databaseFileUtils = DatabaseFileUtils.getInstance();
 
         try {

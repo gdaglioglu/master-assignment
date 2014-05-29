@@ -102,7 +102,10 @@ class BookingPanel extends JPanel {
                         databaseAccessDao.bookHotelRoom(recordRow, csrNumber,
                                 endDate, Thread.currentThread().getId());
                     }
-                } catch (Exception ignored) {
+                } catch (Exception e) {
+
+                    System.err.println("There was an error when booking record number " + recordRow);
+                    e.printStackTrace();
 
                 } finally {
                     TablePanel.hotelRoomTableModel = new HotelRoomTableModel(
