@@ -126,7 +126,7 @@ public class UrlyBirdServerGui extends JFrame {
 
             Properties properties =
                     UrlyBirdApplicationObjectsFactory
-                            .getURLyBirdApplicationProperties();
+                            .getUrlyBirdApplicationProperties();
 
             if (hasDatabasePathPropertyChanged(properties)) {
 

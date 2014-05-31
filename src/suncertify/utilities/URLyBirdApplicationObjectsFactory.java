@@ -18,7 +18,7 @@ public class UrlyBirdApplicationObjectsFactory {
      *
      * @return The initialised properties object for the URLyBird Application.
      */
-    public static Properties getURLyBirdApplicationProperties() {
+    public static Properties getUrlyBirdApplicationProperties() {
 
         Properties properties = new Properties();
 
@@ -52,7 +52,7 @@ public class UrlyBirdApplicationObjectsFactory {
      */
     public static RandomAccessFile getDatabaseRandomAccessFile() {
 
-        Properties properties = getURLyBirdApplicationProperties();
+        Properties properties = getUrlyBirdApplicationProperties();
 
         try {
             File databaseFile = new File(properties.getProperty(

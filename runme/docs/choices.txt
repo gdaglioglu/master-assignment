@@ -379,7 +379,17 @@ Example of the suncertify.properties.
 
 7. General Decision and Considerations
 
+7.1. Canceling of Bookings
+I chose not to implement functionality to cancel bookings. This was not a must
+requirement.
 
 
+7.2. Rebooking of Booked Records
+I chose to allow the booked records to be rebooked. I trust the CSR to book only
+the rows with "Available" in the "Date Available" column. The application
+doesn't include a booking cleanup function to remove the CSR number from a
+record with "Available" in the "Date Available" column. So the records
+displaying "Available" are allowed to be booked.
 
-
+If a CSR books the wrong record, they can rebook the incorrect record with a
+date in the past, so that the records will display "Available".
