@@ -18,11 +18,34 @@ Table of Contents:
 1. Code Style
 
 1.1. JavaDoc
-TEXT
+I've included JavaDoc comments on all the public methods of every class in my
+submission. I've not added JavaDoc for the trivial private methods, as I believe
+that they are self-explanatory. I've included the JavaDoc for the public methods
+of the public classes in the "docs/javadoc/" directory of my submission. I have
+many other classes that are have a package level of access, these are not
+present in the javadoc library as they are not public classes.
 
 
 1.2. Class and Method Naming
-TEXT
+Throughout the development of my URLyBird application, I've tried to keep the
+content of the classes and methods cohesive. This would allow me to use class
+and method names that accurately reflect the actions preformed by these classes
+and methods. Taking my suncertify.db package for an example of my highly
+cohesive classes with accurate names;
+ * DatabaseAccessCrudOperations.java handles the creation, retrieval, updating
+   and deletion of records in the database.
+ * DatabaseAccessLockManager.java handles the locking and unlocking of records
+   in the database.
+ * DatabaseAccessSearch.java handles searching the database records.
+
+When coding the GUIs, I used panels to cleanly add functionality to the GUI
+without the code of the suncertify.gui.client.UrlyBirdClientGui class ballooning
+in size. The UrlyBirdClientGui class contains panels which handle specific
+functionality;
+ * BookingPanel.java handles all the actions surrounding the booking of a room.
+ * SearchPanel.java handles all the procedures involved in searching for a room.
+ * TablePanel.java contains all the logic needed to display the database records
+   in a table on the GUI.
 
 
 1.3. Code Style
@@ -80,7 +103,16 @@ Example of the required entries in suncertify.properties.
 
 
 2.3. DAO Pattern
-TEXT
+I utilised a DAO pattern to give my Client GUIs access to the database. This
+gives any type of client access to the defined functions, search, retrieve and
+book rooms. Taking the approach of using the DAO pattern allowed me to use
+HotelRoom objects rather than positions in a string array.
+I implemented the suncertify.controller.DatabaseAccessDao interface in two ways,
+ * DatabaseAccessDaoLocal is used by clients connecting directly to the database
+   file. When the application is run in standalone mode, the local DAO is used.
+ * DatabaseAccessDaoRemote is used by clients connecting to the database over
+   the network. When the application is run in networked client mode, the remote
+   DAO is used.
 
 
 2.4. Extra Remote Interface
