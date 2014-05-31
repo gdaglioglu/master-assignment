@@ -148,12 +148,31 @@ information is a better approach than referring to positions in a string array.
 
 
 3.2. Facade Pattern
-TEXT
+To keep my code cohesive and to keep the classes to a respectable size, I used a
+Facade pattern when implementing the suncertify.db.DBAccess interface. The
+Facade pattern is used to implement an interface when the word "and" is used to
+describe the functionality of that interface.
+
+The methods in the DBAccess interface can be described as follows;
+  "The DBAccess interface handles the CRUD operations, the search functionality
+   and the record locking."
+
+The description of the DBAccess interface identified three separate areas on
+functionality.
+ * CRUD operations,
+ * Search functionality,
+ * Record locking
+
+As such when interface is being implemented by the suncertify.db.Data class, I
+just sent the call to the methods to the various classes that were designed to
+implement that specific piece of functionality.
 
 
 3.3. Record Creation Process
 When the CSR wants to create a record, it is appended to the end of the Database
-file.
+file. If the record already exists in the database, which is determined by
+performing a search on the name and location of the record attempting to be
+created, a DuplicateKeyException is thrown.
 
 
 3.4. Record Deletion Process
@@ -162,7 +181,14 @@ changed. The contents of the record are still present in the database file.
 
 
 3.5. Random Access File
-TEXT
+I used RandomAccessFile to handle the database file input and output.
+RandomAccessFile has the seek method, which is useful for navigating the file
+pointer to the record to be accessed. The readBytes and writeBytes methods were
+instrumental in allowing the reading and writing of the record values.
+
+The other option for database file I/O was to use FileInputStream and
+FileOutputStream. I felt that the exacting control that RandomAccessFile's read
+and write methods, which deal with bytes, better served my needs.
 
 
 3.6. Caching Records
