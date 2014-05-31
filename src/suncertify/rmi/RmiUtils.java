@@ -30,7 +30,7 @@ class RmiUtils {
     // ----- Private Methods -----
     private static String attainRmiHostnameFromPropertiesFile() {
         return UrlyBirdApplicationObjectsFactory
-                .getURLyBirdApplicationProperties()
+                .getUrlyBirdApplicationProperties()
                 .getProperty(
                         UrlyBirdApplicationConstants
                                 .PROPERTY_FILE_KEY_RMI_HOSTNAME);
@@ -38,7 +38,7 @@ class RmiUtils {
 
     private static String attainRmiPortNumberFromPropertiesFile() {
         return UrlyBirdApplicationObjectsFactory
-                .getURLyBirdApplicationProperties()
+                .getUrlyBirdApplicationProperties()
                 .getProperty(
                         UrlyBirdApplicationConstants
                                 .PROPERTY_FILE_KEY_RMI_PORT_NUMBER);

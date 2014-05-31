@@ -59,7 +59,7 @@ public class UrlyBirdClientGuiUtils {
 
         Properties properties =
                 UrlyBirdApplicationObjectsFactory
-                        .getURLyBirdApplicationProperties();
+                        .getUrlyBirdApplicationProperties();
 
         if (urlyBirdApplicationMode
                 == UrlyBirdApplicationMode.STANDALONE_CLIENT) {

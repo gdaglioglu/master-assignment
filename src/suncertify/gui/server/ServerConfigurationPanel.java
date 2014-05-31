@@ -160,7 +160,7 @@ class ServerConfigurationPanel {
                         .SERVER_CONFIG_TEXT_FIELD_LENGTH);
         pathToDatabaseFileTextField.setText(
                 UrlyBirdApplicationObjectsFactory
-                        .getURLyBirdApplicationProperties()
+                        .getUrlyBirdApplicationProperties()
                         .getProperty(UrlyBirdApplicationConstants
                                 .PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE));
         pathToDatabaseFileLabel.setLabelFor(pathToDatabaseFileTextField);
@@ -172,7 +172,7 @@ class ServerConfigurationPanel {
                         .SERVER_CONFIG_TEXT_FIELD_LENGTH);
         rmiHostnameTextField.setText(
                 UrlyBirdApplicationObjectsFactory
-                        .getURLyBirdApplicationProperties()
+                        .getUrlyBirdApplicationProperties()
                         .getProperty(UrlyBirdApplicationConstants
                                 .PROPERTY_FILE_KEY_RMI_HOSTNAME));
         rmiHostnameLabel.setLabelFor(rmiHostnameTextField);
@@ -185,7 +185,7 @@ class ServerConfigurationPanel {
                         .SERVER_CONFIG_TEXT_FIELD_LENGTH);
         rmiPortNumberTextField.setText(
                 UrlyBirdApplicationObjectsFactory
-                        .getURLyBirdApplicationProperties()
+                        .getUrlyBirdApplicationProperties()
                         .getProperty(UrlyBirdApplicationConstants
                                 .PROPERTY_FILE_KEY_RMI_PORT_NUMBER));
         rmiPortNumberLabel.setLabelFor(rmiPortNumberTextField);

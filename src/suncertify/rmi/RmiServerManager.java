@@ -34,7 +34,7 @@ public class RmiServerManager {
             LocateRegistry.createRegistry(
                     Integer.parseInt(
                             UrlyBirdApplicationObjectsFactory
-                                    .getURLyBirdApplicationProperties()
+                                    .getUrlyBirdApplicationProperties()
                                     .getProperty(UrlyBirdApplicationConstants
                                             .PROPERTY_FILE_KEY_RMI_PORT_NUMBER
                                     )));
