@@ -1,5 +1,5 @@
 Code:
-Implement Java7 MultiCatch.
+Nope: Implement Java7 MultiCatch.
 Nope: Free up rooms after their "booked until" date has passed.
     * Mention it as an area for future improvement.
 Nope: Fix bugs listed in repository.
@@ -18,7 +18,7 @@ Done: Remove extra functionality.
 
 
 Documentation:
-Choices.txt
+Done: Choices.txt
 Done: User Guide.
 Done: Generate JavaDoc.
 Done: Review JavaDoc.
