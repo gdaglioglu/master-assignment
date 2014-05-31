@@ -126,7 +126,9 @@ I implemented the suncertify.controller.DatabaseAccessDao interface in two ways,
 I needed to use an extra interface, suncertify.rmi.DatabaseAccessRemote, this
 interface is almost identical to the suncertify.db.DBAccess interface except
 that it extends the Remote interface. Extending the Remote interface requires
-that the methods in that interface throw RemoteException.
+that the methods in that interface throw RemoteException. This situation arose,
+only because I was not allowed to edit the DBAccess interface, under the
+stipulations of the project.
 
 
 
@@ -192,12 +194,16 @@ and write methods, which deal with bytes, better served my needs.
 
 
 3.6. Caching Records
-TEXT
+I decided against using a cache of the records. Reading the records into a
+List<HotelRoom> would have some advantages, in terms of swiftly accessing the
+records. But if records were created or updated and the program crashed, the
+record cache's contents would be lost. This would result in CSR's bookings not
+taking effect. Even writing the cache to file every minute, still poses a risk
+of a booking not being recorded due to a crash.
 
-
-3.7. Limitations
-TEXT
-
+To eliminate the issues surrounding the cache and the database file going out of
+sync, I decided to access the database file directly. This approach makes the
+database operations as atomic as possible.
 
 
 
@@ -205,7 +211,11 @@ TEXT
 4. Property File Decisions
 
 4.1. Property Management
-TEXT
+I used a single properties object throughout the application. The application
+properties are stored in the
+suncertify.utilities.UrlyBirdApplicationObjectsFactory class. The properties
+object instance is retrieved by calling
+UrlyBirdApplicationObjectsFactory.getUrlyBirdApplicationProperties() method.
 
 
 4.2. Required Properties
