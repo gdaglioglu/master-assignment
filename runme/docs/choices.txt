@@ -75,7 +75,13 @@ write clear, concise code and eliminate redundant lines of code.
 2. Networking decisions
 
 2.1. RMI vs Sockets
-TEXT
+I decided to use RMI for the network communication portion of my project. RMI
+allows methods on an object to be called over the network. This object oriented
+approach is implemented cleanly and the code is quite concise.
+
+The other option for networking was Sockets. Sockets have the advantage of
+giving the developer control to create threads. Implementing a Socket based
+network communication layer involves a larger amount of code, compared to RMI.
 
 
 2.2. RMI Implementation
@@ -107,6 +113,7 @@ I utilised a DAO pattern to give my Client GUIs access to the database. This
 gives any type of client access to the defined functions, search, retrieve and
 book rooms. Taking the approach of using the DAO pattern allowed me to use
 HotelRoom objects rather than positions in a string array.
+
 I implemented the suncertify.controller.DatabaseAccessDao interface in two ways,
  * DatabaseAccessDaoLocal is used by clients connecting directly to the database
    file. When the application is run in standalone mode, the local DAO is used.
@@ -116,7 +123,10 @@ I implemented the suncertify.controller.DatabaseAccessDao interface in two ways,
 
 
 2.4. Extra Remote Interface
-TEXT
+I needed to use an extra interface, suncertify.rmi.DatabaseAccessRemote, this
+interface is almost identical to the suncertify.db.DBAccess interface except
+that it extends the Remote interface. Extending the Remote interface requires
+that the methods in that interface throw RemoteException.
 
 
 
@@ -125,7 +135,16 @@ TEXT
 3. Database Decisions
 
 3.1. Object Orientated Approach
-TEXT
+Because the database layer utilises string arrays for storing data, I decided to
+create a pojo to store the data related to each field in a relevant object type.
+The object suncertify.model.HotelRoom was used. The HotelRoom object has a
+constructor that takes a string array, this allows database records to be
+converted into HotelRoom object easily for retrieval queries. The HotelRoom
+object has the method toStringArray this allows a database record to be created
+from a HotelRoom object in the case of a query that writes to the database.
+
+Calling getter and setter methods on an object in order to retrieve and update
+information is a better approach than referring to positions in a string array.
 
 
 3.2. Facade Pattern
