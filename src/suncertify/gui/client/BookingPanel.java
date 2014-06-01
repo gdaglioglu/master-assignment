@@ -117,7 +117,7 @@ class BookingPanel extends JPanel {
 
                     System.err.println(
                             "There was an error when booking record number "
-                            + recordRow);
+                                    + recordRow);
                     e.printStackTrace();
 
                 } finally {

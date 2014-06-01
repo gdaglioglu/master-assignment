@@ -96,9 +96,9 @@ public class UrlyBirdClientGuiUtils {
             if (RmiClientManager.connectToRemoteServerViaRmi() == null) {
                 CommonGuiUtils.showErrorMessageDialog(
                         "Could not connect to Server.\n\n"
-                        + "Troubleshooting Tips:\n"
-                        + "Is the server running?\n"
-                        + "Is the server URL correct?");
+                                + "Troubleshooting Tips:\n"
+                                + "Is the server running?\n"
+                                + "Is the server URL correct?");
                 System.exit(1);
             }
         }
