@@ -46,12 +46,12 @@ class DatabaseFileSchema {
      * A list to store the lengths of the fields in the Database.
      */
     public static final ArrayList<Integer> databaseFieldLengths =
-            new ArrayList<Integer>();
+            new ArrayList<>();
     /**
      * A list to store the names of the fields in the Database.
      */
     public static final ArrayList<String> databaseFieldNames =
-            new ArrayList<String>();
+            new ArrayList<>();
     /**
      * Field descriptive name: Name of the hotel.
      * Database field name:    name

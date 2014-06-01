@@ -18,12 +18,12 @@ package suncertify.db;
 import suncertify.model.HotelRoom;
 
 /**
- * The <code>DataClassTest</code> tests the main functionalities of the
+ * The {@code DataClassTest} tests the main functionalities of the
  * {@link Data} class. In order to simulate several clients trying to use it and
  * exercise the locking mechanism, it also has several inner classes that extend
  * the {@link Thread} class, where each class represents one client requesting
  * one operation, and mainly requesting updating and deletion of records. The
- * <code>FindingRecordsThread</code> exercises two functionalities: finding
+ * {@code FindingRecordsThread} exercises two functionalities: finding
  * records and reading records.
  *
  * @author Roberto Perillo
@@ -117,7 +117,7 @@ public class LockingManagerTest {
                         + " on UpdatingRandomRecordThread");
                 //data.unlock(recNo, cookie);
             } catch (Exception e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
@@ -155,7 +155,7 @@ public class LockingManagerTest {
                  */
                 //data.unlock(1, cookie);
             } catch (Exception e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
@@ -177,7 +177,7 @@ public class LockingManagerTest {
                         + " trying to create a record");
                 data.createRecord(room.toStringArray());
             } catch (Exception e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
@@ -199,7 +199,7 @@ public class LockingManagerTest {
                         + "DeletingRecord1Thread");
                 //data.unlock(1, cookie);
             } catch (Exception e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
@@ -239,7 +239,7 @@ public class LockingManagerTest {
                 }
                 System.out.println("Exiting for loop");
             } catch (Exception e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }

@@ -49,7 +49,7 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
                 // Initialise the hotelRooms ArrayList the first time we find a
                 // hotelRoom to add to the list.
                 if (hotelRooms == null) {
-                    hotelRooms = new ArrayList<HotelRoom>();
+                    hotelRooms = new ArrayList<>();
                 }
 
                 hotelRooms.add(hotelRoom);
@@ -68,7 +68,7 @@ public class DatabaseAccessDaoLocal implements DatabaseAccessDao {
     @Override
     public ArrayList<HotelRoom> retrieveAllHotelRooms() {
 
-        ArrayList<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
+        ArrayList<HotelRoom> hotelRooms = new ArrayList<>();
         HotelRoom tempHotelRoom;
 
         for (long recordNumber = 0;

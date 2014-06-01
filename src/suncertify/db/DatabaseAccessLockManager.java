@@ -15,7 +15,7 @@ class DatabaseAccessLockManager {
     // Singleton instance of this {@code DatabaseAccessLockManager} class.
     private static DatabaseAccessLockManager databaseAccessLockManager;
     // A map to record which records (key) are locked by which thread (value).
-    private final Map<Long, Long> lockedMap = new HashMap<Long, Long>();
+    private final Map<Long, Long> lockedMap = new HashMap<>();
 
     /**
      * Private constructor for the singleton.

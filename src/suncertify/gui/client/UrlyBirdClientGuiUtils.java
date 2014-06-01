@@ -13,7 +13,6 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.Properties;
 
 /**
@@ -155,11 +154,7 @@ public class UrlyBirdClientGuiUtils {
 
         if (urlyBirdApplicationMode
                 == UrlyBirdApplicationMode.NETWORKED_CLIENT) {
-            try {
-                return new DatabaseAccessDaoRemote();
-            } catch (RemoteException ignored) {
-                return null;
-            }
+            return new DatabaseAccessDaoRemote();
         } else if (urlyBirdApplicationMode
                 == UrlyBirdApplicationMode.STANDALONE_CLIENT) {
             return new DatabaseAccessDaoLocal();

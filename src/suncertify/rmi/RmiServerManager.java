@@ -41,9 +41,7 @@ public class RmiServerManager {
             Naming.rebind(RmiUtils.formRmiUrl(), databaseAccessRemote);
             rmiServerStatus = RmiServerStatus.RUNNING;
 
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
+        } catch (RemoteException | MalformedURLException e) {
             e.printStackTrace();
         }
     }

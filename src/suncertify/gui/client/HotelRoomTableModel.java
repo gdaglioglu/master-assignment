@@ -42,7 +42,11 @@ class HotelRoomTableModel extends AbstractTableModel {
      */
     @Override
     public int getRowCount() {
-        return hotelRoomList.size();
+        try {
+            return hotelRoomList.size();
+        } catch (NullPointerException ignored) {
+            return 0;
+        }
     }
 
     /**

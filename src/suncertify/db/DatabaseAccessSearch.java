@@ -66,7 +66,7 @@ class DatabaseAccessSearch {
                                            int positionInCriteria,
                                            long[] validRecordNumbers) {
 
-        List<Long> searchResults = new ArrayList<Long>();
+        List<Long> searchResults = new ArrayList<>();
 
         for (long recordNumber : validRecordNumbers) {
 
@@ -102,7 +102,7 @@ class DatabaseAccessSearch {
     private static long[] searchOnCriteria(String[] criteria,
                                            long[] validRecordNumbers) {
 
-        List<Long> searchResults = new ArrayList<Long>();
+        List<Long> searchResults = new ArrayList<>();
 
         for (long recordNumber : validRecordNumbers) {
 
@@ -141,7 +141,7 @@ class DatabaseAccessSearch {
         databaseFileUtils.updateNumberOfRecordsInDatabase();
         long recordsInDatabase =
                 databaseFileUtils.getNumberOfRecordsInDatabase();
-        List<Long> validRecordNumbers = new ArrayList<Long>();
+        List<Long> validRecordNumbers = new ArrayList<>();
 
         for (long recordNumber = 0; recordNumber < recordsInDatabase;
              recordNumber++) {

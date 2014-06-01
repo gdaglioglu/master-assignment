@@ -25,7 +25,7 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
     /**
      * The default constructor for the {@code DatabaseAccessDaoRemote} class.
      */
-    public DatabaseAccessDaoRemote() throws RemoteException {
+    public DatabaseAccessDaoRemote() {
 
         databaseAccessRemote = RmiClientManager.connectToRemoteServerViaRmi();
     }
@@ -54,7 +54,7 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
                     // Initialise the hotelRooms ArrayList the first time we
                     // find a hotelRoom to add to the list.
                     if (hotelRooms == null) {
-                        hotelRooms = new ArrayList<HotelRoom>();
+                        hotelRooms = new ArrayList<>();
                     }
 
                     hotelRooms.add(hotelRoom);
@@ -77,7 +77,7 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
     @Override
     public ArrayList<HotelRoom> retrieveAllHotelRooms() {
 
-        ArrayList<HotelRoom> hotelRooms = new ArrayList<HotelRoom>();
+        ArrayList<HotelRoom> hotelRooms = new ArrayList<>();
         HotelRoom tempHotelRoom;
 
         for (long recordNumber = 0;

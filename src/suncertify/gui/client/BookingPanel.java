@@ -148,7 +148,7 @@ class BookingPanel extends JPanel {
 
                 return true;
 
-            } catch (ParseException ignored) {
+            } catch (NullPointerException | ParseException ignored) {
                 return false;
             }
         }
