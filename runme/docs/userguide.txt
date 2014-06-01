@@ -1,5 +1,5 @@
 +------------------------------------------------------------------------------+
-|                Luke Potter's URLyBird application User Guide                 |
+|                Luke Potter's URLyBird Application User Guide                 |
 +------------------------------------------------------------------------------+
 
 Table of Contents:
@@ -14,6 +14,7 @@ Table of Contents:
 
 
 1. URLyBird Application Overview
+
 The URLyBird application is designed to enable Customer Service Representatives
 (CSRs) to book hotel rooms on behalf their customers. It also allows the CSR to
 view available rooms and to search for rooms by hotel name and/or location
@@ -25,6 +26,7 @@ accessed either locally or over the network.
 
 
 2. Running the URLyBird Application
+
 The URLyBird application can be run in three possible modes;
  * Networked Client,
  * Server,
@@ -58,8 +60,8 @@ Arguments.
 
 
 
-
 3. Application Properties
+
 Each of the three modes that the URLyBird application can be started in requires
 properties.
  * The Networked Client mode requires the "rmiHostname" and
@@ -138,6 +140,7 @@ The table of records in the Client GUI will be refreshed with the latest data.
 
 4.5. Exiting the Client GUI
 To exit the Client GUI, click the "x" button on the application window.
+
 
 
 
