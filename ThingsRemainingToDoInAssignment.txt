@@ -26,7 +26,7 @@ Done: Review JavaDoc.
 
 
 Testing:
-Ensure runme.jar file is functioning correctly.
+Done: Ensure runme.jar file is functioning correctly.
 Done: Run JavaRanch's locking tester.
 Done: Run the server with multiple clients.
 Done: Run the networked client and the standalone client at the same time.
@@ -36,4 +36,4 @@ Done: Run the networked client and the standalone client at the same time.
 Other:
 Know why you chose RMI over Sockets.
 Know how the Locking is implemented.
-Build the submission.jar file from the instructions.
+Done: Build the submission.jar file from the instructions.
