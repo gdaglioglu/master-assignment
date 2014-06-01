@@ -1,5 +1,7 @@
 Operating System:
     MacOS X 10.9 Mavericks
+    System Version: OS X 10.9.3 (13D65)
+    Kernel Version: Darwin 13.2.0
 
 Development Environment:
     Intellij IDEA 13.1 Community Edition
