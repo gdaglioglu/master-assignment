@@ -2,18 +2,14 @@ package suncertify.gui.server;
 
 import suncertify.gui.common.CommonGuiUtils;
 import suncertify.rmi.RmiServerManager;
-import suncertify.utilities.UrlyBirdApplicationConstants;
 import suncertify.utilities.UrlyBirdApplicationGuiConstants;
-import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Properties;
 
 /**
  * The Server GUI, it contains the UI components and the logic for Starting the
@@ -88,12 +84,20 @@ public class UrlyBirdServerGui extends JFrame {
 
             if (!serverConfigurationPanel.areTextFieldValuesValid()) {
                 CommonGuiUtils.showErrorMessageDialog(
-                        "Please enter valid values in the Text Fields.");
+                        "Please enter valid values in the Text Fields.\n\n"
+                                + "Does the Database File exist?\n"
+                                + "Are the RMI Hostname and Port Number"
+                                + "correctly formatted?");
                 return;
             }
 
             try {
-                updatePropertiesToReflectServerGui();
+                CommonGuiUtils.updatePropertiesToReflectGui(
+                        serverConfigurationPanel
+                                .getPathToDatabaseFileFromTextField(),
+                        serverConfigurationPanel.getRmiHostnameFromTextField(),
+                        serverConfigurationPanel
+                                .getRmiPortNumberFromTextField());
             } catch (FileNotFoundException ignored) {
                 CommonGuiUtils.showErrorMessageDialog(
                         "The Application's Properties File does not exist.");
@@ -113,72 +117,6 @@ public class UrlyBirdServerGui extends JFrame {
                 serverStatusLabel.setText(
                         UrlyBirdApplicationGuiConstants.SERVER_STARTED);
             }
-        }
-
-        /**
-         * Updates the {@code suncertify.properties} file with the latest
-         * properties.
-         *
-         * @throws IOException If there's a problem with accessing the
-         *                     {@code suncertify.properties} file.
-         */
-        private void updatePropertiesToReflectServerGui() throws IOException {
-
-            Properties properties =
-                    UrlyBirdApplicationObjectsFactory
-                            .getUrlyBirdApplicationProperties();
-
-            if (hasDatabasePathPropertyChanged(properties)) {
-
-                properties.setProperty(
-                        UrlyBirdApplicationConstants
-                                .PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE,
-                        serverConfigurationPanel
-                                .getPathToDatabaseFileFromTextField());
-
-                properties.setProperty(
-                        UrlyBirdApplicationConstants
-                                .PROPERTY_FILE_KEY_RMI_HOSTNAME,
-                        serverConfigurationPanel.getRmiHostnameFromTextField());
-
-                properties.setProperty(
-                        UrlyBirdApplicationConstants
-                                .PROPERTY_FILE_KEY_RMI_PORT_NUMBER,
-                        serverConfigurationPanel
-                                .getRmiPortNumberFromTextField());
-
-                properties.store(new FileOutputStream(
-                        UrlyBirdApplicationConstants.PROPERTY_FILE_NAME), null);
-            }
-        }
-
-        /**
-         * Compares the URLyBird Application's properties to the text in the
-         * JTextFields on the {@code ServerConfigurationPanel}.
-         *
-         * @param properties The current properties of the URLyBird Application.
-         * @return True, if the properties have been changed.
-         * False, if the properties have not been changed.
-         */
-        private boolean hasDatabasePathPropertyChanged(Properties properties) {
-
-            return !(properties.getProperty(
-                    UrlyBirdApplicationConstants
-                            .PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE)
-                    .equals(serverConfigurationPanel
-                            .getPathToDatabaseFileFromTextField())
-
-                    && properties.getProperty(
-                    UrlyBirdApplicationConstants
-                            .PROPERTY_FILE_KEY_RMI_HOSTNAME)
-                    .equals(serverConfigurationPanel
-                            .getRmiHostnameFromTextField())
-
-                    && properties.getProperty(
-                    UrlyBirdApplicationConstants
-                            .PROPERTY_FILE_KEY_RMI_PORT_NUMBER)
-                    .equals(serverConfigurationPanel
-                            .getRmiPortNumberFromTextField()));
         }
     }
 }

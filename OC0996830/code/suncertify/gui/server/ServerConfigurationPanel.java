@@ -1,5 +1,6 @@
 package suncertify.gui.server;
 
+import suncertify.gui.common.CommonGuiUtils;
 import suncertify.utilities.UrlyBirdApplicationConstants;
 import suncertify.utilities.UrlyBirdApplicationGuiConstants;
 import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
@@ -7,7 +8,6 @@ import suncertify.utilities.UrlyBirdApplicationObjectsFactory;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.util.StringTokenizer;
 
 /**
  * The JPanel that contains the JTextFields for the database location, RMI
@@ -94,8 +94,8 @@ class ServerConfigurationPanel {
                 || rmiPortNumber.equals(emptyString);
 
         return (!emptyFields) && new File(dbFilePath).exists()
-                && isValidHostname(rmiHostname)
-                && isValidPortNumber(rmiPortNumber);
+                && CommonGuiUtils.isValidHostname(rmiHostname)
+                && CommonGuiUtils.isValidPortNumber(rmiPortNumber);
     }
 
     /**
@@ -189,63 +189,5 @@ class ServerConfigurationPanel {
                         .getProperty(UrlyBirdApplicationConstants
                                 .PROPERTY_FILE_KEY_RMI_PORT_NUMBER));
         rmiPortNumberLabel.setLabelFor(rmiPortNumberTextField);
-    }
-
-    /**
-     * Examines if the rmi hostname is valid.
-     *
-     * @param rmiHostname The RMI hostname to validate.
-     * @return True, if the hostname is valid.
-     * False, if the hostname is invalid.
-     */
-    private boolean isValidHostname(String rmiHostname) {
-
-        return rmiHostname.equals("localhost") || isValidIpAddress(rmiHostname);
-    }
-
-    /**
-     * Examines the ip address of the rmi hostname.
-     *
-     * @param rmiHostname The hostname for the RMI server in the dotted decimal
-     *                    format of an IP address.
-     * @return True, if the hostname is a valid IP address.
-     * False, if the hostname is an invalid IP address.
-     */
-    private boolean isValidIpAddress(String rmiHostname) {
-
-        StringTokenizer stringTokenizer = new StringTokenizer(rmiHostname, ".");
-
-        if (stringTokenizer.countTokens() != 4) return false;
-
-        while (stringTokenizer.hasMoreTokens()) {
-
-            int ipBlock;
-
-            try {
-                ipBlock = Integer.parseInt(stringTokenizer.nextToken(), 10);
-            } catch (NumberFormatException ignored) {
-                return false;
-            }
-
-            if (ipBlock < 0 || ipBlock > 255) return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks that the RMI Port is a valid port number.
-     *
-     * @param rmiPortNumber The port number to validate.
-     * @return True, if the port is valid.
-     * False, if the port is invalid.
-     */
-    private boolean isValidPortNumber(String rmiPortNumber) {
-
-        try {
-            return (Integer.parseInt(rmiPortNumber) > 0);
-        } catch (NumberFormatException ignored) {
-            return false;
-        }
     }
 }

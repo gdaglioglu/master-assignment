@@ -93,13 +93,13 @@ public class UrlyBirdClientGuiUtils {
             }
         } else if (urlyBirdApplicationMode
                 == UrlyBirdApplicationMode.NETWORKED_CLIENT) {
-            if (RmiClientManager.connectToRemoteServerViaRmi() == null) {
+            while (RmiClientManager.connectToRemoteServerViaRmi() == null) {
                 CommonGuiUtils.showErrorMessageDialog(
                         "Could not connect to Server.\n\n"
                                 + "Troubleshooting Tips:\n"
                                 + "Is the server running?\n"
                                 + "Is the server URL correct?");
-                System.exit(1);
+                askForRmiHostnameAndPort(properties);
             }
         }
     }
@@ -180,6 +180,44 @@ public class UrlyBirdClientGuiUtils {
             return true;
         } catch (NumberFormatException ignored) {
             return false;
+        }
+    }
+
+    /**
+     * Asks the user for the RMI hostname and RMI port number by using
+     * JOptionPane Input Dialogs. This method also verifies the input.
+     *
+     * @param properties The application's properties object.
+     */
+    private void askForRmiHostnameAndPort(Properties properties) {
+
+        String rmiHost = "", rmiPort = "";
+
+        try {
+            while (!CommonGuiUtils.isValidHostname(rmiHost)) {
+                rmiHost = JOptionPane.showInputDialog(null,
+                        "Enter the RMI Hostname");
+            }
+
+            while (!CommonGuiUtils.isValidPortNumber(rmiPort)) {
+                rmiPort = JOptionPane.showInputDialog(null,
+                        "Enter the RMI Port");
+            }
+
+            CommonGuiUtils.updatePropertiesToReflectGui(
+                    properties.getProperty(
+                            UrlyBirdApplicationConstants
+                                    .PROPERTY_FILE_KEY_PATH_TO_DATABASE_FILE),
+                    rmiHost, rmiPort);
+
+        } catch (NullPointerException ignored) {
+            JOptionPane.showMessageDialog(null,
+                    "Exiting Networked Client GUI because RMI URL parameters "
+                            + "were not set.");
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("Error writing to Properties file.");
+            e.printStackTrace();
         }
     }
 }
