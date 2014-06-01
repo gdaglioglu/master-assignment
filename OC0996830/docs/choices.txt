@@ -223,7 +223,9 @@ UrlyBirdApplicationObjectsFactory.getUrlyBirdApplicationProperties() method.
 
 4.2. Required Properties
 The properties file must be in the current user directory. It must be called
-"suncertify.properties".
+"suncertify.properties". If the suncertify.properties file does not exist, it
+will be created on the start up of the application. It will be initialised with
+default properties.
 
 I decided to use three properties in the application;
   * pathToDatabaseFile
@@ -365,11 +367,14 @@ will be booked. This is an area for future enhancement of the GUI.
 
 
 6.7. Server GUI
-The server GUI has three text fields, representing an entry in the
+The server GUI has three text fields, each representing an entry in the
 suncertify.properties file. The server GUI will be preloaded with the
-properties, if the properties file is present. Otherwise it will be blank. The
-server will not start unless the suncertify.properties file is present and
-pre-populated with values.
+properties from the properties file.
+
+The server will not start unless;
+ * the "pathToDatabaseFile" property points to an existing file,
+ * the "rmiHostname" is set to a correctly formatted IP address, or "localhost",
+ * the "rmiPortNumber" is set to a value comprising of digits.
 
 Example of the suncertify.properties.
     pathToDatabaseFile=db-1x1.db

@@ -1,5 +1,4 @@
 Code:
-Create missing suncertify.properties file is it does not exist.
 Book correct record when viewing search result.
 Nope: Free up rooms after their "booked until" date has passed.
     * Mention it as an area for future improvement.
@@ -16,6 +15,7 @@ Done: JavaDoc comments of every field and method.
 Done: Remove extra functionality.
     * Mention it as an area for future improvement.
 Done: Implement Java7 MultiCatch.
+Done: Create missing suncertify.properties file is it does not exist.
 
 
 

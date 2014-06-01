@@ -71,7 +71,9 @@ properties.
  * The Standalone Client mode requires the "pathToDatabaseFile" property.
 
 These properties need to be defined in the suncertify.properties file, which
-must be located in the current directory.
+must be located in the current directory. If the suncertify.properties file does
+not exist, it will be created on the start up of the application. It will be
+initialised with default properties.
 
 Example of the suncertify.properties file.
     pathToDatabaseFile=db-1x1.db
@@ -148,9 +150,13 @@ To exit the Client GUI, click the "x" button on the application window.
 5. Using the Server GUI
 
 5.1. Opening the Server GUI
-On starting, the Server GUI will check for the properties it requires. It will
-fail if the required properties are not present in the suncertify.properties
-file.
+On starting, the Server GUI will check for the properties it requires.
+
+The server will not start unless;
+ * the "Path to Database File" property points to an existing file,
+ * the "RMI Hostname" is set to a correctly formatted IP address, or
+   "localhost",
+ * the "RMI Port" is set to a value comprising of digits.
 
 The Server GUI will appear. It will have values loaded into its text fields from
 the suncertify.properties file. These properties can be edited. The updated

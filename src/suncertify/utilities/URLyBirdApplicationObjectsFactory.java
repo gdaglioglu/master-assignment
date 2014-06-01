@@ -21,23 +21,21 @@ public class UrlyBirdApplicationObjectsFactory {
     public static Properties getUrlyBirdApplicationProperties() {
 
         Properties properties = new Properties();
+        File propertiesFile = new File(
+                UrlyBirdApplicationConstants.PROPERTY_FILE_NAME);
+
+        if (! (propertiesFile.exists() && propertiesFile.canRead()
+                && propertiesFile.canWrite())) {
+            createNewPropertiesFile(propertiesFile);
+        }
 
         try {
             properties.load(new FileInputStream(
-                    UrlyBirdApplicationConstants.PROPERTY_FILE_NAME));
-        } catch (FileNotFoundException e) {
-            System.out.println(
-                    "Unable to find the properties file. Looking for file in: "
-                            + System.getProperty("user.dir")
-                            + "/"
-                            + UrlyBirdApplicationConstants.PROPERTY_FILE_NAME);
-            e.printStackTrace();
+                    propertiesFile));
         } catch (IOException e) {
-            System.out.println(
-                    "Error loading the properties file. File may be corrupt."
-                            + " Looking for file in: "
-                            + UrlyBirdApplicationConstants.PROPERTY_FILE_NAME);
-            e.printStackTrace();
+            System.err.println(
+                    "Unable to find the properties file. Looking for file in: "
+                    + UrlyBirdApplicationConstants.PROPERTY_FILE_NAME);
         }
 
         return properties;
@@ -76,5 +74,28 @@ public class UrlyBirdApplicationObjectsFactory {
         }
 
         return null;
+    }
+
+    /**
+     * Creates a new properties file and initialises it with default values.
+     *
+     * @param propertiesFile The File object intended for storing properties.
+     */
+    private static void createNewPropertiesFile(File propertiesFile) {
+        try {
+            propertiesFile.createNewFile();
+            BufferedWriter output = new BufferedWriter(
+                    new FileWriter(propertiesFile));
+            output.write(
+                    "pathToDatabaseFile=db-1x1.db\n"
+                    + "rmiHostname=localhost\n"
+                    + "rmiPortNumber=1234");
+            output.close();
+        } catch (IOException e) {
+            System.err.println("Problem creating properties file, "
+                    + UrlyBirdApplicationConstants.PROPERTY_FILE_NAME
+                    + ".");
+            e.printStackTrace();
+        }
     }
 }
