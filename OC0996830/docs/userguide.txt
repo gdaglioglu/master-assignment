@@ -90,9 +90,9 @@ Example of the suncertify.properties file.
 On starting, the Client GUI will check for the properties it requires. When
 starting a standalone client, should the "pathToDatabaseFile" property not be
 pointing to a file, the user will be prompted for the location of the database
-file. When starting a networked client, it will fail if the required properties
-are not present and correct in the suncertify.properties file and if the server
-is not running.
+file. When starting a networked client, should there be a problem connecting to
+the server, the user will be prompted to enter the RMI hostname and RMI port
+number for the RMI URL.
 
 Then the Client GUI will prompt you for your CSR number. This will be the id
 used to book rows for the duration of this GUI's existence. Enter your CSR
