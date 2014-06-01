@@ -89,13 +89,24 @@ class BookingPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
 
-            int recordRow = TablePanel.hotelRoomTable.getSelectedRow();
+            long recordRow = TablePanel.hotelRoomTable.getSelectedRow();
 
             if (recordRow < 0) {
                 JOptionPane.showMessageDialog(bookingPanel,
                         "Please select a row");
 
             } else {
+                /*
+                 * Ensure the the recordRow matches the correct position in the
+                 * database of the selected record. This is so it is possible to
+                 * book a record when viewing a search result.
+                 */
+                recordRow = databaseAccessDao.getRecordPositionInDatabase(
+                        (String) TablePanel.hotelRoomTable.getValueAt(
+                                (int) recordRow, 0),
+                        (String) TablePanel.hotelRoomTable.getValueAt(
+                                (int) recordRow, 1));
+
                 try {
                     if (areStartDateAndEndDateOfBookingSet()) {
 
@@ -104,7 +115,9 @@ class BookingPanel extends JPanel {
                     }
                 } catch (Exception e) {
 
-                    System.err.println("There was an error when booking record number " + recordRow);
+                    System.err.println(
+                            "There was an error when booking record number "
+                            + recordRow);
                     e.printStackTrace();
 
                 } finally {
@@ -125,17 +138,28 @@ class BookingPanel extends JPanel {
                     "Choose booking start date.", "Booking Start Date",
                     JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
 
-            if (startDate.equals(UrlyBirdApplicationConstants.EMPTY_STRING))
+            try {
+                if (startDate.equals(
+                        UrlyBirdApplicationConstants.EMPTY_STRING)) {
+                    return false;
+                }
+
+                while (!isValidEndDate()) {
+                    endDate = JOptionPane.showInputDialog(bookingPanel,
+                            "Enter the date to end the booking ("
+                                    + UrlyBirdApplicationConstants.DATE_FORMAT
+                                    + ")");
+
+                    if (endDate.equals(
+                            UrlyBirdApplicationConstants.EMPTY_STRING)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            } catch (NullPointerException ignored) {
                 return false;
-
-            while (!isValidEndDate()) {
-                endDate = JOptionPane.showInputDialog(bookingPanel,
-                        "Enter the date to end the booking ("
-                                + UrlyBirdApplicationConstants.DATE_FORMAT
-                                + ")");
             }
-
-            return true;
         }
 
         private boolean isValidEndDate() {

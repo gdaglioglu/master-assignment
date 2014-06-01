@@ -1,9 +1,6 @@
 Code:
-Book correct record when viewing search result.
 Nope: Free up rooms after their "booked until" date has passed.
     * Mention it as an area for future improvement.
-Nope: Fix bugs listed in repository.
-    * Bugs impact not in the requirements.
 Nope: Implement the Observer Pattern.
 Done: Standalone Client GUI accepting the database file.
 Done: Put the suncertify.properties into the "current working directory".
@@ -16,6 +13,7 @@ Done: Remove extra functionality.
     * Mention it as an area for future improvement.
 Done: Implement Java7 MultiCatch.
 Done: Create missing suncertify.properties file is it does not exist.
+Done: Book correct record when viewing search result.
 
 
 

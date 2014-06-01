@@ -292,7 +292,8 @@ the record and cookie. It then removes the record, there by releasing the lock.
 When opening the Client GUI, you will be prompted for your CSR number. This will
 be the id used to book rows for the duration of this GUI's existence. Asking for
 the CSR number at the start eliminates the process of having to repeatedly enter
-it when booking.
+it when booking. I implemented this under the assumption that every CSR would
+have a unique CSR number.
 
 
 6.2. Client GUI's Table of Records
@@ -325,6 +326,11 @@ return the same result for "Fred" and "fred". I catered for these users.
 
 I decided against implementing price search logic, as that's not a "must"
 feature.
+
+I am allowing the CSR to book a room when viewing a search result. This specific
+piece of functionality was not a "must" requirement, and not explicitly stated.
+I decided to implement it, as I felt it removed any ambiguity in the requirement
+to be able to book a hotel room from the table.
 
 
 6.4. Booking a Room using the Client GUI
@@ -359,11 +365,6 @@ GUI in future, it should be relatively straight forward to add them to the GUI.
 
 The implementation of an Observer, or MVC, pattern would allow the table of
 records on all client GUIs to be updated after any client makes booking.
-
-When viewing a search result, there is an issue when trying to make a booking.
-Say a search returns three results, and the client tries to book result number
-three. Only the table row number is recorded, so record three in the database
-will be booked. This is an area for future enhancement of the GUI.
 
 
 6.7. Server GUI

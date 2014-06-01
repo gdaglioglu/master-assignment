@@ -51,8 +51,10 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
 
                 if (hotelRoom != null) {
 
-                    // Initialise the hotelRooms ArrayList the first time we
-                    // find a hotelRoom to add to the list.
+                    /**
+                     * Initialise the hotelRooms ArrayList the first time we
+                     * find a hotelRoom to add to the list.
+                     */
                     if (hotelRooms == null) {
                         hotelRooms = new ArrayList<>();
                     }
@@ -65,6 +67,25 @@ public class DatabaseAccessDaoRemote implements DatabaseAccessDao {
 
         } catch (RemoteException e) {
             return null;
+        }
+    }
+
+    /**
+     * Returns the record number of the database record matching the specified
+     * name and location.
+     *
+     * @param recordNameAndLocation The name and location of the
+     *                              {@code HotelRoom} record to get the database
+     *                              position of.
+     * @return The record number of the record's position in the database file.
+     */
+    @Override
+    public long getRecordPositionInDatabase(String... recordNameAndLocation) {
+        try {
+            return (int) databaseAccessRemote.findByCriteria(
+                    recordNameAndLocation)[0];
+        } catch (RemoteException e) {
+            return -1;
         }
     }
 

@@ -22,6 +22,17 @@ public interface DatabaseAccessDao {
     ArrayList<HotelRoom> findHotelRooms(String... searchStrings);
 
     /**
+     * Returns the record number of the database record matching the specified
+     * name and location.
+     *
+     * @param recordNameAndLocation The name and location of the
+     *                              {@code HotelRoom} record to get the database
+     *                              position of.
+     * @return The record number of the record's position in the database file.
+     */
+    long getRecordPositionInDatabase(String... recordNameAndLocation);
+
+    /**
      * Gets all the {@code HotelRoom} objects in the database.
      *
      * @return An ArrayList of the all the {@code HotelRoom} objects in the
