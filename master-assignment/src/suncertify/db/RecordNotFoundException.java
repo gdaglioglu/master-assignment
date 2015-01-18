@@ -1,6 +1,6 @@
 package suncertify.db;
 
-public class RecordNotFoundException extends Exception {
+public class RecordNotFoundException extends DatabaseException {
 	
 	public RecordNotFoundException(){
 		
