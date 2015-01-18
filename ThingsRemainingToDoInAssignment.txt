@@ -1,0 +1,39 @@
+Code:
+Nope: Free up rooms after their "booked until" date has passed.
+    * Mention it as an area for future improvement.
+Nope: Implement the Observer Pattern.
+Done: Standalone Client GUI accepting the database file.
+Done: Put the suncertify.properties into the "current working directory".
+Done: Networked Client GUI fails gracefully when it cannot find the server.
+Done: Only allow booking within 48 hours.
+Done: Determine duration of stay when booking.
+Done: Implement DuplicateKeyException.
+Done: JavaDoc comments of every field and method.
+Done: Remove extra functionality.
+    * Mention it as an area for future improvement.
+Done: Implement Java7 MultiCatch.
+Done: Create missing suncertify.properties file is it does not exist.
+Done: Book correct record when viewing search result.
+
+
+
+Documentation:
+Done: Choices.txt
+Done: User Guide.
+Done: Generate JavaDoc.
+Done: Review JavaDoc.
+
+
+
+Testing:
+Done: Ensure runme.jar file is functioning correctly.
+Done: Run JavaRanch's locking tester.
+Done: Run the server with multiple clients.
+Done: Run the networked client and the standalone client at the same time.
+
+
+
+Other:
+Know why you chose RMI over Sockets.
+Know how the Locking is implemented.
+Done: Build the submission.jar file from the instructions.
