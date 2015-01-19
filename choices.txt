@@ -1,0 +1,201 @@
+                                            INTRODUCTION
+                                            ------------
+
+The author will first outline general considerations and then proceed to detail the major choices made on a per package
+basis.
+
+Logging
+-------
+Logging was used sparingly throughout the application, being implemented in what were the most important and pertinent
+classes.  These classes are concerned with direct database file access and locking.  Log messages will include details
+such as how many records match a search, if deleted records were found during a search and if exceptions were thrown
+(displaying associated stack traces) during read / write operations.  The lock / update / unlock process is also logged.
+Finally, server startup and shutdown are also displayed.
+
+Record Indentification
+----------------------
+Record numbers are derived from the position in which they appear in the file.
+
+Book once and only once
+-----------------------
+The application only allows a record to be booked once and cannot be updated, so care is needed when making a booking.
+The instructions did not specify that a record should be re-bookable, so such functionality is not included.
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+                                            suncertify.db
+                                            --------------
+
+This package is primarily concerned with database access and record locking.
+
+Database operations
+-------------------
+The supplied DB interface was extended to include 2 extra methods that specify that implementing classes should have a
+method to close their database connections, and to indicate if their database connection is of a local nature.  That is,
+if the database resides on the same machine. This allowed closing of the RandomAccessFile used to read from and write
+to the database file.
+
+Data implements the extended CloseableDB interface and is in essence a facade which delegates CRUD operations on the
+database to DBAccessor and record locking responsibilities to LockManager.  DBAccessor uses a RandomAccessFile instance
+to perform the CRUD operations.  No caching of records is implemented so each read from or write to the database
+is performed directly on the file and so constitutes an IO operation.  Given that most methods in RandomAccessFile
+throw checked exceptions, for Data to maintain compliance with the supplied DB interface, it was deemed necessary to
+catch the checked exceptions and instead throw DBException.  DBException extends RuntimeException and is of course
+unchecked.
+
+As per best practice, DBException is not included in DBAccessor method signatures but it is however included in the @throws
+sections of Javadocs.  DBException is also shown in the Javadocs of classes that use DBAccessor such as Data (and indeed
+the classes that use Data).  This was done to make absolutely clear what users of Data should expect.
+
+New records are written to the database by first searching for a deleted record in the file.  Upon discovery of a record
+marked as deleted, the newly created record is written to this position in the file, overwriting the fields of the
+deleted record.  If no deleted records are found, the new data is appended to the end of the database file.  Given this
+scheme, DuplicateKeyException will never be thrown.
+
+Locking
+-------
+As mentioned, LockManager is responsible for record locking to prevent simultaneous updates of a record by several clients,
+resulting in data corruption.  LockManager maintains a Map<Integer, Long> hash map that maps a given record number to a lock
+cookie that is generated when the record is locked.  Thus when a client attempts to update a record, or unlock a record
+after an update, it must do so by supplying the lock cookie generated in the lock phase.  Attempts to update or unlock
+with an invalid cookie result in a SecurityException being thrown.  If a client attempts to lock a record that is
+already locked, it is placed in a waiting state by the Object.wait() method which is called on a mutex.  When a record
+is successfully unlocked, Object.notifyAll() is invoked to indicate to other threads that a record has been unlocked and
+to attempt to obtain a lock on their desired record again.
+
+A potential problem with the locking mechanism was identified in that if a client locks a record and then fails for some
+reason, that record could remain locked forever, unavailable to any other client.  An investigation was carried out into
+starting a timer after a lock had been obtained and giving a client an arbitrary amount of time to complete its task,
+after which the lock would be automatically released.  This was however not in the requirements of the project and was
+not implemented.
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+                                            suncertify.network:
+                                            -------------------
+
+This package is concerned with providing network server functionality.  RMI was chosen over sockets for ease of use and
+the abstraction that it provides.
+
+Adapting Data for use as a remote object
+----------------------------------------
+In order to use Data as a remote object it was necessary to adapt it using a Remote interface.  This interface,
+DataRemoteAdapter, extends java.rmi.Remote and is identical to the supplied DB interface except that every method
+additionally throws java.rmi.RemoteException.  DataRemoteAdapterImpl is the implementation of this interface.  It has
+a Data instance as a member and each DataRemoteAdapterImpl method invokes the corresponding method of this Data member.
+DataRemoteAdapterImpl is the object exported to the RMI registry.
+
+It was deemed important that the application was unconcerned about whether the database it was accessing was local or
+remote and could accept an object of a single type to perform whatever functions necessary.  The DataProxy class achieves
+this by adapting DataRemoteAdapterImpl in much the same way as DataRemoteAdapterImpl adapts Data.  That is, DataProxy
+has a DataRemoteAdapterImpl member and DataProxy methods call the corresponding DataRemoteAdapterImpl methods.
+DataProxy also implements the CloseableDB interface, so the application uses a single type to access local and remote
+databases.
+
+In DataProxy, the RemoteExceptions potentially thrown by DataRemoteAdapterImpl methods are caught and NetworkException is
+thrown instead.  NetworkException is a sub-class of RuntimeException.  This is done in order to maintain compliance
+with the CloseableDB and DB interfaces.
+
+Server functionality
+--------------------
+The Server class starts RMI registry programmatically and registers an instance of DataRemoteAdapterImpl under the name
+"Data".
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+                                            suncertify.application
+                                            ----------------------
+
+The classes in this package can perhaps be regarded as 'infrastructure' classes.  They carry out functions such as
+application startup, reading and writing configuration data, Setting log levels and providing database connections to
+clients.
+
+Application startup
+-------------------
+
+The Application class is the main class and of course it accepts the command line arguments specified by the user.  If
+more than a single argument is provided, it is ignored.  Provided that the arguments (if any) satisfy the permitted
+values, Application decides on which mode to run the application: standalone, network client or server.  The appropriate
+objects are then constructed, local or remote database connections obtained and the GUI is shown.  If the supplied
+argument is invalid, the user is informed that this is the case via a JOptionPane and the application exits.
+
+Business logic
+--------------
+
+The BusinessService class provides the business logic of the application.  It extends java.util.Observable so that GUI
+components can observe it for changes in data.  It provides a full suite of methods for searching, booking, creating
+and deleting records.  Only search and book functionality is exposed through the GUI however.  BusinessService accepts
+an object of type CloseableDB that provides it's database connection.  The connection may be local, provided by Data, or
+remote, provided by DataProxy.
+
+Providing database connections
+------------------------------
+
+The DatabaseConnection class has 2 static methods that both return CloseableDB instances.  getLocalConnection() returns
+a Data object, while getRemoteConnection() uses Naming.lookup() to get a stub of a remote object of the
+DataRemoteAdapterImpl class.  A DataProxy instance (which also implements CloseableDB) is then instantiated and returned.
+
+Configuration data
+------------------
+
+Configuration data is loaded and saved using the PropertiesAccessor class.  Data for all 3 modes is persisted to the
+'suncertify.properties' file.  When the application is run for the first time, this file will not exist.  The user will
+be prompted to enter data manually, a properties file will be created and the data saved.  A Configuration object is used
+to encapsulate config data for all modes.  Configuration has a private constructor, so the only means of instantiation
+are 3 static methods, one for each application mode. This prevents incorrect use of the class.
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+                                            suncertify.presentation
+                                            -----------------------
+
+The suncertify.presentation package contains the classes that constitute the GUI layer of the application.  The main
+layout used was GridbagLayout, but some panels use BorderLayout to achieve the desired positioning of components.
+
+GUI windows and views
+---------------------
+
+ConnectionDialog extends JDialog and is the first GUI component the user of a client sees upon application startup.  This
+class alters it's appearance according to whether the application is being run in local or remote client mode.  In local
+mode, the user chooses the database file by means of a JFileChooser.  Only files with the extension '.db' are selectable.
+In network client mode, JTextField is used to input the database server hostname / IP and the port number that the
+server is accepting requests on.  Checks are carried out that the port number is within acceptable limits.  The button
+used to connect to the server is disabled until a valid port number is entered.
+
+Upon successful connection the user will be presented with a MainWindow instance.  MainWindow has a BusinessService object
+as a member variable which is passed to it upon construction.  As mentioned earlier, Business service is a subclass of
+java.util.Observable.  MainWindow implements the java.util.Observer interface and it registers itself with BusinessService
+as an observer.  Thus when data changes as a result of BusinessService methods, MainWindow is updated to reflect
+these changes.
+
+MainWindow is composed of several panels: 1 for search, 1 for display of records and 1 for making a booking.  All
+available records are displayed on startup.  A user can search for rooms by name and / or location.  Search queries are
+case insensitive and pattern matching is used to match fields.  The user may display all records again by simply leaving
+name and location text fields blank and pressing the 'Search' button.
+
+In network client mode, the possibility exists that a user tries to book a record that has already been reserved by
+another client in the time between performing a search and making the booking.  In this eventuality,
+a RoomAlreadyBookedException is thrown and the user is notified of the situation by a JOptionPane.  The Dialogs class
+provides static methods to display several types of JOptionPane (info, error, confirm).  The table is then refreshed
+to show the latest server data.  Indeed, the latest server data is fetched and displayed whenever there is
+an attempt to book a room, successful or not.
+
+RoomTableModel is an extension of AbstractTableModel and is perhaps a little unusual in that it stores record data in a
+LinkedHashMap<Integer, Room> rather than a List data structure.  This was decided upon to enable easy mapping
+of table rows to record numbers.  The Room transfer object encapsulates the record fields but also the record number.
+When a search is carried out, matching record numbers are returned.  The data of each match is then retrieved and a Room
+object is constructed with the record number and data.  These Room objects are then added to a LinkedHashMap with a
+sequential Integer key starting at 0, such that:
+
+            match[i] corresponds to Map<i, Room(recNo, data)> corresponds to tableRow[i]
+
+The ServerWindow class is the GUI for server functionality.  A JFileChooser allows the selection of '.db' files and a
+JTextField allows the input of the port on which the server is to listen for requests.  The server cannot be started
+unless a valid port number is entered.
+
+------------------------------------------------------------------------------------------------------------------------
