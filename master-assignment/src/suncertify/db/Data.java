@@ -3,6 +3,10 @@ package suncertify.db;
 
 public class Data implements DBMain{
 
+	public Data(String dbLocation) {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public String[] read(int recNo) throws RecordNotFoundException {
 		// TODO Auto-generated method stub
