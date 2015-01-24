@@ -1,2 +1,0 @@
-JDK Version: 1.7.0_15
-Host Platform: Windows 7
