@@ -32,11 +32,6 @@ public class MainWindow extends JFrame {
     private GuiController controller;
 
     /**
-     * The main application window instance.
-     */
-    private JFrame mainWindow;
-
-    /**
      * The <code>JTable</code> that displays the Hotel room held by the system.
      */
     private JTable mainTable = new JTable();
@@ -44,8 +39,34 @@ public class MainWindow extends JFrame {
     /**
      * The text field that contains the user defined search String.
      */
-    private JTextField searchField = new JTextField(20);
+    private JTextField nameSearchField = new JTextField(15);
 
+    /**
+     * The text field that contains the user defined search String.
+     */
+    private JTextField locationSearchField = new JTextField(15);
+    /**
+     * The text field that contains the user defined search String.
+     */
+    private JTextField sizeSearchField = new JTextField(15);
+    /**
+     * The text field that contains the user defined search String.
+     */
+    private JTextField smokingSearchField = new JTextField(15);
+    /**
+     * The text field that contains the user defined search String.
+     */
+    private JTextField rateSearchField = new JTextField(15);
+    /**
+     * The text field that contains the user defined search String.
+     */
+    private JTextField dateSearchField = new JTextField(15);
+    /**
+     * The text field that contains the user defined search String.
+     */
+    private JTextField ownerSearchField = new JTextField(15);
+
+    
     /**
      * The internal reference to the the currently displayed table data.
      */
@@ -88,7 +109,7 @@ public class MainWindow extends JFrame {
         }
 
         try {
-            controller = new GuiController(connectionType, dbLocation.getLocation(),
+            controller = new GuiController(dbLocation.getNetworkType(), dbLocation.getLocation(),
                                            dbLocation.getPort());
         } catch (GuiControllerException gce) {
             ApplicationRunner.handleException(
@@ -120,7 +141,7 @@ public class MainWindow extends JFrame {
         this.add(new HotelRoomScreen());
 
         this.pack();
-        this.setSize(650, 300);
+        this.setSize(1000, 500);
 
         // Center on screen
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -183,15 +204,44 @@ public class MainWindow extends JFrame {
             searchButton.addActionListener(new SearchHotelRoom());
             searchButton.setMnemonic(KeyEvent.VK_S);
             // Search panel
-            JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            searchPanel.add(searchField);
+            JPanel searchPanel = new JPanel(new GridLayout(2, 8, 10, 5));
+            searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
+            final JLabel nameLabel = new JLabel("Hotel name:");
+            final JLabel locationLabel = new JLabel("Hotel location:");
+            final JLabel sizeLabel = new JLabel("Room size:");
+            final JLabel smokingLabel = new JLabel("Smoking state:");
+            final JLabel rateLabel = new JLabel("Room rate:");
+            final JLabel dateLabel = new JLabel("Date:");
+            final JLabel ownerLabel = new JLabel("Owner:");
+            
+            searchPanel.add(nameLabel);
+            searchPanel.add(locationLabel);
+            searchPanel.add(sizeLabel);
+            searchPanel.add(smokingLabel);
+            searchPanel.add(rateLabel);
+            searchPanel.add(dateLabel);
+            searchPanel.add(ownerLabel);
+            
+            
+            
             searchPanel.add(searchButton);
-
+            
+            searchPanel.add(nameSearchField);
+            searchPanel.add(locationSearchField);
+            searchPanel.add(sizeSearchField);
+            searchPanel.add(smokingSearchField);
+            searchPanel.add(rateSearchField);
+            searchPanel.add(dateSearchField);
+            searchPanel.add(ownerSearchField);
+            
+            
+            this.add(searchPanel, BorderLayout.NORTH);
+            
             // Setup rent and return buttons
-            JButton rentButton = new JButton("Rent DVD");
-            JButton returnButton = new JButton("Return DVD");
+            JButton rentButton = new JButton("Book Room");
+            JButton returnButton = new JButton("Cancel Booking");
 
-            // Add the action listenters to rent and return buttons
+            // Add the action listeners to rent and return buttons
             rentButton.addActionListener(new BookHotelRoom());
             returnButton.addActionListener(new ReturnHotelRoom());
             // Set the rent and return buttons to refuse focus
@@ -207,7 +257,7 @@ public class MainWindow extends JFrame {
 
             // bottom panel
             JPanel bottomPanel = new JPanel(new BorderLayout());
-            bottomPanel.add(searchPanel, BorderLayout.NORTH);
+           // bottomPanel.add(searchPanel, BorderLayout.NORTH);
             bottomPanel.add(hiringPanel, BorderLayout.SOUTH);
 
             // Add the bottom panel to the main window
@@ -223,9 +273,9 @@ public class MainWindow extends JFrame {
                         "Return the DVD item selected in the above table.");
             rentButton.setToolTipText(
                         "Rent the DVD item selected in the above table.");
-            searchField.setToolTipText(
+            nameSearchField.setToolTipText(
                         "Enter infromation about a DVD you want to locate.");
-            searchButton.setToolTipText("Submit the DVD search.");
+            searchButton.setToolTipText("Submit the Hotel search.");
 
        }
     }
@@ -255,7 +305,7 @@ public class MainWindow extends JFrame {
                     if (rented == false) {
                        ApplicationRunner.handleException(OUT_OF_STOCK);
                     }
-                    tableData = controller.find(previousSearchString);
+                   // tableData = controller.find(previousSearchString);
                     setupTable();
                 } catch (GuiControllerException gce) {
                     ApplicationRunner.handleException("Rent operation failed.");
@@ -286,7 +336,7 @@ public class MainWindow extends JFrame {
                 returnIsbn = (String) mainTable.getValueAt(index, 0);
                 try {
                     controller.returnRental(returnIsbn);
-                    tableData = controller.find(previousSearchString);
+                    //tableData = controller.find(previousSearchString);
                     setupTable();
                 } catch (GuiControllerException gce) {
                     ApplicationRunner.handleException(RETURN_FAILURE_MSG);
@@ -310,9 +360,16 @@ public class MainWindow extends JFrame {
          * @param ae The event initiated by the search button.
          */
         public void actionPerformed(ActionEvent ae) {
-            previousSearchString = searchField.getText();
+        	String[] criteria = new String[7];
+            criteria[0] = nameSearchField.getText().trim();
+            criteria[1] = locationSearchField.getText().trim();
+            criteria[2] = sizeSearchField.getText().trim();
+            criteria[3] = smokingSearchField.getText().trim();
+            criteria[4] = rateSearchField.getText().trim();
+            criteria[5] = dateSearchField.getText().trim();
+            criteria[6] = ownerSearchField.getText().trim();
             try {
-                tableData = controller.find(previousSearchString);
+                tableData = controller.find(criteria);
                 setupTable();
             } catch (GuiControllerException gce) {
                 // Inspect the exception chain
@@ -325,7 +382,7 @@ public class MainWindow extends JFrame {
                 ApplicationRunner.handleException(msg);
                 previousSearchString = "";
             }
-            searchField.setText("");
+            nameSearchField.setText("");
         }
     }
 

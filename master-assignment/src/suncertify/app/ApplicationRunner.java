@@ -29,6 +29,7 @@ public class ApplicationRunner {
      * @param args Holds the command line inputs
      */
     public static void main(String[] args) {
+    	args = new String[]{"alone"};
         ApplicationRunner app = new ApplicationRunner(args);
     }
 

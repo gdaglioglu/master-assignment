@@ -2,7 +2,6 @@ package suncertify.client.gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.*;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -10,6 +9,8 @@ import java.util.*;
 import java.util.logging.*;
 
 import javax.swing.*;
+
+import suncertify.client.gui.ConnectionType;
 
 
 /**
@@ -295,6 +296,16 @@ public class DatabaseLocationDialog extends WindowAdapter
      */
     public String getLocation() {
         return location;
+    }
+    
+    /**
+     * Returns the type of network connection (DIRECT, RMI ...) that should
+     * be used to connect to the server.
+     *
+     * @return the network protocol used to connect to the server.
+     */
+    public ConnectionType getNetworkType() {
+        return networkType;
     }
 
     /**

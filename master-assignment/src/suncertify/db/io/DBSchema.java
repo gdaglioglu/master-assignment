@@ -37,14 +37,9 @@ public class DBSchema {
 
 	// File Headers - Values
 	/** The magic cookie for the database of this application. */
-	public static int EXPECTED_MAGIC_COOKIE = 514;
+	public static int EXPECTED_MAGIC_COOKIE = 259;
 	/** The actual magic cookie read from the database file by {@link DBParser}. */
 	public static int MAGIC_COOKIE;
-	/**
-	 * The position where the records begin in the database file. Read in by
-	 * {@link DBParser}.
-	 */
-	public static int START_OF_RECORDS;
 	/** The number of fields each record has. Read in by {@link DBParser}. */
 	public static int NUMBER_OF_FIELDS;
 

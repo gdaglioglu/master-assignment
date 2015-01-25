@@ -7,9 +7,9 @@ import static suncertify.db.io.DBSchema.MAGIC_COOKIE;
 import static suncertify.db.io.DBSchema.NUMBER_OF_FIELDS;
 import static suncertify.db.io.DBSchema.NUM_BYTES_RECORD_DELETED_FLAG;
 import static suncertify.db.io.DBSchema.RECORD_LENGTH;
-import static suncertify.db.io.DBSchema.START_OF_RECORDS;
 import static suncertify.db.io.DBSchema.US_ASCII;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -46,7 +46,6 @@ public class DBParser {
 			this.readDataFileHeaders();
 
 			// data
-			this.is.seek(START_OF_RECORDS);
 			while (this.is.getFilePointer() != this.is.length()) {
 				final String[] dataItem = this.readNextRecord();
 				hotelRooms.add(dataItem);
@@ -81,7 +80,7 @@ public class DBParser {
 	 */
 	private void readDataFileHeaders() throws IOException {
 		// headers
-		START_OF_RECORDS = this.is.readInt();
+		//START_OF_RECORDS = this.is.readInt();
 		NUMBER_OF_FIELDS = this.is.readShort();
 
 		// data headers
@@ -89,13 +88,13 @@ public class DBParser {
 		FIELD_HEADERS = new String[NUMBER_OF_FIELDS];
 		for (int i = 0; i < NUMBER_OF_FIELDS; i++) {
 			// 1 byte numeric, length (in bytes) of field name
-			final int fieldNameLength = this.is.readShort();
+			final int fieldNameLength = this.is.readByte();
 
 			// n bytes (defined by previous entry), field name
 			FIELD_HEADERS[i] = this.readString(fieldNameLength);
 
 			// 1 byte numeric, field length in bytes
-			final int fieldLength = this.is.readShort();
+			final int fieldLength = this.is.readByte();
 			FIELD_LENGTHS[i] = fieldLength;
 			RECORD_LENGTH += fieldLength;
 		}
@@ -110,7 +109,7 @@ public class DBParser {
 	 *             If reading from the database file fails.
 	 */
 	private String[] readNextRecord() throws IOException {
-		final short flag = this.is.readShort();
+		final short flag = this.is.readByte();
 
 		final String[] dataItem = new String[NUMBER_OF_FIELDS];
 		if (flag == 0) {

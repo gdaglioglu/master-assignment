@@ -1,10 +1,8 @@
 package suncertify.client.gui;
 
-import java.io.InterruptedIOException;
-import java.io.IOException;
-import java.util.*;
 import java.util.logging.*;
 import java.util.regex.*;
+
 import suncertify.db.*;
 
 
@@ -74,48 +72,15 @@ public class GuiController {
      * network level exception.
      */
     public HotelRoomModel find(String[] hotelDetails) throws GuiControllerException{
-        HotelRoomModel out = new HotelRoomModel();
-        int[] hotelRooms = new int[10];
-        try{
-        	hotelRooms = this.connection.find(hotelDetails);
-            out.addDvdRecord((DVD) dvdArray.get(0));
-        }
-
-        catch(PatternSyntaxException pse){
-            log.log(Level.WARNING, pse.getMessage(), pse);
-            throw new GuiControllerException(pse);
-        }
-        catch(Exception e){
-            log.log(Level.SEVERE, e.getMessage(), e);
-            throw new GuiControllerException(e);
-        }
-        return out;
-    }
-
-    /**
-     * Locates a Dvd based on a user defined search query.
-     *
-     * @param searchString The user defined search String
-     * @return A DvdTableModel containing all Dvd records that met the search
-     * criteria.
-     * @throws GuiControllerException Indicates a database or network
-     * level exception.
-     */
-    public DvdTableModel find(String searchString) throws
-                                                    GuiControllerException{
-        DvdTableModel out = new DvdTableModel();
-        ArrayList dvdArray = new ArrayList();
-
+    	HotelRoomModel out = new HotelRoomModel();
         try {
-            dvdArray = (ArrayList)this.connection.findDVD(searchString);
-            Iterator it = dvdArray.iterator();
-            while(it.hasNext()){
-                out.addDvdRecord((DVD)it.next());
-            }
-        }
-        catch(PatternSyntaxException pse){
-            log.log(Level.WARNING, pse.getMessage(), pse);
-            throw new GuiControllerException(pse);
+        	int[] rawResults = new int[0];
+        	rawResults = this.connection.find(hotelDetails);
+        	
+        	for (final int recNo : rawResults) {    			
+        		String[] hotelRoom = this.connection.read(recNo);
+        		out.addHotelRecord(hotelRoom[0], hotelRoom[1], hotelRoom[2], hotelRoom[3], hotelRoom[4], hotelRoom[5], hotelRoom[6]);							
+    		}
         }
         catch(Exception e){
             log.log(Level.SEVERE, e.getMessage(), e);
@@ -123,6 +88,7 @@ public class GuiController {
         }
         return out;
     }
+
 
     /**
      * Retrieves all Hotel room records from the database.
@@ -133,13 +99,14 @@ public class GuiController {
      */
     public HotelRoomModel getHotelRooms() throws GuiControllerException{
     	HotelRoomModel out = new HotelRoomModel();
-        ArrayList dvdArray = new ArrayList();
         try {
-            dvdArray = (ArrayList)this.connection.
-            Iterator it = dvdArray.iterator();
-            while(it.hasNext()){
-                out.addDvdRecord((DVD)it.next());
-            }
+        	int[] rawResults = new int[0];
+        	rawResults = this.connection.find(new String[1]);
+        	
+        	for (final int recNo : rawResults) {    			
+        		String[] hotelRoom = this.connection.read(recNo);
+        		out.addHotelRecord(hotelRoom[0], hotelRoom[1], hotelRoom[2], hotelRoom[3], hotelRoom[4], hotelRoom[5], hotelRoom[6]);							
+    		}
         }
         catch(Exception e){
             log.log(Level.SEVERE, e.getMessage(), e);
@@ -157,30 +124,7 @@ public class GuiController {
      * network level exception.
      */
     public boolean rent(String upc) throws GuiControllerException{
-        boolean returnValue = false;
-        try {
-            if (this.connection.reserveDVD(upc)) {
-                DVD dvd = this.connection.getDVD(upc);
-                if (dvd.getCopy() > 0) {
-                    dvd.setCopy(dvd.getCopy() - 1);
-                    this.connection.modifyDVD(dvd);
-                    returnValue = true;
-                }
-            }
-        } catch(InterruptedIOException ie) {
-            log.log(Level.SEVERE, ie.getMessage(), ie);
-            throw new GuiControllerException(ie);
-        } catch(Exception e) {
-            log.log(Level.SEVERE, e.getMessage(), e);
-            throw new GuiControllerException(e);
-        } finally {
-            try {
-                this.connection.releaseDVD(upc);
-            } catch(IOException ie) {
-                log.log(Level.SEVERE, ie.getMessage(), ie);
-                throw new GuiControllerException(ie);
-            }
-        }
+        boolean returnValue = false;        
         return returnValue;
     }
 
@@ -194,27 +138,7 @@ public class GuiController {
      */
     public boolean returnRental(String upc) throws GuiControllerException{
         boolean returnValue = false;
-        try {
-            if (this.connection.reserveDVD(upc)) {
-                DVD dvd = this.connection.getDVD(upc);
-                dvd.setCopy(dvd.getCopy() + 1);
-                this.connection.modifyDVD(dvd);
-                returnValue = true;
-            }
-        } catch(InterruptedException e) {
-            log.log(Level.SEVERE, e.getMessage(), e);
-            throw new GuiControllerException(e);
-        } catch(java.io.IOException e) {
-            log.log(Level.SEVERE, e.getMessage(), e);
-            throw new GuiControllerException(e);
-        } finally {
-            try {
-                this.connection.releaseDVD(upc);
-            } catch(IOException ie) {
-                log.log(Level.SEVERE, ie.getMessage(), ie);
-                throw new GuiControllerException(ie);
-            }
-        }
+       
         return returnValue;
     }
 }
