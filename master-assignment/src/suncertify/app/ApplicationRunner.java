@@ -6,7 +6,7 @@ import java.util.logging.*;
 
 import javax.swing.*;
 
-import suncertify.client.gui.MainWindow;
+import suncertify.client.gui.HotelRoomView;
 
 /**
  * The URLyBird application loader - a facade to the two modes the
@@ -55,7 +55,7 @@ public class ApplicationRunner {
 
         if (args.length == 0 || "alone".equalsIgnoreCase(args[0])) {
             // Create an instance of the main application window
-            new MainWindow(args);
+            new HotelRoomView(args);
         } else if ("server".equalsIgnoreCase(args[0])) {
             new ServerWindow();
         } else {

@@ -1,7 +1,6 @@
 package suncertify.client.gui;
 
 import java.util.logging.*;
-import java.util.regex.*;
 
 import suncertify.db.*;
 

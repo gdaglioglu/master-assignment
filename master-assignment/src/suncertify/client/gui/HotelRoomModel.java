@@ -12,7 +12,7 @@ import suncertify.domain.HotelRoom;
  *
  * @author gdaglioglu
  * @version 1.0
- * @see suncertify.gui.MainWindow
+ * @see suncertify.HotelRoomView.MainWindow
  */
 public class HotelRoomModel extends AbstractTableModel {
     /**

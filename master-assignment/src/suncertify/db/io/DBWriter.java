@@ -5,7 +5,6 @@ import static suncertify.db.io.DBSchema.NUM_BYTES_RECORD_DELETED_FLAG;
 import static suncertify.db.io.DBSchema.RECORD_DELETED;
 import static suncertify.db.io.DBSchema.RECORD_LENGTH;
 import static suncertify.db.io.DBSchema.RECORD_VALID;
-import static suncertify.db.io.DBSchema.START_OF_RECORDS;
 import static suncertify.db.io.DBSchema.US_ASCII;
 
 import java.io.IOException;
@@ -46,7 +45,7 @@ public class DBWriter {
 	 */
 	public boolean write(final int recNo, final String[] data) {
 		try {
-			final int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
+			final int pos = RECORD_LENGTH * recNo;
 
 			this.lock.lock();
 			this.writeRecord(pos, data);
@@ -66,7 +65,7 @@ public class DBWriter {
 	 * @return true if the delete succeeded otherwise false.
 	 */
 	public boolean delete(final int recNo) {
-		final int pos = START_OF_RECORDS + (RECORD_LENGTH * recNo);
+		final int pos = RECORD_LENGTH * recNo;
 		try {
 			this.lock.lock();
 			this.is.seek(pos);
@@ -89,7 +88,6 @@ public class DBWriter {
 	public int create(final String[] data) {
 		try {
 			this.lock.lock();
-			this.is.seek(START_OF_RECORDS);
 
 			while (this.is.getFilePointer() != this.is.length()) {
 				final long recordPos = this.is.getFilePointer();
@@ -97,7 +95,7 @@ public class DBWriter {
 				if (flag != RECORD_VALID) {
 					this.writeRecord(recordPos, data);
 
-					final long recordIndex = (recordPos - START_OF_RECORDS)
+					final long recordIndex = (recordPos)
 							/ RECORD_LENGTH;
 					return (int) recordIndex;
 				}

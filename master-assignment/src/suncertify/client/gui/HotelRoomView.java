@@ -13,9 +13,8 @@ import suncertify.app.ApplicationRunner;
  * The main application window of the URLyBird client application.
  *
  * @author Gokhan Daglioglu
- * @version 1.0
  */
-public class MainWindow extends JFrame {
+public class HotelRoomView extends JFrame {
     /**
      * A version number for this class so that serialization can occur
      * without worrying about the underlying class changing between
@@ -37,32 +36,32 @@ public class MainWindow extends JFrame {
     private JTable mainTable = new JTable();
 
     /**
-     * The text field that contains the user defined search String.
+     * The text field that contains the user defined name String.
      */
     private JTextField nameSearchField = new JTextField(15);
 
     /**
-     * The text field that contains the user defined search String.
+     * The text field that contains the user defined location String.
      */
     private JTextField locationSearchField = new JTextField(15);
     /**
-     * The text field that contains the user defined search String.
+     * The text field that contains the user defined size String.
      */
     private JTextField sizeSearchField = new JTextField(15);
     /**
-     * The text field that contains the user defined search String.
+     * The text field that contains the user defined smoking String.
      */
     private JTextField smokingSearchField = new JTextField(15);
     /**
-     * The text field that contains the user defined search String.
+     * The text field that contains the user defined rate String.
      */
     private JTextField rateSearchField = new JTextField(15);
     /**
-     * The text field that contains the user defined search String.
+     * The text field that contains the user defined date String.
      */
     private JTextField dateSearchField = new JTextField(15);
     /**
-     * The text field that contains the user defined search String.
+     * The text field that contains the user defined owner String.
      */
     private JTextField ownerSearchField = new JTextField(15);
 
@@ -71,11 +70,6 @@ public class MainWindow extends JFrame {
      * The internal reference to the the currently displayed table data.
      */
     private HotelRoomModel tableData;
-
-    /**
-     * Holds a copy of the last user defined search String.
-     */
-    private String previousSearchString = "";
 
     /**
      * The Logger instance. All log messages from this class are routed through
@@ -92,8 +86,8 @@ public class MainWindow extends JFrame {
      * @param args an argument specifying whether we are starting a networked
      * client (argument missing) or a standalone client (argument = "alone").
      */
-    public MainWindow(String[] args) {
-        super("URLyBird");
+    public HotelRoomView(String[] args) {
+        super("URLyBird Discounted Hotel Rooms");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         ApplicationMode connectionType = (args.length == 0)
@@ -134,11 +128,11 @@ public class MainWindow extends JFrame {
             setupTable();
         } catch (GuiControllerException gce) {
             ApplicationRunner.handleException(
-                    "Failed to acquire an initial DVD list."
+                    "Failed to acquire an initial hotel room list."
                     + "\nPlease check the DB connection.");
         }
 
-        this.add(new HotelRoomScreen());
+        this.add(new HotelRoomsPanel());
 
         this.pack();
         this.setSize(1000, 500);
@@ -168,8 +162,8 @@ public class MainWindow extends JFrame {
 
         // Reselect the previous item if it still exists
         for (int i = 0; i < this.mainTable.getRowCount(); i++) {
-            String selectedUpc = (String) mainTable.getValueAt(i, 0);
-            if (selectedUpc.equals(prevSelected)) {
+            String selected = (String) mainTable.getValueAt(i, 0);
+            if (selected.equals(prevSelected)) {
                 this.mainTable.setRowSelectionInterval(i, i);
                 break;
             }
@@ -181,7 +175,7 @@ public class MainWindow extends JFrame {
      * application. Having this here helps keep the code clean within the
      * body of the MainWindow constructor.
      */
-    private class HotelRoomScreen extends JPanel {
+    private class HotelRoomsPanel extends JPanel {
         /**
          * A version number for this class so that serialization can occur
          * without worrying about the underlying class changing between
@@ -192,7 +186,7 @@ public class MainWindow extends JFrame {
         /**
          * Constructs the main panel for the client application.
          */
-        public HotelRoomScreen() {
+        public HotelRoomsPanel() {
             this.setLayout(new BorderLayout());
             JScrollPane tableScroll = new JScrollPane(mainTable);
             tableScroll.setSize(500, 250);
@@ -220,9 +214,7 @@ public class MainWindow extends JFrame {
             searchPanel.add(smokingLabel);
             searchPanel.add(rateLabel);
             searchPanel.add(dateLabel);
-            searchPanel.add(ownerLabel);
-            
-            
+            searchPanel.add(ownerLabel);            
             
             searchPanel.add(searchButton);
             
@@ -243,7 +235,7 @@ public class MainWindow extends JFrame {
 
             // Add the action listeners to rent and return buttons
             rentButton.addActionListener(new BookHotelRoom());
-            returnButton.addActionListener(new ReturnHotelRoom());
+            returnButton.addActionListener(new UnbookHotelRoom());
             // Set the rent and return buttons to refuse focus
             rentButton.setRequestFocusEnabled(false);
             returnButton.setRequestFocusEnabled(false);
@@ -266,46 +258,58 @@ public class MainWindow extends JFrame {
             // Set table properties
             mainTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             mainTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-            mainTable.setToolTipText("Select a DVD record to rent or return.");
+            mainTable.setToolTipText("Select a Hotel room record to book or cancel.");
 
             // Add Tool Tips
             returnButton.setToolTipText(
-                        "Return the DVD item selected in the above table.");
+                        "Cancel the booking of the hotel room selected in the above table.");
             rentButton.setToolTipText(
-                        "Rent the DVD item selected in the above table.");
+                        "Book the hotel room selected in the above table.");
             nameSearchField.setToolTipText(
-                        "Enter infromation about a DVD you want to locate.");
-            searchButton.setToolTipText("Submit the Hotel search.");
+                        "Enter hotel name to search.");
+            locationSearchField.setToolTipText(
+                    "Enter hotel location to search.");
+            sizeSearchField.setToolTipText(
+                    "Enter room size to search.");
+            smokingSearchField.setToolTipText(
+                    "Enter smoking state to search.");
+            rateSearchField.setToolTipText(
+                    "Enter room rate to search.");
+            dateSearchField.setToolTipText(
+                    "Enter date to search.");
+            ownerSearchField.setToolTipText(
+                    "Enter owner name to search.");
+            searchButton.setToolTipText("Submit the Hotel room search.");
 
        }
     }
 
     /**
-     * Handles all DVD rental events.
+     * Handles all Hotel room booking events.
      *
-     * @author Denny's DVDs
-     * @version 2.0
+     * @author Gokhan Daglioglu
      */
     private class BookHotelRoom implements ActionListener {
-        private static final String OUT_OF_STOCK
-                = "Unable to rent - check remaining quantities.";
+        private static final String ALREADY_BOOKED_MSG
+                = "Unable to book - room is already booked.";
+		
 
         /**
-         * Handles the actionPerformed event for the rent button.
+         * Handles the actionPerformed event for the book button.
          *
-         * @param ae The event initiated by the rent button.
+         * @param actionEvent The event initiated by the book button.
          */
-        public void actionPerformed(ActionEvent ae) {
-            String rentalIsbn = "";
+        public void actionPerformed(ActionEvent actionEvent) {
+            String hotelRoomRecordNo = "";
             int index = mainTable.getSelectedRow();
             if ((index >= 0) && (index <= mainTable.getColumnCount())) {
-                rentalIsbn = (String) mainTable.getValueAt(index, 0);
+                hotelRoomRecordNo = (String) mainTable.getValueAt(index, 0);
                 try {
-                    boolean rented = controller.rent(rentalIsbn);
-                    if (rented == false) {
-                       ApplicationRunner.handleException(OUT_OF_STOCK);
+                    boolean booked = controller.rent(hotelRoomRecordNo);
+                    if (booked == false) {
+                       ApplicationRunner.handleException(ALREADY_BOOKED_MSG);
                     }
-                   // tableData = controller.find(previousSearchString);
+                   // tableData = controller.find(previousCriteria);
                     setupTable();
                 } catch (GuiControllerException gce) {
                     ApplicationRunner.handleException("Rent operation failed.");
@@ -315,31 +319,29 @@ public class MainWindow extends JFrame {
     }
 
     /**
-     * Handles all DVD return events.
+     * Handles all Hotel room cancellation events.
      *
-     * @author Denny's DVDs
-     * @version 2.0
+     * @author Gokhan Daglioglu
      */
-    private class ReturnHotelRoom implements ActionListener {
-        private static final String RETURN_FAILURE_MSG
-                = "Return operation failed.";
+    private class UnbookHotelRoom implements ActionListener {
+        private static final String CANCELLATION_FAILURE_MSG
+                = "Unable to cancel - unknown cancellation failure.";
 
         /**
-         * Handles the actionPerformed event for the return button.
+         * Handles the actionPerformed event for the cancel button.
          *
-         * @param ae The event initiated by the return button.
+         * @param actionEvent The event initiated by the return button.
          */
-        public void actionPerformed(ActionEvent ae) {
-            String returnIsbn = "";
+        public void actionPerformed(ActionEvent actionEvent) {
+            String hotelRoomRecordNo = "";
             int index = mainTable.getSelectedRow();
             if ((index >= 0) && (index <= mainTable.getColumnCount())) {
-                returnIsbn = (String) mainTable.getValueAt(index, 0);
+                hotelRoomRecordNo = (String) mainTable.getValueAt(index, 0);
                 try {
-                    controller.returnRental(returnIsbn);
-                    //tableData = controller.find(previousSearchString);
+                    controller.returnRental(hotelRoomRecordNo);
                     setupTable();
                 } catch (GuiControllerException gce) {
-                    ApplicationRunner.handleException(RETURN_FAILURE_MSG);
+                    ApplicationRunner.handleException(CANCELLATION_FAILURE_MSG);
                 }
             }
         }
@@ -348,8 +350,7 @@ public class MainWindow extends JFrame {
     /**
      * Handles all DVD search events.
      *
-     * @author Denny's DVDs
-     * @version 2.0
+     * @author Gokhan Daglioglu
      */
     private class SearchHotelRoom implements ActionListener {
 
@@ -380,17 +381,14 @@ public class MainWindow extends JFrame {
                     msg += ("\n" + rootException.getMessage());
                 }
                 ApplicationRunner.handleException(msg);
-                previousSearchString = "";
             }
-            nameSearchField.setText("");
         }
     }
 
     /**
      * Handles all application quit events.
      *
-     * @author Denny's DVDs
-     * @version 2.0
+     * @author Gokhan Daglioglu
      */
     private class QuitApplication implements ActionListener {
 
