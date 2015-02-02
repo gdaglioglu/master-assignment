@@ -134,7 +134,7 @@ public class SavedConfiguration {
                }
                savedOptionsFile.createNewFile();
                FileOutputStream fos = new FileOutputStream(savedOptionsFile);
-               parameters.store(fos, "Denny's DVDs configuration");
+               parameters.store(fos, "URLyBird configuration");
                fos.close();
             }
         } catch (IOException e) {

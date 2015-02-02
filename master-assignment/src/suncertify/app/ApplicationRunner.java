@@ -1,6 +1,8 @@
 package suncertify.app;
 
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.util.logging.*;
 
@@ -81,12 +83,19 @@ public class ApplicationRunner {
                                             JOptionPane.DEFAULT_OPTION);
         JDialog dialog = alert.createDialog(null, "Alert");
 
-        // Center on screen
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (int) ((d.getWidth() - dialog.getWidth()) / 2);
-        int y = (int) ((d.getHeight() - dialog.getHeight()) / 2);
-        dialog.setLocation(x, y);
+      
+        dialog.setLocation(getCenterOnScreen(dialog));
 
         dialog.setVisible(true);
     }
+
+	public static Point getCenterOnScreen(Component component) {
+		// Center on screen
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((d.getWidth() - component.getWidth()) / 2);
+        int y = (int) ((d.getHeight() - component.getHeight()) / 2);
+		return new Point(x, y);
+	}
+    
+    
 }
