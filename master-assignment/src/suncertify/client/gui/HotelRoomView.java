@@ -1,8 +1,11 @@
 package suncertify.client.gui;
 
-import java.util.logging.*;
+import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
 
 import suncertify.app.ApplicationRunner;
 
@@ -11,73 +14,98 @@ import suncertify.app.ApplicationRunner;
  *
  * @author Gokhan Daglioglu
  */
-public class HotelRoomView extends JFrame {  
-
+public class HotelRoomView extends JFrame {
 
 	/**
-     * A version number for this class so that serialization can occur
-     * without worrying about the underlying class changing between
-     * serialization and deserialization.<p>
-     *
-     * Not that we ever serialize this class of course, but JFrame implements
-     * Serializable, so therefore by default we do as well.
-     */
-	
+	 * A version number for this class so that serialization can occur without
+	 * worrying about the underlying class changing between serialization and
+	 * deserialization.
+	 * <p>
+	 *
+	 * Not that we ever serialize this class of course, but JFrame implements
+	 * Serializable, so therefore by default we do as well.
+	 */
+
 	private static final long serialVersionUID = 2886178206092565805L;
 
-    /**
-     * The internal reference to the GUI controller.
-     */
-    private GuiController controller;
-    
-    /**
-     * The Logger instance. All log messages from this class are routed through
-     * this member. The Logger namespace is <code>suncertify.client.gui</code>.
-     */
-    private Logger logger = Logger.getLogger("suncertify.client.gui");
+	/**
+	 * The Logger instance. All log messages from this class are routed through
+	 * this member. The Logger namespace is <code>suncertify.client.gui</code>.
+	 */
+	private Logger logger = Logger.getLogger("suncertify.client.gui");
 
-    /**
-     * Builds and displays the main application window. The constructor begins
-     * by building the connection selection dialog box. After the user selects
-     * a connection type, the method creates a <code>HotelRoomMainWindow</code>
-     * instance.
-     *
-     * @param args an argument specifying whether we are starting a networked
-     * client (argument missing) or a standalone client (argument = "alone").
-     */
-    public HotelRoomView(String[] args) {
-        super("URLyBird Discounted Hotel Rooms");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	private HotelRoomsMenu hotelRoomsMenu;
 
-        ApplicationMode connectionType = (args.length == 0)
-                                       ? ApplicationMode.NETWORK_CLIENT
-                                       : ApplicationMode.STANDALONE_CLIENT;
+	private HotelRoomsPanel hotelRoomsPanel;
 
-        // find out where our database is
-        DatabaseLocationDialog dbLocation =
-                new DatabaseLocationDialog(this, connectionType);
+	/**
+	 * Builds and displays the main application window. The constructor begins
+	 * by building the connection selection dialog box. After the user selects a
+	 * connection type, the method creates a <code>HotelRoomMainWindow</code>
+	 * instance.
+	 *
+	 * @param args
+	 *            an argument specifying whether we are starting a networked
+	 *            client (argument missing) or a standalone client (argument =
+	 *            "alone").
+	 */
+	public HotelRoomView(String title) {
+		super(title);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        if (dbLocation.userCanceled()) {
-        	System.exit(0);
-        }
+		hotelRoomsMenu = new HotelRoomsMenu();
 
-        try {
-            controller = new GuiController(dbLocation.getNetworkType(), dbLocation.getLocation(),
-                                           dbLocation.getPort());
-        } catch (GuiControllerException gce) {
-            ApplicationRunner.handleException(
-                    "Failed to connect to the database");
-        }
+		hotelRoomsPanel = new HotelRoomsPanel();
 
-        this.setJMenuBar(new HotelRoomsMenu());
-        
-        this.add(new HotelRoomsPanel(controller));
-        
-        this.pack();
-        this.setSize(1000, 500);        
-        this.setLocation(ApplicationRunner.getCenterOnScreen(this));
-        this.setVisible(true);
-    }
+		this.setJMenuBar(hotelRoomsMenu);
 
+		this.add(hotelRoomsPanel);
+
+		this.pack();
+		this.setSize(1000, 500);
+		this.setLocation(ApplicationRunner.getCenterOnScreen(this));
+		this.setVisible(true);
+	}
+
+	/**
+	 * Uses the <code>tableData</code> member to refresh the contents of the
+	 * <code>mainTable</code>. The method will attempt to preserve all previous
+	 * selections and contents displayed.
+	 */
+	public void updateTable(final AbstractTableModel tableData) {
+		// Preserve the previous selection
+		JTable mainTable = this.getMainTable();
+		int index = mainTable.getSelectedRow();
+		String prevSelected = (index >= 0) ? (String) mainTable.getValueAt(
+				index, 0) : "";
+
+		// Reset the table data
+		mainTable.setModel(tableData);
+
+		// Reselect the previous item if it still exists
+		for (int i = 0; i < mainTable.getRowCount(); i++) {
+			String selected = (String) mainTable.getValueAt(i, 0);
+			if (selected.equals(prevSelected)) {
+				mainTable.setRowSelectionInterval(i, i);
+				break;
+			}
+		}
+	}
+
+	public String[] getSearchCriteria() {
+		return this.hotelRoomsPanel.getSearchCriteria();
+	}
+
+	public JButton getSearchButton() {
+		return this.hotelRoomsPanel.getSearchButton();
+	}
+
+	public JTable getMainTable() {
+		return this.hotelRoomsPanel.getMainTable();
+	}
+
+	public JButton getBookButton() {
+		return this.hotelRoomsPanel.getBookButton();
+	}
 
 }

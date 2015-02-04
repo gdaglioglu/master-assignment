@@ -1,6 +1,5 @@
 package suncertify.client.gui;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.InetAddress;
@@ -93,8 +92,7 @@ public class DatabaseLocationDialog extends WindowAdapter
      * networked)
      * @see JOptionPane
      */
-    public DatabaseLocationDialog(Frame parent,
-            ApplicationMode connectionMode) {
+    public DatabaseLocationDialog(ApplicationMode connectionMode) {
         configOptions = (new ConfigOptions(connectionMode));
         configOptions.getObservable().addObserver(this);
 
@@ -153,7 +151,7 @@ public class DatabaseLocationDialog extends WindowAdapter
 
         options.setOptions(new Object[] {connectButton, exitButton});
 
-        dialog = options.createDialog(parent, TITLE);
+        dialog = options.createDialog(TITLE);
         dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         dialog.addWindowListener(this);
         dialog.setVisible(true);

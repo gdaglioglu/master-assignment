@@ -1,13 +1,13 @@
 package suncertify.client.gui;
 
-import suncertify.client.gui.GuiController;
+import suncertify.client.gui.HotelRoomController;
 
 /**
  * Holds all exceptions that may occur in the <code>HotelRoomController</code>.
  *
  * @author Denny's DVDs
  * @version 2.0
- * @see GuiController
+ * @see HotelRoomController
  */
 public class GuiControllerException extends Exception {
     /**

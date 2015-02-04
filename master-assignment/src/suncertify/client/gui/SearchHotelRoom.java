@@ -9,7 +9,7 @@ class SearchHotelRoom {
 	/**
 	 * The internal reference to the GUI controller.
 	 */
-	public GuiController controller;
+	public HotelRoomController controller;
 	/**
 	 * The <code>JTable</code> that displays the Hotel room held by the system.
 	 */
