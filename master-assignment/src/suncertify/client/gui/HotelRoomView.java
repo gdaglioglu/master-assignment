@@ -3,6 +3,7 @@ package suncertify.client.gui;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -106,6 +107,14 @@ public class HotelRoomView extends JFrame {
 
 	public JButton getBookButton() {
 		return this.hotelRoomsPanel.getBookButton();
+	}
+
+	public JCheckBox getExactMatch() {
+		return this.hotelRoomsPanel.getExactMatch();
+	}
+
+	public String isExactMatchSelected() {
+		return this.hotelRoomsPanel.isExactMatchSelected();
 	}
 
 }

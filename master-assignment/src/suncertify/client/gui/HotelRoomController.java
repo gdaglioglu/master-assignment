@@ -2,14 +2,18 @@ package suncertify.client.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.PatternSyntaxException;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import suncertify.app.ApplicationRunner;
 import suncertify.db.DBMain;
+import suncertify.db.RecordNotFoundException;
+import suncertify.domain.HotelRoom;
 
 /**
  * Handles all interactions between the GUI layer and the data layer.
@@ -30,19 +34,25 @@ public class HotelRoomController {
 	 * The Logger instance. All log messages from this class are routed through
 	 * this member. The Logger namespace is <code>suncertify.client.gui</code>.
 	 */
-	private Logger log = Logger.getLogger("suncertify.client.gui");
+	private Logger logger = Logger.getLogger("suncertify.client.gui");
 
 	/**
 	 * The search listener, attached to the search button in the
-	 * <code>ClientWindow</code> instance.
+	 * <code>SearchPanel</code> instance.
 	 */
 	private ActionListener searchListener;
 
 	/**
 	 * The booking listener, attached to the book button in the
-	 * <code>ClientWindow</code> instance.
+	 * <code>SearchPanel</code> instance.
 	 */
 	private ActionListener bookingListener;
+
+	/**
+	 * This listener persists the state of the exact match checkbox when it's
+	 * state changes.
+	 */
+	private ActionListener exactMatchListener;
 
 	/** The model for the client MVC. */
 	private HotelRoomModel hotelRoomModel;
@@ -93,13 +103,13 @@ public class HotelRoomController {
 						"Invalid connection type specified");
 			}
 		} catch (ClassNotFoundException e) {
-			log.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			// throw new GuiControllerException(e);
 		} catch (java.rmi.RemoteException e) {
-			log.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			// throw new GuiControllerException(e);
 		} catch (java.io.IOException e) {
-			log.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			// throw new GuiControllerException(e);
 		}
 
@@ -111,15 +121,15 @@ public class HotelRoomController {
 			this.hotelRoomView = new HotelRoomView(
 					"URLyBird Discounted Hotel Rooms - Network Mode");
 		} else {
-			this.log.severe("Client started with incorrect Application Mode. Exiting application");
+			this.logger
+					.severe("Client started with incorrect Application Mode. Exiting application");
 			ApplicationRunner
 					.handleException("Client started with incorrect Application Mode. Exiting application");
 
 		}
 
-		// Perform an empty search to retrieve all records
 		try {
-			this.hotelRoomModel = this.find(new String[] {});
+			this.hotelRoomModel = this.getAllHotelRooms();
 		} catch (GuiControllerException e) {
 			ApplicationRunner
 					.handleException("Failed to acquire an initial hotel room list."
@@ -130,6 +140,8 @@ public class HotelRoomController {
 
 	/**
 	 * Locates a Hotel Room record by hotel name.
+	 * 
+	 * @param exactMatch
 	 *
 	 * @param hotelName
 	 *            A String representing the hotel name.
@@ -137,94 +149,113 @@ public class HotelRoomController {
 	 * @throws GuiControllerException
 	 *             Indicates a database or network level exception.
 	 */
-	public HotelRoomModel find(String[] hotelDetails)
+	public HotelRoomModel findRoom(String[] searchCriteria, boolean exactMatch)
 			throws GuiControllerException {
 		HotelRoomModel out = new HotelRoomModel();
 		try {
 			int[] rawResults = new int[0];
-			rawResults = this.connection.find(hotelDetails);
+			rawResults = this.connection.find(searchCriteria);
 
 			for (final int recNo : rawResults) {
 				String[] hotelRoom = this.connection.read(recNo);
-				out.addHotelRecord(hotelRoom[0], hotelRoom[1], hotelRoom[2],
-						hotelRoom[3], hotelRoom[4], hotelRoom[5], hotelRoom[6]);
+				if (!exactMatch || this.isExactMatch(hotelRoom, searchCriteria)) {
+					out.addHotelRecord(hotelRoom[0], hotelRoom[1],
+							hotelRoom[2], hotelRoom[3], hotelRoom[4],
+							hotelRoom[5], hotelRoom[6]);
+				}
+
 			}
 		} catch (Exception e) {
-			log.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw new GuiControllerException(e);
 		}
 		return out;
 	}
 
-	// /**
-	// * Retrieves all Hotel room records from the database.
-	// *
-	// * @return A HotelRoomModel containing all Hotel room Records.
-	// * @throws GuiControllerException
-	// * Indicates a database or network level exception.
-	// */
-	// public HotelRoomModel getHotelRooms() throws GuiControllerException {
-	// HotelRoomModel out = new HotelRoomModel();
-	// try {
-	// int[] rawResults = new int[0];
-	// rawResults = this.connection.find(new String[1]);
-	//
-	// for (final int recNo : rawResults) {
-	// String[] hotelRoom = this.connection.read(recNo);
-	// out.addHotelRecord(hotelRoom[0], hotelRoom[1], hotelRoom[2],
-	// hotelRoom[3], hotelRoom[4], hotelRoom[5], hotelRoom[6]);
-	// }
-	// } catch (Exception e) {
-	// log.log(Level.SEVERE, e.getMessage(), e);
-	// throw new GuiControllerException(e);
-	// }
-	// return out;
-	// }
-
 	/**
-	 * Decrements the number of Dvd's in stock identified by their UPC number.
-	 *
-	 * @param upc
-	 *            The UPC of the Dvd to rent.
-	 * @return A boolean indicating if the rent operation was successful.
-	 * @throws GuiControllerException
-	 *             Indicates a database or network level exception.
+	 * Reserve a room in the database
+	 * 
+	 * @param customerId
+	 * @param hotelRoomRecordNo
 	 */
-	public boolean rent(String upc) throws GuiControllerException {
-		boolean returnValue = false;
-		return returnValue;
-	}
+	public boolean bookRoom(String customerId, int hotelRoomRecordNo)
+			throws GuiControllerException {
 
-	/**
-	 * Increments the number of Dvd's in stock identified by their UPC number.
-	 *
-	 * @param upc
-	 *            The UPC of the Dvd to return.
-	 * @return A boolean indicating if the return operation was successful.
-	 * @throws GuiControllerException
-	 *             Indicates a database or network level exception.
-	 */
-	public boolean returnRental(String upc) throws GuiControllerException {
-		boolean returnValue = false;
+		logger.entering("HotelRoomController", "bookRoom",
+				"Record number to be booked: " + hotelRoomRecordNo);
+		String[] hotelRoom = null;
+		try {
+			hotelRoom = this.connection.read(hotelRoomRecordNo);
+			if (hotelRoom[6] != null && hotelRoom[6].trim().length() > 0) {
+				return false;
+			}
 
-		return returnValue;
-	}
+		} catch (RecordNotFoundException rnfex) {
+			logger.log(Level.SEVERE, rnfex.getMessage(), rnfex);
+			System.err.println("Error reading record at position : "
+					+ rnfex.getMessage());
+		} catch (Exception ex) {
+			if (ex instanceof RemoteException) {
+				logger.log(Level.SEVERE, ex.getMessage(), ex);
+				System.err.println("Problem with remote connection : "
+						+ ex.getMessage());
+			}
+		}
+		HotelRoom room = new HotelRoom(hotelRoom);
+		room.setOwner(customerId);
+		try {
+			this.connection.lock(hotelRoomRecordNo);
+			this.connection.update(hotelRoomRecordNo, room.toArray());
+		} catch (RecordNotFoundException rnfex) {
+			logger.log(Level.SEVERE, rnfex.getMessage(), rnfex);
+			System.err.println("Error attempting to update : "
+					+ rnfex.getMessage());
+		} catch (Exception ex) {
+			if (ex instanceof RemoteException) {
+				logger.log(Level.SEVERE, ex.getMessage(), ex);
+				System.err.println("Problem with remote connection : "
+						+ ex.getMessage());
+			}
 
-	private String[] getSearchCriteria() {
-		return hotelRoomView.getSearchCriteria();
+		} finally {
+			try {
+				this.connection.unlock(hotelRoomRecordNo);
+			} catch (RecordNotFoundException rnfex) {
+				logger.log(Level.SEVERE, rnfex.getMessage(), rnfex);
+			} catch (Exception ex) {
+				if (ex instanceof RemoteException) {
+					logger.log(Level.SEVERE, ex.getMessage(), ex);
+					System.err.println("Problem with remote connection : "
+							+ ex.getMessage());
+				}
+			}
+
+		}
+		logger.exiting("HotelRoomController", "bookRoom");
+		return true;
 	}
 
 	public void init() {
 
 		this.searchListener = new ActionListener() {
 
+			/**
+			 * {@inheritDoc}
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					HotelRoomController.this.lastSearchCriteria = HotelRoomController.this
 							.getSearchCriteria();
-					hotelRoomView.updateTable(HotelRoomController.this
-							.find(HotelRoomController.this.lastSearchCriteria));
+					final boolean exactMatch = Boolean
+							.valueOf(SavedConfiguration.getSavedConfiguration()
+									.getParameter(
+											SavedConfiguration.EXACT_MATCH));
+					hotelRoomView
+							.updateTable(HotelRoomController.this
+									.findRoom(
+											HotelRoomController.this.lastSearchCriteria,
+											exactMatch));
 				} catch (GuiControllerException gce) {
 					// Inspect the exception chain
 					Throwable rootException = gce.getCause();
@@ -239,33 +270,76 @@ public class HotelRoomController {
 			}
 
 		};
+		this.exactMatchListener = new ActionListener() {
+
+			/**
+			 * {@inheritDoc}
+			 */
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				SavedConfiguration.getSavedConfiguration().setParameter(
+						SavedConfiguration.EXACT_MATCH,
+						HotelRoomController.this.hotelRoomView
+								.isExactMatchSelected());
+			}
+		};
 
 		this.bookingListener = new ActionListener() {
 
+			/**
+			 * {@inheritDoc}
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				final String ALREADY_BOOKED_MSG = "Unable to book - room is already booked.";
-				String hotelRoomRecordNo = "";
+
 				JTable mainTable = hotelRoomView.getMainTable();
-				int index = mainTable.getSelectedRow();
-				if ((index >= 0) && (index <= mainTable.getColumnCount())) {
-					hotelRoomRecordNo = (String) mainTable.getValueAt(index, 0);
-					try {
-						boolean booked = HotelRoomController.this
-								.rent(hotelRoomRecordNo);
-						if (booked == false) {
+				int hotelRoomRecordNo = mainTable.getSelectedRow();
+				if ((hotelRoomRecordNo >= 0)) {
+					final String customerId = JOptionPane.showInputDialog(null,
+							"Enter Customer ID", "Book Room",
+							JOptionPane.QUESTION_MESSAGE);
+					if (isValidCustomerId(customerId)) {
+						try {
+							boolean booked = HotelRoomController.this.bookRoom(
+									customerId, hotelRoomRecordNo);
+							if (booked == false) {
+								ApplicationRunner
+										.handleException(ALREADY_BOOKED_MSG);
+							}
+							final boolean exactMatch = Boolean
+									.valueOf(SavedConfiguration
+											.getSavedConfiguration()
+											.getParameter(
+													SavedConfiguration.EXACT_MATCH));
+							hotelRoomView
+									.updateTable(HotelRoomController.this
+											.findRoom(
+													HotelRoomController.this.lastSearchCriteria,
+													exactMatch));
+						} catch (GuiControllerException gce) {
 							ApplicationRunner
-									.handleException(ALREADY_BOOKED_MSG);
+									.handleException("Booking operation failed.");
 						}
-						// tableData = controller.find(previousCriteria);
-						hotelRoomView
-								.updateTable(HotelRoomController.this
-										.find(HotelRoomController.this.lastSearchCriteria));
-					} catch (GuiControllerException gce) {
-						ApplicationRunner
-								.handleException("Rent operation failed.");
 					}
+				} else {
+					ApplicationRunner.showWarning("Please select a row");
+					JOptionPane.showMessageDialog(
+							HotelRoomController.this.hotelRoomView,
+							"Please select a row");
 				}
+			}
+
+			private boolean isValidCustomerId(String id) {
+				if (id == null) {
+					return false;
+				} else if (!id.matches("^\\d{8}$")) {
+					JOptionPane.showMessageDialog(
+							HotelRoomController.this.hotelRoomView,
+							"Please enter a valid Customer Id");
+					return false;
+				} else
+					return true;
 			}
 
 		};
@@ -274,6 +348,41 @@ public class HotelRoomController {
 				this.searchListener);
 		this.hotelRoomView.getBookButton().addActionListener(
 				this.bookingListener);
+		this.hotelRoomView.getExactMatch().addActionListener(
+				this.exactMatchListener);
 	}
 
+	/**
+	 * This method is used to determine if a hotel room exactly matches search
+	 * criteria.
+	 * 
+	 * @param hotelRoom
+	 *            The Hotel room to check.
+	 * @param searchCriteria
+	 *            The search criteria used to check the Contractor.
+	 * @return true if the hotel room is an exact match otherwise false.
+	 */
+	private boolean isExactMatch(final String[] hotelRoom,
+			final String[] searchCriteria) {
+		for (int i = 0; i < searchCriteria.length; i++) {
+			if ((searchCriteria[i] != null) && !searchCriteria[i].equals("")
+					&& !hotelRoom[i].equals(searchCriteria[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private HotelRoomModel getAllHotelRooms() throws GuiControllerException {
+		lastSearchCriteria = getSearchCriteria();
+		final boolean exactMatch = Boolean.valueOf(SavedConfiguration
+				.getSavedConfiguration().getParameter(
+						SavedConfiguration.EXACT_MATCH));
+		return this.findRoom(lastSearchCriteria, exactMatch);
+
+	}
+
+	private String[] getSearchCriteria() {
+		return hotelRoomView.getSearchCriteria();
+	}
 }

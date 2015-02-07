@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -48,14 +49,24 @@ public class SearchPanel extends JPanel {
 	 */
 	private JTextField ownerSearchField = new JTextField(15);
 
-	JButton searchButton = new JButton("Search");
+	JButton searchButton;
+
+	private JCheckBox exactMatch;
 
 	public SearchPanel() {
 
-		searchButton.setMnemonic(KeyEvent.VK_S);
-		// Search panel
-		this.setLayout(new GridLayout(2, 8, 10, 5));
 		this.setBorder(BorderFactory.createTitledBorder("Search"));
+		this.setLayout(new GridLayout(2, 8, 10, 5));
+
+		searchButton = new JButton("Search");
+		searchButton.setMnemonic(KeyEvent.VK_S);
+		// load saved configuration
+		final boolean state = Boolean.parseBoolean(SavedConfiguration
+				.getSavedConfiguration().getParameter(
+						SavedConfiguration.EXACT_MATCH));
+		this.exactMatch = new JCheckBox("Exact match", state);
+		this.exactMatch.setMnemonic(KeyEvent.VK_E);
+
 		final JLabel nameLabel = new JLabel("Hotel name:");
 		final JLabel locationLabel = new JLabel("Hotel location:");
 		final JLabel sizeLabel = new JLabel("Room size:");
@@ -82,6 +93,8 @@ public class SearchPanel extends JPanel {
 		this.add(dateSearchField);
 		this.add(ownerSearchField);
 
+		this.add(exactMatch);
+
 		nameSearchField.setToolTipText("Enter hotel name to search.");
 		locationSearchField.setToolTipText("Enter hotel location to search.");
 		sizeSearchField.setToolTipText("Enter room size to search.");
@@ -90,6 +103,8 @@ public class SearchPanel extends JPanel {
 		dateSearchField.setToolTipText("Enter date to search.");
 		ownerSearchField.setToolTipText("Enter owner name to search.");
 		searchButton.setToolTipText("Submit the Hotel room search.");
+		exactMatch
+				.setToolTipText("Tick the box to search with exact match option.");
 
 	}
 
@@ -107,5 +122,13 @@ public class SearchPanel extends JPanel {
 
 	public JButton getSearchButton() {
 		return this.searchButton;
+	}
+
+	public JCheckBox getExactMatch() {
+		return exactMatch;
+	}
+
+	public String isExactMatchSelected() {
+		return String.valueOf(this.exactMatch.isSelected());
 	}
 }

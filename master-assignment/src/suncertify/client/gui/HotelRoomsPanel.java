@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -106,6 +107,14 @@ public class HotelRoomsPanel extends JPanel {
 
 	public JButton getBookButton() {
 		return bookButton;
+	}
+
+	public JCheckBox getExactMatch() {
+		return this.searchPanel.getExactMatch();
+	}
+
+	public String isExactMatchSelected() {
+		return this.searchPanel.isExactMatchSelected();
 	}
 
 }
