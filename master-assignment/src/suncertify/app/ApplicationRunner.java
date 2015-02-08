@@ -13,6 +13,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import suncertify.client.gui.HotelRoomController;
+import suncertify.client.gui.ServerWindow;
 
 /**
  * The URLyBird application loader - a facade to the two modes the application
@@ -31,7 +32,7 @@ public class ApplicationRunner {
 	 *            Holds the command line inputs
 	 */
 	public static void main(String[] args) {
-		args = new String[] { "alone" };
+		args = new String[] {};
 		ApplicationRunner app = new ApplicationRunner(args);
 	}
 
@@ -57,7 +58,6 @@ public class ApplicationRunner {
 			hotelRoomController.init();
 		} else if (args.length == 1 && "server".equals(args[0])) {
 			final ServerWindow server = new ServerWindow();
-			// server.startServer();
 		} else {
 			System.err
 					.println("Command line options are case sensitive and may be only one of:");

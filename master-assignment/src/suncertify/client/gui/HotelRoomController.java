@@ -14,6 +14,7 @@ import suncertify.app.ApplicationRunner;
 import suncertify.db.DBMain;
 import suncertify.db.RecordNotFoundException;
 import suncertify.domain.HotelRoom;
+import suncertify.remote.HotelDatabaseRemote;
 
 /**
  * Handles all interactions between the GUI layer and the data layer.
@@ -24,11 +25,21 @@ import suncertify.domain.HotelRoom;
  * @see GuiControllerException
  */
 public class HotelRoomController {
+
 	/**
-	 * Holds a reference to the client interface of the
-	 * <code>HotelRoomMediator</code>.
+	 * Application mode
 	 */
-	private DBMain connection;
+	ApplicationMode applicationMode;
+
+	/**
+	 * Create instance of Data using the DBMain Interface for local connections
+	 */
+	private DBMain localConnection;
+
+	/**
+	 * Create instance of Data using the DBMain Interface for remote connections
+	 */
+	private HotelDatabaseRemote remoteConnection;
 
 	/**
 	 * The Logger instance. All log messages from this class are routed through
@@ -78,6 +89,7 @@ public class HotelRoomController {
 	 *             on communication error with database.
 	 */
 	public HotelRoomController(ApplicationMode applicationMode) {
+		this.applicationMode = applicationMode;
 
 		// find out where our database is
 		DatabaseLocationDialog dbLocationDialog = new DatabaseLocationDialog(
@@ -90,11 +102,11 @@ public class HotelRoomController {
 		try {
 			switch (dbLocationDialog.getNetworkType()) {
 			case DIRECT:
-				connection = suncertify.direct.HotelConnector
+				localConnection = suncertify.direct.HotelConnector
 						.getLocal(dbLocationDialog.getLocation());
 				break;
 			case RMI:
-				connection = suncertify.remote.HotelConnector.getRemote(
+				remoteConnection = suncertify.remote.HotelConnector.getRemote(
 						dbLocationDialog.getLocation(),
 						dbLocationDialog.getPort());
 				break;
@@ -151,25 +163,41 @@ public class HotelRoomController {
 	 */
 	public HotelRoomModel findRoom(String[] searchCriteria, boolean exactMatch)
 			throws GuiControllerException {
-		HotelRoomModel out = new HotelRoomModel();
+		HotelRoomModel hotelRoomModel = new HotelRoomModel();
+		int[] rawResults;
+
 		try {
-			int[] rawResults = new int[0];
-			rawResults = this.connection.find(searchCriteria);
+			if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
+				rawResults = this.localConnection.find(searchCriteria);
 
-			for (final int recNo : rawResults) {
-				String[] hotelRoom = this.connection.read(recNo);
-				if (!exactMatch || this.isExactMatch(hotelRoom, searchCriteria)) {
-					out.addHotelRecord(hotelRoom[0], hotelRoom[1],
-							hotelRoom[2], hotelRoom[3], hotelRoom[4],
-							hotelRoom[5], hotelRoom[6]);
+				for (final int recNo : rawResults) {
+					String[] hotelRoom = this.localConnection.read(recNo);
+					if (!exactMatch
+							|| this.isExactMatch(hotelRoom, searchCriteria)) {
+						hotelRoomModel.addHotelRecord(hotelRoom[0],
+								hotelRoom[1], hotelRoom[2], hotelRoom[3],
+								hotelRoom[4], hotelRoom[5], hotelRoom[6]);
+					}
+
 				}
-
+			} else {
+				rawResults = this.remoteConnection.find(searchCriteria);
+				for (final int recNo : rawResults) {
+					String[] hotelRoom = this.remoteConnection.read(recNo);
+					if (!exactMatch
+							|| this.isExactMatch(hotelRoom, searchCriteria)) {
+						hotelRoomModel.addHotelRecord(hotelRoom[0],
+								hotelRoom[1], hotelRoom[2], hotelRoom[3],
+								hotelRoom[4], hotelRoom[5], hotelRoom[6]);
+					}
+				}
 			}
+
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw new GuiControllerException(e);
 		}
-		return out;
+		return hotelRoomModel;
 	}
 
 	/**
@@ -185,7 +213,11 @@ public class HotelRoomController {
 				"Record number to be booked: " + hotelRoomRecordNo);
 		String[] hotelRoom = null;
 		try {
-			hotelRoom = this.connection.read(hotelRoomRecordNo);
+			if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
+				hotelRoom = this.localConnection.read(hotelRoomRecordNo);
+			} else {
+				hotelRoom = this.remoteConnection.read(hotelRoomRecordNo);
+			}
 			if (hotelRoom[6] != null && hotelRoom[6].trim().length() > 0) {
 				return false;
 			}
@@ -204,8 +236,13 @@ public class HotelRoomController {
 		HotelRoom room = new HotelRoom(hotelRoom);
 		room.setOwner(customerId);
 		try {
-			this.connection.lock(hotelRoomRecordNo);
-			this.connection.update(hotelRoomRecordNo, room.toArray());
+			if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
+				this.localConnection.lock(hotelRoomRecordNo);
+				this.localConnection.update(hotelRoomRecordNo, room.toArray());
+			} else {
+				this.remoteConnection.lock(hotelRoomRecordNo);
+				this.remoteConnection.update(hotelRoomRecordNo, room.toArray());
+			}
 		} catch (RecordNotFoundException rnfex) {
 			logger.log(Level.SEVERE, rnfex.getMessage(), rnfex);
 			System.err.println("Error attempting to update : "
@@ -219,7 +256,7 @@ public class HotelRoomController {
 
 		} finally {
 			try {
-				this.connection.unlock(hotelRoomRecordNo);
+				this.localConnection.unlock(hotelRoomRecordNo);
 			} catch (RecordNotFoundException rnfex) {
 				logger.log(Level.SEVERE, rnfex.getMessage(), rnfex);
 			} catch (Exception ex) {

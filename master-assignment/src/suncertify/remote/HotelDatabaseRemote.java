@@ -2,14 +2,13 @@ package suncertify.remote;
 
 import java.rmi.Remote;
 
-import suncertify.db.DBLocal;
+import suncertify.db.RemoteDBMain;
 
 /**
- * The remote interface for the GUI-Client.
- * Exactly matches the DBMain interface in the db package.
+ * The remote interface for the GUI-Client. Exactly matches the DBMain interface
+ * in the db package.
  *
  * @author gdaglioglu
- * @version 1.0
  */
-public interface HotelDatabaseRemote extends Remote, DBLocal {
+public interface HotelDatabaseRemote extends Remote, RemoteDBMain {
 }

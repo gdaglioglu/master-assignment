@@ -1,6 +1,7 @@
 package suncertify.db;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class Data implements DBMain {
 	private RandomAccessFile is;
 	private List<String[]> hotelRooms;
 
-	public Data(String dbLocation) {
+	public Data(String dbLocation) throws FileNotFoundException, IOException {
 		this.dbLocation = dbLocation;
 		this.init();
 	}
