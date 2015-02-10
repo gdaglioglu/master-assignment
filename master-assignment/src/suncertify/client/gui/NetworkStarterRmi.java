@@ -1,7 +1,6 @@
 package suncertify.client.gui;
 
 import java.rmi.RemoteException;
-import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,15 +35,6 @@ public class NetworkStarterRmi {
 	 * Our default port - the same as the standard RMI port.
 	 */
 	private int port = java.rmi.registry.Registry.REGISTRY_PORT;
-	/**
-	 * The fully qualified path to the database file.
-	 */
-	private String databaseLocation = null;
-
-	/**
-	 * A reference to the registry we will instantiate.
-	 */
-	private Registry registry = null;
 
 	/**
 	 * The Logger instance. All log messages from this class are routed through
@@ -72,15 +62,11 @@ public class NetworkStarterRmi {
 			log.info("Server started.");
 			status.setText(SERVER_RUNNING);
 
-			// Save our configuration now that it all seems to be working.
-			SavedConfiguration config = SavedConfiguration
-					.getSavedConfiguration();
-
-			config.setParameter(SavedConfiguration.DATABASE_LOCATION,
+			PropertyManager.setParameter(PropertyManager.DATABASE_LOCATION,
 					dbLocation);
 
-			config.setParameter(SavedConfiguration.SERVER_PORT, port);
-			config.setParameter(SavedConfiguration.NETWORK_TYPE, ""
+			PropertyManager.setParameter(PropertyManager.SERVER_PORT, port);
+			PropertyManager.setParameter(PropertyManager.NETWORK_TYPE, ""
 					+ ConnectionType.RMI);
 		} catch (NumberFormatException e) {
 			// this should never happen, since we are taking pains to ensure

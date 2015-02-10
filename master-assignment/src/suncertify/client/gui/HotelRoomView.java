@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import suncertify.app.ApplicationRunner;
+import suncertify.app.App;
 
 /**
  * The main application window of the URLyBird client application.
@@ -64,7 +64,7 @@ public class HotelRoomView extends JFrame {
 
 		this.pack();
 		this.setSize(1000, 500);
-		this.setLocation(ApplicationRunner.getCenterOnScreen(this));
+		this.setLocation(App.getCenterOnScreen(this));
 		this.setVisible(true);
 	}
 

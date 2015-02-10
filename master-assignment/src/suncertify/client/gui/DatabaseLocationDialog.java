@@ -101,21 +101,19 @@ public class DatabaseLocationDialog extends WindowAdapter implements
 		configOptions = (new ConfigOptions(connectionMode));
 		configOptions.getObservable().addObserver(this);
 
-		// load saved configuration
-		SavedConfiguration config = SavedConfiguration.getSavedConfiguration();
-
 		// the port and connection type are irrelevant in standalone mode
 		if (connectionMode == ApplicationMode.STANDALONE_CLIENT) {
 			validPort = true;
 			validCnx = true;
 			networkType = ConnectionType.DIRECT;
-			location = config
-					.getParameter(SavedConfiguration.DATABASE_LOCATION);
+			location = PropertyManager
+					.getParameter(PropertyManager.DATABASE_LOCATION);
 		} else {
 			// there may not be a network connectivity type defined and, if
 			// not, we do not set a default - force the user to make a choice
 			// the at least for the first time they run this.
-			String tmp = config.getParameter(SavedConfiguration.NETWORK_TYPE);
+			String tmp = PropertyManager
+					.getParameter(PropertyManager.NETWORK_TYPE);
 			if (tmp != null) {
 				try {
 					networkType = ConnectionType.valueOf(tmp);
@@ -127,11 +125,12 @@ public class DatabaseLocationDialog extends WindowAdapter implements
 
 			// there is always at least a default port number, so we don't have
 			// to validate this.
-			port = config.getParameter(SavedConfiguration.SERVER_PORT);
+			port = PropertyManager.getParameter(PropertyManager.SERVER_PORT);
 			configOptions.setPortNumberText(port);
 			validPort = true;
 
-			location = config.getParameter(SavedConfiguration.SERVER_ADDRESS);
+			location = PropertyManager
+					.getParameter(PropertyManager.SERVER_ADDRESS);
 		}
 
 		// there may not be a default database location, so we had better
@@ -222,9 +221,6 @@ public class DatabaseLocationDialog extends WindowAdapter implements
 
 		OptionUpdate optionUpdate = (OptionUpdate) arg;
 
-		// load saved configuration
-		SavedConfiguration config = SavedConfiguration.getSavedConfiguration();
-
 		switch (optionUpdate.getUpdateType()) {
 		case DB_LOCATION_CHANGED:
 			location = (String) optionUpdate.getPayload();
@@ -233,8 +229,8 @@ public class DatabaseLocationDialog extends WindowAdapter implements
 				if (f.exists() && f.canRead() && f.canWrite()) {
 					validDb = true;
 					log.info("File chosen " + location);
-					config.setParameter(SavedConfiguration.DATABASE_LOCATION,
-							location);
+					PropertyManager.setParameter(
+							PropertyManager.DATABASE_LOCATION, location);
 				} else {
 					log.warning("Invalid file " + location);
 				}
@@ -255,8 +251,8 @@ public class DatabaseLocationDialog extends WindowAdapter implements
 					}
 					log.info("Server specified " + location);
 					validDb = true;
-					config.setParameter(SavedConfiguration.SERVER_ADDRESS,
-							location);
+					PropertyManager.setParameter(
+							PropertyManager.SERVER_ADDRESS, location);
 				} catch (UnknownHostException uhe) {
 					log.warning("Unknown host: " + location);
 					validDb = false;
@@ -276,7 +272,7 @@ public class DatabaseLocationDialog extends WindowAdapter implements
 					log.info("User chose dynamic port " + port);
 				}
 				validPort = true;
-				config.setParameter(SavedConfiguration.SERVER_PORT, port);
+				PropertyManager.setParameter(PropertyManager.SERVER_PORT, port);
 			} else {
 				validPort = false;
 			}

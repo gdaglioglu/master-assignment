@@ -61,9 +61,8 @@ public class SearchPanel extends JPanel {
 		searchButton = new JButton("Search");
 		searchButton.setMnemonic(KeyEvent.VK_S);
 		// load saved configuration
-		final boolean state = Boolean.parseBoolean(SavedConfiguration
-				.getSavedConfiguration().getParameter(
-						SavedConfiguration.EXACT_MATCH));
+		final boolean state = Boolean.parseBoolean(PropertyManager
+				.getParameter(PropertyManager.EXACT_MATCH));
 		this.exactMatch = new JCheckBox("Exact match", state);
 		this.exactMatch.setMnemonic(KeyEvent.VK_E);
 

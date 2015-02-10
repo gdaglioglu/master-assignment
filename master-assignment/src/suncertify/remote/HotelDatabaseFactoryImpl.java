@@ -31,7 +31,7 @@ class HotelDatabaseFactoryImpl extends UnicastRemoteObject implements
 	 *             created.
 	 */
 	public HotelDatabaseFactoryImpl(String dbLocation) throws RemoteException {
-		this.dbLocation = dbLocation;
+		HotelDatabaseFactoryImpl.dbLocation = dbLocation;
 	}
 
 	/** {@inheritDoc} */

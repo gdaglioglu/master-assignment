@@ -67,7 +67,7 @@ public class ConfigOptions extends JPanel {
 
 	private String location = null;
 	private String port = null;
-	private ApplicationMode applicationMode = ApplicationMode.STANDALONE_CLIENT;
+	private ApplicationMode applicationMode;
 
 	/**
 	 * The Logger instance. All log messages from this class are routed through
@@ -341,16 +341,6 @@ public class ConfigOptions extends JPanel {
 	 */
 	public void setPortNumberEnabled(boolean enabled) {
 		this.portNumber.setEnabled(enabled);
-	}
-
-	/**
-	 * Configures whether the RMI option radio button is enabled or not.
-	 *
-	 * @param enabled
-	 *            true if the RMI option radio button is enabled.
-	 */
-	public void setRmiOptionEnabled(boolean enabled) {
-		this.rmiOption.setEnabled(enabled);
 	}
 
 	/**

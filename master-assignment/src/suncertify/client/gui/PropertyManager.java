@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import suncertify.app.ApplicationRunner;
+import suncertify.app.App;
 
 /**
  * Provides read/write access to the user's saved configuration parameters on
@@ -15,9 +15,8 @@ import suncertify.app.ApplicationRunner;
  * parameters as a default.
  *
  * @author Gokhan Daglioglu
- * @version 1.0
  */
-public class SavedConfiguration {
+public class PropertyManager {
 	/**
 	 * key in Properties indicating that the value will be the database
 	 * location.
@@ -45,7 +44,7 @@ public class SavedConfiguration {
 	/**
 	 * the Properties for this application.
 	 */
-	private Properties parameters = null;
+	private Properties props = null;
 
 	/**
 	 * The location where our configuration file will be saved.
@@ -75,32 +74,27 @@ public class SavedConfiguration {
 	 * as we possibly can. If we were unsure whether we would ever need this or
 	 * not we would probably perform a lazy instantiation.
 	 */
-	private static SavedConfiguration savedConfiguration = new SavedConfiguration();
+	private static PropertyManager propertyManager = new PropertyManager();
 
 	/**
 	 * Creates a new instance of SavedConfiguration. There should only ever be
 	 * one instance of this class (a Singleton), so we have made it private.
 	 */
-	private SavedConfiguration() {
-		parameters = loadParametersFromFile();
-
-		if (parameters == null) {
-			parameters = new Properties();
-
-			parameters.setProperty(SERVER_ADDRESS, "localhost");
-			parameters.setProperty(SERVER_PORT, ""
-					+ java.rmi.registry.Registry.REGISTRY_PORT);
-			parameters.setProperty(EXACT_MATCH, "false");
-		}
+	private PropertyManager() {
+		init();
 	}
 
-	/**
-	 * return the single instance of the SavedConfiguration.
-	 *
-	 * @return the single instance of the SavedConfiguration.
-	 */
-	public static SavedConfiguration getSavedConfiguration() {
-		return savedConfiguration;
+	private void init() {
+		props = loadParametersFromFile();
+
+		if (props == null) {
+			props = new Properties();
+
+			props.setProperty(SERVER_ADDRESS, "localhost");
+			props.setProperty(SERVER_PORT, ""
+					+ java.rmi.registry.Registry.REGISTRY_PORT);
+			props.setProperty(EXACT_MATCH, "false");
+		}
 	}
 
 	/**
@@ -112,8 +106,8 @@ public class SavedConfiguration {
 	 *            value.
 	 * @return the value of the named parameter.
 	 */
-	public String getParameter(String parameterName) {
-		return parameters.getProperty(parameterName);
+	public static String getParameter(String parameterName) {
+		return propertyManager.props.getProperty(parameterName);
 	}
 
 	/**
@@ -130,8 +124,8 @@ public class SavedConfiguration {
 	 * @param parameterValue
 	 *            the value to be stored for the parameter
 	 */
-	public void setParameter(String parameterName, String parameterValue) {
-		parameters.setProperty(parameterName, parameterValue);
+	public static void setParameter(String parameterName, String parameterValue) {
+		propertyManager.props.setProperty(parameterName, parameterValue);
 		saveParametersToFile();
 	}
 
@@ -139,7 +133,7 @@ public class SavedConfiguration {
 	 * saves the parameters to a file so that they can be used again next time
 	 * the application starts.
 	 */
-	private void saveParametersToFile() {
+	private static void saveParametersToFile() {
 		try {
 			synchronized (savedOptionsFile) {
 				if (savedOptionsFile.exists()) {
@@ -147,13 +141,12 @@ public class SavedConfiguration {
 				}
 				savedOptionsFile.createNewFile();
 				FileOutputStream fos = new FileOutputStream(savedOptionsFile);
-				parameters.store(fos, "URLyBird configuration");
+				propertyManager.props.store(fos, "URLyBird configuration");
 				fos.close();
 			}
 		} catch (IOException e) {
-			ApplicationRunner
-					.handleException("Unable to save user parameters to file. "
-							+ "They wont be remembered next time you start.");
+			App.handleException("Unable to save user parameters to file. "
+					+ "They wont be remembered next time you start.");
 		}
 	}
 
@@ -175,11 +168,11 @@ public class SavedConfiguration {
 					fis.close();
 				} catch (FileNotFoundException e) {
 					assert false : "File not found after existance verified";
-					ApplicationRunner.handleException("Unable to load user "
+					App.handleException("Unable to load user "
 							+ "parameters. Default values will be used.\n" + e);
 				} catch (IOException e) {
 					assert false : "Bad data in parameters file";
-					ApplicationRunner.handleException("Unable to load user "
+					App.handleException("Unable to load user "
 							+ "parameters. Default values will be used.\n" + e);
 				}
 			}

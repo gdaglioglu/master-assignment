@@ -19,7 +19,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-import suncertify.app.ApplicationRunner;
+import suncertify.app.App;
 
 /**
  * The graphical user interface the user sees when they start the server
@@ -96,25 +96,22 @@ public class ServerWindow extends JFrame implements Observer {
 		statusPanel.add(status, BorderLayout.CENTER);
 		this.add(statusPanel, BorderLayout.SOUTH);
 
-		// load saved configuration
-		SavedConfiguration config = SavedConfiguration.getSavedConfiguration();
-
 		// there may not be a default database location, so we had better
 		// validate before using the returned value.
-		String databaseLocation = config
-				.getParameter(SavedConfiguration.DATABASE_LOCATION);
+		String databaseLocation = PropertyManager
+				.getParameter(PropertyManager.DATABASE_LOCATION);
 		configOptionsPanel.setLocationFieldText((databaseLocation == null) ? ""
 				: databaseLocation);
 
 		// there is always at least a default port number, so we don't have to
 		// validate this.
-		configOptionsPanel.setPortNumberText(config
-				.getParameter(SavedConfiguration.SERVER_PORT));
+		configOptionsPanel.setPortNumberText(PropertyManager
+				.getParameter(PropertyManager.SERVER_PORT));
 
 		status.setText(INITIAL_STATUS);
 
 		this.pack();
-		this.setLocation(ApplicationRunner.getCenterOnScreen(this));
+		this.setLocation(App.getCenterOnScreen(this));
 		this.setVisible(true);
 	}
 
@@ -179,7 +176,6 @@ public class ServerWindow extends JFrame implements Observer {
 			configOptionsPanel.setLocationFieldEnabled(false);
 			configOptionsPanel.setPortNumberEnabled(false);
 			configOptionsPanel.setBrowseButtonEnabled(false);
-			configOptionsPanel.setRmiOptionEnabled(false);
 
 			startServerButton.setEnabled(false);
 

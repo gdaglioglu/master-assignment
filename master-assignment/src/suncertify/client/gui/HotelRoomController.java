@@ -10,7 +10,7 @@ import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
-import suncertify.app.ApplicationRunner;
+import suncertify.app.App;
 import suncertify.db.DBMain;
 import suncertify.db.RecordNotFoundException;
 import suncertify.domain.HotelRoom;
@@ -135,17 +135,15 @@ public class HotelRoomController {
 		} else {
 			this.logger
 					.severe("Client started with incorrect Application Mode. Exiting application");
-			ApplicationRunner
-					.handleException("Client started with incorrect Application Mode. Exiting application");
+			App.handleException("Client started with incorrect Application Mode. Exiting application");
 
 		}
 
 		try {
 			this.hotelRoomModel = this.getAllHotelRooms();
 		} catch (GuiControllerException e) {
-			ApplicationRunner
-					.handleException("Failed to acquire an initial hotel room list."
-							+ "\nPlease check the DB connection.");
+			App.handleException("Failed to acquire an initial hotel room list."
+					+ "\nPlease check the DB connection.");
 		}
 		this.hotelRoomView.updateTable(this.hotelRoomModel);
 	}
@@ -284,10 +282,8 @@ public class HotelRoomController {
 				try {
 					HotelRoomController.this.lastSearchCriteria = HotelRoomController.this
 							.getSearchCriteria();
-					final boolean exactMatch = Boolean
-							.valueOf(SavedConfiguration.getSavedConfiguration()
-									.getParameter(
-											SavedConfiguration.EXACT_MATCH));
+					final boolean exactMatch = Boolean.valueOf(PropertyManager
+							.getParameter(PropertyManager.EXACT_MATCH));
 					hotelRoomView
 							.updateTable(HotelRoomController.this
 									.findRoom(
@@ -301,7 +297,7 @@ public class HotelRoomController {
 					if (rootException instanceof PatternSyntaxException) {
 						msg += ("\n" + rootException.getMessage());
 					}
-					ApplicationRunner.handleException(msg);
+					App.handleException(msg);
 				}
 
 			}
@@ -314,8 +310,7 @@ public class HotelRoomController {
 			 */
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				SavedConfiguration.getSavedConfiguration().setParameter(
-						SavedConfiguration.EXACT_MATCH,
+				PropertyManager.setParameter(PropertyManager.EXACT_MATCH,
 						HotelRoomController.this.hotelRoomView
 								.isExactMatchSelected());
 			}
@@ -341,26 +336,22 @@ public class HotelRoomController {
 							boolean booked = HotelRoomController.this.bookRoom(
 									customerId, hotelRoomRecordNo);
 							if (booked == false) {
-								ApplicationRunner
-										.handleException(ALREADY_BOOKED_MSG);
+								App.handleException(ALREADY_BOOKED_MSG);
 							}
 							final boolean exactMatch = Boolean
-									.valueOf(SavedConfiguration
-											.getSavedConfiguration()
-											.getParameter(
-													SavedConfiguration.EXACT_MATCH));
+									.valueOf(PropertyManager
+											.getParameter(PropertyManager.EXACT_MATCH));
 							hotelRoomView
 									.updateTable(HotelRoomController.this
 											.findRoom(
 													HotelRoomController.this.lastSearchCriteria,
 													exactMatch));
 						} catch (GuiControllerException gce) {
-							ApplicationRunner
-									.handleException("Booking operation failed.");
+							App.handleException("Booking operation failed.");
 						}
 					}
 				} else {
-					ApplicationRunner.showWarning("Please select a row");
+					App.showWarning("Please select a row");
 					JOptionPane.showMessageDialog(
 							HotelRoomController.this.hotelRoomView,
 							"Please select a row");
@@ -412,9 +403,8 @@ public class HotelRoomController {
 
 	private HotelRoomModel getAllHotelRooms() throws GuiControllerException {
 		lastSearchCriteria = getSearchCriteria();
-		final boolean exactMatch = Boolean.valueOf(SavedConfiguration
-				.getSavedConfiguration().getParameter(
-						SavedConfiguration.EXACT_MATCH));
+		final boolean exactMatch = Boolean.valueOf(PropertyManager
+				.getParameter(PropertyManager.EXACT_MATCH));
 		return this.findRoom(lastSearchCriteria, exactMatch);
 
 	}
