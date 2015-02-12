@@ -1,4 +1,4 @@
-package suncertify.client.gui;
+package suncertify.client.ui;
 
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
@@ -124,7 +124,7 @@ public class SearchPanel extends JPanel {
 	}
 
 	public JCheckBox getExactMatch() {
-		return exactMatch;
+		return this.exactMatch;
 	}
 
 	public String isExactMatchSelected() {

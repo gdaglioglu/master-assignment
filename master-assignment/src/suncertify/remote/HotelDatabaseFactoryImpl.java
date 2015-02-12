@@ -36,7 +36,7 @@ class HotelDatabaseFactoryImpl extends UnicastRemoteObject implements
 
 	/** {@inheritDoc} */
 	@Override
-	public HotelDatabaseRemote getClient() throws RemoteException {
+	public DBRemote getClient() throws RemoteException {
 		return new HotelDatabaseRemoteImpl(dbLocation);
 	}
 }

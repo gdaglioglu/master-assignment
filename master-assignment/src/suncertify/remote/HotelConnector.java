@@ -41,7 +41,7 @@ public class HotelConnector {
 	 *             Indicates that a remote instance of the DBMain interface
 	 *             cannot be created.
 	 */
-	public static HotelDatabaseRemote getRemote(String hostname, String port)
+	public static DBRemote getRemote(String hostname, String port)
 			throws RemoteException {
 		String url = "rmi://" + hostname + ":" + port + "/HotelMediator";
 		logger.log(Level.INFO, "URL is: " + url);

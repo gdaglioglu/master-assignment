@@ -1,4 +1,4 @@
-package suncertify.client.gui;
+package suncertify.client.ui;
 
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;

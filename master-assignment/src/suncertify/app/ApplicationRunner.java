@@ -1,9 +1,9 @@
 package suncertify.app;
 
-import static suncertify.client.gui.ApplicationMode.NETWORK_CLIENT;
-import static suncertify.client.gui.ApplicationMode.STANDALONE_CLIENT;
-import suncertify.client.gui.HotelRoomController;
-import suncertify.client.gui.ServerWindow;
+import static suncertify.client.ui.ApplicationMode.NETWORK_CLIENT;
+import static suncertify.client.ui.ApplicationMode.STANDALONE_CLIENT;
+import suncertify.client.ui.HotelRoomController;
+import suncertify.client.ui.ServerWindow;
 
 /**
  * The URLyBird application loader - a facade to the two modes the application
@@ -41,11 +41,11 @@ public class ApplicationRunner {
 		if (args.length == 0) {
 			final HotelRoomController hotelRoomController = new HotelRoomController(
 					NETWORK_CLIENT);
-			hotelRoomController.init();
+			hotelRoomController.control();
 		} else if (args.length == 1 && "alone".equals(args[0])) {
 			final HotelRoomController hotelRoomController = new HotelRoomController(
 					STANDALONE_CLIENT);
-			hotelRoomController.init();
+			hotelRoomController.control();
 		} else if (args.length == 1 && "server".equals(args[0])) {
 			new ServerWindow();
 		} else {

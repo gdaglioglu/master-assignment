@@ -1,4 +1,4 @@
-package suncertify.client.gui;
+package suncertify.client.ui;
 
 /** Specifies the modes the application can run in. */
 public enum ApplicationMode {

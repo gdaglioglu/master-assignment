@@ -19,10 +19,10 @@ import suncertify.db.RemoteDBMainImpl;
  * primarily as a wrapper for the database.
  *
  * @author Gokhan Daglioglu
- * @see suncertify.remote.HotelDatabaseRemote
+ * @see suncertify.remote.DBRemote
  */
 public class HotelDatabaseRemoteImpl extends UnicastRemoteObject implements
-		HotelDatabaseRemote {
+		DBRemote {
 	/**
 	 * A version number for this class so that serialization can occur without
 	 * worrying about the underlying class changing between serialization and

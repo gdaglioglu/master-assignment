@@ -10,5 +10,5 @@ import suncertify.db.RemoteDBMain;
  *
  * @author gdaglioglu
  */
-public interface HotelDatabaseRemote extends Remote, RemoteDBMain {
+public interface DBRemote extends Remote, RemoteDBMain {
 }

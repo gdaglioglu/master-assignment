@@ -5,4 +5,4 @@
  * @author gdaglioglu
  *
  */
-package suncertify.client.gui;
+package suncertify.client.ui;

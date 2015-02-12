@@ -15,5 +15,5 @@ interface HotelDatabaseFactory extends Remote {
      * @return a unique database connectivity class.
      * @throws RemoteException on network errors.
      */
-    public HotelDatabaseRemote getClient() throws RemoteException;
+    public DBRemote getClient() throws RemoteException;
 }

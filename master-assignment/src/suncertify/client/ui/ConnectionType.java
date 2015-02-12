@@ -1,4 +1,4 @@
-package suncertify.client.gui;
+package suncertify.client.ui;
 
 /** Specifies the types of connections that can be made to the server. */
 public enum ConnectionType {

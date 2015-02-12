@@ -1,4 +1,4 @@
-package suncertify.client.gui;
+package suncertify.client.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -93,16 +93,16 @@ public class DatabaseLocationDialog extends WindowAdapter implements
 	 *            Defines the Component that is to be the parent of this dialog
 	 *            box. For information on how this is used, see
 	 *            <code>JOptionPane</code>
-	 * @param connectionMode
+	 * @param applicationMode
 	 *            Specifies the type of connection (standalone or networked)
 	 * @see JOptionPane
 	 */
-	public DatabaseLocationDialog(ApplicationMode connectionMode) {
-		configOptions = (new ConfigOptions(connectionMode));
+	public DatabaseLocationDialog(ApplicationMode applicationMode) {
+		configOptions = (new ConfigOptions(applicationMode));
 		configOptions.getObservable().addObserver(this);
 
 		// the port and connection type are irrelevant in standalone mode
-		if (connectionMode == ApplicationMode.STANDALONE_CLIENT) {
+		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
 			validPort = true;
 			validCnx = true;
 			networkType = ConnectionType.DIRECT;

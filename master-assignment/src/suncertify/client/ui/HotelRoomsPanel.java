@@ -1,4 +1,4 @@
-package suncertify.client.gui;
+package suncertify.client.ui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

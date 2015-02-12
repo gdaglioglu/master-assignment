@@ -1,4 +1,4 @@
-package suncertify.client.gui;
+package suncertify.client.ui;
 
 import java.util.logging.Logger;
 
@@ -45,7 +45,7 @@ class SearchHotelRoom {
 	/**
 	 * The internal reference to the the currently displayed table data.
 	 */
-	public HotelRoomModel tableData;
+	public HotelRoomTableModel tableData;
 	/**
 	 * Holds a copy of the last user defined search String.
 	 */
