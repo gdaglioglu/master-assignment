@@ -3,7 +3,7 @@ package suncertify.client.ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.PatternSyntaxException;
 
@@ -16,6 +16,7 @@ import suncertify.db.DBMain;
 import suncertify.db.RecordNotFoundException;
 import suncertify.domain.HotelRoom;
 import suncertify.remote.DBRemote;
+import suncertify.server.DataService;
 
 /**
  * Controller for the {@link HotelRoomView} GUI class. Handles all interactions
@@ -47,19 +48,9 @@ public class HotelRoomController {
 	private HotelRoomView hotelRoomView;
 
 	/**
-	 * The mode the application is currently running in.
-	 */
-	private final ApplicationMode applicationMode;
-
-	/**
 	 * The reference to a local datafile.
 	 */
-	private DBMain localConnection;
-
-	/**
-	 * The reference to a remote datafile.
-	 */
-	private DBRemote remoteConnection;
+	private DataService dataService;
 
 	/**
 	 * The search listener, attached to the search button in the
@@ -91,56 +82,11 @@ public class HotelRoomController {
 	 * @param applicationMode
 	 *            The mode the application is currently running in
 	 */
-	public HotelRoomController(ApplicationMode applicationMode) {
-		this.applicationMode = applicationMode;
+	public HotelRoomController(DataService dataservice) {
+		dataService = dataservice;
 
-		// find out where our database is
-		DatabaseLocationDialog dbLocationDialog = new DatabaseLocationDialog(
-				applicationMode);
-
-		if (dbLocationDialog.userCanceled()) {
-			System.exit(0);
-		}
-
-		try {
-			switch (dbLocationDialog.getNetworkType()) {
-			case DIRECT:
-				localConnection = suncertify.direct.HotelConnector
-						.getLocal(dbLocationDialog.getLocation());
-				break;
-			case RMI:
-				remoteConnection = suncertify.remote.HotelConnector.getRemote(
-						dbLocationDialog.getLocation(),
-						dbLocationDialog.getPort());
-				break;
-			default:
-				throw new IllegalArgumentException(
-						"Invalid connection type specified");
-			}
-		} catch (ClassNotFoundException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-			// throw new GuiControllerException(e);
-		} catch (java.rmi.RemoteException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-			// throw new GuiControllerException(e);
-		} catch (java.io.IOException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-			// throw new GuiControllerException(e);
-		}
-
-		// Start ClientWindow so we can pop-up a ConfigDialog
-		if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
-			this.hotelRoomView = new HotelRoomView(
-					"URLyBird Discounted Hotel Rooms - Standalone Mode");
-		} else if (applicationMode == ApplicationMode.NETWORK_CLIENT) {
-			this.hotelRoomView = new HotelRoomView(
-					"URLyBird Discounted Hotel Rooms - Network Mode");
-		} else {
-			this.logger
-					.severe("Client started with incorrect Application Mode. Exiting application");
-			App.handleException("Client started with incorrect Application Mode. Exiting application");
-
-		}
+		this.hotelRoomView = new HotelRoomView(
+				"URLyBird Discounted Hotel Rooms - Client View");
 
 		try {
 			this.hotelRoomModel = this.getAllHotelRooms();
@@ -149,6 +95,7 @@ public class HotelRoomController {
 					+ "\nPlease check the DB connection.");
 		}
 		this.hotelRoomView.updateTable(this.hotelRoomModel);
+		this.control();
 	}
 
 	private HotelRoomTableModel getAllHotelRooms()
@@ -180,56 +127,15 @@ public class HotelRoomController {
 			String[] searchCriteria, boolean exactMatch)
 			throws GuiControllerException {
 		HotelRoomTableModel hotelRoomModel = new HotelRoomTableModel();
-		int[] rawResults;
 		try {
-			if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
-				rawResults = this.localConnection.find(searchCriteria);
-
-				for (final int recNo : rawResults) {
-					String[] hotelRoom = this.localConnection.read(recNo);
-					if (!exactMatch
-							|| this.isExactMatch(hotelRoom, searchCriteria)) {
-						hotelRoomModel.addHotelRoomRecord(hotelRoom);
-					}
-
-				}
-			} else {
-				rawResults = this.remoteConnection.find(searchCriteria);
-				for (final int recNo : rawResults) {
-					String[] hotelRoom = this.remoteConnection.read(recNo);
-					if (!exactMatch
-							|| this.isExactMatch(hotelRoom, searchCriteria)) {
-						hotelRoomModel.addHotelRoomRecord(hotelRoom);
-					}
-				}
-			}
-
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-			throw new GuiControllerException(e);
+			final List<HotelRoom> records = this.dataService.find(
+					searchCriteria, exactMatch);
+			hotelRoomModel.clearData();
+			hotelRoomModel.addAll(records);
+		} catch (final RemoteException exp) {
+			App.showErrorAndExit("The remote server is no longer available.");
 		}
 		return hotelRoomModel;
-	}
-
-	/**
-	 * This method is used to determine if a hotel room exactly matches search
-	 * criteria.
-	 * 
-	 * @param hotelRoom
-	 *            The hotel room to check.
-	 * @param searchCriteria
-	 *            The search criteria used to check the {@link HotelRoom}.
-	 * @return true if the hotel room is an exact match otherwise false.
-	 */
-	private boolean isExactMatch(final String[] hotelRoom,
-			final String[] searchCriteria) {
-		for (int i = 0; i < searchCriteria.length; i++) {
-			if ((searchCriteria[i] != null) && !searchCriteria[i].equals("")
-					&& !hotelRoom[i].equals(searchCriteria[i])) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -239,7 +145,7 @@ public class HotelRoomController {
 	 * them to the relevant <code>JButtons</code> in the
 	 * <code>ClientWindow</code>
 	 */
-	public void control() {
+	private void control() {
 
 		this.searchListener = new ActionListener() {
 
@@ -365,62 +271,14 @@ public class HotelRoomController {
 
 		logger.entering("HotelRoomController", "bookRoom",
 				"Record number to be booked: " + hotelRoomRecordNo);
-		String[] hotelRoom = null;
 		try {
-			if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
-				hotelRoom = this.localConnection.read(hotelRoomRecordNo);
-			} else {
-				hotelRoom = this.remoteConnection.read(hotelRoomRecordNo);
-			}
-			if (hotelRoom[6] != null && hotelRoom[6].trim().length() > 0) {
-				return false;
-			}
-
-		} catch (RecordNotFoundException rnfex) {
-			logger.log(Level.SEVERE, rnfex.getMessage(), rnfex);
-			System.err.println("Error reading record at position : "
-					+ rnfex.getMessage());
-		} catch (Exception ex) {
-			if (ex instanceof RemoteException) {
-				logger.log(Level.SEVERE, ex.getMessage(), ex);
-				System.err.println("Problem with remote connection : "
-						+ ex.getMessage());
-			}
-		}
-		HotelRoom room = new HotelRoom(hotelRoom);
-		room.setOwner(customerId);
-		try {
-			if (applicationMode == ApplicationMode.STANDALONE_CLIENT) {
-				this.localConnection.lock(hotelRoomRecordNo);
-				this.localConnection.update(hotelRoomRecordNo, room.toArray());
-			} else {
-				this.remoteConnection.lock(hotelRoomRecordNo);
-				this.remoteConnection.update(hotelRoomRecordNo, room.toArray());
-			}
-		} catch (RecordNotFoundException rnfex) {
-			logger.log(Level.SEVERE, rnfex.getMessage(), rnfex);
-			System.err.println("Error attempting to update : "
-					+ rnfex.getMessage());
-		} catch (Exception ex) {
-			if (ex instanceof RemoteException) {
-				logger.log(Level.SEVERE, ex.getMessage(), ex);
-				System.err.println("Problem with remote connection : "
-						+ ex.getMessage());
-			}
-
-		} finally {
-			try {
-				this.localConnection.unlock(hotelRoomRecordNo);
-			} catch (RecordNotFoundException rnfex) {
-				logger.log(Level.SEVERE, rnfex.getMessage(), rnfex);
-			} catch (Exception ex) {
-				if (ex instanceof RemoteException) {
-					logger.log(Level.SEVERE, ex.getMessage(), ex);
-					System.err.println("Problem with remote connection : "
-							+ ex.getMessage());
-				}
-			}
-
+			HotelRoom hotelRoom = this.dataService.read(hotelRoomRecordNo);
+			hotelRoom.setOwner(customerId);
+			this.dataService.update(hotelRoomRecordNo, hotelRoom);
+		} catch (final RecordNotFoundException e) {
+			App.showError(e.getMessage());
+		} catch (final RemoteException exp) {
+			App.showErrorAndExit("The remote server is no longer available.");
 		}
 		logger.exiting("HotelRoomController", "bookRoom");
 		return true;

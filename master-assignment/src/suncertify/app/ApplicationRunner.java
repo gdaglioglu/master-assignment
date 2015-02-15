@@ -1,9 +1,9 @@
 package suncertify.app;
 
-import static suncertify.client.ui.ApplicationMode.NETWORK_CLIENT;
+import static suncertify.client.ui.ApplicationMode.SERVER;
 import static suncertify.client.ui.ApplicationMode.STANDALONE_CLIENT;
-import suncertify.client.ui.HotelRoomController;
-import suncertify.client.ui.ServerWindow;
+import suncertify.client.ui.ClientRunner;
+import suncertify.client.ui.ServerRunner;
 
 /**
  * The URLyBird application loader - a facade to the two modes the application
@@ -21,6 +21,7 @@ public class ApplicationRunner {
 	 *            Holds the command line inputs.
 	 */
 	public static void main(String[] args) {
+		// args = new String[] { "alone" };
 		// args = new String[] { "server" };
 		args = new String[] {};
 		new ApplicationRunner(args);
@@ -39,15 +40,11 @@ public class ApplicationRunner {
 		App.setLookAndFeel();
 
 		if (args.length == 0) {
-			final HotelRoomController hotelRoomController = new HotelRoomController(
-					NETWORK_CLIENT);
-			hotelRoomController.control();
+			new ClientRunner();
 		} else if (args.length == 1 && "alone".equals(args[0])) {
-			final HotelRoomController hotelRoomController = new HotelRoomController(
-					STANDALONE_CLIENT);
-			hotelRoomController.control();
+			new ServerRunner(STANDALONE_CLIENT);
 		} else if (args.length == 1 && "server".equals(args[0])) {
-			new ServerWindow();
+			new ServerRunner(SERVER);
 		} else {
 			System.err
 					.println("Command line options are case sensitive and may be only one of:");

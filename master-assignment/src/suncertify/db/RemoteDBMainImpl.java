@@ -1,9 +1,6 @@
 package suncertify.db;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -31,15 +28,9 @@ public class RemoteDBMainImpl implements RemoteDBMain {
 	 * @throws RemoteException
 	 */
 	public RemoteDBMainImpl(String dbLocation) throws RemoteException {
-		try {
-			database = new Data(dbLocation);
-		} catch (FileNotFoundException fex) {
-			logger.log(Level.SEVERE, "File not found at: " + dbLocation
-					+ "Exception is: " + fex.getMessage());
-		} catch (IOException iex) {
-			logger.log(Level.SEVERE, "I/O problem with file at: " + dbLocation
-					+ "Exception is: " + iex.getMessage());
-		}
+
+		database = new Data(dbLocation);
+
 	}
 
 	/**

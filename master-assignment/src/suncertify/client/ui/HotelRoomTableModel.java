@@ -1,6 +1,7 @@
 package suncertify.client.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -33,7 +34,7 @@ public class HotelRoomTableModel extends AbstractTableModel {
 	/**
 	 * Holds all Hotel instances displayed in the main table.
 	 */
-	private ArrayList<String[]> hotelRoomRecords = new ArrayList<String[]>(7);
+	private ArrayList<HotelRoom> hotelRoomRecords = new ArrayList<HotelRoom>();
 
 	/**
 	 * Adds a row of hotel room data to the table.
@@ -42,7 +43,9 @@ public class HotelRoomTableModel extends AbstractTableModel {
 	 *            a <code>String</code> array representing a hotel room
 	 */
 	public void addHotelRoomRecord(String[] hotelRoomRecord) {
-		this.hotelRoomRecords.add(hotelRoomRecord);
+		this.hotelRoomRecords.add(new HotelRoom(hotelRoomRecord[0],
+				hotelRoomRecord[1], hotelRoomRecord[2], hotelRoomRecord[3],
+				hotelRoomRecord[4], hotelRoomRecord[5], hotelRoomRecord[6]));
 	}
 
 	/**
@@ -52,11 +55,28 @@ public class HotelRoomTableModel extends AbstractTableModel {
 	 *            The {@link HotelRoom} object to add to the table.
 	 */
 	public void addHotelRecord(HotelRoom hotelRoom) {
-		String[] hotelRoomRecord = new String[] { hotelRoom.getName(),
-				hotelRoom.getLocation(), hotelRoom.getSize(),
-				hotelRoom.getSmoking(), hotelRoom.getRate(),
-				hotelRoom.getDate(), hotelRoom.getOwner() };
-		this.hotelRoomRecords.add(hotelRoomRecord);
+		this.hotelRoomRecords.add(hotelRoom);
+	}
+
+	/**
+	 * Clear all records from the table model.
+	 */
+	public void clearData() {
+		this.hotelRoomRecords.clear();
+		// this.fireTableDataChanged();
+	}
+
+	/**
+	 * Add all the Contractors from a list to the table model
+	 * 
+	 * @param records
+	 *            The list of Contractors to add.
+	 */
+	public void addAll(final List<HotelRoom> records) {
+		for (final HotelRoom rec : records) {
+			addHotelRecord(rec);
+		}
+		// this.fireTableDataChanged();
 	}
 
 	/**
@@ -80,8 +100,7 @@ public class HotelRoomTableModel extends AbstractTableModel {
 	 */
 	@Override
 	public Object getValueAt(int row, int column) {
-		String[] rowValues = this.hotelRoomRecords.get(row);
-		return rowValues[column];
+		return this.hotelRoomRecords.get(row).toArray()[column];
 	}
 
 	/**
@@ -89,7 +108,7 @@ public class HotelRoomTableModel extends AbstractTableModel {
 	 */
 	@Override
 	public void setValueAt(Object obj, int row, int column) {
-		Object[] rowValues = this.hotelRoomRecords.get(row);
+		Object[] rowValues = this.hotelRoomRecords.get(row).toArray();
 		rowValues[column] = obj;
 	}
 

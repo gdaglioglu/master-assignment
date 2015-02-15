@@ -32,6 +32,35 @@ public class App {
 	}
 
 	/**
+	 * This method is a convenience method to show an error dialog to the user.
+	 * 
+	 * @param msg
+	 *            The message you wish to display.
+	 */
+	public static void showError(final String msg) {
+		logWarning(msg);
+		JOptionPane.showMessageDialog(null, msg, "Error",
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	/**
+	 * As with {@link #showError(String)} this method is a convenience method to
+	 * show an error dialog to the user. However once the user dismisses the
+	 * error dialog this method will then exit the application with an error
+	 * code of 1.
+	 * 
+	 * @param msg
+	 *            The message you wish to display before exiting.
+	 */
+	public static void showErrorAndExit(final String msg) {
+		logError(msg);
+		JOptionPane.showMessageDialog(null, msg
+				+ "\nApplication will now exit!", "Fatal error",
+				JOptionPane.ERROR_MESSAGE);
+		System.exit(2);
+	}
+
+	/**
 	
 	 * 
 	 */
