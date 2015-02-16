@@ -1,4 +1,4 @@
-package suncertify.client.ui;
+package suncertify.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

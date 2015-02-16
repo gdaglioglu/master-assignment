@@ -1,4 +1,4 @@
-package suncertify.app;
+package suncertify.shared;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -13,6 +13,20 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class App {
+
+	/**
+	 * This method will display a usage message on the command line and exit
+	 * with an error.
+	 */
+	public static void printUsage() {
+		System.out.println("Usage: java -jar <path_and_filename> [mode]");
+		System.out.println("Mode can be one of,");
+		System.out.println("\\tserver:\\tTo start networked server.");
+		System.out
+				.println("\\alone:\\tTo start unnetworked standalone application.");
+		System.out.println("\\No mode:\\tTo start networked client.");
+		System.exit(1);
+	}
 
 	/**
 	 * Prompts the user with an error message in an alert window.
@@ -64,7 +78,7 @@ public class App {
 	
 	 * 
 	 */
-	static void setLookAndFeel() {
+	public static void setLookAndFeel() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (UnsupportedLookAndFeelException uex) {

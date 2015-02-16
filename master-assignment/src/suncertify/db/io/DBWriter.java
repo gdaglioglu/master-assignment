@@ -6,18 +6,17 @@ import static suncertify.db.io.DBSchema.RECORD_DELETED;
 import static suncertify.db.io.DBSchema.RECORD_LENGTH;
 import static suncertify.db.io.DBSchema.RECORD_VALID;
 import static suncertify.db.io.DBSchema.US_ASCII;
+import static suncertify.shared.App.showErrorAndExit;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 
-//import suncertify.shared.App;
-
 /**
  * This class is responsible for writing records to the database file.
  * 
- * @author Sean Dunne
+ * @author Gokhan Daglioglu
  */
 public class DBWriter {
 
@@ -46,12 +45,11 @@ public class DBWriter {
 	public boolean write(final int recNo, final String[] data) {
 		try {
 			final int pos = RECORD_LENGTH * recNo;
-
 			this.lock.lock();
 			this.writeRecord(pos, data);
 			this.lock.unlock();
 		} catch (final IOException e) {
-		//	App.showErrorAndExit("Cannot write to database file, changes cannot be persisted.");
+			showErrorAndExit("Cannot write to database file, changes cannot be persisted.");
 		}
 		return true;
 	}
@@ -69,10 +67,10 @@ public class DBWriter {
 		try {
 			this.lock.lock();
 			this.is.seek(pos);
-			this.is.writeShort(RECORD_DELETED);
+			this.is.writeByte(RECORD_DELETED);
 			this.lock.unlock();
 		} catch (final IOException e) {
-		//	App.showErrorAndExit("Cannot write to database file, changes cannot be persisted.");
+			showErrorAndExit("Cannot write to database file, changes cannot be persisted.");
 		}
 		return true;
 	}
@@ -95,8 +93,7 @@ public class DBWriter {
 				if (flag != RECORD_VALID) {
 					this.writeRecord(recordPos, data);
 
-					final long recordIndex = (recordPos)
-							/ RECORD_LENGTH;
+					final long recordIndex = (recordPos) / RECORD_LENGTH;
 					return (int) recordIndex;
 				}
 				// skip the record
@@ -107,7 +104,7 @@ public class DBWriter {
 			this.writeRecord(this.is.getFilePointer(), data);
 			this.lock.unlock();
 		} catch (final IOException e) {
-		//	App.showErrorAndExit("Cannot write to database file.");
+			showErrorAndExit("Cannot write to database file.");
 		}
 		return -1;
 	}
@@ -126,8 +123,8 @@ public class DBWriter {
 			throws IOException {
 		this.is.seek(pos);
 
-		// write 2 byte flag to indicate not deleted
-		this.is.writeShort(RECORD_VALID);
+		// write 0 byte flag to indicate not deleted
+		this.is.writeByte(RECORD_VALID);
 		for (int i = 0; i < data.length; i++) {
 			final byte[] updatedData = Arrays.copyOf(
 					data[i].getBytes(US_ASCII), FIELD_LENGTHS[i]);

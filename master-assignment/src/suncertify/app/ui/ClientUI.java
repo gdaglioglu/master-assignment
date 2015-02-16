@@ -1,7 +1,7 @@
-package suncertify.client.ui;
+package suncertify.app.ui;
 
-import static suncertify.client.ui.PropertyManager.SERVER_ADDRESS;
-import static suncertify.client.ui.RmiServer.RMI_SERVER;
+import static suncertify.app.NetworkApplication.RMI_SERVER;
+import static suncertify.ui.PropertyManager.SERVER_ADDRESS;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,8 +20,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import suncertify.app.App;
+import suncertify.app.Application;
 import suncertify.server.DataService;
+import suncertify.shared.App;
+import suncertify.ui.PropertyManager;
 
 /**
  * This class is responsible for creating, displaying and populating the
@@ -30,27 +32,20 @@ import suncertify.server.DataService;
  * 
  * @author Gokhan Daglioglu
  */
-public class ClientRunner extends JFrame {
+public class ClientUI extends JFrame {
 
 	private static final long serialVersionUID = 6636073318499699241L;
 	private JTextField textField;
 	private DataService dataService;
 	private JButton ok;
-
-	/**
-	 * This method is responsible for creating the NetworkedClientUI JFrame.
-	 * 
-	 * @return A reference to the NetworkedClientUI JFrame.
-	 */
-	public static ClientRunner start() {
-		return new ClientRunner();
-	}
+	private Application application;
 
 	/**
 	 * Creates the JFrame, sets it's properties, adds the contents and displays
 	 * the JFrame.
 	 */
-	public ClientRunner() {
+	public ClientUI(Application application) {
+		this.application = application;
 		this.setTitle("Server Hostname");
 		this.setSize(300, 130);
 		this.setResizable(false);
@@ -135,7 +130,7 @@ public class ClientRunner extends JFrame {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			ClientRunner.this.ok.doClick();
+			ClientUI.this.ok.doClick();
 		}
 	}
 
@@ -151,7 +146,7 @@ public class ClientRunner extends JFrame {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent event) {
-			final String hostname = ClientRunner.this.textField.getText();
+			final String hostname = ClientUI.this.textField.getText();
 
 			if (hostname.equals("")) {
 				App.showError("You must enter a hostname for the server.");
@@ -159,13 +154,11 @@ public class ClientRunner extends JFrame {
 				try {
 					final Registry registry = LocateRegistry
 							.getRegistry(hostname);
-					ClientRunner.this.dataService = (DataService) registry
+					ClientUI.this.dataService = (DataService) registry
 							.lookup(RMI_SERVER);
 					PropertyManager.setParameter(SERVER_ADDRESS, hostname);
-
-					ClientRunner.this.dispose();
-					new HotelRoomController(ClientRunner.this.dataService);
-
+					ClientUI.this.dispose();
+					ClientUI.this.application.start();
 				} catch (final RemoteException e) {
 					App.showError("Cannot connect to the remote server.\nThe hostname may be incorrect or the server could be down.");
 				} catch (final NotBoundException e) {
@@ -189,4 +182,5 @@ public class ClientRunner extends JFrame {
 			System.exit(0);
 		}
 	}
+
 }

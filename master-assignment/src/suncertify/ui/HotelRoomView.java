@@ -1,4 +1,4 @@
-package suncertify.client.ui;
+package suncertify.ui;
 
 import java.util.logging.Logger;
 
@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import suncertify.app.App;
+import suncertify.shared.App;
 
 /**
  * The main application window of the URLyBird client application.

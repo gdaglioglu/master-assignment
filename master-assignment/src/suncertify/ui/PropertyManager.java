@@ -1,4 +1,4 @@
-package suncertify.client.ui;
+package suncertify.ui;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import suncertify.app.App;
+import suncertify.shared.App;
 
 /**
  * Provides read/write access to the user's saved configuration parameters on

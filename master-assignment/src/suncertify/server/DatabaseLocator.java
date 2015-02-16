@@ -5,7 +5,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import suncertify.client.ui.PropertyManager;
+import suncertify.ui.PropertyManager;
 
 /**
  * This class is responsible for prompting the user to enter the location of the

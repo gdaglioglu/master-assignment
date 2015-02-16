@@ -5,4 +5,4 @@
  * @author gdaglioglu
  *
  */
-package suncertify.remote;
+package suncertify.shared;

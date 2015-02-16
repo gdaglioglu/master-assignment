@@ -1,4 +1,4 @@
-package suncertify.client.ui;
+package suncertify.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,13 +10,12 @@ import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
-import suncertify.app.App;
-import suncertify.app.ApplicationRunner;
 import suncertify.db.DBMain;
 import suncertify.db.RecordNotFoundException;
 import suncertify.domain.HotelRoom;
-import suncertify.remote.DBRemote;
+import suncertify.init.ApplicationRunner;
 import suncertify.server.DataService;
+import suncertify.shared.App;
 
 /**
  * Controller for the {@link HotelRoomView} GUI class. Handles all interactions

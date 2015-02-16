@@ -1,6 +1,6 @@
-package suncertify.client.ui;
+package suncertify.ui;
 
-import suncertify.client.ui.HotelRoomController;
+import suncertify.ui.HotelRoomController;
 
 /**
  * Holds all exceptions that may occur in the <code>HotelRoomController</code>.

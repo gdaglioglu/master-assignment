@@ -1,6 +1,6 @@
-package suncertify.client.ui;
+package suncertify.app.ui;
 
-import static suncertify.client.ui.PropertyManager.DATABASE_LOCATION;
+import static suncertify.ui.PropertyManager.DATABASE_LOCATION;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -18,28 +18,26 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import suncertify.app.App;
+import suncertify.app.Application;
 import suncertify.server.DatabaseLocator;
+import suncertify.shared.App;
+import suncertify.ui.PropertyManager;
 
-/**
- * This class is responsible for creating, displaying and populating the Server
- * user interface.
- * 
- * @author Gokhan Daglioglu
- */
-public abstract class Server extends JFrame {
+public class ServerUI extends JFrame {
 
 	private static final long serialVersionUID = 4825206061500231551L;
 	private JTextField dbFileLocTxt;
 	private JButton browseBtn;
 	private AbstractButton shutdownBtn;
 	private JButton startBtn;
+	private Application application;
 
 	/**
 	 * Creates the JFrame, sets it's properties, adds the contents and displays
 	 * the JFrame.
 	 */
-	Server() {
+	public ServerUI(Application application) {
+		this.application = application;
 		this.setTitle("URlybird Server application");
 		this.setSize(600, 100);
 		this.setResizable(false);
@@ -139,7 +137,7 @@ public abstract class Server extends JFrame {
 		public void actionPerformed(final ActionEvent arg0) {
 			final String location = DatabaseLocator.getLocation();
 			if (location != null) {
-				Server.this.dbFileLocTxt.setText(location);
+				ServerUI.this.dbFileLocTxt.setText(location);
 			}
 		}
 	}
@@ -155,13 +153,13 @@ public abstract class Server extends JFrame {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			if (Server.this.dbFileLocTxt.getText().equals("")) {
+			if (ServerUI.this.dbFileLocTxt.getText().equals("")) {
 				App.showError("You must choose a database file before the server can start.");
 			} else {
-				Server.this.start();
+				ServerUI.this.application.start();
 
-				Server.this.startBtn.setEnabled(false);
-				Server.this.browseBtn.setEnabled(false);
+				ServerUI.this.startBtn.setEnabled(false);
+				ServerUI.this.browseBtn.setEnabled(false);
 			}
 		}
 	}
@@ -180,6 +178,4 @@ public abstract class Server extends JFrame {
 			System.exit(0);
 		}
 	}
-
-	abstract void start();
 }

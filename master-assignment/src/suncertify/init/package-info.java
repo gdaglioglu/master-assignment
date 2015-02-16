@@ -5,4 +5,4 @@
  * @author gdaglioglu
  *
  */
-package suncertify.direct;
+package suncertify.init;

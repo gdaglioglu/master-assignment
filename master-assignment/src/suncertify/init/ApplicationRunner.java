@@ -1,9 +1,10 @@
-package suncertify.app;
+package suncertify.init;
 
-import static suncertify.client.ui.ApplicationMode.SERVER;
-import static suncertify.client.ui.ApplicationMode.STANDALONE_CLIENT;
-import suncertify.client.ui.ClientRunner;
-import suncertify.client.ui.ServerRunner;
+import static suncertify.shared.App.printUsage;
+import static suncertify.shared.App.setLookAndFeel;
+import suncertify.app.NetworkApplication;
+import suncertify.app.NetworkClientApplication;
+import suncertify.app.StandAloneApplication;
 
 /**
  * The URLyBird application loader - a facade to the two modes the application
@@ -37,21 +38,17 @@ public class ApplicationRunner {
 	 */
 	public ApplicationRunner(String[] args) {
 
-		App.setLookAndFeel();
+		setLookAndFeel();
 
 		if (args.length == 0) {
-			new ClientRunner();
+			new NetworkClientApplication().launch();
 		} else if (args.length == 1 && "alone".equals(args[0])) {
-			new ServerRunner(STANDALONE_CLIENT);
+			new StandAloneApplication().launch();
+
 		} else if (args.length == 1 && "server".equals(args[0])) {
-			new ServerRunner(SERVER);
+			new NetworkApplication().launch();
 		} else {
-			System.err
-					.println("Command line options are case sensitive and may be only one of:");
-			System.err
-					.println("\"\"       - (no command line option): starts networked client");
-			System.err.println("\"alone\"  - starts standalone client");
-			System.err.println("\"server\" - starts server");
+			printUsage();
 		}
 
 	}

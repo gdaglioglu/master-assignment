@@ -1,24 +1,28 @@
-package suncertify.client.ui;
+package suncertify.app;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import suncertify.app.App;
+import suncertify.app.ui.ServerUI;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
+import suncertify.shared.App;
 
-public class RmiServer extends Server {
+public class NetworkApplication implements Application {
 
-	private static final long serialVersionUID = 3630214414950489684L;
 	public static final String RMI_SERVER = "remote.database.server";
+
+	@Override
+	public void launch() {
+		new ServerUI(this);
+	}
 
 	@Override
 	public void start() {
 		final DataService dataService = new DataServiceImpl();
 		this.register(dataService);
-
 	}
 
 	/**

@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-import suncertify.app.App;
 import suncertify.db.io.DBParser;
 import suncertify.db.io.DBSchema;
 import suncertify.db.io.DBWriter;
+import suncertify.shared.App;
 
 /**
  * This class implements the provided interface <code>DBMain</code> This class

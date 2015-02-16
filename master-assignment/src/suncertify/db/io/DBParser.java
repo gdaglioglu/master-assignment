@@ -8,6 +8,7 @@ import static suncertify.db.io.DBSchema.NUMBER_OF_FIELDS;
 import static suncertify.db.io.DBSchema.NUM_BYTES_RECORD_DELETED_FLAG;
 import static suncertify.db.io.DBSchema.RECORD_LENGTH;
 import static suncertify.db.io.DBSchema.US_ASCII;
+import static suncertify.shared.App.showErrorAndExit;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -51,7 +52,7 @@ public class DBParser {
 			}
 
 		} catch (final IOException e) {
-			// App.showErrorAndExit("Cannot read from database file.");
+			showErrorAndExit("Cannot read from database file.");
 		}
 		return hotelRooms;
 	}
@@ -66,7 +67,7 @@ public class DBParser {
 	private void checkMagicCookie() throws IOException {
 		MAGIC_COOKIE = this.is.readInt();
 		if (MAGIC_COOKIE != EXPECTED_MAGIC_COOKIE) {
-			// App.showErrorAndExit("The selected database file is not compatible with this application.");
+			showErrorAndExit("The selected database file is not compatible with this application.");
 		}
 	}
 
