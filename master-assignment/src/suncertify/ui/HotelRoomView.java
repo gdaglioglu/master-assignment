@@ -17,23 +17,13 @@ import suncertify.shared.App;
  */
 public class HotelRoomView extends JFrame {
 
-	/**
-	 * A version number for this class so that serialization can occur without
-	 * worrying about the underlying class changing between serialization and
-	 * deserialization.
-	 * <p>
-	 *
-	 * Not that we ever serialize this class of course, but JFrame implements
-	 * Serializable, so therefore by default we do as well.
-	 */
-
 	private static final long serialVersionUID = 2886178206092565805L;
 
 	/**
 	 * The Logger instance. All log messages from this class are routed through
 	 * this member. The Logger namespace is <code>suncertify.client.gui</code>.
 	 */
-	private Logger logger = Logger.getLogger("suncertify.client.gui");
+	private Logger logger = Logger.getLogger("suncertify.ui");
 
 	private HotelRoomsMenu hotelRoomsMenu;
 
@@ -77,8 +67,7 @@ public class HotelRoomView extends JFrame {
 		// Preserve the previous selection
 		JTable mainTable = this.getMainTable();
 		int index = mainTable.getSelectedRow();
-		String prevSelected = (index >= 0) ? (String) mainTable.getValueAt(
-				index, 0) : "";
+		String prevSelected = (index >= 0) ? (String) mainTable.getValueAt(index, 0) : "";
 
 		// Reset the table data
 		mainTable.setModel(tableData);

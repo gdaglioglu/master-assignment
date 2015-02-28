@@ -19,18 +19,9 @@ import javax.swing.ListSelectionModel;
  */
 public class HotelRoomsPanel extends JPanel {
 
-	/**
-	 * A version number for this class so that serialization can occur without
-	 * worrying about the underlying class changing between serialization and
-	 * deserialization.
-	 */
 	private static final long serialVersionUID = 797317548930520661L;
 
-	/**
-	 * The Logger instance. All log messages from this class are routed through
-	 * this member. The Logger namespace is <code>suncertify.client.gui</code>.
-	 */
-	private Logger logger = Logger.getLogger("suncertify.client.gui");
+	private Logger logger = Logger.getLogger("suncertify.ui");
 
 	private SearchPanel searchPanel;
 
@@ -56,25 +47,18 @@ public class HotelRoomsPanel extends JPanel {
 		this.searchPanel = new SearchPanel();
 		this.add(searchPanel, BorderLayout.NORTH);
 
-		// Setup rent and return buttons
-
-		JButton unbookButton = new JButton("Cancel Booking");
-
 		// Set the rent and return buttons to refuse focus
 		bookButton.setRequestFocusEnabled(false);
-		unbookButton.setRequestFocusEnabled(false);
 		// Add the keystroke mnemonics
 		bookButton.setMnemonic(KeyEvent.VK_R);
-		unbookButton.setMnemonic(KeyEvent.VK_U);
 		// Create a panel to add the rental a remove buttons
-		JPanel hiringPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		hiringPanel.add(bookButton);
-		hiringPanel.add(unbookButton);
+		JPanel bookingPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		bookingPanel.add(bookButton);
 
 		// bottom panel
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 		// bottomPanel.add(searchPanel, BorderLayout.NORTH);
-		bottomPanel.add(hiringPanel, BorderLayout.SOUTH);
+		bottomPanel.add(bookingPanel, BorderLayout.SOUTH);
 
 		// Add the bottom panel to the main window
 		this.add(bottomPanel, BorderLayout.SOUTH);
@@ -82,14 +66,9 @@ public class HotelRoomsPanel extends JPanel {
 		// Set table properties
 		mainTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mainTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		mainTable
-				.setToolTipText("Select a Hotel room record to book or cancel.");
+		mainTable.setToolTipText("Select a Hotel room record to book or cancel.");
 
-		// Add Tool Tips
-		unbookButton
-				.setToolTipText("Cancel the booking of the hotel room selected in the above table.");
-		bookButton
-				.setToolTipText("Book the hotel room selected in the above table.");
+		bookButton.setToolTipText("Book the hotel room selected in the above table.");
 
 	}
 

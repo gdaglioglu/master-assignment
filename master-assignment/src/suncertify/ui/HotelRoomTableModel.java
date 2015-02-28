@@ -15,21 +15,12 @@ import suncertify.domain.HotelRoom;
  */
 public class HotelRoomTableModel extends AbstractTableModel {
 
-	/**
-	 * A version number for this class so that serialization can occur without
-	 * worrying about the underlying class changing between serialization and
-	 * deserialization.
-	 *
-	 * Not that we ever serialize this class of course, but AbstractTableModel
-	 * implements Serializable, so therefore by default we do as well.
-	 */
 	private static final long serialVersionUID = -1536374087517864732L;
 
 	/**
 	 * An array of <code>String</code> objects representing the table headers.
 	 */
-	private String[] headerNames = { "Name", "Location", "Size", "Smoking",
-			"Rate", "Date", "Owner" };
+	private String[] headerNames = { "Name", "Location", "Size", "Smoking", "Rate", "Date", "Owner" };
 
 	/**
 	 * Holds all Hotel instances displayed in the main table.
@@ -43,9 +34,9 @@ public class HotelRoomTableModel extends AbstractTableModel {
 	 *            a <code>String</code> array representing a hotel room
 	 */
 	public void addHotelRoomRecord(String[] hotelRoomRecord) {
-		this.hotelRoomRecords.add(new HotelRoom(hotelRoomRecord[0],
-				hotelRoomRecord[1], hotelRoomRecord[2], hotelRoomRecord[3],
-				hotelRoomRecord[4], hotelRoomRecord[5], hotelRoomRecord[6]));
+		this.hotelRoomRecords.add(new HotelRoom(hotelRoomRecord[0], hotelRoomRecord[1],
+				hotelRoomRecord[2], hotelRoomRecord[3], hotelRoomRecord[4], hotelRoomRecord[5],
+				hotelRoomRecord[6]));
 	}
 
 	/**
@@ -63,7 +54,6 @@ public class HotelRoomTableModel extends AbstractTableModel {
 	 */
 	public void clearData() {
 		this.hotelRoomRecords.clear();
-		// this.fireTableDataChanged();
 	}
 
 	/**
@@ -76,7 +66,6 @@ public class HotelRoomTableModel extends AbstractTableModel {
 		for (final HotelRoom rec : records) {
 			addHotelRecord(rec);
 		}
-		// this.fireTableDataChanged();
 	}
 
 	/**

@@ -22,9 +22,9 @@ public class ApplicationRunner {
 	 *            Holds the command line inputs.
 	 */
 	public static void main(String[] args) {
-		// args = new String[] { "alone" };
+		args = new String[] { "alone" };
 		// args = new String[] { "server" };
-		args = new String[] {};
+		// args = new String[] {};
 		new ApplicationRunner(args);
 	}
 
@@ -44,7 +44,6 @@ public class ApplicationRunner {
 			new NetworkClientApplication().launch();
 		} else if (args.length == 1 && "alone".equals(args[0])) {
 			new StandAloneApplication().launch();
-
 		} else if (args.length == 1 && "server".equals(args[0])) {
 			new NetworkApplication().launch();
 		} else {
