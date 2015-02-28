@@ -1,16 +1,20 @@
 package suncertify.domain;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class is the Domain object class for the application. It represents a
  * Hotel record in the database.
  * 
- * @author gdaglioglu
+ * @author Gokhan Daglioglu
  */
 public class HotelRoom implements Serializable {
 
 	private static final long serialVersionUID = 1746986159728433641L;
+
+	private Logger logger = Logger.getLogger("suncertify.domain");
 
 	private String name;
 	private String location;
@@ -41,9 +45,8 @@ public class HotelRoom implements Serializable {
 	 * @param owner
 	 *            The customer id (an 8 digit number) who books the room.
 	 */
-	public HotelRoom(final String name, final String location,
-			final String size, final String smoking, final String rate,
-			final String date, final String owner) {
+	public HotelRoom(final String name, final String location, final String size,
+			final String smoking, final String rate, final String date, final String owner) {
 		this.name = name;
 		this.location = location;
 		this.size = size;
@@ -51,6 +54,9 @@ public class HotelRoom implements Serializable {
 		this.rate = rate;
 		this.date = date;
 		this.owner = owner;
+		logger.log(Level.FINE, "Initialized Hotel Room Object with following parameters: name = "
+				+ name + ", location = " + location + ", size = " + size + ", smoking = " + smoking
+				+ ", rate = " + rate + ", date = " + date + ", owner = " + owner);
 	}
 
 	/**
@@ -66,8 +72,11 @@ public class HotelRoom implements Serializable {
 	 *            A String array containing the 7 data fields.
 	 */
 	public HotelRoom(final String[] record) {
-		this(record[0], record[1], record[2], record[3], record[4], record[5],
-				record[6]);
+		this(record[0], record[1], record[2], record[3], record[4], record[5], record[6]);
+		logger.log(Level.FINE, "Initialized Hotel Room Object with following parameters: name = "
+				+ record[0] + ", location = " + record[1] + ", size = " + record[2]
+				+ ", smoking = " + record[3] + ", rate = " + record[4] + ", date = " + record[5]
+				+ ", owner = " + record[6]);
 	}
 
 	/**

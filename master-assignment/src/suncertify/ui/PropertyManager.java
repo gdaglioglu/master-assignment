@@ -1,13 +1,15 @@
 package suncertify.ui;
 
+import static suncertify.shared.App.handleException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
-import suncertify.shared.App;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Provides read/write access to the user's saved configuration parameters on
@@ -17,6 +19,9 @@ import suncertify.shared.App;
  * @author Gokhan Daglioglu
  */
 public class PropertyManager {
+
+	private Logger logger = Logger.getLogger("suncertify.ui");
+
 	/**
 	 * key in Properties indicating that the value will be the database
 	 * location.
@@ -65,8 +70,7 @@ public class PropertyManager {
 	/**
 	 * The file containing our saved configuration.
 	 */
-	private static File savedOptionsFile = new File(BASE_DIRECTORY,
-			OPTIONS_FILENAME);
+	private static File savedOptionsFile = new File(BASE_DIRECTORY, OPTIONS_FILENAME);
 
 	/**
 	 * Placeholder for our singleton version of OptionsModel. Since we know that
@@ -82,6 +86,7 @@ public class PropertyManager {
 	 */
 	private PropertyManager() {
 		init();
+		logger.log(Level.FINE, "Initialized Singleton Property Manager Object");
 	}
 
 	private void init() {
@@ -91,8 +96,7 @@ public class PropertyManager {
 			props = new Properties();
 
 			props.setProperty(SERVER_ADDRESS, "localhost");
-			props.setProperty(SERVER_PORT, ""
-					+ java.rmi.registry.Registry.REGISTRY_PORT);
+			props.setProperty(SERVER_PORT, "" + java.rmi.registry.Registry.REGISTRY_PORT);
 			props.setProperty(EXACT_MATCH, "false");
 		}
 	}
@@ -145,7 +149,7 @@ public class PropertyManager {
 				fos.close();
 			}
 		} catch (IOException e) {
-			App.handleException("Unable to save user parameters to file. "
+			handleException("Unable to save user parameters to file. "
 					+ "They wont be remembered next time you start.");
 		}
 	}
@@ -168,16 +172,15 @@ public class PropertyManager {
 					fis.close();
 				} catch (FileNotFoundException e) {
 					assert false : "File not found after existance verified";
-					App.handleException("Unable to load user "
+					handleException("Unable to load user "
 							+ "parameters. Default values will be used.\n" + e);
 				} catch (IOException e) {
 					assert false : "Bad data in parameters file";
-					App.handleException("Unable to load user "
+					handleException("Unable to load user "
 							+ "parameters. Default values will be used.\n" + e);
 				}
 			}
 		}
 		return loadedProperties;
 	}
-
 }

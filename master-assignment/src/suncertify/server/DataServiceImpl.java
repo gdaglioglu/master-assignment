@@ -40,10 +40,10 @@ public class DataServiceImpl implements DataService {
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 */
 	@Override
-	public void update(final int recNo, final HotelRoom data)
-			throws RecordNotFoundException {
+	public void update(final int recNo, final HotelRoom data) throws RecordNotFoundException {
 		this.data.lock(recNo);
 		this.data.update(recNo, data.toArray());
 		this.data.unlock(recNo);
@@ -63,8 +63,7 @@ public class DataServiceImpl implements DataService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<HotelRoom> find(final String[] criteria,
-			final boolean findExactMatches) {
+	public List<HotelRoom> find(final String[] criteria, final boolean findExactMatches) {
 		final List<HotelRoom> finalResults = new ArrayList<HotelRoom>();
 		int[] rawResults = new int[0];
 		try {

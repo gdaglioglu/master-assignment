@@ -1,6 +1,7 @@
 package suncertify.app.ui;
 
 import static suncertify.app.NetworkApplication.RMI_SERVER;
+import static suncertify.shared.App.showError;
 import static suncertify.ui.PropertyManager.SERVER_ADDRESS;
 
 import java.awt.GridBagConstraints;
@@ -13,6 +14,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,7 +25,6 @@ import javax.swing.JTextField;
 
 import suncertify.app.Application;
 import suncertify.server.DataService;
-import suncertify.shared.App;
 import suncertify.ui.PropertyManager;
 
 /**
@@ -35,9 +37,12 @@ import suncertify.ui.PropertyManager;
 public class ClientUI extends JFrame {
 
 	private static final long serialVersionUID = 6636073318499699241L;
+
+	private Logger logger = Logger.getLogger("suncertify.app.ui");
+
 	private JTextField textField;
 	private DataService dataService;
-	private JButton ok;
+	private JButton okButton;
 	private Application application;
 
 	/**
@@ -54,6 +59,8 @@ public class ClientUI extends JFrame {
 
 		this.initUIElements();
 		this.setVisible(true);
+
+		logger.log(Level.FINE, "Initialized Client UI");
 	}
 
 	/**
@@ -73,21 +80,20 @@ public class ClientUI extends JFrame {
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		panel.add(label, c);
 
-		this.textField = new JTextField(
-				PropertyManager.getParameter(SERVER_ADDRESS));
+		this.textField = new JTextField(PropertyManager.getParameter(SERVER_ADDRESS));
 		this.textField.addActionListener(new TextFieldListener());
 		c.gridy = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		panel.add(this.textField, c);
 
-		this.ok = new JButton("OK");
-		this.ok.setMnemonic(KeyEvent.VK_O);
-		this.ok.addActionListener(new OKListener());
+		this.okButton = new JButton("OK");
+		this.okButton.setMnemonic(KeyEvent.VK_O);
+		this.okButton.addActionListener(new OKListener());
 		c.gridx = 1;
 		c.gridy = 2;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.NONE;
-		panel.add(this.ok, c);
+		panel.add(this.okButton, c);
 
 		final JButton cancel = new JButton("Cancel");
 		cancel.setMnemonic(KeyEvent.VK_C);
@@ -130,7 +136,7 @@ public class ClientUI extends JFrame {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			ClientUI.this.ok.doClick();
+			ClientUI.this.okButton.doClick();
 		}
 	}
 
@@ -138,7 +144,7 @@ public class ClientUI extends JFrame {
 	 * Listener to validate server hostname and to attempt to connect to the
 	 * remote server once the user clicks the OK button.
 	 * 
-	 * @author Sean Dunne
+	 * @author Gokhan Daglioglu
 	 */
 	private class OKListener implements ActionListener {
 		/**
@@ -149,20 +155,18 @@ public class ClientUI extends JFrame {
 			final String hostname = ClientUI.this.textField.getText();
 
 			if (hostname.equals("")) {
-				App.showError("You must enter a hostname for the server.");
+				showError("You must enter a hostname for the server.");
 			} else {
 				try {
-					final Registry registry = LocateRegistry
-							.getRegistry(hostname);
-					ClientUI.this.dataService = (DataService) registry
-							.lookup(RMI_SERVER);
+					final Registry registry = LocateRegistry.getRegistry(hostname);
+					ClientUI.this.dataService = (DataService) registry.lookup(RMI_SERVER);
 					PropertyManager.setParameter(SERVER_ADDRESS, hostname);
 					ClientUI.this.dispose();
 					ClientUI.this.application.start();
 				} catch (final RemoteException e) {
-					App.showError("Cannot connect to the remote server.\nThe hostname may be incorrect or the server could be down.");
+					showError("Cannot connect to the remote server.\nThe hostname may be incorrect or the server could be down.");
 				} catch (final NotBoundException e) {
-					App.showError("Server found but cannot connect.\nThe server has not started correctly and should be restarted.");
+					showError("Server found but cannot connect.\nThe server has not started correctly and should be restarted.");
 				}
 			}
 		}

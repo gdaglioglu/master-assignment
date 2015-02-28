@@ -1,6 +1,8 @@
 package suncertify.app.ui;
 
+import static suncertify.shared.App.showError;
 import static suncertify.ui.PropertyManager.DATABASE_LOCATION;
+import static suncertify.ui.PropertyManager.getParameter;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -9,6 +11,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
@@ -19,12 +23,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import suncertify.app.Application;
-import suncertify.shared.App;
-import suncertify.ui.PropertyManager;
 
 public class ServerUI extends JFrame {
 
 	private static final long serialVersionUID = 4825206061500231551L;
+	private Logger logger = Logger.getLogger("suncertify.app.ui");
+
 	private JTextField dbFileLocTxt;
 	private JButton browseBtn;
 	private AbstractButton shutdownBtn;
@@ -45,6 +49,7 @@ public class ServerUI extends JFrame {
 
 		this.getContentPane().add(initUIElements());
 		this.setVisible(true);
+		logger.log(Level.FINE, "Initialized Server UI");
 	}
 
 	/**
@@ -82,8 +87,7 @@ public class ServerUI extends JFrame {
 		c.insets = new Insets(5, 5, 5, 5);
 		middle.add(dbFileLocLbl, c);
 
-		this.dbFileLocTxt = new JTextField(
-				PropertyManager.getParameter(DATABASE_LOCATION));
+		this.dbFileLocTxt = new JTextField(getParameter(DATABASE_LOCATION));
 		this.dbFileLocTxt.setEditable(false);
 		c = new GridBagConstraints();
 		c.gridx = 1;
@@ -153,7 +157,7 @@ public class ServerUI extends JFrame {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			if (ServerUI.this.dbFileLocTxt.getText().equals("")) {
-				App.showError("You must choose a database file before the server can start.");
+				showError("You must choose a database file before the server can start.");
 			} else {
 				ServerUI.this.application.start();
 

@@ -5,7 +5,7 @@ package suncertify.db.io;
  * the database metadata headers once the database file is read by
  * {@link DBParser}.
  * 
- * @author gdaglioglu
+ * @author Gokhan Daglioglu
  */
 public class DBSchema {
 

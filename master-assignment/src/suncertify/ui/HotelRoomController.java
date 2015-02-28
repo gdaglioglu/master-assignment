@@ -1,9 +1,16 @@
 package suncertify.ui;
 
+import static suncertify.shared.App.handleException;
+import static suncertify.shared.App.showError;
+import static suncertify.shared.App.showErrorAndExit;
+import static suncertify.shared.App.showWarning;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.PatternSyntaxException;
 
@@ -15,7 +22,6 @@ import suncertify.db.RecordNotFoundException;
 import suncertify.domain.HotelRoom;
 import suncertify.init.ApplicationRunner;
 import suncertify.server.DataService;
-import suncertify.shared.App;
 
 /**
  * Controller for the {@link HotelRoomView} GUI class. Handles all interactions
@@ -53,19 +59,19 @@ public class HotelRoomController {
 
 	/**
 	 * The search listener, attached to the search button in the
-	 * {@link SearchPanel} instance.
+	 * {@link SearchPanel1} instance.
 	 */
 	private ActionListener searchListener;
 
 	/**
 	 * The booking listener, attached to the book button in the
-	 * {@link HotelRoomsPanel} instance.
+	 * {@link HotelRoomsMainPanel1} instance.
 	 */
 	private ActionListener bookingListener;
 
 	/**
 	 * This exact match listener, attached to the exact match check box in the
-	 * {@link SearchPanel} instance.
+	 * {@link SearchPanel1} instance.
 	 */
 	private ActionListener exactMatchListener;
 
@@ -84,21 +90,20 @@ public class HotelRoomController {
 	public HotelRoomController(DataService dataservice) {
 		dataService = dataservice;
 
-		this.hotelRoomView = new HotelRoomView(
-				"URLyBird Discounted Hotel Rooms - Client View");
+		this.hotelRoomView = new HotelRoomView("URLyBird Discounted Hotel Rooms - Client View");
 
 		try {
 			this.hotelRoomModel = this.getAllHotelRooms();
 		} catch (GuiControllerException e) {
-			App.handleException("Failed to acquire an initial hotel room list."
+			handleException("Failed to acquire an initial hotel room list."
 					+ "\nPlease check the DB connection.");
 		}
 		this.hotelRoomView.updateTable(this.hotelRoomModel);
 		this.control();
+		logger.log(Level.FINE, "Initialized Hotel Room Controller");
 	}
 
-	private HotelRoomTableModel getAllHotelRooms()
-			throws GuiControllerException {
+	private HotelRoomTableModel getAllHotelRooms() throws GuiControllerException {
 		lastSearchCriteria = getSearchCriteria();
 		final boolean exactMatch = Boolean.valueOf(PropertyManager
 				.getParameter(PropertyManager.EXACT_MATCH));
@@ -122,18 +127,20 @@ public class HotelRoomController {
 	 * @throws GuiControllerException
 	 *             Indicates a database or network level exception.
 	 */
-	private HotelRoomTableModel getHotelRoomsByCriteria(
-			String[] searchCriteria, boolean exactMatch)
+	private HotelRoomTableModel getHotelRoomsByCriteria(String[] searchCriteria, boolean exactMatch)
 			throws GuiControllerException {
+		logger.entering("HotelRoomController", "getHotelRoomsByCriteria",
+				"Parameters: searchCriteria = " + Arrays.toString(searchCriteria)
+						+ "\nexactMatch = " + exactMatch);
 		HotelRoomTableModel hotelRoomModel = new HotelRoomTableModel();
 		try {
-			final List<HotelRoom> records = this.dataService.find(
-					searchCriteria, exactMatch);
+			final List<HotelRoom> records = this.dataService.find(searchCriteria, exactMatch);
 			hotelRoomModel.clearData();
 			hotelRoomModel.addAll(records);
 		} catch (final RemoteException exp) {
-			App.showErrorAndExit("The remote server is no longer available.");
+			showErrorAndExit("The remote server is no longer available.");
 		}
+		logger.exiting("HotelRoomController", "getHotelRoomsByCriteria");
 		return hotelRoomModel;
 	}
 
@@ -158,11 +165,8 @@ public class HotelRoomController {
 							.getSearchCriteria();
 					final boolean exactMatch = Boolean.valueOf(PropertyManager
 							.getParameter(PropertyManager.EXACT_MATCH));
-					hotelRoomView
-							.updateTable(HotelRoomController.this
-									.getHotelRoomsByCriteria(
-											HotelRoomController.this.lastSearchCriteria,
-											exactMatch));
+					hotelRoomView.updateTable(HotelRoomController.this.getHotelRoomsByCriteria(
+							HotelRoomController.this.lastSearchCriteria, exactMatch));
 				} catch (GuiControllerException gce) {
 					// Inspect the exception chain
 					Throwable rootException = gce.getCause();
@@ -171,7 +175,7 @@ public class HotelRoomController {
 					if (rootException instanceof PatternSyntaxException) {
 						msg += ("\n" + rootException.getMessage());
 					}
-					App.handleException(msg);
+					handleException(msg);
 				}
 
 			}
@@ -185,8 +189,7 @@ public class HotelRoomController {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				PropertyManager.setParameter(PropertyManager.EXACT_MATCH,
-						HotelRoomController.this.hotelRoomView
-								.isExactMatchSelected());
+						HotelRoomController.this.hotelRoomView.isExactMatchSelected());
 			}
 		};
 
@@ -203,32 +206,27 @@ public class HotelRoomController {
 				int hotelRoomRecordNo = mainTable.getSelectedRow();
 				if ((hotelRoomRecordNo >= 0)) {
 					final String customerId = JOptionPane.showInputDialog(null,
-							"Enter Customer ID", "Book Room",
-							JOptionPane.QUESTION_MESSAGE);
+							"Enter Customer ID", "Book Room", JOptionPane.QUESTION_MESSAGE);
 					if (isValidCustomerId(customerId)) {
 						try {
-							boolean booked = HotelRoomController.this.bookRoom(
-									customerId, hotelRoomRecordNo);
+							boolean booked = HotelRoomController.this.bookRoom(customerId,
+									hotelRoomRecordNo);
 							if (booked == false) {
-								App.handleException(ALREADY_BOOKED_MSG);
+								handleException(ALREADY_BOOKED_MSG);
 							}
-							final boolean exactMatch = Boolean
-									.valueOf(PropertyManager
-											.getParameter(PropertyManager.EXACT_MATCH));
+							final boolean exactMatch = Boolean.valueOf(PropertyManager
+									.getParameter(PropertyManager.EXACT_MATCH));
 							hotelRoomView
 									.updateTable(HotelRoomController.this
 											.getHotelRoomsByCriteria(
 													HotelRoomController.this.lastSearchCriteria,
 													exactMatch));
 						} catch (GuiControllerException gce) {
-							App.handleException("Booking operation failed.");
+							handleException("Booking operation failed.");
 						}
 					}
 				} else {
-					App.showWarning("Please select a row");
-					JOptionPane.showMessageDialog(
-							HotelRoomController.this.hotelRoomView,
-							"Please select a row");
+					showWarning("Please select a row");
 				}
 			}
 
@@ -236,9 +234,7 @@ public class HotelRoomController {
 				if (id == null) {
 					return false;
 				} else if (!id.matches("^\\d{8}$")) {
-					JOptionPane.showMessageDialog(
-							HotelRoomController.this.hotelRoomView,
-							"Please enter a valid Customer Id");
+					showWarning("Please enter a valid Customer Id");
 					return false;
 				} else
 					return true;
@@ -246,12 +242,9 @@ public class HotelRoomController {
 
 		};
 
-		this.hotelRoomView.getSearchButton().addActionListener(
-				this.searchListener);
-		this.hotelRoomView.getBookButton().addActionListener(
-				this.bookingListener);
-		this.hotelRoomView.getExactMatch().addActionListener(
-				this.exactMatchListener);
+		this.hotelRoomView.getSearchButton().addActionListener(this.searchListener);
+		this.hotelRoomView.getBookButton().addActionListener(this.bookingListener);
+		this.hotelRoomView.getExactMatch().addActionListener(this.exactMatchListener);
 	}
 
 	/**
@@ -268,16 +261,17 @@ public class HotelRoomController {
 	private boolean bookRoom(String customerId, int hotelRoomRecordNo)
 			throws GuiControllerException {
 
-		logger.entering("HotelRoomController", "bookRoom",
-				"Record number to be booked: " + hotelRoomRecordNo);
+		logger.entering("HotelRoomController", "bookRoom", "Record number to be booked: "
+				+ hotelRoomRecordNo);
 		try {
 			HotelRoom hotelRoom = this.dataService.read(hotelRoomRecordNo);
 			hotelRoom.setOwner(customerId);
 			this.dataService.update(hotelRoomRecordNo, hotelRoom);
-		} catch (final RecordNotFoundException e) {
-			App.showError(e.getMessage());
+		} catch (final RecordNotFoundException recordNotFoundException) {
+			logger.log(Level.SEVERE, recordNotFoundException.getMessage(), recordNotFoundException);
+			showError(recordNotFoundException.getMessage());
 		} catch (final RemoteException exp) {
-			App.showErrorAndExit("The remote server is no longer available.");
+			showErrorAndExit("The remote server is no longer available.");
 		}
 		logger.exiting("HotelRoomController", "bookRoom");
 		return true;

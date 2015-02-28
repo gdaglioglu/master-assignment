@@ -1,25 +1,30 @@
 package suncertify.db;
 
+import static suncertify.shared.App.showErrorAndExit;
+
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import suncertify.db.io.DBParser;
 import suncertify.db.io.DBSchema;
 import suncertify.db.io.DBWriter;
-import suncertify.shared.App;
 
 /**
  * This class implements the provided interface <code>DBMain</code> This class
  * is a facade and delegates all functionality to two worker classes
  * 
- * @author Eoin Mooney
+ * @author Gokhan Daglioglu
  * 
  */
 public class Data implements DBMain {
+
+	private Logger logger = Logger.getLogger("suncertify.db");
 
 	private List<ReentrantLock> locks;
 	private ReentrantLock createLock;
@@ -37,6 +42,7 @@ public class Data implements DBMain {
 	public Data(String dbLocation) {
 		this.dbLocation = dbLocation;
 		this.init();
+		logger.log(Level.FINE, "Initialized Data");
 	}
 
 	/**
@@ -51,7 +57,7 @@ public class Data implements DBMain {
 			this.createLock = new ReentrantLock();
 			this.buildCache(parser);
 		} catch (final FileNotFoundException e) {
-			App.showErrorAndExit("Cannot open database file for reading.");
+			showErrorAndExit("Cannot open database file for reading.");
 		}
 	}
 
@@ -179,14 +185,11 @@ public class Data implements DBMain {
 	 *             If a record with the primary key of name & location already
 	 *             exists.
 	 */
-	private boolean checkCreateData(final String[] data)
-			throws DuplicateKeyException {
-		if ((data == null) || (data.length < 2) || (data[0] == null)
-				|| (data[1] == null) || data[0].equals("")
-				|| data[1].equals("")) {
+	private boolean checkCreateData(final String[] data) throws DuplicateKeyException {
+		if ((data == null) || (data.length < 2) || (data[0] == null) || (data[1] == null)
+				|| data[0].equals("") || data[1].equals("")) {
 			this.createLock.unlock();
-			throw new IllegalArgumentException(
-					"The Name & Address cannot be empty!");
+			throw new IllegalArgumentException("The Name & Address cannot be empty!");
 		}
 
 		for (int i = 0; i < this.hotelRooms.size(); i++) {
@@ -259,19 +262,15 @@ public class Data implements DBMain {
 	 * @throws RecordNotFoundException
 	 *             If the record can't be found in the cache.
 	 */
-	private void checkRecordNumber(final int recNo)
-			throws RecordNotFoundException {
+	private void checkRecordNumber(final int recNo) throws RecordNotFoundException {
 		if (recNo < 0) {
-			throw new IllegalArgumentException(
-					"The record number cannot be negative.");
+			throw new IllegalArgumentException("The record number cannot be negative.");
 		}
 		if (this.hotelRooms.size() <= recNo) {
-			throw new RecordNotFoundException(
-					"No record found for record number: " + recNo);
+			throw new RecordNotFoundException("No record found for record number: " + recNo);
 		}
 		if (this.isRecordDeleted(recNo) && !this.isRecordLocked(recNo)) {
-			throw new RecordNotFoundException("Record number " + recNo
-					+ " has been deleted.");
+			throw new RecordNotFoundException("Record number " + recNo + " has been deleted.");
 		}
 	}
 }
