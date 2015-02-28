@@ -1,4 +1,4 @@
-package suncertify.server;
+package suncertify.app.ui;
 
 import java.io.File;
 

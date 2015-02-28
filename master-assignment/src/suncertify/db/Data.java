@@ -3,6 +3,7 @@ package suncertify.db;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -76,8 +77,8 @@ public class Data implements DBMain {
 	public String[] read(int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
 		final String[] hotelRoom = this.hotelRooms.get(recNo);
-		// consider Arrays.copyOf(hotelRoom, hotelRoom.length);
-		return hotelRoom;
+
+		return Arrays.copyOf(hotelRoom, hotelRoom.length);
 	}
 
 	/**
@@ -88,7 +89,6 @@ public class Data implements DBMain {
 		this.checkRecordNumber(recNo);
 		this.dbWriter.write(recNo, data);
 		this.hotelRooms.set(recNo, data);
-
 	}
 
 	/**

@@ -1,18 +1,30 @@
 package suncertify.db;
 
-public class RecordNotFoundException extends DatabaseException {
-	
-	/**
-	 * 
-	 */
+/**
+ * Exception thrown when a specified record cannot be found. When an attempt to
+ * find a particular record and the record does not exist or is marked as
+ * deleted then a RecordNotFoundException is thrown.
+ * 
+ * @author Gokhan Daglioglu
+ */
+public class RecordNotFoundException extends Exception {
+
 	private static final long serialVersionUID = 9172845648588845215L;
 
-	public RecordNotFoundException(){
-		
-	}
-	
-    public RecordNotFoundException(String message){
-		
+	/**
+	 * Default zero argument constructor.
+	 */
+	public RecordNotFoundException() {
 	}
 
+	/**
+	 * Constructs a <code>RecordNotFoundException</code> with the specified
+	 * detail message.
+	 * 
+	 * @param message
+	 *            the exception detail.
+	 */
+	public RecordNotFoundException(String message) {
+		super(message);
+	}
 }

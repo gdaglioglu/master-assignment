@@ -19,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import suncertify.app.Application;
-import suncertify.server.DatabaseLocator;
 import suncertify.shared.App;
 import suncertify.ui.PropertyManager;
 

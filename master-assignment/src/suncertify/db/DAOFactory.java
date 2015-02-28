@@ -1,6 +1,6 @@
 package suncertify.db;
 
-import suncertify.server.DatabaseLocator;
+import suncertify.app.ui.DatabaseLocator;
 import suncertify.shared.App;
 import suncertify.ui.PropertyManager;
 
