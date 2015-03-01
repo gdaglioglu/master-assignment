@@ -6,21 +6,33 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import suncertify.app.ui.ServerUI;
+import suncertify.app.util.App;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
-import suncertify.shared.App;
 
+/**
+ * This class is responsible for establishing a networked server, using RMI in
+ * this case.
+ * 
+ * @author Gokhan Daglioglu
+ */
 public class NetworkApplication implements Application {
 
 	public static final String RMI_SERVER = "remote.database.server";
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void launch() {
+	public void init() {
 		new ServerUI(this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public void start() {
+	public void launch() {
 		final DataService dataService = new DataServiceImpl();
 		this.register(dataService);
 	}
@@ -34,26 +46,12 @@ public class NetworkApplication implements Application {
 	 */
 	private void register(final DataService dataService) {
 		try {
-			final DataService rmiStub = (DataService) UnicastRemoteObject
-					.exportObject(dataService, Registry.REGISTRY_PORT);
-			final Registry registry = this.getRMIRegistry();
+			final DataService rmiStub = (DataService) UnicastRemoteObject.exportObject(dataService,
+					Registry.REGISTRY_PORT);
+			final Registry registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 			registry.rebind(RMI_SERVER, rmiStub);
 		} catch (final RemoteException e) {
 			App.showErrorAndExit("Cannot publish the RMI server, check no other applications are using the default RMI port 1099.");
 		}
 	}
-
-	/**
-	 * This method is responsible for creating a new RMI registry.
-	 * 
-	 * @return A reference to an RMI registry that can be used to publish
-	 *         objects over RMI.
-	 * @throws RemoteException
-	 *             If an RMI registry is already started on the default RMI
-	 *             port.
-	 */
-	private Registry getRMIRegistry() throws RemoteException {
-		return LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
-	}
-
 }

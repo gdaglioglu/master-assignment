@@ -1,8 +1,8 @@
 package suncertify.db;
 
 import suncertify.app.ui.DatabaseLocator;
-import suncertify.shared.App;
-import suncertify.ui.PropertyManager;
+import suncertify.app.util.App;
+import suncertify.app.util.PropertyManager;
 
 /**
  * This is a factory class responsible for creating and retrieving an instance

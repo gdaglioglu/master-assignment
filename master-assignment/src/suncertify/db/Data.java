@@ -1,6 +1,6 @@
 package suncertify.db;
 
-import static suncertify.shared.App.showErrorAndExit;
+import static suncertify.app.util.App.showErrorAndExit;
 
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;

@@ -1,12 +1,12 @@
 package suncertify.db.io;
 
+import static suncertify.app.util.App.showErrorAndExit;
 import static suncertify.db.io.DBSchema.FIELD_LENGTHS;
 import static suncertify.db.io.DBSchema.NUM_BYTES_RECORD_DELETED_FLAG;
 import static suncertify.db.io.DBSchema.RECORD_DELETED;
 import static suncertify.db.io.DBSchema.RECORD_LENGTH;
 import static suncertify.db.io.DBSchema.RECORD_VALID;
 import static suncertify.db.io.DBSchema.US_ASCII;
-import static suncertify.shared.App.showErrorAndExit;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

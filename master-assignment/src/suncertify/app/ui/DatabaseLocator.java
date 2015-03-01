@@ -1,8 +1,8 @@
 package suncertify.app.ui;
 
-import static suncertify.shared.App.showError;
-import static suncertify.ui.PropertyManager.DATABASE_LOCATION;
-import static suncertify.ui.PropertyManager.setParameter;
+import static suncertify.app.util.App.showError;
+import static suncertify.app.util.PropertyManager.DATABASE_LOCATION;
+import static suncertify.app.util.PropertyManager.setParameter;
 
 import java.io.File;
 
@@ -25,33 +25,34 @@ public class DatabaseLocator {
 	 */
 	public static String getLocation() {
 		final JFileChooser chooser = createDialog();
-
 		String location = null;
 		final int action = chooser.showOpenDialog(null);
+
 		if (action == JFileChooser.APPROVE_OPTION) {
 			final File choice = chooser.getSelectedFile();
+
 			if (choice.getName().endsWith(".db")) {
 				location = choice.getAbsolutePath();
 				setParameter(DATABASE_LOCATION, location);
 			} else {
 				showError("The selected file is not a valid database file.");
 			}
+
 		}
 
 		return location;
 	}
 
 	/**
-	 * This method creates the {@link JFileChooser} with the correct properties.
+	 * This method creates the <code>JFileChooser</code> with the correct
+	 * properties.
 	 * 
 	 * @return A JFileChooser allowing selection of .db files.
 	 */
 	private static JFileChooser createDialog() {
 		final JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
-
 		chooser.setFileFilter(new FileNameExtensionFilter(".db files only", "db"));
 		chooser.setDialogTitle("Database location");
-
 		return chooser;
 	}
 }

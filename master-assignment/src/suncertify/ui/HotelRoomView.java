@@ -1,5 +1,7 @@
 package suncertify.ui;
 
+import static suncertify.app.util.App.getCenterOnScreen;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -19,7 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
-import suncertify.shared.App;
+import suncertify.app.util.PropertyManager;
 
 /**
  * The main application window of the URLyBird client application.
@@ -77,7 +79,7 @@ public class HotelRoomView extends JFrame {
 		this.add(new HotelRoomsMainPanel());
 		this.pack();
 		this.setSize(1000, 500);
-		this.setLocation(App.getCenterOnScreen(this));
+		this.setLocation(getCenterOnScreen(this));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		logger.log(Level.FINE, "Initialized Hotel Room View");

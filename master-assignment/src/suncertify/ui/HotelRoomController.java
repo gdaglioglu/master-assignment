@@ -1,9 +1,12 @@
 package suncertify.ui;
 
-import static suncertify.shared.App.handleException;
-import static suncertify.shared.App.showError;
-import static suncertify.shared.App.showErrorAndExit;
-import static suncertify.shared.App.showWarning;
+import static suncertify.app.util.App.handleException;
+import static suncertify.app.util.App.showError;
+import static suncertify.app.util.App.showErrorAndExit;
+import static suncertify.app.util.App.showWarning;
+import static suncertify.app.util.PropertyManager.EXACT_MATCH;
+import static suncertify.app.util.PropertyManager.getBooleanParameter;
+import static suncertify.app.util.PropertyManager.setParameter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,7 +32,7 @@ import suncertify.server.DataService;
  *
  * @author Gokhan Daglioglu
  * @see DBMain
- * @see DBRemote
+ * @see HotelRoomView
  * @see GuiControllerException
  */
 
@@ -38,9 +41,9 @@ public class HotelRoomController {
 	/**
 	 * The <code>Logger</code> instance. All log messages from this class are
 	 * routed through this member. The <code>Logger</code> namespace is
-	 * <code>suncertify.client.ui</code>.
+	 * <code>suncertify.ui</code>.
 	 */
-	private Logger logger = Logger.getLogger("suncertify.client.ui");
+	private Logger logger = Logger.getLogger("suncertify.ui");
 
 	/**
 	 * The model for the client MVC.
@@ -59,19 +62,19 @@ public class HotelRoomController {
 
 	/**
 	 * The search listener, attached to the search button in the
-	 * {@link SearchPanel1} instance.
+	 * {@link HotelRoomView} instance.
 	 */
 	private ActionListener searchListener;
 
 	/**
 	 * The booking listener, attached to the book button in the
-	 * {@link HotelRoomsMainPanel1} instance.
+	 * {@link HotelRoomView} instance.
 	 */
 	private ActionListener bookingListener;
 
 	/**
 	 * This exact match listener, attached to the exact match check box in the
-	 * {@link SearchPanel1} instance.
+	 * {@link HotelRoomView} instance.
 	 */
 	private ActionListener exactMatchListener;
 
@@ -89,7 +92,6 @@ public class HotelRoomController {
 	 */
 	public HotelRoomController(DataService dataservice) {
 		dataService = dataservice;
-
 		this.hotelRoomView = new HotelRoomView("URLyBird Discounted Hotel Rooms - Client View");
 
 		try {
@@ -98,20 +100,17 @@ public class HotelRoomController {
 			handleException("Failed to acquire an initial hotel room list."
 					+ "\nPlease check the DB connection.");
 		}
+
 		this.hotelRoomView.updateTable(this.hotelRoomModel);
 		this.control();
+
 		logger.log(Level.FINE, "Initialized Hotel Room Controller");
 	}
 
 	private HotelRoomTableModel getAllHotelRooms() throws GuiControllerException {
-		lastSearchCriteria = getSearchCriteria();
-		final boolean exactMatch = Boolean.valueOf(PropertyManager
-				.getParameter(PropertyManager.EXACT_MATCH));
+		lastSearchCriteria = this.hotelRoomView.getSearchCriteria();
+		final boolean exactMatch = getBooleanParameter(EXACT_MATCH);
 		return this.getHotelRoomsByCriteria(lastSearchCriteria, exactMatch);
-	}
-
-	private String[] getSearchCriteria() {
-		return hotelRoomView.getSearchCriteria();
 	}
 
 	/**
@@ -145,26 +144,20 @@ public class HotelRoomController {
 	}
 
 	/**
-	 * This method is called by the {@link ApplicationRunner}after instantiating
-	 * a <code>HotelRoomController</code>. It creates
+	 * This method is called by the {@link ApplicationRunner} after
+	 * instantiating a <code>HotelRoomController</code>. It creates
 	 * <code>ActionListener</code> instances for searching and booking and adds
-	 * them to the relevant <code>JButtons</code> in the
-	 * <code>ClientWindow</code>
+	 * them to the relevant <code>JButtons</code> in {@link HotelRoomView}
 	 */
 	private void control() {
 
 		this.searchListener = new ActionListener() {
-
-			/**
-			 * {@inheritDoc}
-			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					HotelRoomController.this.lastSearchCriteria = HotelRoomController.this
+					HotelRoomController.this.lastSearchCriteria = HotelRoomController.this.hotelRoomView
 							.getSearchCriteria();
-					final boolean exactMatch = Boolean.valueOf(PropertyManager
-							.getParameter(PropertyManager.EXACT_MATCH));
+					final boolean exactMatch = getBooleanParameter(EXACT_MATCH);
 					hotelRoomView.updateTable(HotelRoomController.this.getHotelRoomsByCriteria(
 							HotelRoomController.this.lastSearchCriteria, exactMatch));
 				} catch (GuiControllerException gce) {
@@ -181,23 +174,16 @@ public class HotelRoomController {
 			}
 
 		};
-		this.exactMatchListener = new ActionListener() {
 
-			/**
-			 * {@inheritDoc}
-			 */
+		this.exactMatchListener = new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				PropertyManager.setParameter(PropertyManager.EXACT_MATCH,
+				setParameter(EXACT_MATCH,
 						HotelRoomController.this.hotelRoomView.isExactMatchSelected());
 			}
 		};
 
 		this.bookingListener = new ActionListener() {
-
-			/**
-			 * {@inheritDoc}
-			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				final String ALREADY_BOOKED_MSG = "Unable to book - room is already booked.";
@@ -214,8 +200,7 @@ public class HotelRoomController {
 							if (booked == false) {
 								handleException(ALREADY_BOOKED_MSG);
 							}
-							final boolean exactMatch = Boolean.valueOf(PropertyManager
-									.getParameter(PropertyManager.EXACT_MATCH));
+							final boolean exactMatch = getBooleanParameter(EXACT_MATCH);
 							hotelRoomView
 									.updateTable(HotelRoomController.this
 											.getHotelRoomsByCriteria(

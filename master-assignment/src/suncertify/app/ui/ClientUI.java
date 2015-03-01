@@ -1,8 +1,10 @@
 package suncertify.app.ui;
 
 import static suncertify.app.NetworkApplication.RMI_SERVER;
-import static suncertify.shared.App.showError;
-import static suncertify.ui.PropertyManager.SERVER_ADDRESS;
+import static suncertify.app.util.App.showError;
+import static suncertify.app.util.PropertyManager.SERVER_ADDRESS;
+import static suncertify.app.util.PropertyManager.getParameter;
+import static suncertify.app.util.PropertyManager.setParameter;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -25,7 +27,6 @@ import javax.swing.JTextField;
 
 import suncertify.app.Application;
 import suncertify.server.DataService;
-import suncertify.ui.PropertyManager;
 
 /**
  * This class is responsible for creating, displaying and populating the
@@ -38,11 +39,31 @@ public class ClientUI extends JFrame {
 
 	private static final long serialVersionUID = 6636073318499699241L;
 
-	private Logger logger = Logger.getLogger("suncertify.app.ui");
+	/**
+	 * The <code>Logger</code> instance. All log messages from this class are
+	 * routed through this member. The <code>Logger</code> namespace is
+	 * <code>suncertify.app.ui</code>.
+	 */
+	private Logger logger = Logger.getLogger(ClientUI.class.getPackage().getName());
 
-	private JTextField textField;
+	/**
+	 * The <code>JTextField</code> which is used as a hostname field.
+	 */
+	private JTextField hostnameField;
+
+	/**
+	 * The reference to a {@link DataService} instance.
+	 */
 	private DataService dataService;
+
+	/**
+	 * The <code>JButton</code> that starts the networked client when pressed.
+	 */
 	private JButton okButton;
+
+	/**
+	 * The reference to a {@link Application} instance.
+	 */
 	private Application application;
 
 	/**
@@ -64,8 +85,8 @@ public class ClientUI extends JFrame {
 	}
 
 	/**
-	 * This method is responsible for adding the components of the
-	 * NetworkedClientUI to the JFrame.
+	 * This method is responsible for adding the components of the networked
+	 * ClientUI to the JFrame.
 	 */
 	private void initUIElements() {
 		final GridBagLayout layout = new GridBagLayout();
@@ -80,11 +101,11 @@ public class ClientUI extends JFrame {
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		panel.add(label, c);
 
-		this.textField = new JTextField(PropertyManager.getParameter(SERVER_ADDRESS));
-		this.textField.addActionListener(new TextFieldListener());
+		this.hostnameField = new JTextField(getParameter(SERVER_ADDRESS));
+		this.hostnameField.addActionListener(new HostNameFieldListener());
 		c.gridy = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		panel.add(this.textField, c);
+		panel.add(this.hostnameField, c);
 
 		this.okButton = new JButton("OK");
 		this.okButton.setMnemonic(KeyEvent.VK_O);
@@ -130,7 +151,7 @@ public class ClientUI extends JFrame {
 	 * 
 	 * @author Gokhan Daglioglu
 	 */
-	private class TextFieldListener implements ActionListener {
+	private class HostNameFieldListener implements ActionListener {
 		/**
 		 * {@inheritDoc}
 		 */
@@ -152,7 +173,7 @@ public class ClientUI extends JFrame {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent event) {
-			final String hostname = ClientUI.this.textField.getText();
+			final String hostname = ClientUI.this.hostnameField.getText();
 
 			if (hostname.equals("")) {
 				showError("You must enter a hostname for the server.");
@@ -160,9 +181,9 @@ public class ClientUI extends JFrame {
 				try {
 					final Registry registry = LocateRegistry.getRegistry(hostname);
 					ClientUI.this.dataService = (DataService) registry.lookup(RMI_SERVER);
-					PropertyManager.setParameter(SERVER_ADDRESS, hostname);
+					setParameter(SERVER_ADDRESS, hostname);
 					ClientUI.this.dispose();
-					ClientUI.this.application.start();
+					ClientUI.this.application.launch();
 				} catch (final RemoteException e) {
 					showError("Cannot connect to the remote server.\nThe hostname may be incorrect or the server could be down.");
 				} catch (final NotBoundException e) {
@@ -186,5 +207,4 @@ public class ClientUI extends JFrame {
 			System.exit(0);
 		}
 	}
-
 }

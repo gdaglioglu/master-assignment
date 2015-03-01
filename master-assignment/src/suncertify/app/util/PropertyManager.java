@@ -1,6 +1,6 @@
-package suncertify.ui;
+package suncertify.app.util;
 
-import static suncertify.shared.App.handleException;
+import static suncertify.app.util.App.handleException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,36 +20,41 @@ import java.util.logging.Logger;
  */
 public class PropertyManager {
 
-	private Logger logger = Logger.getLogger("suncertify.ui");
+	/**
+	 * The <code>Logger</code> instance. All log messages from this class are
+	 * routed through this member. The <code>Logger</code> namespace is
+	 * <code>suncertify.config</code>.
+	 */
+	private Logger logger = Logger.getLogger("suncertify.config");
 
 	/**
-	 * key in Properties indicating that the value will be the database
-	 * location.
+	 * The key in application properties indicating that the value will be the
+	 * database location.
 	 */
 	public static final String DATABASE_LOCATION = "database.location";
 
 	/**
-	 * key in Properties indicating that the value will be the RMI Registry
-	 * server address.
+	 * The key in application properties indicating that the value will be the
+	 * RMI Registry server address.
 	 */
 	public static final String SERVER_ADDRESS = "server.address";
 
 	/**
-	 * key in Properties indicating that the value will be the port the RMI
-	 * Registry.
+	 * The key in application properties indicating that the value will be the
+	 * port the RMI Registry.
 	 */
 	public static final String SERVER_PORT = "server.port";
 
 	/**
-	 * key in Properties indicating that the what type of network connectivity
-	 * will be used between the client and server.
+	 * The name used to persist the whether the state of the "Exact match"
+	 * checkbox on client UI.
 	 */
-	public static final String NETWORK_TYPE = "network.type";
+	public static final String EXACT_MATCH = "exact.match.enabled";
 
 	/**
-	 * the Properties for this application.
+	 * The <code>Properties</code> for this application.
 	 */
-	private Properties props = null;
+	private Properties props;
 
 	/**
 	 * The location where our configuration file will be saved.
@@ -57,26 +62,19 @@ public class PropertyManager {
 	private static final String BASE_DIRECTORY = System.getProperty("user.dir");
 
 	/**
-	 * the name of our properties file.
+	 * The name of our properties file.
 	 */
 	private static final String OPTIONS_FILENAME = "suncertify.properties";
 
 	/**
-	 * The name used to persist the whether the state of the Exact match
-	 * checkbox on the Client UI.
-	 */
-	public static final String EXACT_MATCH = "exact.match.enabled";
-
-	/**
-	 * The file containing our saved configuration.
+	 * The <code>File</code> containing application's saved configuration.
 	 */
 	private static File savedOptionsFile = new File(BASE_DIRECTORY, OPTIONS_FILENAME);
 
 	/**
-	 * Placeholder for our singleton version of OptionsModel. Since we know that
-	 * we will want at least one of these, we are creating our instance as soon
-	 * as we possibly can. If we were unsure whether we would ever need this or
-	 * not we would probably perform a lazy instantiation.
+	 * Placeholder for our singleton version of <code>PropertyManager</code>.
+	 * Since we know that we will want at least one of these, we are creating
+	 * our instance as soon as we possibly can.
 	 */
 	private static PropertyManager propertyManager = new PropertyManager();
 
@@ -94,24 +92,35 @@ public class PropertyManager {
 
 		if (props == null) {
 			props = new Properties();
-
 			props.setProperty(SERVER_ADDRESS, "localhost");
 			props.setProperty(SERVER_PORT, "" + java.rmi.registry.Registry.REGISTRY_PORT);
 			props.setProperty(EXACT_MATCH, "false");
 		}
+
 	}
 
 	/**
-	 * returns the value of the named parameter.
-	 * <p>
+	 * Returns the value of the named parameter.
+	 *
+	 * @param parameterName
+	 *            the name of the parameter for which the user is requesting the
+	 *            value.
+	 * @return the value of the named parameter in
+	 */
+	public static String getParameter(String parameterName) {
+		return propertyManager.props.getProperty(parameterName);
+	}
+
+	/**
+	 * Returns the <code>Boolean</code> value of the named parameter.
 	 *
 	 * @param parameterName
 	 *            the name of the parameter for which the user is requesting the
 	 *            value.
 	 * @return the value of the named parameter.
 	 */
-	public static String getParameter(String parameterName) {
-		return propertyManager.props.getProperty(parameterName);
+	public static boolean getBooleanParameter(String parameterName) {
+		return Boolean.parseBoolean(propertyManager.props.getProperty(parameterName));
 	}
 
 	/**
@@ -134,7 +143,7 @@ public class PropertyManager {
 	}
 
 	/**
-	 * saves the parameters to a file so that they can be used again next time
+	 * Saves the parameters to a file so that they can be used again next time
 	 * the application starts.
 	 */
 	private static void saveParametersToFile() {
@@ -150,15 +159,15 @@ public class PropertyManager {
 			}
 		} catch (IOException e) {
 			handleException("Unable to save user parameters to file. "
-					+ "They wont be remembered next time you start.");
+					+ "They will not be remembered next time you start.");
 		}
 	}
 
 	/**
-	 * attempts to load the saved parameters from the file so that the user does
-	 * not have to reenter all the information.
+	 * Attempts to load the saved parameters from the file so that the user does
+	 * not have to re-enter all the information.
 	 *
-	 * @return Properties loaded from file or null.
+	 * @return The properties loaded from file or null if file does not exist.
 	 */
 	private Properties loadParametersFromFile() {
 		Properties loadedProperties = null;
@@ -171,11 +180,9 @@ public class PropertyManager {
 					loadedProperties.load(fis);
 					fis.close();
 				} catch (FileNotFoundException e) {
-					assert false : "File not found after existance verified";
 					handleException("Unable to load user "
 							+ "parameters. Default values will be used.\n" + e);
 				} catch (IOException e) {
-					assert false : "Bad data in parameters file";
 					handleException("Unable to load user "
 							+ "parameters. Default values will be used.\n" + e);
 				}

@@ -1,7 +1,7 @@
 package suncertify.init;
 
-import static suncertify.shared.App.printUsage;
-import static suncertify.shared.App.setLookAndFeel;
+import static suncertify.app.util.App.printUsage;
+import static suncertify.app.util.App.setLookAndFeel;
 import suncertify.app.NetworkApplication;
 import suncertify.app.NetworkClientApplication;
 import suncertify.app.StandAloneApplication;
@@ -37,15 +37,14 @@ public class ApplicationRunner {
 	 *            "server" or no argument.
 	 */
 	public ApplicationRunner(String[] args) {
-
 		setLookAndFeel();
 
 		if (args.length == 0) {
-			new NetworkClientApplication().launch();
+			new NetworkClientApplication().init();
 		} else if (args.length == 1 && "alone".equals(args[0])) {
-			new StandAloneApplication().launch();
+			new StandAloneApplication().init();
 		} else if (args.length == 1 && "server".equals(args[0])) {
-			new NetworkApplication().launch();
+			new NetworkApplication().init();
 		} else {
 			printUsage();
 		}
