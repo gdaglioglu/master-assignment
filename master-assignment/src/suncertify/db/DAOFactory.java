@@ -1,8 +1,9 @@
 package suncertify.db;
 
-import suncertify.app.ui.DatabaseLocator;
+import static suncertify.app.ui.DatabaseLocator.getLocation;
+import static suncertify.app.util.PropertyManager.DATABASE_LOCATION;
+import static suncertify.app.util.PropertyManager.getParameter;
 import suncertify.app.util.App;
-import suncertify.app.util.PropertyManager;
 
 /**
  * This is a factory class responsible for creating and retrieving an instance
@@ -12,6 +13,10 @@ import suncertify.app.util.PropertyManager;
  */
 public class DAOFactory {
 
+	/**
+	 * The reference to {@link DBMain} instance.
+	 * 
+	 */
 	private static DBMain dataService;
 
 	/**
@@ -20,10 +25,12 @@ public class DAOFactory {
 	 * @return An instance of DBMain.
 	 */
 	public static DBMain getDataService() {
+
 		if (dataService == null) {
 			final String location = getDBLocation();
 			dataService = new Data(location);
 		}
+
 		return dataService;
 	}
 
@@ -34,15 +41,15 @@ public class DAOFactory {
 	 * @return The location of the database file.
 	 */
 	private static String getDBLocation() {
-		String location = PropertyManager
-				.getParameter(PropertyManager.DATABASE_LOCATION);
+		String location = getParameter(DATABASE_LOCATION);
 
 		if (location == null) {
-			location = DatabaseLocator.getLocation();
+			location = getLocation();
 			if (location == null) {
 				App.showErrorAndExit("You did not select a database location.");
 			}
 		}
+
 		return location;
 	}
 }

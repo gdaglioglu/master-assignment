@@ -16,21 +16,51 @@ import suncertify.db.io.DBSchema;
 import suncertify.db.io.DBWriter;
 
 /**
- * This class implements the provided interface <code>DBMain</code> This class
- * is a facade and delegates all functionality to two worker classes
+ * This class is responsible for the servers data records. It maintains a write
+ * through cache of the database records.
  * 
  * @author Gokhan Daglioglu
- * 
  */
 public class Data implements DBMain {
 
-	private Logger logger = Logger.getLogger("suncertify.db");
+	/**
+	 * The <code>Logger</code> instance. All log messages from this class are
+	 * routed through this member. The <code>Logger</code> namespace is
+	 * <code>suncertify.db</code>.
+	 */
+	private Logger logger = Logger.getLogger(Data.class.getPackage().getName());
 
+	/**
+	 * The <code>List</code> of <code>ReentrantLock</code>s used for find, read,
+	 * update and delete operations.
+	 */
 	private List<ReentrantLock> locks;
+
+	/**
+	 * The <code>ReentrantLock</code>s used for create operation.
+	 */
 	private ReentrantLock createLock;
+
+	/**
+	 * The full path to database file.
+	 */
 	private final String dbLocation;
-	private RandomAccessFile is;
+
+	/**
+	 * The <code>RandomAccessFile</code> instance used to read the database
+	 * file.
+	 */
+	private RandomAccessFile raf;
+
+	/**
+	 * The <code>List</code> of hotelRoom representations which serves as a
+	 * cache.
+	 */
 	private List<String[]> hotelRooms;
+
+	/**
+	 * The {@link DBWriter} instance used to write to the database file.
+	 */
 	private DBWriter dbWriter;
 
 	/**
@@ -51,9 +81,9 @@ public class Data implements DBMain {
 	 */
 	private void init() {
 		try {
-			this.is = new RandomAccessFile(this.dbLocation, "rw");
-			final DBParser parser = new DBParser(this.is);
-			this.dbWriter = new DBWriter(this.is);
+			this.raf = new RandomAccessFile(this.dbLocation, "rw");
+			final DBParser parser = new DBParser(this.raf);
+			this.dbWriter = new DBWriter(this.raf);
 			this.createLock = new ReentrantLock();
 			this.buildCache(parser);
 		} catch (final FileNotFoundException e) {
@@ -83,7 +113,6 @@ public class Data implements DBMain {
 	public String[] read(int recNo) throws RecordNotFoundException {
 		this.checkRecordNumber(recNo);
 		final String[] hotelRoom = this.hotelRooms.get(recNo);
-
 		return Arrays.copyOf(hotelRoom, hotelRoom.length);
 	}
 
@@ -116,7 +145,6 @@ public class Data implements DBMain {
 		for (int n = 0; n < this.hotelRooms.size(); n++) {
 			if (!this.isRecordDeleted(n)) {
 				this.lock(n);
-
 				boolean match = true;
 				for (int i = 0; i < criteria.length; i++) {
 					if (criteria[i] != null) {
@@ -124,6 +152,7 @@ public class Data implements DBMain {
 						if (field != null) {
 							field = field.toLowerCase();
 							final String critField = criteria[i].toLowerCase();
+
 							if (!field.contains(critField)) {
 								match = false;
 							}
@@ -145,7 +174,6 @@ public class Data implements DBMain {
 		for (int i = 0; i < results.size(); i++) {
 			intResults[i] = results.get(i);
 		}
-
 		return intResults;
 	}
 
@@ -154,14 +182,10 @@ public class Data implements DBMain {
 	 */
 	@Override
 	public int create(String[] data) throws DuplicateKeyException {
-
 		this.createLock.lock();
-
 		this.checkCreateData(data);
-
 		final int deletedPos = this.dbWriter.create(data);
 		int recNo = deletedPos;
-
 		if (deletedPos != -1) {
 			this.hotelRooms.set(deletedPos, data);
 		} else {
@@ -186,6 +210,7 @@ public class Data implements DBMain {
 	 *             exists.
 	 */
 	private boolean checkCreateData(final String[] data) throws DuplicateKeyException {
+
 		if ((data == null) || (data.length < 2) || (data[0] == null) || (data[1] == null)
 				|| data[0].equals("") || data[1].equals("")) {
 			this.createLock.unlock();
@@ -263,14 +288,18 @@ public class Data implements DBMain {
 	 *             If the record can't be found in the cache.
 	 */
 	private void checkRecordNumber(final int recNo) throws RecordNotFoundException {
+
 		if (recNo < 0) {
 			throw new IllegalArgumentException("The record number cannot be negative.");
 		}
+
 		if (this.hotelRooms.size() <= recNo) {
 			throw new RecordNotFoundException("No record found for record number: " + recNo);
 		}
+
 		if (this.isRecordDeleted(recNo) && !this.isRecordLocked(recNo)) {
 			throw new RecordNotFoundException("Record number " + recNo + " has been deleted.");
 		}
+
 	}
 }
