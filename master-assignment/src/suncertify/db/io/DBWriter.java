@@ -20,17 +20,26 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class DBWriter {
 
-	private final RandomAccessFile is;
+	/**
+	 * The <code>RandomAccessFile</code> instance used to read the database
+	 * file.
+	 */
+	private final RandomAccessFile raf;
+
+	/**
+	 * The <code>ReentrantLock</code>s used for crud operations towards the
+	 * database file.
+	 */
 	private final ReentrantLock lock = new ReentrantLock();
 
 	/**
 	 * Create new instance of the database writer.
 	 * 
-	 * @param is
-	 *            The file which to write too.
+	 * @param raf
+	 *            The file which to write to.
 	 */
-	public DBWriter(final RandomAccessFile is) {
-		this.is = is;
+	public DBWriter(final RandomAccessFile raf) {
+		this.raf = raf;
 	}
 
 	/**
@@ -66,8 +75,8 @@ public class DBWriter {
 		final int pos = RECORD_LENGTH * recNo;
 		try {
 			this.lock.lock();
-			this.is.seek(pos);
-			this.is.writeByte(RECORD_DELETED);
+			this.raf.seek(pos);
+			this.raf.writeByte(RECORD_DELETED);
 			this.lock.unlock();
 		} catch (final IOException e) {
 			showErrorAndExit("Cannot write to database file, changes cannot be persisted.");
@@ -86,22 +95,20 @@ public class DBWriter {
 	public int create(final String[] data) {
 		try {
 			this.lock.lock();
+			while (this.raf.getFilePointer() != this.raf.length()) {
+				final long recordPos = this.raf.getFilePointer();
+				final int flag = this.raf.readShort();
 
-			while (this.is.getFilePointer() != this.is.length()) {
-				final long recordPos = this.is.getFilePointer();
-				final int flag = this.is.readShort();
 				if (flag != RECORD_VALID) {
 					this.writeRecord(recordPos, data);
-
 					final long recordIndex = (recordPos) / RECORD_LENGTH;
 					return (int) recordIndex;
 				}
-				// skip the record
-				this.is.seek((this.is.getFilePointer() + RECORD_LENGTH)
+
+				this.raf.seek((this.raf.getFilePointer() + RECORD_LENGTH)
 						- NUM_BYTES_RECORD_DELETED_FLAG);
 			}
-
-			this.writeRecord(this.is.getFilePointer(), data);
+			this.writeRecord(this.raf.getFilePointer(), data);
 			this.lock.unlock();
 		} catch (final IOException e) {
 			showErrorAndExit("Cannot write to database file.");
@@ -119,16 +126,13 @@ public class DBWriter {
 	 * @throws IOException
 	 *             If the method fails to write to the database file.
 	 */
-	private void writeRecord(final long pos, final String[] data)
-			throws IOException {
-		this.is.seek(pos);
-
-		// write 0 byte flag to indicate not deleted
-		this.is.writeByte(RECORD_VALID);
+	private void writeRecord(final long pos, final String[] data) throws IOException {
+		this.raf.seek(pos);
+		// write 0 byte flag to indicate valid record
+		this.raf.writeByte(RECORD_VALID);
 		for (int i = 0; i < data.length; i++) {
-			final byte[] updatedData = Arrays.copyOf(
-					data[i].getBytes(US_ASCII), FIELD_LENGTHS[i]);
-			this.is.write(updatedData);
+			final byte[] updatedData = Arrays.copyOf(data[i].getBytes(US_ASCII), FIELD_LENGTHS[i]);
+			this.raf.write(updatedData);
 		}
 	}
 }

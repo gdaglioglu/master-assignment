@@ -2,6 +2,10 @@ package suncertify.init;
 
 import static suncertify.app.util.App.printUsage;
 import static suncertify.app.util.App.setLookAndFeel;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import suncertify.app.NetworkApplication;
 import suncertify.app.NetworkClientApplication;
 import suncertify.app.StandAloneApplication;
@@ -14,6 +18,13 @@ import suncertify.app.StandAloneApplication;
  * @author Gokhan Daglioglu
  */
 public class ApplicationRunner {
+
+	/**
+	 * The <code>Logger</code> instance. All log messages from this class are
+	 * routed through this member. The <code>Logger</code> namespace is
+	 * <code>suncertify.init</code>.
+	 */
+	private Logger logger = Logger.getLogger(ApplicationRunner.class.getPackage().getName());
 
 	/**
 	 * The method that launches the URLyBird application.
@@ -40,10 +51,13 @@ public class ApplicationRunner {
 		setLookAndFeel();
 
 		if (args.length == 0) {
+			logger.log(Level.INFO, "Starting URLybird in Networked Client Mode");
 			new NetworkClientApplication().init();
 		} else if (args.length == 1 && "alone".equals(args[0])) {
+			logger.log(Level.INFO, "Starting URLybird in Stand Alone Mode");
 			new StandAloneApplication().init();
 		} else if (args.length == 1 && "server".equals(args[0])) {
+			logger.log(Level.INFO, "Starting URLybird in Networked Server Mode");
 			new NetworkApplication().init();
 		} else {
 			printUsage();

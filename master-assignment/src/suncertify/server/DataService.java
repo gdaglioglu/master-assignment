@@ -17,10 +17,10 @@ import suncertify.domain.HotelRoom;
 public interface DataService extends Remote {
 
 	/**
-	 * This method reads a {@link HotelRoom} HotelRoom object from the database.
+	 * This method reads a {@link HotelRoom} object from the database.
 	 * 
 	 * @param recNo
-	 *            The record number of the HotelRoom.
+	 *            The record number of the {@link HotelRoom}.
 	 * @return The {@link HotelRoom} object.
 	 * @throws RecordNotFoundException
 	 *             When no {@link HotelRoom} was found with the specified record
@@ -28,8 +28,7 @@ public interface DataService extends Remote {
 	 * @throws RemoteException
 	 *             If called over RMI and the server cannot be contacted.
 	 */
-	HotelRoom read(final int recNo) throws RecordNotFoundException,
-			RemoteException;
+	HotelRoom read(final int recNo) throws RecordNotFoundException, RemoteException;
 
 	/**
 	 * This method will update the {@link HotelRoom} in the database.
@@ -44,8 +43,8 @@ public interface DataService extends Remote {
 	 * @throws RemoteException
 	 *             If called over RMI and the server cannot be contacted.
 	 */
-	void update(final int recNo, final HotelRoom record)
-			throws RecordNotFoundException, RemoteException;
+	void update(final int recNo, final HotelRoom record) throws RecordNotFoundException,
+			RemoteException;
 
 	/**
 	 * This method deletes a {@link HotelRoom} from the database.
@@ -54,7 +53,7 @@ public interface DataService extends Remote {
 	 *            The record to be deleted.
 	 * @throws RecordNotFoundException
 	 *             When no {@link HotelRoom} was found that matches the record
-	 *             number of the specified Contractor object.
+	 *             number of the specified {@link HotelRoom} object.
 	 * @throws RemoteException
 	 *             If called over RMI and the server cannot be contacted.
 	 */
@@ -74,8 +73,7 @@ public interface DataService extends Remote {
 	 * @throws RemoteException
 	 *             If called over RMI and the server cannot be contacted.
 	 */
-	List<HotelRoom> find(final String[] criteria, boolean exactMatch)
-			throws RemoteException;
+	List<HotelRoom> find(final String[] criteria, boolean exactMatch) throws RemoteException;
 
 	/**
 	 * This method will create a new {@link HotelRoom} in the database.
@@ -85,10 +83,9 @@ public interface DataService extends Remote {
 	 *            {@link HotelRoom}.
 	 * @return The record number of the new {@link HotelRoom}.
 	 * @throws DuplicateKeyException
-	 *             If this Contractor already exists.
+	 *             If this {@link HotelRoom} already exists.
 	 * @throws RemoteException
 	 *             If called over RMI and the server cannot be contacted.
 	 */
-	int create(final String[] data) throws DuplicateKeyException,
-			RemoteException;
+	int create(final String[] data) throws DuplicateKeyException, RemoteException;
 }

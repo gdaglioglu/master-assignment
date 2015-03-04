@@ -2,6 +2,8 @@ package suncertify.server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import suncertify.db.DAOFactory;
 import suncertify.db.DBMain;
@@ -16,6 +18,16 @@ import suncertify.domain.HotelRoom;
  */
 public class DataServiceImpl implements DataService {
 
+	/**
+	 * The <code>Logger</code> instance. All log messages from this class are
+	 * routed through this member. The <code>Logger</code> namespace is
+	 * <code>suncertify.server</code>.
+	 */
+	private Logger logger = Logger.getLogger(DataServiceImpl.class.getPackage().getName());
+
+	/**
+	 * The instance to {@link DBMain}.
+	 */
 	private final DBMain data;
 
 	/**
@@ -24,6 +36,7 @@ public class DataServiceImpl implements DataService {
 	 */
 	public DataServiceImpl() {
 		this.data = DAOFactory.getDataService();
+		logger.log(Level.FINE, "Initialized DataServiceImpl");
 	}
 
 	/**
@@ -34,7 +47,7 @@ public class DataServiceImpl implements DataService {
 		this.data.lock(recNo);
 		final HotelRoom record = new HotelRoom(this.data.read(recNo));
 		this.data.unlock(recNo);
-
+		logger.log(Level.FINER, "Read the hotel room object with recNo: " + recNo);
 		return record;
 	}
 
@@ -47,6 +60,8 @@ public class DataServiceImpl implements DataService {
 		this.data.lock(recNo);
 		this.data.update(recNo, data.toArray());
 		this.data.unlock(recNo);
+		logger.log(Level.FINER, "Updated the hotel room object with recNo: " + recNo
+				+ " with data: " + data.toString());
 	}
 
 	/**
@@ -57,6 +72,7 @@ public class DataServiceImpl implements DataService {
 		this.data.lock(recNo);
 		this.data.delete(recNo);
 		this.data.unlock(recNo);
+		logger.log(Level.FINER, "Deleted the hotel room object with recNo: " + recNo);
 	}
 
 	/**
@@ -79,21 +95,21 @@ public class DataServiceImpl implements DataService {
 					finalResults.add(record);
 				}
 			} catch (final RecordNotFoundException e) {
-				// record has been deleted, ignore it
+				logger.log(Level.FINER, "Record has been deleted, ignoring it");
 			}
 		}
 		return finalResults;
 	}
 
 	/**
-	 * This method is used to determine if a Contractor exactly matches search
-	 * criteria.
+	 * This method is used to determine if a {@link HotelRoom} exactly matches
+	 * search criteria.
 	 * 
 	 * @param record
-	 *            The Contractor to check.
+	 *            The {@link HotelRoom} to check.
 	 * @param criteria
-	 *            The search criteria used to check the Contractor.
-	 * @return true if the Contractor is an exact match otherwise false.
+	 *            The search criteria used to check the {@link HotelRoom}.
+	 * @return true if the {@link HotelRoom} is an exact match otherwise false.
 	 */
 	private boolean isExactMatch(final HotelRoom record, final String[] criteria) {
 		final String[] dataArray = record.toArray();
@@ -112,6 +128,8 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public int create(final String[] data) throws DuplicateKeyException {
 		final int recNo = this.data.create(data);
+		logger.log(Level.FINER, "Created the hotel room object with recNo: " + recNo
+				+ " with data: " + data.toString());
 		return recNo;
 	}
 }

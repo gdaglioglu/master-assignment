@@ -14,39 +14,51 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * This class is responsible for the reading of the database file.
+ * This class is responsible for the reading from the database file.
  * 
- * @author gdaglioglu
+ * @author Gokhan Daglioglu
  */
 public class DBParser {
 
-	private final RandomAccessFile is;
+	/**
+	 * The <code>Logger</code> instance. All log messages from this class are
+	 * routed through this member. The <code>Logger</code> namespace is
+	 * <code>suncertify.db.io</code>.
+	 */
+	private Logger logger = Logger.getLogger(DBParser.class.getPackage().getName());
+
+	/**
+	 * The <code>RandomAccessFile</code> instance used to read the database
+	 * file.
+	 */
+	private final RandomAccessFile raf;
 
 	/**
 	 * Create a new instance of this class to parse the database file.
 	 * 
-	 * @param is
+	 * @param raf
 	 *            The database file to be parsed.
 	 */
-	public DBParser(final RandomAccessFile is) {
-		this.is = is;
+	public DBParser(final RandomAccessFile raf) {
+		this.raf = raf;
+		logger.log(Level.FINE, "Initialized DBParser");
 	}
 
 	/**
 	 * This method reads all records from the database file.
 	 * 
-	 * @return A List containing all the database records.
+	 * @return A <code>List</code> containing all hotel room records.
 	 */
 	public List<String[]> getAllRecords() {
 		final List<String[]> hotelRooms = new ArrayList<String[]>();
 		try {
 			this.checkMagicCookie();
 			this.readDataFileHeaders();
-
-			// data
-			while (this.is.getFilePointer() != this.is.length()) {
+			while (this.raf.getFilePointer() != this.raf.length()) {
 				final String[] dataItem = this.readNextRecord();
 				hotelRooms.add(dataItem);
 			}
@@ -65,7 +77,7 @@ public class DBParser {
 	 *             If reading the magic cookie value from the file fails.
 	 */
 	private void checkMagicCookie() throws IOException {
-		MAGIC_COOKIE = this.is.readInt();
+		MAGIC_COOKIE = this.raf.readInt();
 		if (MAGIC_COOKIE != EXPECTED_MAGIC_COOKIE) {
 			showErrorAndExit("The selected database file is not compatible with this application.");
 		}
@@ -79,22 +91,19 @@ public class DBParser {
 	 *             If reading from the database file fails.
 	 */
 	private void readDataFileHeaders() throws IOException {
-		// headers
-		// START_OF_RECORDS = this.is.readInt();
-		NUMBER_OF_FIELDS = this.is.readShort();
-
+		NUMBER_OF_FIELDS = this.raf.readShort();
 		// data headers
 		FIELD_LENGTHS = new int[NUMBER_OF_FIELDS];
 		FIELD_HEADERS = new String[NUMBER_OF_FIELDS];
 		for (int i = 0; i < NUMBER_OF_FIELDS; i++) {
 			// 1 byte numeric, length (in bytes) of field name
-			final int fieldNameLength = this.is.readByte();
+			final int fieldNameLength = this.raf.readByte();
 
 			// n bytes (defined by previous entry), field name
 			FIELD_HEADERS[i] = this.readString(fieldNameLength);
 
 			// 1 byte numeric, field length in bytes
-			final int fieldLength = this.is.readByte();
+			final int fieldLength = this.raf.readByte();
 			FIELD_LENGTHS[i] = fieldLength;
 			RECORD_LENGTH += fieldLength;
 		}
@@ -109,18 +118,19 @@ public class DBParser {
 	 *             If reading from the database file fails.
 	 */
 	private String[] readNextRecord() throws IOException {
-		final short flag = this.is.readByte();
-
+		final short flag = this.raf.readByte();
 		final String[] dataItem = new String[NUMBER_OF_FIELDS];
+
 		if (flag == 0) {
 			for (int i = 0; i < dataItem.length; i++) {
 				dataItem[i] = this.readString(FIELD_LENGTHS[i]);
 			}
 		} else {
 			// skip the next record as it's marked deleted
-			this.is.seek((this.is.getFilePointer() + RECORD_LENGTH)
+			this.raf.seek((this.raf.getFilePointer() + RECORD_LENGTH)
 					- NUM_BYTES_RECORD_DELETED_FLAG);
 		}
+
 		return dataItem;
 	}
 
@@ -138,7 +148,7 @@ public class DBParser {
 	 */
 	private String readString(final int n) throws IOException {
 		final byte[] bytes = new byte[n];
-		this.is.read(bytes);
+		this.raf.read(bytes);
 		return new String(bytes, US_ASCII).trim();
 	}
 }

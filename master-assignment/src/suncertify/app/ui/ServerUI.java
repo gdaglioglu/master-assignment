@@ -31,6 +31,11 @@ import suncertify.app.Application;
  */
 public class ServerUI extends JFrame {
 
+	/**
+	 * A version number for this class so that serialization can occur without
+	 * worrying about the underlying class changing between serialization and
+	 * deserialization.
+	 */
 	private static final long serialVersionUID = 4825206061500231551L;
 
 	/**

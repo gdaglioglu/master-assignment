@@ -1,5 +1,5 @@
 /**
  * This package contains all the classes responsible for reading and writing to the database file.
- * @author gdaglioglu
+ * @author Gokhan Daglioglu
  */
 package suncertify.db.io;

@@ -15,6 +15,11 @@ import suncertify.domain.HotelRoom;
  */
 public class HotelRoomTableModel extends AbstractTableModel {
 
+	/**
+	 * A version number for this class so that serialization can occur without
+	 * worrying about the underlying class changing between serialization and
+	 * deserialization.
+	 */
 	private static final long serialVersionUID = -1536374087517864732L;
 
 	/**
@@ -23,15 +28,15 @@ public class HotelRoomTableModel extends AbstractTableModel {
 	private String[] headerNames = { "Name", "Location", "Size", "Smoking", "Rate", "Date", "Owner" };
 
 	/**
-	 * Holds all Hotel instances displayed in the main table.
+	 * Holds all hotel room instances displayed in the main table.
 	 */
 	private ArrayList<HotelRoom> hotelRoomRecords = new ArrayList<HotelRoom>();
 
 	/**
-	 * Adds a row of hotel room data to the table.
+	 * Adds a row of hotel room to the table.
 	 *
 	 * @param hotelRoomRecord
-	 *            a <code>String</code> array representing a hotel room
+	 *            a <code>String</code> array representing a hotel room.
 	 */
 	public void addHotelRoomRecord(String[] hotelRoomRecord) {
 		this.hotelRoomRecords.add(new HotelRoom(hotelRoomRecord[0], hotelRoomRecord[1],
@@ -57,10 +62,10 @@ public class HotelRoomTableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Add all the Contractors from a list to the table model
+	 * Add all the {@link HotelRoom}s from a list to the table model
 	 * 
 	 * @param records
-	 *            The list of Contractors to add.
+	 *            The list of {@link HotelRoom}s to add.
 	 */
 	public void addAll(final List<HotelRoom> records) {
 		for (final HotelRoom rec : records) {
@@ -116,5 +121,4 @@ public class HotelRoomTableModel extends AbstractTableModel {
 	public boolean isCellEditable(int row, int column) {
 		return false;
 	}
-
 }

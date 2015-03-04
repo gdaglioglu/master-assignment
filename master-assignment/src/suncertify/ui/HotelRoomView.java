@@ -5,6 +5,8 @@ import static suncertify.app.util.App.getCenterOnScreen;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +16,9 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -30,48 +35,87 @@ import suncertify.app.util.PropertyManager;
  */
 public class HotelRoomView extends JFrame {
 
+	/**
+	 * A version number for this class so that serialization can occur without
+	 * worrying about the underlying class changing between serialization and
+	 * deserialization.
+	 */
 	private static final long serialVersionUID = 2886178206092565805L;
-
-	final JLabel nameLabel = new JLabel("Hotel name:");
-	final JLabel locationLabel = new JLabel("Hotel location:");
-	final JLabel sizeLabel = new JLabel("Room size:");
-	final JLabel smokingLabel = new JLabel("Smoking state:");
-	final JLabel rateLabel = new JLabel("Room rate:");
-	final JLabel dateLabel = new JLabel("Date:");
-	final JLabel ownerLabel = new JLabel("Owner:");
-
-	private JTextField nameSearchField = new JTextField(15);
-	private JTextField locationSearchField = new JTextField(15);
-	private JTextField sizeSearchField = new JTextField(15);
-	private JTextField smokingSearchField = new JTextField(15);
-	private JTextField rateSearchField = new JTextField(15);
-	private JTextField dateSearchField = new JTextField(15);
-	private JTextField ownerSearchField = new JTextField(15);
-
-	private JTable mainTable;
-
-	private JButton bookButton = new JButton("Book Room");
-
-	private JButton searchButton = new JButton("Search");
-
-	private JCheckBox exactMatch = new JCheckBox("Exact match");
 
 	/**
 	 * The Logger instance. All log messages from this class are routed through
-	 * this member. The Logger namespace is <code>suncertify.client.gui</code>.
+	 * this member. The Logger namespace is <code>suncertify.ui</code>.
 	 */
-	private Logger logger = Logger.getLogger("suncertify.ui");
+	private Logger logger = Logger.getLogger(HotelRoomView.class.getPackage().getName());
 
 	/**
-	 * Builds and displays the main application window. The constructor begins
-	 * by building the connection selection dialog box. After the user selects a
-	 * connection type, the method creates a <code>HotelRoomMainWindow</code>
-	 * instance.
+	 * The <code>JTextField</code> which is used as a name search field for the
+	 * hotel.
+	 */
+	private JTextField nameSearchField = new JTextField(15);
+
+	/**
+	 * The <code>JTextField</code> which is used as a location search field for
+	 * the hotel.
+	 */
+	private JTextField locationSearchField = new JTextField(15);
+
+	/**
+	 * The <code>JTextField</code> which is used as a size search field for the
+	 * hotel.
+	 */
+	private JTextField sizeSearchField = new JTextField(15);
+
+	/**
+	 * The <code>JTextField</code> which is used as a smoking search field for
+	 * the hotel.
+	 */
+	private JTextField smokingSearchField = new JTextField(15);
+
+	/**
+	 * The <code>JTextField</code> which is used as a rate search field for the
+	 * hotel.
+	 */
+	private JTextField rateSearchField = new JTextField(15);
+
+	/**
+	 * The <code>JTextField</code> which is used as a date search field for the
+	 * hotel.
+	 */
+	private JTextField dateSearchField = new JTextField(15);
+
+	/**
+	 * The <code>JTextField</code> which is used as a owner search field for the
+	 * hotel.
+	 */
+	private JTextField ownerSearchField = new JTextField(15);
+
+	/**
+	 * The <code>JTable</code> which displays the records.
+	 */
+	private JTable mainTable;
+
+	/**
+	 * The <code>JButton</code>s which allows user to perform book operation.
+	 */
+	private JButton bookButton = new JButton("Book Room");
+
+	/**
+	 * The <code>JButton</code>s which allows user to perform search operation.
+	 */
+	private JButton searchButton = new JButton("Search");
+
+	/**
+	 * The <code>JCheckBox</code> which allows user to perform a search
+	 * operation using exact match functionality.
+	 */
+	private JCheckBox exactMatch = new JCheckBox("Exact match");
+
+	/**
+	 * Builds and displays the main application window.
 	 *
-	 * @param args
-	 *            an argument specifying whether we are starting a networked
-	 *            client (argument missing) or a standalone client (argument =
-	 *            "alone").
+	 * @param title
+	 *            The title to be displayed on the main application window.
 	 */
 	public HotelRoomView(String title) {
 		super(title);
@@ -89,16 +133,17 @@ public class HotelRoomView extends JFrame {
 	 * Uses the <code>tableData</code> member to refresh the contents of the
 	 * <code>mainTable</code>. The method will attempt to preserve all previous
 	 * selections and contents displayed.
+	 * 
+	 * @param tableData
+	 *            The new data set to be used to update the records shown to the
+	 *            user.
 	 */
 	public void updateTable(final AbstractTableModel tableData) {
-		// Preserve the previous selection
-		JTable mainTable = this.getMainTable();
 		int index = mainTable.getSelectedRow();
+		// Preserve the previous selection
 		String prevSelected = (index >= 0) ? (String) mainTable.getValueAt(index, 0) : "";
-
 		// Reset the table data
 		mainTable.setModel(tableData);
-
 		// Reselect the previous item if it still exists
 		for (int i = 0; i < mainTable.getRowCount(); i++) {
 			String selected = (String) mainTable.getValueAt(i, 0);
@@ -109,6 +154,11 @@ public class HotelRoomView extends JFrame {
 		}
 	}
 
+	/**
+	 * Gets the contents of search fields.
+	 * 
+	 * @return the array that contains the contents of each search field.
+	 */
 	public String[] getSearchCriteria() {
 		String[] criteria = new String[7];
 		criteria[0] = nameSearchField.getText().trim();
@@ -121,28 +171,110 @@ public class HotelRoomView extends JFrame {
 		return criteria;
 	}
 
+	/**
+	 * Gets the search button.
+	 * 
+	 * @return a reference to the search button.
+	 */
 	public JButton getSearchButton() {
 		return this.searchButton;
 	}
 
+	/**
+	 * Gets the main table.
+	 * 
+	 * @return a reference to the main table.
+	 */
 	public JTable getMainTable() {
 		return this.mainTable;
 	}
 
+	/**
+	 * Gets the booking button.
+	 * 
+	 * @return a reference to the button button.
+	 */
 	public JButton getBookButton() {
 		return this.bookButton;
 	}
 
+	/**
+	 * Gets the exact match check box.
+	 * 
+	 * @return a reference to the exact match check box.
+	 */
 	public JCheckBox getExactMatch() {
 		return this.exactMatch;
 	}
 
+	/**
+	 * Gets the exact match check box's state.
+	 * 
+	 * @return the state of the exact match check box.
+	 */
 	public String isExactMatchSelected() {
 		return String.valueOf(this.exactMatch.isSelected());
 	}
 
+	/**
+	 * The menu bar of main application window of the URLyBird client
+	 * application.
+	 *
+	 * @author Gokhan Daglioglu
+	 */
+	private class HotelRoomsMenuBar extends JMenuBar {
+
+		/**
+		 * A version number for this class so that serialization can occur
+		 * without worrying about the underlying class changing between
+		 * serialization and deserialization.
+		 */
+		private static final long serialVersionUID = -81759777197357075L;
+
+		public HotelRoomsMenuBar() {
+			JMenu fileMenu = new JMenu("File");
+			JMenuItem quitMenuItem = new JMenuItem("Quit");
+			quitMenuItem.addActionListener(new QuitApplication());
+			quitMenuItem.setMnemonic(KeyEvent.VK_Q);
+			fileMenu.add(quitMenuItem);
+			fileMenu.setMnemonic(KeyEvent.VK_F);
+			this.add(fileMenu);
+			logger.log(Level.FINE, "Initialized Hotel Room Menu Bar");
+		}
+
+		/**
+		 * Handles all application quit events.
+		 *
+		 * @author Gokhan Daglioglu
+		 */
+		private class QuitApplication implements ActionListener {
+
+			/**
+			 * Quits the application when invoked.
+			 *
+			 * @param actionEvent
+			 *            The event triggering the quit operation.
+			 */
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				logger.log(Level.INFO, "Exiting Client Application");
+				System.exit(0);
+			}
+		}
+	}
+
+	/**
+	 * The main panel of application window of the URLyBird client application.
+	 *
+	 * @author Gokhan Daglioglu
+	 */
 	private class HotelRoomsMainPanel extends JPanel {
 
+		/**
+		 * A version number for this class so that serialization can occur
+		 * without worrying about the underlying class changing between
+		 * serialization and deserialization.
+		 */
 		private static final long serialVersionUID = -8314548902783510446L;
 
 		/**
@@ -150,7 +282,6 @@ public class HotelRoomView extends JFrame {
 		 * 
 		 */
 		public HotelRoomsMainPanel() {
-
 			mainTable = new JTable();
 			mainTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			mainTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -176,11 +307,32 @@ public class HotelRoomView extends JFrame {
 		}
 	}
 
+	/**
+	 * The search panel of application's main panel.
+	 *
+	 * @author Gokhan Daglioglu
+	 */
 	private class SearchPanel extends JPanel {
 
+		/**
+		 * A version number for this class so that serialization can occur
+		 * without worrying about the underlying class changing between
+		 * serialization and deserialization.
+		 */
 		private static final long serialVersionUID = -1126709180970637756L;
 
+		/**
+		 * Constructs the main panel for the client application.
+		 * 
+		 */
 		public SearchPanel() {
+			final JLabel nameLabel = new JLabel("Hotel name:");
+			final JLabel locationLabel = new JLabel("Hotel location:");
+			final JLabel sizeLabel = new JLabel("Room size:");
+			final JLabel smokingLabel = new JLabel("Smoking state:");
+			final JLabel rateLabel = new JLabel("Room rate:");
+			final JLabel dateLabel = new JLabel("Date:");
+			final JLabel ownerLabel = new JLabel("Owner:");
 
 			// load saved configuration
 			exactMatch.setSelected(Boolean.parseBoolean(PropertyManager

@@ -1,7 +1,6 @@
 package suncertify.ui;
 
 import static suncertify.app.util.App.handleException;
-import static suncertify.app.util.App.showError;
 import static suncertify.app.util.App.showErrorAndExit;
 import static suncertify.app.util.App.showWarning;
 import static suncertify.app.util.PropertyManager.EXACT_MATCH;
@@ -15,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -23,7 +21,6 @@ import javax.swing.JTable;
 import suncertify.db.DBMain;
 import suncertify.db.RecordNotFoundException;
 import suncertify.domain.HotelRoom;
-import suncertify.init.ApplicationRunner;
 import suncertify.server.DataService;
 
 /**
@@ -33,9 +30,8 @@ import suncertify.server.DataService;
  * @author Gokhan Daglioglu
  * @see DBMain
  * @see HotelRoomView
- * @see GuiControllerException
+ * @see HotelRoomTableModel
  */
-
 public class HotelRoomController {
 
 	/**
@@ -43,7 +39,7 @@ public class HotelRoomController {
 	 * routed through this member. The <code>Logger</code> namespace is
 	 * <code>suncertify.ui</code>.
 	 */
-	private Logger logger = Logger.getLogger("suncertify.ui");
+	private Logger logger = Logger.getLogger(HotelRoomController.class.getPackage().getName());
 
 	/**
 	 * The model for the client MVC.
@@ -56,7 +52,7 @@ public class HotelRoomController {
 	private HotelRoomView hotelRoomView;
 
 	/**
-	 * The reference to a local datafile.
+	 * The reference to a {@link DataService} interface.
 	 */
 	private DataService dataService;
 
@@ -93,23 +89,17 @@ public class HotelRoomController {
 	public HotelRoomController(DataService dataservice) {
 		dataService = dataservice;
 		this.hotelRoomView = new HotelRoomView("URLyBird Discounted Hotel Rooms - Client View");
-
-		try {
-			this.hotelRoomModel = this.getAllHotelRooms();
-		} catch (GuiControllerException e) {
-			handleException("Failed to acquire an initial hotel room list."
-					+ "\nPlease check the DB connection.");
-		}
-
+		this.hotelRoomModel = this.getAllHotelRooms();
 		this.hotelRoomView.updateTable(this.hotelRoomModel);
 		this.control();
-
 		logger.log(Level.FINE, "Initialized Hotel Room Controller");
 	}
 
-	private HotelRoomTableModel getAllHotelRooms() throws GuiControllerException {
+	private HotelRoomTableModel getAllHotelRooms() {
+		logger.entering("HotelRoomController", "getAllHotelRooms");
 		lastSearchCriteria = this.hotelRoomView.getSearchCriteria();
 		final boolean exactMatch = getBooleanParameter(EXACT_MATCH);
+		logger.exiting("HotelRoomController", "getAllHotelRooms");
 		return this.getHotelRoomsByCriteria(lastSearchCriteria, exactMatch);
 	}
 
@@ -123,11 +113,8 @@ public class HotelRoomController {
 	 * @param hotelName
 	 *            The <code>String</code> representing the hotel name.
 	 * @return A {@link HotelRoomModel} containing all found hotel room records.
-	 * @throws GuiControllerException
-	 *             Indicates a database or network level exception.
 	 */
-	private HotelRoomTableModel getHotelRoomsByCriteria(String[] searchCriteria, boolean exactMatch)
-			throws GuiControllerException {
+	private HotelRoomTableModel getHotelRoomsByCriteria(String[] searchCriteria, boolean exactMatch) {
 		logger.entering("HotelRoomController", "getHotelRoomsByCriteria",
 				"Parameters: searchCriteria = " + Arrays.toString(searchCriteria)
 						+ "\nexactMatch = " + exactMatch);
@@ -144,35 +131,21 @@ public class HotelRoomController {
 	}
 
 	/**
-	 * This method is called by the {@link ApplicationRunner} after
-	 * instantiating a <code>HotelRoomController</code>. It creates
-	 * <code>ActionListener</code> instances for searching and booking and adds
-	 * them to the relevant <code>JButtons</code> in {@link HotelRoomView}
+	 * This method creates <code>ActionListener</code> instances for searching
+	 * and booking and adds them to the relevant <code>JButtons</code> and
+	 * <code>JCheckBox</code> in {@link HotelRoomView}
 	 */
 	private void control() {
 
 		this.searchListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					HotelRoomController.this.lastSearchCriteria = HotelRoomController.this.hotelRoomView
-							.getSearchCriteria();
-					final boolean exactMatch = getBooleanParameter(EXACT_MATCH);
-					hotelRoomView.updateTable(HotelRoomController.this.getHotelRoomsByCriteria(
-							HotelRoomController.this.lastSearchCriteria, exactMatch));
-				} catch (GuiControllerException gce) {
-					// Inspect the exception chain
-					Throwable rootException = gce.getCause();
-					String msg = "Search operation failed.";
-					// If a syntax error occurred, get the message
-					if (rootException instanceof PatternSyntaxException) {
-						msg += ("\n" + rootException.getMessage());
-					}
-					handleException(msg);
-				}
-
+				HotelRoomController.this.lastSearchCriteria = HotelRoomController.this.hotelRoomView
+						.getSearchCriteria();
+				final boolean exactMatch = getBooleanParameter(EXACT_MATCH);
+				hotelRoomView.updateTable(HotelRoomController.this.getHotelRoomsByCriteria(
+						HotelRoomController.this.lastSearchCriteria, exactMatch));
 			}
-
 		};
 
 		this.exactMatchListener = new ActionListener() {
@@ -187,28 +160,20 @@ public class HotelRoomController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				final String ALREADY_BOOKED_MSG = "Unable to book - room is already booked.";
-
 				JTable mainTable = hotelRoomView.getMainTable();
 				int hotelRoomRecordNo = mainTable.getSelectedRow();
 				if ((hotelRoomRecordNo >= 0)) {
 					final String customerId = JOptionPane.showInputDialog(null,
 							"Enter Customer ID", "Book Room", JOptionPane.QUESTION_MESSAGE);
 					if (isValidCustomerId(customerId)) {
-						try {
-							boolean booked = HotelRoomController.this.bookRoom(customerId,
-									hotelRoomRecordNo);
-							if (booked == false) {
-								handleException(ALREADY_BOOKED_MSG);
-							}
-							final boolean exactMatch = getBooleanParameter(EXACT_MATCH);
-							hotelRoomView
-									.updateTable(HotelRoomController.this
-											.getHotelRoomsByCriteria(
-													HotelRoomController.this.lastSearchCriteria,
-													exactMatch));
-						} catch (GuiControllerException gce) {
-							handleException("Booking operation failed.");
+						boolean booked = HotelRoomController.this.bookRoom(customerId,
+								hotelRoomRecordNo);
+						if (booked == false) {
+							handleException(ALREADY_BOOKED_MSG);
 						}
+						final boolean exactMatch = getBooleanParameter(EXACT_MATCH);
+						hotelRoomView.updateTable(HotelRoomController.this.getHotelRoomsByCriteria(
+								HotelRoomController.this.lastSearchCriteria, exactMatch));
 					}
 				} else {
 					showWarning("Please select a row");
@@ -243,8 +208,7 @@ public class HotelRoomController {
 	 * @return A <code>boolean</code> indicating if the rent operation was
 	 *         successful.
 	 */
-	private boolean bookRoom(String customerId, int hotelRoomRecordNo)
-			throws GuiControllerException {
+	private boolean bookRoom(String customerId, int hotelRoomRecordNo) {
 
 		logger.entering("HotelRoomController", "bookRoom", "Record number to be booked: "
 				+ hotelRoomRecordNo);
@@ -253,8 +217,7 @@ public class HotelRoomController {
 			hotelRoom.setOwner(customerId);
 			this.dataService.update(hotelRoomRecordNo, hotelRoom);
 		} catch (final RecordNotFoundException recordNotFoundException) {
-			logger.log(Level.SEVERE, recordNotFoundException.getMessage(), recordNotFoundException);
-			showError(recordNotFoundException.getMessage());
+			handleException(recordNotFoundException.getMessage());
 		} catch (final RemoteException exp) {
 			showErrorAndExit("The remote server is no longer available.");
 		}

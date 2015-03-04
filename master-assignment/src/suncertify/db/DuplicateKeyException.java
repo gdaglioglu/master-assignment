@@ -8,6 +8,11 @@ package suncertify.db;
  */
 public class DuplicateKeyException extends Exception {
 
+	/**
+	 * A version number for this class so that serialization can occur without
+	 * worrying about the underlying class changing between serialization and
+	 * deserialization.
+	 */
 	private static final long serialVersionUID = -6689165809485807888L;
 
 	/**
