@@ -6,6 +6,7 @@ import static suncertify.db.io.DBSchema.NUM_BYTES_RECORD_DELETED_FLAG;
 import static suncertify.db.io.DBSchema.RECORD_DELETED;
 import static suncertify.db.io.DBSchema.RECORD_LENGTH;
 import static suncertify.db.io.DBSchema.RECORD_VALID;
+import static suncertify.db.io.DBSchema.START_OFFSET;
 import static suncertify.db.io.DBSchema.US_ASCII;
 
 import java.io.IOException;
@@ -53,7 +54,7 @@ public class DBWriter {
 	 */
 	public boolean write(final int recNo, final String[] data) {
 		try {
-			final int pos = RECORD_LENGTH * recNo;
+			final int pos = START_OFFSET + RECORD_LENGTH * recNo;
 			this.lock.lock();
 			this.writeRecord(pos, data);
 			this.lock.unlock();
@@ -72,7 +73,7 @@ public class DBWriter {
 	 * @return true if the delete succeeded otherwise false.
 	 */
 	public boolean delete(final int recNo) {
-		final int pos = RECORD_LENGTH * recNo;
+		final int pos = START_OFFSET + RECORD_LENGTH * recNo;
 		try {
 			this.lock.lock();
 			this.raf.seek(pos);
@@ -128,7 +129,7 @@ public class DBWriter {
 	 */
 	private void writeRecord(final long pos, final String[] data) throws IOException {
 		this.raf.seek(pos);
-		// write 0 byte flag to indicate valid record
+		// write 1 byte flag to indicate valid record
 		this.raf.writeByte(RECORD_VALID);
 		for (int i = 0; i < data.length; i++) {
 			final byte[] updatedData = Arrays.copyOf(data[i].getBytes(US_ASCII), FIELD_LENGTHS[i]);

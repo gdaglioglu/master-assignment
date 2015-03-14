@@ -6,8 +6,11 @@ import static suncertify.db.io.DBSchema.FIELD_HEADERS;
 import static suncertify.db.io.DBSchema.FIELD_LENGTHS;
 import static suncertify.db.io.DBSchema.MAGIC_COOKIE;
 import static suncertify.db.io.DBSchema.NUMBER_OF_FIELDS;
+import static suncertify.db.io.DBSchema.NUM_BYTES_FIELD_HEADER;
+import static suncertify.db.io.DBSchema.NUM_BYTES_FIELD_LENGTH;
 import static suncertify.db.io.DBSchema.NUM_BYTES_RECORD_DELETED_FLAG;
 import static suncertify.db.io.DBSchema.RECORD_LENGTH;
+import static suncertify.db.io.DBSchema.START_OFFSET;
 import static suncertify.db.io.DBSchema.US_ASCII;
 
 import java.io.IOException;
@@ -98,10 +101,9 @@ public class DBParser {
 		for (int i = 0; i < NUMBER_OF_FIELDS; i++) {
 			// 1 byte numeric, length (in bytes) of field name
 			final int fieldNameLength = this.raf.readByte();
-
+			START_OFFSET += NUM_BYTES_FIELD_LENGTH + NUM_BYTES_FIELD_HEADER + fieldNameLength;
 			// n bytes (defined by previous entry), field name
 			FIELD_HEADERS[i] = this.readString(fieldNameLength);
-
 			// 1 byte numeric, field length in bytes
 			final int fieldLength = this.raf.readByte();
 			FIELD_LENGTHS[i] = fieldLength;

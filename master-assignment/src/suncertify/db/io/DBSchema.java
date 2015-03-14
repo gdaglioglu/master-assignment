@@ -80,4 +80,10 @@ public class DBSchema {
 	 * The length of each record in the database. Read in by {@link DBParser}.
 	 */
 	public static int RECORD_LENGTH = NUM_BYTES_RECORD_DELETED_FLAG;
+
+	/**
+	 * The position where the records begin in the database file. Read in by
+	 * {@link DBParser}.
+	 */
+	public static int START_OFFSET = NUM_BYTES_MAGIC_COOKIE + NUM_BYTES_NUMBER_OF_FIELDS;
 }
