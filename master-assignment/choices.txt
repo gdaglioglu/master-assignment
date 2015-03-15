@@ -1,0 +1,245 @@
+==================== URLyBird application design choices ====================
+
+====== Table of Contents ======
+1. Code style
+2. Networking decisions
+3. Database decisions
+4. Property file decisions
+5. Concurrency and locking decisions
+6. GUI and usability decisions
+7. General decision and considerations
+
+
+
+======= 1. Code style =======
+
+Javadoc
+    I have added javadoc to every class and all methods, regardless of access modifier. 
+This is partly to avoid having to use single line comments within private methods. See below on Single line comments.
+
+
+Class/Method naming
+    I have tried to use intuitive and expressive names for classes and methods so
+it is immediately obvious what the role of a class/method's role is.
+
+
+Single line comments
+    I tried to avoid single line comments, the code is meant to be understood by
+a junior developer so the javadoc comment for each method should be sufficient. 
+There are a few single line comments where I felt the code needed additional 
+clarification and a large single line explaining my omission of the DuplicateKeyException.
+
+
+
+======= 2. Networking decisions =======
+
+RMI vs Sockets
+    I decided to use RMI because it is easier to implement the network communication
+in RMI, RMI is object oriented and is not limited to a single platform.
+RMI also uses less code than sockets.
+Conversely sockets gives the developer more low level control than RMI, RMI does not give the
+developer control over threads being created.
+
+
+Factory pattern
+    I used the factory pattern for creating RMI objects. The factory is put in the
+naming service and a client attempting to get a connection retrieves a connection
+client from the factory.
+
+Extra interface
+    I had to create an extra interface between the controller and the Data class in order
+to allow me to throw a RemoteException on the methods in the DBMain interface.
+In an ideal situation I could have merely added the RemoteException throw to the method
+declaration for each method but I had to leave the DBMain interface I received as is.
+
+
+
+======= 3. Database decisions =======
+
+Object class
+    In the spirit of Object Oriented programming I created a Room POJO for record representation
+to handle get and set attributes on a record. I also added a toStringArray method which returns
+the record as a String array.
+
+
+Delegation pattern
+    I used the delegation pattern to delegate the responsibility of the Data class to
+the DataDBAccess class, keeping Data clean and small, if I put all the functionality in the Data
+class it would balloon to over 500 lines.
+
+
+DuplicateKeyException
+    I chose not to throw the DuplicateKeyException as I saw an issue with how it could be implemented.
+I could not see a unique identifier to make a primary key. To my mind, if the data in two separate
+records was identical, e.g. hotel name and location and maximum occupancy etc was exactly the same it
+would not necessarily be a duplicate.
+Since we are not given room numbers for hotel rooms the hotel name, location, maximum occupancy, smoking status,
+price, date available and CSR number could be the same and still refer to different rooms.
+Imagine a scenario where a CSR books multiple rooms for something like a wedding party, the CSR number would
+be the same, so would dates and they would likely get rooms close to each other, so similar rooms.
+To avoid getting off the point: Without a unique identifier like room number, I did not
+feel comfortable implementing the DuplicateKeyException.
+Also it was not a 'must' requirement.
+
+
+RandomAccessFile
+    I used RandomAccessFile to read/write to the database file. This was my first time 
+using RandomAccessFile but I found it easy to use and efficient. I did research on RandomAccessFile
+vs FileInputStream/FileOutputStream which I had used before. RandomAccessFile can use one instance to 
+both read and write and the seek() method is noticeably faster than FileInputStream's skip() method when
+reading the file.
+
+
+Record Cache
+    I decided against implementing a record cache and adding an extra layer of complexity.
+I felt that the cache was unnecessary and so just read from the database instead of keeping 
+the records in memory. While the extra I/O would have an adverse effect on speed in 
+a larger application with a bigger database, in an application of this size the impact
+on speed is basically unnoticeable.
+
+Limitation
+    Creating a new record has a limitation where an empty custId must be passed in 
+in the data String array like so: data.create(new String[] {"Elephant Inn", "Emerald City", "6", 
+"N", "$120.00", "2005/02/03",""}); 
+This because the implementation of the create method works on the premise that all 
+data criteria are in the String[], the data for the custId can be populated or empty but
+like the other data fields it will be expanded out to the max field size in bytes before 
+being written to the database.
+
+
+
+======= 4. Property file decisions =======
+
+PropertyManager
+    I utilized a singleton PropertyManager class to deal with persistence of properties.
+The property manager deals with saving and loading of persistent properties and creates
+a suncertify.properties file if the application can not find an existing one.
+
+Server host name
+    I decided to make the server name localhost by default and not to allow the user
+to enter a hostname when starting the server, the server will always start on localhost
+and clients can enter a hostname to connect to, it will be localhost on the same machine and
+whatever the ip address of the machine is when running from another machine.
+
+
+
+======= 5. Concurrency and locking decisions =======
+
+I chose to avoid using the built in lock packages in Java in the package java.util.concurrent.
+This is because I was unfamiliar with the classes and I was more comfortable with
+synchronization. Also, I thought using synchronization would be simpler for a junior 
+programmer to understand.
+
+
+Locking map
+    I utilized a singleton LockManager class with a HashMap, the HashMap is populated
+with a record number as the key and a long as the value.
+The long is obtained by the thread id of the current client thread.
+The locking procedure consists of a call to lock a record, which adds the record number and the client thread id
+into the HashMap, these calls in the HotelFrameController are not synchronized because 
+a call to lock will block other threads wishing to access the record while the record number
+is in the locking HashMap.
+The next call is to update, which checks the current thread id is the owner of the lock of the record.
+The final call unlocks the record, this is in the finally block of a try-catch to
+ensure the call is made to unlock even if an exception is caught.
+
+
+Client responsibility
+    The call to lock/update/unlock the record is made from the HotelFrameController.
+It is the responsibility of the client to call lock, then update, then finally unlock.
+If the unlock is not called by the client then deadlock will occur.
+
+
+Locking/Unlocking
+    When attempting to lock the lock method in the data Facade will attempt to read
+the record number, if the read is not successful the record number will not be locked.
+A RecordNotFoundException will be thrown in accordance with the instructions.
+This is to prevent random record numbers that do not have corresponding records in the database
+from being added into the locking map.
+    When attempting to unlock the unlock method in the data Facade will attempt to read as well.
+If the read is not successful (for reasons like record has just been deleted) the unlock will still
+remove the record number entry from the locking map, keeping the locking map clean.
+A RecordNotFoundException will be thrown in accordance with the instructions.
+
+
+
+======= 6. GUI and usability decisions =======
+
+Configuration GUI
+    The configuration dialog is common to the three application start-up modes.
+Depending on the mode in which the application is started then some components will be disabled.
+In standalone client mode -
+    Only the database location needs to be entered, host name and port are not editable.
+In network client mode - 
+    The RMI host name and port need to be entered, database location is not editable.
+In server mode -
+    The RMI port number and database location have to be entered, host name is set to
+localhost by default.
+
+
+HotelFrame GUI
+    I chose not to limit the visibility of records to the user, so all records are displayed in the JTable, rather than
+only displaying bookable records e.g records violating 48 hour rule or records already booked
+by CSR. See Section 7 for additional 48-hour rationale.
+I chose to load all records in the database on application start up, this was a purely
+aesthetic decision on my part.
+When the user attempts to book a room I implemented validation to make sure that a record has been
+selected, then a JDialog user input is verified as being 8 characters long and all digits.
+
+
+Server GUI
+    I decided that rather than having a simple start server button that I would display the 
+options that the server is using to start as un-editable text fields. The server then has an exit button
+and the start server button is disabled as soon as the server is started.
+
+
+
+======= 7. General decision and considerations =======
+
+48-hour rule
+    I decided against implementing the 48 hour rule as the dates in the database file
+are all years in the past. I did not see any point in implementing code that would never be used.
+If the dates were in the future then simple implementation in the GUI code to ensure that only bookable 
+entries are displayed to the user could have been added in. 
+However since I validate the magic cookie in the database file the application is locked
+to the specific database I received which has all old dates.
+It was also not a 'must' requirement.
+
+
+Packaging structure
+    I divided the application structure into five packages, the application is 
+started from the StartUp.java class which I placed into the suncertify.init package
+on it's own. 
+The suncertify.util package is used to contain classes that can be used to 
+provide common functionality across the application.
+The other packages are self-explanatory.
+
+
+Model View Controller architecture pattern
+    I used a passive implementation model view controller pattern because it was a good fit for what I needed
+in the client side code and Swing implementation.
+In my application the model is represented by the AbstractTableModel and the information to be sent to
+the user. I say passive implementation as my model does not notify the view and controller 
+when there has been a change in state/information, the user must manually refresh the table data through
+the Load table button or search button with no criteria. I could have used the observer pattern as a method
+of notifying the view and controller but did not feel there was sufficient need.
+The controller is represented by the HotelFrameController which is a class common to both the network
+and stand alone clients. It creates the network/direct connection depending on application mode.
+The controller also calls the lock/update/unlock/find/read methods in the data layer through the 
+controller methods.
+The view is represented by the HotelFrame class, it constructs the Swing GUI components and displays the data in the model.
+
+
+Logging
+    I used extensive logging in the application, logging as Level.SEVERE for caught exceptions and
+    as Level.INFO for informative messages in the application flow.
+
+Rebooking of records
+    I do not allow re-booking of records or unbooking. It was not a must requirement
+and I believe it is a security risk. If the CSR makes a mistake when entering the number
+carelessly then they cannot unbook the record. How would the application know whether it is the same
+CSR attempting to unbook the record or another unscrupulous CSR unbooking to make a record available for that CSR's
+clients? It would have needed additional implementation and I did not feel it added value to
+the application.
+
+

@@ -83,7 +83,7 @@ public class DBSchema {
 
 	/**
 	 * The position where the records begin in the database file. Read in by
-	 * {@link DBParser}.
+	 * {@link DBParser} and {@link DBWriter}.
 	 */
 	public static int START_OFFSET = NUM_BYTES_MAGIC_COOKIE + NUM_BYTES_NUMBER_OF_FIELDS;
 }

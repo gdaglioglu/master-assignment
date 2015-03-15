@@ -74,6 +74,9 @@ public class ClientUI extends JFrame {
 	/**
 	 * Creates the JFrame, sets it's properties, adds the contents and displays
 	 * the JFrame.
+	 * 
+	 * @param application
+	 *            The application mode to be started.
 	 */
 	public ClientUI(Application application) {
 		this.application = application;

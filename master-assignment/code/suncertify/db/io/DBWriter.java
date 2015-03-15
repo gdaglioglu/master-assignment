@@ -96,13 +96,14 @@ public class DBWriter {
 	public int create(final String[] data) {
 		try {
 			this.lock.lock();
+			this.raf.seek(START_OFFSET);
 			while (this.raf.getFilePointer() != this.raf.length()) {
 				final long recordPos = this.raf.getFilePointer();
-				final int flag = this.raf.readShort();
+				final int flag = this.raf.readByte();
 
 				if (flag != RECORD_VALID) {
 					this.writeRecord(recordPos, data);
-					final long recordIndex = (recordPos) / RECORD_LENGTH;
+					final long recordIndex = (recordPos - START_OFFSET) / RECORD_LENGTH;
 					return (int) recordIndex;
 				}
 

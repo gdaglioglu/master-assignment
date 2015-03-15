@@ -83,8 +83,9 @@ public class HotelRoomController {
 	 * Creates a <code>HotelRoomController</code> instance with a specified
 	 * connection type.
 	 *
-	 * @param applicationMode
-	 *            The mode the application is currently running in
+	 * @param dataservice
+	 *            The Data Service that enables clients to interact with the
+	 *            server.
 	 */
 	public HotelRoomController(DataService dataservice) {
 		dataService = dataservice;

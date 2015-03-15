@@ -42,10 +42,9 @@ public class DataTest {
 		assertThat(record[1], is(not(equalTo(""))));
 		assertThat(record[2], is(not(equalTo(""))));
 		assertThat(record[3], is(not(equalTo(""))));
-		assertThat(record[4], is(not(equalTo(""))));
+		assertThat(Float.parseFloat(record[4].substring(1)), is(notNullValue()));
 		assertThat(record[5], is(not(equalTo(""))));
-		assertThat(record[6], is(not(equalTo(""))));
-		assertThat(Integer.parseInt(record[7].substring(1)), is(notNullValue()));
+		assertThat(record[6], is(equalTo("")));
 	}
 
 	@Test(expected = RecordNotFoundException.class)
@@ -83,7 +82,6 @@ public class DataTest {
 		assertThat(afterRec[4], is(equalTo(newRec[4])));
 		assertThat(afterRec[5], is(equalTo(newRec[5])));
 		assertThat(afterRec[6], is(equalTo(newRec[6])));
-		assertThat(afterRec[7], is(equalTo(newRec[7])));
 	}
 
 	@Test(expected = RecordNotFoundException.class)
@@ -151,10 +149,9 @@ public class DataTest {
 			assertThat(record[1], is(not(equalTo(""))));
 			assertThat(record[2], is(not(equalTo(""))));
 			assertThat(record[3], is(not(equalTo(""))));
-			assertThat(record[4], is(not(equalTo(""))));
+			assertThat(Float.parseFloat(record[4].substring(1)), is(notNullValue()));
 			assertThat(record[5], is(not(equalTo(""))));
-			assertThat(record[6], is(not(equalTo(""))));
-			assertThat(Integer.parseInt(record[7].substring(1)), is(notNullValue()));
+			assertThat(record[6], is(notNullValue()));
 		}
 	}
 

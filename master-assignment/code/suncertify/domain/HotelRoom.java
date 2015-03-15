@@ -107,8 +107,6 @@ public class HotelRoom implements Serializable {
 	 * {@link HotelRoom#HotelRoom(String, String, String, String, String, String, String)}
 	 * .
 	 * 
-	 * @param recordId
-	 *            The ID of this record.
 	 * @param hotelRoom
 	 *            A String array containing the 7 data fields.
 	 */

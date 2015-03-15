@@ -67,7 +67,7 @@ public interface DBMain {
 	 *            The fields of the new record.
 	 * @return The record number of the new record.
 	 * @throws DuplicateKeyException
-	 *             If a record with the primary key of name & location already
+	 *             If a record with the primary key of name and location already
 	 *             exists.
 	 */
 	public int create(String[] data) throws DuplicateKeyException;

@@ -109,6 +109,7 @@ public class App {
 	 * @param component
 	 *            The graphical object representation that can be displayed on
 	 *            the screen.
+	 * @return the center <code>Point</code> of the screen.
 	 */
 	public static Point getCenterOnScreen(Component component) {
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();

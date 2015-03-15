@@ -43,7 +43,7 @@ public class TestJarSubmission {
 	 * this must be the file you submit. The marking process will expect the
 	 * exact same data without any changes.
 	 */
-	private static final String FILE_DB = "db-2x2.db";
+	private static final String FILE_DB = "db-1x3.db";
 
 	/**
 	 * A file called choices.txt that containing pure ASCII (not a word
@@ -64,8 +64,7 @@ public class TestJarSubmission {
 	/**
 	 * This html file.
 	 */
-	private static final String FILE_INSTRUCTIONS = DIR_DOCS
-			+ "/instructions.html";
+	private static final String FILE_INSTRUCTIONS = DIR_DOCS + "/instructions.html";
 
 	/**
 	 * The index.html file of the HTML/Javadoc documentation.
@@ -92,14 +91,12 @@ public class TestJarSubmission {
 	/**
 	 * The required data access class (Data).
 	 */
-	private static final String SOURCE_DATA = DIR_CODE
-			+ "/suncertify/db/Data.java";
+	private static final String SOURCE_DATA = DIR_CODE + "/suncertify/db/Data.java";
 
 	/**
 	 * The required interface (DBMain).
 	 */
-	private static final String SOURCE_DBMAIN = DIR_CODE
-			+ "/suncertify/db/DBMain.java";
+	private static final String SOURCE_DBMAIN = DIR_CODE + "/suncertify/db/DBMain.java";
 
 	/**
 	 * The required exception DuplicateKeyException.
@@ -116,8 +113,8 @@ public class TestJarSubmission {
 	/**
 	 * The required directories in the submission jar.
 	 */
-	private static final String[] REQUIRED_DIRECTORIES = new String[] {
-			DIR_CODE, DIR_DOCS, DIR_JAVADOC };
+	private static final String[] REQUIRED_DIRECTORIES = new String[] { DIR_CODE, DIR_DOCS,
+			DIR_JAVADOC };
 
 	/**
 	 * The expected count of required directories in the submission jar.
@@ -127,9 +124,8 @@ public class TestJarSubmission {
 	/**
 	 * The required files in the submission jar.
 	 */
-	private static final String[] REQUIRED_FILES = new String[] { FILE_DB,
-			FILE_CHOICES, FILE_EXECUTABLE_JAR, FILE_INSTRUCTIONS, FILE_JAVADOC,
-			FILE_USERGUIDE, FILE_VERSION };
+	private static final String[] REQUIRED_FILES = new String[] { FILE_DB, FILE_CHOICES,
+			FILE_EXECUTABLE_JAR, FILE_INSTRUCTIONS, FILE_JAVADOC, FILE_USERGUIDE, FILE_VERSION };
 
 	/**
 	 * The expected count of required files in the submission jar.
@@ -139,9 +135,8 @@ public class TestJarSubmission {
 	/**
 	 * The required sources in the submission jar.
 	 */
-	private static final String[] REQUIRED_SOURCES = new String[] {
-			SOURCE_DATA, SOURCE_DBMAIN, SOURCE_EXCEPTION_DK,
-			SOURCE_EXCEPTION_RNF };
+	private static final String[] REQUIRED_SOURCES = new String[] { SOURCE_DATA, SOURCE_DBMAIN,
+			SOURCE_EXCEPTION_DK, SOURCE_EXCEPTION_RNF };
 
 	/**
 	 * The expected count of required sources in the submission jar.
@@ -153,12 +148,10 @@ public class TestJarSubmission {
 	 */
 	@Test
 	public void testRequiredDirectories() {
-		Assert.assertEquals(REQUIRED_DIRECTORIES_COUNT,
-				REQUIRED_DIRECTORIES.length);
+		Assert.assertEquals(REQUIRED_DIRECTORIES_COUNT, REQUIRED_DIRECTORIES.length);
 		for (String directory : REQUIRED_DIRECTORIES) {
 			File f = new File(DIR_SUBMISSION_JAR, directory);
-			Assert.assertTrue("directory '" + directory + "' not exists",
-					f.exists());
+			Assert.assertTrue("directory '" + directory + "' not exists", f.exists());
 		}
 	}
 
