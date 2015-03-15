@@ -30,9 +30,9 @@ public class DBParser {
 	/**
 	 * The <code>Logger</code> instance. All log messages from this class are
 	 * routed through this member. The <code>Logger</code> namespace is
-	 * <code>suncertify.db.io</code>.
+	 * <code>suncertify.db.io.DBParser</code>.
 	 */
-	private Logger logger = Logger.getLogger(DBParser.class.getPackage().getName());
+	private Logger logger = Logger.getLogger(DBParser.class.getName());
 
 	/**
 	 * The <code>RandomAccessFile</code> instance used to read the database

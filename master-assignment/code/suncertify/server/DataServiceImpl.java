@@ -21,9 +21,9 @@ public class DataServiceImpl implements DataService {
 	/**
 	 * The <code>Logger</code> instance. All log messages from this class are
 	 * routed through this member. The <code>Logger</code> namespace is
-	 * <code>suncertify.server</code>.
+	 * <code>suncertify.server.DataServiceImpl</code>.
 	 */
-	private Logger logger = Logger.getLogger(DataServiceImpl.class.getPackage().getName());
+	private Logger logger = Logger.getLogger(DataServiceImpl.class.getName());
 
 	/**
 	 * The instance to {@link DBMain}.

@@ -22,9 +22,9 @@ public class ApplicationRunner {
 	/**
 	 * The <code>Logger</code> instance. All log messages from this class are
 	 * routed through this member. The <code>Logger</code> namespace is
-	 * <code>suncertify.init</code>.
+	 * <code>suncertify.init.ApplicationRunner</code>.
 	 */
-	private Logger logger = Logger.getLogger(ApplicationRunner.class.getPackage().getName());
+	private Logger logger = Logger.getLogger(ApplicationRunner.class.getName());
 
 	/**
 	 * The method that launches the URLyBird application.
@@ -33,9 +33,6 @@ public class ApplicationRunner {
 	 *            Holds the command line inputs.
 	 */
 	public static void main(String[] args) {
-		args = new String[] { "alone" };
-		// args = new String[] { "server" };
-		// args = new String[] {};
 		new ApplicationRunner(args);
 	}
 

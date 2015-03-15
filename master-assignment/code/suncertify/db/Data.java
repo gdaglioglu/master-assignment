@@ -26,9 +26,9 @@ public class Data implements DBMain {
 	/**
 	 * The <code>Logger</code> instance. All log messages from this class are
 	 * routed through this member. The <code>Logger</code> namespace is
-	 * <code>suncertify.db</code>.
+	 * <code>suncertify.db.Data</code>.
 	 */
-	private Logger logger = Logger.getLogger(Data.class.getPackage().getName());
+	private Logger logger = Logger.getLogger(Data.class.getName());
 
 	/**
 	 * The <code>List</code> of <code>ReentrantLock</code>s used for find, read,

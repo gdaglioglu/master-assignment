@@ -60,7 +60,7 @@ public class App {
 	 *            The logging level to use.
 	 */
 	private static void log(final String message, final Level level) {
-		Logger.getLogger(App.class.getPackage().getName()).log(level, message);
+		Logger.getLogger(App.class.getName()).log(level, message);
 	}
 
 	/**
@@ -69,10 +69,10 @@ public class App {
 	 */
 	public static void printUsage() {
 		System.out.println("Usage: java -jar <path_and_filename> [mode]");
-		System.out.println("Mode can be one of,");
-		System.out.println("\\tserver:\\tTo start networked server.");
-		System.out.println("\\alone:\\tTo start unnetworked standalone application.");
-		System.out.println("\\No mode:\\tTo start networked client.");
+		System.out.println("Mode can be one of;");
+		System.out.println("\tserver:\tTo start networked server.");
+		System.out.println("\talone:\tTo start unnetworked standalone application.");
+		System.out.println("\tno mode:To start networked client.");
 		System.exit(1);
 	}
 

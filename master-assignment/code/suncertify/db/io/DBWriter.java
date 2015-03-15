@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class is responsible for writing records to the database file.
@@ -20,6 +22,13 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Gokhan Daglioglu
  */
 public class DBWriter {
+
+	/**
+	 * The <code>Logger</code> instance. All log messages from this class are
+	 * routed through this member. The <code>Logger</code> namespace is
+	 * <code>suncertify.db.io.DBWriter</code>.
+	 */
+	private Logger logger = Logger.getLogger(DBWriter.class.getName());
 
 	/**
 	 * The <code>RandomAccessFile</code> instance used to read the database
@@ -41,6 +50,7 @@ public class DBWriter {
 	 */
 	public DBWriter(final RandomAccessFile raf) {
 		this.raf = raf;
+		logger.log(Level.FINE, "Initialized DBParser");
 	}
 
 	/**

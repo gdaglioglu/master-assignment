@@ -44,9 +44,10 @@ public class HotelRoomView extends JFrame {
 
 	/**
 	 * The Logger instance. All log messages from this class are routed through
-	 * this member. The Logger namespace is <code>suncertify.ui</code>.
+	 * this member. The Logger namespace is
+	 * <code>suncertify.ui.HotelRoomView</code>.
 	 */
-	private Logger logger = Logger.getLogger(HotelRoomView.class.getPackage().getName());
+	private Logger logger = Logger.getLogger(HotelRoomView.class.getName());
 
 	/**
 	 * The <code>JTextField</code> which is used as a name search field for the

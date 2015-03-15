@@ -37,9 +37,9 @@ public class HotelRoomController {
 	/**
 	 * The <code>Logger</code> instance. All log messages from this class are
 	 * routed through this member. The <code>Logger</code> namespace is
-	 * <code>suncertify.ui</code>.
+	 * <code>suncertify.ui.HotelRoomController</code>.
 	 */
-	private Logger logger = Logger.getLogger(HotelRoomController.class.getPackage().getName());
+	private Logger logger = Logger.getLogger(HotelRoomController.class.getName());
 
 	/**
 	 * The model for the client MVC.
@@ -125,6 +125,7 @@ public class HotelRoomController {
 			hotelRoomModel.clearData();
 			hotelRoomModel.addAll(records);
 		} catch (final RemoteException exp) {
+			exp.printStackTrace();
 			showErrorAndExit("The remote server is no longer available.");
 		}
 		logger.exiting("HotelRoomController", "getHotelRoomsByCriteria");

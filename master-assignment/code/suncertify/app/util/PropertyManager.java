@@ -23,9 +23,9 @@ public class PropertyManager {
 	/**
 	 * The <code>Logger</code> instance. All log messages from this class are
 	 * routed through this member. The <code>Logger</code> namespace is
-	 * <code>suncertify.config</code>.
+	 * <code>suncertify.app.util.PropertyManager</code>.
 	 */
-	private Logger logger = Logger.getLogger("suncertify.config");
+	private Logger logger = Logger.getLogger(PropertyManager.class.getName());
 
 	/**
 	 * The key in application properties indicating that the value will be the

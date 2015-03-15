@@ -81,9 +81,9 @@ public class DataServiceImplTest {
 		List<HotelRoom> records = this.dataService.find(findCriteria, true);
 		assertThat(records.size(), is(equalTo(0)));
 
-		findCriteria = new String[] { "Dew Drop Inn" };
+		findCriteria = new String[] { "Bed & Breakfast & Business" };
 		records = this.dataService.find(findCriteria, true);
-		assertThat(records.size(), is(equalTo(3)));
+		assertThat(records.size(), is(equalTo(2)));
 	}
 
 	@Test

@@ -22,9 +22,9 @@ public class HotelRoom implements Serializable {
 	/**
 	 * The <code>Logger</code> instance. All log messages from this class are
 	 * routed through this member. The <code>Logger</code> namespace is
-	 * <code>suncertify.domain</code>.
+	 * <code>suncertify.domain.HotelRoom</code>.
 	 */
-	private Logger logger = Logger.getLogger(HotelRoom.class.getPackage().getName());
+	private static Logger logger = Logger.getLogger(HotelRoom.class.getName());
 
 	/**
 	 * Variable used as a representation of the hotel name in the database file.

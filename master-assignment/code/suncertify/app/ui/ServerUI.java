@@ -41,9 +41,9 @@ public class ServerUI extends JFrame {
 	/**
 	 * The <code>Logger</code> instance. All log messages from this class are
 	 * routed through this member. The <code>Logger</code> namespace is
-	 * <code>suncertify.app.ui</code>.
+	 * <code>suncertify.app.ui.ServerUI</code>.
 	 */
-	private Logger logger = Logger.getLogger(ServerUI.class.getPackage().getName());
+	private Logger logger = Logger.getLogger(ServerUI.class.getName());
 
 	/**
 	 * The <code>JTextField</code> which is used to enter a database file

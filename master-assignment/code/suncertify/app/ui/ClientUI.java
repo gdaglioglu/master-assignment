@@ -47,9 +47,9 @@ public class ClientUI extends JFrame {
 	/**
 	 * The <code>Logger</code> instance. All log messages from this class are
 	 * routed through this member. The <code>Logger</code> namespace is
-	 * <code>suncertify.app.ui</code>.
+	 * <code>suncertify.app.ui.ClientUI</code>.
 	 */
-	private Logger logger = Logger.getLogger(ClientUI.class.getPackage().getName());
+	private Logger logger = Logger.getLogger(ClientUI.class.getName());
 
 	/**
 	 * The <code>JTextField</code> which is used as a hostname field.
