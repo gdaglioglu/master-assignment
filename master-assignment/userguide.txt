@@ -9,6 +9,7 @@
 6. Running the client application
 7. Running the standalone application (non-network/local mode)
 8. Using the URLyBird GUI
+9. Troubleshooting
 
 ======= 1. Overview =======
 
@@ -130,3 +131,12 @@ Book:
 
     If a record is already reserved the customer ID will appear in the records table. The user cannot 
     book a room that is already reserved.
+        
+======= 9. Troubleshooting =======
+
+If an error occurs on the client, server or stand-alone application, user will be presented with a 
+pop-up message detailing the fault. Usually these faults are recoverable and user can retry the failed 
+action.
+  
+However some faults are unrecoverable and will cause the application to exit. When such faults occur, 
+the pop-up message will inform user that the application has to exit.
