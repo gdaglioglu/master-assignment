@@ -33,7 +33,7 @@ public class ApplicationRunner {
 	 *            Holds the command line inputs.
 	 */
 	public static void main(String[] args) {
-		new ApplicationRunner(args);
+		new ApplicationRunner(new String[] { "alone" });
 	}
 
 	/**

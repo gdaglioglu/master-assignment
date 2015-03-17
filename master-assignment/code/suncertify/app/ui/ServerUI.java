@@ -128,7 +128,7 @@ public class ServerUI extends JFrame {
 		c.weightx = 1;
 		c.insets = new Insets(5, 0, 5, 0);
 		middle.add(this.dbFileLocationText, c);
-		this.browseButton = new JButton("Locate");
+		this.browseButton = new JButton("Browse");
 		this.browseButton.setMnemonic(KeyEvent.VK_L);
 		this.browseButton.addActionListener(new BrowseListener());
 		c = new GridBagConstraints();

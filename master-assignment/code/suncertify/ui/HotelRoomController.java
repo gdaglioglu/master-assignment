@@ -125,7 +125,6 @@ public class HotelRoomController {
 			hotelRoomModel.clearData();
 			hotelRoomModel.addAll(records);
 		} catch (final RemoteException exp) {
-			exp.printStackTrace();
 			showErrorAndExit("The remote server is no longer available.");
 		}
 		logger.exiting("HotelRoomController", "getHotelRoomsByCriteria");
@@ -171,7 +170,7 @@ public class HotelRoomController {
 						boolean booked = HotelRoomController.this.bookRoom(customerId,
 								hotelRoomRecordNo);
 						if (booked == false) {
-							handleException(ALREADY_BOOKED_MSG);
+							showWarning(ALREADY_BOOKED_MSG);
 						}
 						final boolean exactMatch = getBooleanParameter(EXACT_MATCH);
 						hotelRoomView.updateTable(HotelRoomController.this.getHotelRoomsByCriteria(
@@ -216,6 +215,9 @@ public class HotelRoomController {
 				+ hotelRoomRecordNo);
 		try {
 			HotelRoom hotelRoom = this.dataService.read(hotelRoomRecordNo);
+			if (hotelRoom.getOwner().length() > 0) {
+				return false;
+			}
 			hotelRoom.setOwner(customerId);
 			this.dataService.update(hotelRoomRecordNo, hotelRoom);
 		} catch (final RecordNotFoundException recordNotFoundException) {

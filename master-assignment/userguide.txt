@@ -2,152 +2,131 @@
 
 ====== Table of Contents ======
 1. Overview
-2. How to run the application
-3. Configuring the application
-4. Running the server application
-5. Running the client application
-6. Running the standalone application (non-network/local mode)
-7. Using the URLyBird GUI
-
-
+2. Prerequisites to running the application
+3. How to run the application
+4. Configuring the application
+5. Running the server application
+6. Running the client application
+7. Running the standalone application (non-network/local mode)
+8. Using the URLyBird GUI
 
 ======= 1. Overview =======
 
-This application is designed to aid the URLyBird customer service representative
-(CSR) in booking hotel rooms for their customer.
-It allows the CSR to view available rooms and offers the functionality to search 
-by hotel name and/or location in addition to room booking.
-The list of rooms are retrieved from a database file.
+This application is designed and developed to aid the URLyBird customer service representative (CSR) in
+booking hotel rooms for their customer. It allows CSRs to view, search and book available rooms.
 
+======= 2. Prerequisites to running the application =======
 
+Prior to running the application, user must have the Java Runtime Environment (JRE) installed on the 
+computer. Download this from the Oracle website.
 
-======= 2. How to run the application =======
+User will also need the runme.jar file that contains the URLyBird application.
 
-The steps for running the application in all 3 modes are almost identical. To
-run the jar navigate to the directory that the jar is placed in and in command line run the command:
+======= 3. How to run the application =======
+
+The steps for running the application in all 3 modes are almost identical. To run the jar navigate to 
+the directory that the jar is placed in and in command line run the command:
 
     java -jar runme.jar <mode>
 
-In client mode the <mode> can be omitted like so: java -jar runme.jar    
-    Client mode must be run in combination with a running server, 
-    if there is no server the application will display an error and shut down.
+For the server application, <mode> is server. The command becomes:
+	java -jar runme.jar server
+	
+For the networked client application, <mode> is blank. The command becomes:
+	java -jar runme.jar
+Note: If there is no server running, the client will fail to start properly.
+	
+For the stand-alone client application, <mode> is alone. The command becomes:
+	java -jar runme.jar alone
 
-In server mode the <mode> is given as: java -jar runme.jar server
-    This starts the server application.
+======= 4. Configuring the application =======
 
-In standalone client mode the mode is given as: java -jar runme.jar alone
-    This starts the client in local mode.
+When the application starts up in any mode a configuration window is displayed to user. When user 
+enters valid parameters they will be saved in a properties file called suncertify.properties.
+ 
+If the application starts up and detects an existing properties file it will load the values from the 
+file to save user re-typing them. the properties file will then be overwritten with the values from the
+new start up.
 
+======= 5. Running the server application =======
 
+When the server starts, user will be presented with a very simple user interface which allows user to 
+enter the location of a database file and start the server so it can start accepting client calls.
 
-======= 3. Configuring the application =======
+To choose a database location press the "Browse" button in the user interface. It opens a dialog 
+allowing user to select any file with a .db extension.
 
-When the application starts up in any mode a configuration window is displayed to
-the user. When the user enters valid parameters they will be saved in a properties file
-called suncertify.properties. 
-If the application starts up and detects an existing properties file it will 
-load the values from the file to save the user re-typing them. the properties file 
-will then be overwritten with the values from the new start up.
+After selecting a database location, user should press the "Start" button on the user interface to 
+start the server. Once the server is started, the "Browse" and "Start" buttons become grayed out and 
+are no longer selectable. This indicates that the server has successfully started.
 
+"Shutdown" button on the user interface allows user to close the application completely. If the server 
+had been started previously, it will now stop and will no longer be able to receive connections.
 
+======= 6. Running the client application =======
 
-======= 4. Running the server application =======
+When the application is started in client mode, the first action user should take is specifying the 
+location of the networked server. This is done via the server location dialog which is presented to 
+user on start up.
 
-To start the server application the user must run the following command from the command line:
+There is a single text box allowing user to enter to hostname of the remote server. When clicking "OK" 
+the client will attempt to connect to the server at the specified hostname. If a viable connection is 
+established, the client window will open and display a list of rooms. Otherwise an error message will 
+be displayed and user can enter the correct hostname or exit.
 
-    java -jar runme.jar server
+For information on using the client, check Section 8. Using the URLyBird GUI.
 
-This will open up the configuration dialog for the server. The user must enter a
-valid path to the database file through the text field or the file chooser window,
-the port they wish to start the server on and confirm the options.
+======= 7. Running the stand-alone application (non-network/local mode) =======
 
-The option to enter a host name is disabled as the server will always run on the 
-local host of the machine running the application
+When the application is started in stand-alone mode, user will be presented with this same server user 
+interface as detailed in the "5. Running the server application" section. All actions as described in 
+that section are the same for stand-alone mode. The only difference being when user presses the "Start"
+button the server user interface will now close and user will be presented with the client window which
+displays a list of rooms. 
 
-If the options are valid the server window will open and display the options that it will attempt
-to start the server on. The user can then press the "Start Server" button to start the server.
+When user exits the client application in stand-alone mode, both the server and client will be shutdown.
 
-To stop the server the user can press the "Exit" button, or go File -> Quit in the menu bar or close the window.
+For information on using the client, check Section 8. Using the URLyBird GUI.
 
-N.B The server must be running for the network client to connect to.
+======= 8. Using the URLyBird GUI =======
 
+The URLyBird GUI is made up of 3 main components.
 
+Records:
 
-======= 5. Running the client application =======
-
-To start the client application the user must run the following command from the command line with no parameters:
-
-    java -jar runme.jar
-
-This will open up the configuration dialog for the client. The user must enter a
-valid host name that corresponds to the address that the server is running on,
-the port they wish to start the server on and confirm the options.
-
-The default values are Host name: localhost, Port: 1099.
-
-If a viable connection is established a the client window will open and display a list of rooms.
-
-If no viable connection can be established the application will display an error 
-and will inform the user that the application is shutting down, then exit.
-
-For information on using the client check Section 7. Using the URLyBird GUI.
-
-
-
-======= 6. Running the standalone application (non-network/local mode) =======
-
-To start the client application the user must run the following command from the command line with no parameters:
-
-    java -jar runme.jar alone
-
-This will open up the configuration dialog for the client. The user must enter a
-valid path to the database file through the text field or the file chooser window
-and confirm the option.
-
-If the database path is valid the client window will open and display a list of rooms.
-
-For information on using the client check Section 7. Using the URLyBird GUI.
-
-
-
-======= 7. Using the URLyBird GUI =======
-
-The URLyBird GUI is made up of multiple components.
-
-There is a menu bar giving the user the option to quit, File -> Quit.
-
-Records: 
-    There is a table of records displaying the rooms in the database to the user.
+    There is a table of records displaying the available rooms to user.
     This table is populated by default when the window opens with all the records in the database.
 
-    Pressing the "Search" button when no search criteria have been entered or
-    pressing the "Load Table" button will also load all the records in the database.
-
+	The width of these columns can be modified by dragging a column edge to make the column bigger or 
+	smaller.
+	
 Search:
 
-    The client offers the functionality to search all records in the database
-    matching the criteria "Hotel name", "Location" or both.
+	The search feature allows user to search for available rooms based on the following fields; Name, 
+	Location, Size, Smoking, Rate, Date and Owner(customer ID). Each field has a text box where user 
+	can	enter the value he/she wishes to search on. Leaving a search box empty will not filter search 
+	results	by that field.
 
-    The criteria must be entered in their respective search fields 
-    and the "Search" button must be pressed to display the results of the search.
-    The results of the search are displayed in the records table
+	By default all searches are strict. This means the text user enter in the search boxes will only 
+	return rooms whose fields exactly match the search criteria entered. Including case. A less strict 
+	search can be performed by de-selecting the "Exact match" check-box, visible below the "Search" 
+	button on the right of the search area. When the "Exact match" box is unchecked the search will 
+	return rooms whose fields contain the search criteria. I.e. searching 'is' will match 'Metropolis' 
+	'Digitopolis' and 'Atlantis'.
 
-    If no criteria are provided all records are displayed in the records table.
+	If user leaves all search boxes empty, the search will display all available hotel rooms.
 
-    N.B The search is case sensitive and must match the data in the record.
-    e.g. if record is location is "Smallville" then entering "smallville" will not retrieve the record.
+Book:
 
-Reserve:
-
-    The client offers the functionality to reserve a room in the records table. This updates the record in the database.
+    The client window offers the functionality to book a room in the records table. This updates the 
+    record in the database.
     
-    The user must select a record from the records table and press the "Reserve Room" button.
-    This will display a dialog where the user can enter their CSR number. 
-    Entering the CSR number and confirming will update the record as reserved.
+    To book a room, user must select a record from the records table and press the "Book Room" button.
+    This will present user with a new dialog allowing you enter the ID of the customer booking the 
+    room.
+    
+	When booking a room, user must enter an 8 digit number as the customer ID. No other text will be 
+	accepted.
 
-    N.B The CSR number must be numeric and must be 8 digits long.
-
-    If a record is already reserved the CSR number will appear in the records table.
-    The user cannot reserve/re-reserve a record that is already reserved.
-
-
+    If a record is already reserved the customer ID will appear in the records table. The user cannot 
+    book a room that is already reserved.
