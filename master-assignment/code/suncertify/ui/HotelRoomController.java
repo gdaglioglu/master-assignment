@@ -96,6 +96,12 @@ public class HotelRoomController {
 		logger.log(Level.FINE, "Initialized Hotel Room Controller");
 	}
 
+	/**
+	 * Retrieves all rooms from the database, this method uses the
+	 * getHotelRoomsByCriteria method by passing in two default search criteria.
+	 * 
+	 * @return A {@link HotelRoomModel} containing all hotel room records.
+	 */
 	private HotelRoomTableModel getAllHotelRooms() {
 		logger.entering("HotelRoomController", "getAllHotelRooms");
 		lastSearchCriteria = this.hotelRoomView.getSearchCriteria();

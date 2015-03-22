@@ -1,75 +1,223 @@
 ==================== URLyBird application design choices ====================
 
 ====== Table of Contents ======
-1. Code style
-2. Networking decisions
-3. Database decisions
-4. Property file decisions
-5. Concurrency and locking decisions
-6. GUI and usability decisions
-7. General decision and considerations
+1. General
+	a. Code Style
+	b. Javadoc/Comments
+2. Architectural Overview
+	a. NetworkedApplication
+	b. NetworkedClientApplication
+	c. StandAloneApplication
+3. Server Side Architecture
+	a. DataService Layer
+	b. Data Layer
+	c. IO Layer
+4. Network Communication - RMI vs. Sockets
+5. Presentation Layer
+	a. MVC Pattern
+	b. Searching
+6. Domain Object
+7. Database Decisions
+5. Property file decisions
+6. Concurrency and locking decisions
+7. GUI and usability decisions
+8. General decision and considerations
 
 
+1. General
+--------------------------------------------
+a. Code Style
 
-======= 1. Code style =======
+	I have used expressive names for classes/methods and variables so that it should be easier for a 
+	junior programmer to understand what a class or method doing.
 
-Javadoc
-    I have added javadoc to every class and all methods, regardless of access modifier. 
-This is partly to avoid having to use single line comments within private methods. See below on Single line comments.
+b. Javadoc/Comments
+
+	Javadoc is added to every class, all methods and attributes, regardless of their access modifier.
+	I have tried to avoid single line comments and instead explain as much as possible in the javadoc 
+	comments. 
+	This allows a centralized documentation for all operations in my application, which I think is 
+	useful for junior developers.
+	
+	Though sometimes, I felt the code(i.e. DBParser.java and HotelRoomView.java) needed additional 
+	clarification and single line comments were unavoidable.
+
+2. Architectural Overview
+--------------------------------------------
+The thing I was particularly concerned with while designing the application, was how to split between 
+Networked and Stand-alone mode. My main goal to minimize code replication and maximize code 
+maintainability. So, I have decided to make majority of client and server code unaware of the mode the 
+application is running in. 
+ 
+On start up, the application creates an instance of an Application based on the start mode 
+(NetworkedClientApplication, NetworkedApplication or StandAloneApplication) using a factory. These 
+applications perform the specific tasks that differentiate the modes. So, all code outside these 
+"Applications" code stays unaware of the application mode, which allows complete code re-use.
+ 
+a. NetworkedApplication
+ 	
+	The NetworkedApplication is basically the server application. On start up, this application 
+	presents the ServerUI which allows the user to enter a valid database location. 
+	The main problem was to keep the server side code networking unaware while 
+		# allowing the server side code to stay re-usable and
+		# allowing the Application to publish the server interface correctly. 
+	Therefore, the ServerUI is dependency injected with the Application mode running. This allows the 
+	ServerUI code call the #launch() method of the Application that created the ServerUI.
+	
+	When the Start button of the ServerUI is pressed, the relevant Application's #launch() method is 
+	executed. The NetworkedApplication#launch() method creates an instance of DataService which is then
+	published via RMI for use by NetworkedClientApplication.
+
+b. NetworkedClientApplication
+
+	On start up, the NetworkedClientApplication presents the user with the ClientUI which allows the 
+	user to enter the location of the NetworkedApplication.
+	The main problem was to keep the client side code networking unaware while 
+		# allowing the client side to connect to the server side without knowing whether it was using 
+		RMI or not.
+	Therefore, the ClientUI is dependency injected with the Application mode running. This allows the 
+	ClientUI code call the #launch() method of the Application that created the ClientUI.
+	
+	When the OK button of the ClientUI is pressed, the DataService instance over RMI is retrieved and 
+	the	relevant Application's #launch() method is executed. The NetworkedClientApplication#launch() 
+	method creates an instance of HotelRoomController by passing the DataService instance retrieved in 
+	the previous step. So, HotelRoomController stays unaware of it's networking state, using only the 
+	instance of	DataService to communicate with	the server side code.
+	
+c. StandAloneApplication
+
+	The StandAloneApplication starts the ServerUI like the NetworkedApplication. The only difference 
+	being is that the ServerUI is dependency injected an instance of StandAloneApplication. 
+	In StandAloneApplication#launch(), it creates an instance of DataService, and initialize an 
+	instance of HotelRoomController by passing the DataService instance just created.
+ 
+3. Server Side Architecture
+--------------------------------------------
+The server side architecture consists of three layers, the DataService
+layer, the Data layer and the IO layer.
+
+a. DataService Layer
+
+	The DataService layer is the server interface callable by clients. It is responsible for 
+		# managing the locking and thread safety of all reads and writes made by clients and 
+		# any business logic that needs to be performed, i.e. exact match.
+		
+	I have introduced the DataService layer to enable clients to talk to the server without having to 
+	do any locking. This server side business layer was a simple solution to address that problem.
+	The DataService layer gets an instance of Data using a factory, then it passes calls(read/write) to
+	this Data instance.
+  
+b. Data Layer
+
+	The Data layer is responsible for
+		# managing all the data records for the	application. 
+	The Data object is created via a factory which retrieves the database location from the application
+	"suncertify.properties" file and passes the	location to the Data object. 
+	
+	On initialization, the Data object uses the DBParser to build a cache of the data records. 
+	
+	I have decided to use a cache as this enabled me to keep keep all the methods of the DBMain 
+	interface to be simple and clean. The cache is a write through cache which allows for fast and 
+	efficient reads while keeping the on disk database constantly up-to-date. I have preferred a write
+	through cache as I didn't want	the database file out of sync with what was shown on the clients'.
+	This was a least error prone cache implementation considering other options, i.e., write cache to 
+	the on disk database on exit.
+	
+	This layer also provides the locking mechanisms that allow for thread safety while reading/writing 
+	from/to the Data instance. 
+  
+b. IO Layer
+
+	The IO layer is responsible for dumb reading and writing to the database file. I have decided to 
+	introduce this layer, as reading and writing to the database file using  proper database schema can 
+	be complex.
+	
+	This abstraction helps isolating code changes to this layer in case future changes to the database 
+	schema. In summary, IO Layer
+		# offers improved maintainability
+		# simplifies the complex read/write from/to database, therefore helps those who are unfamiliar 
+		with the code understand it.
+		
+		
+4. Network Communication - RMI vs. Sockets
+--------------------------------------------
+I have chosen to use RMI over Sockets for a number of general reasons:
+	# Less code needed to implement the server in RMI than sockets
+	# Easier to maintain an RMI server using the Factory pattern than a
+	multi-threaded sockets server
+	# RMI is object oriented and is not limited to a single platform
+
+In addition, RMI supported my particular design/architecture by
+	# offering code simplicity and extensibility where I could re-use as much code as possible 
+	without having to implement the same functionality twice.
+	# allowing me to have a single server interface used in both networked and stand-alone mode,
+	and the only difference in the two modes was, networked published the interface via RMI whereas
+	stand-alone mode creates a local instance of the interface implementation.
+	This would be very complicated to achieve using serialization and sockets.
 
 
-Class/Method naming
-    I have tried to use intuitive and expressive names for classes and methods so
-it is immediately obvious what the role of a class/method's role is.
+5. Presentation Layer
+--------------------------------------------
+a. MVC Pattern
+	
+	I have opted to implement a strict MVC pattern where neither the HotelRoomTableModel nor the 
+	HotelRoomView classes have any knowledge of each other or of the HotelRoomController.
+	
+	This means that if the HotelRoomView is replaced in the future it will have	no impact on the 
+	HotelRoomTableModel and vice versa. Also if the HotelRoomController is replaced, there is no 
+	impact on either the HotelRoomTableModel or the	HotelRoomView.
+	
+	The down side of this approach is that there is more code between the 3	components. For example, 
+	HotelRoomView must provide a method that returns the searchButton and HotelRoomController then 
+	calls that method and adds an ActionListener to it, rather than HotelRoomView just adding the 
+	ActionListener and calling HotelRoomController when the button is pressed.
+
+	The HotelRoomView is split up into multiple Panels that extend JPanel. I have chosen this for 
+	modularity and maintainability purposes. So if for instance the search functionality was to be
+	replaced a new JPanel containing the new search components could be created	and swapped for the 
+	existing SearchPanel making extending the application simpler.
 
 
-Single line comments
-    I tried to avoid single line comments, the code is meant to be understood by
-a junior developer so the javadoc comment for each method should be sufficient. 
-There are a few single line comments where I felt the code needed additional 
-clarification and a large single line explaining my omission of the DuplicateKeyException.
+b. Searching
+
+	The search feature allows to search for available rooms based on all available fields, i.e., Name, 
+	Location, Size, Smoking, Rate, Date and Owner(customer ID). Each field has a text box where user 
+	can	enter the value to search on. Leaving a search box empty will not filter search results	by that
+	field.
+
+	Searches may be strict or not. I have used an "Exact match" check-box to control this so that to be
+	able offer more flexible search mechanism. When the "Exact match" box is unchecked the search will 
+	return rooms whose fields contain the search criteria. I.e. searching 'is' will match 'Metropolis' 
+	'Digitopolis' and 'Atlantis'.
 
 
+6. Domain Object
+--------------------------------------------
 
-======= 2. Networking decisions =======
+I had two options on how I was to store the data records read from the database. 
 
-RMI vs Sockets
-    I decided to use RMI because it is easier to implement the network communication
-in RMI, RMI is object oriented and is not limited to a single platform.
-RMI also uses less code than sockets.
-Conversely sockets gives the developer more low level control than RMI, RMI does not give the
-developer control over threads being created.
+	# First option was to adhere to the limitations of the DBMain interface and use String[]'s 
+	everywhere for storing the data records.
+	# Second option was to use a domain object for data storage. 
+	
+I have utilized both of the these approaches:
 
+	# In the IO & Data layer I have kept the reading and writing of the data records generic, using 
+	only String arrays. This allowed these two low level tiers be completely generic, therefore if 
+	changes to the database schema ever occur it should not have any impact of these two tiers once the
+	new schema is reflected in the DBSchema class.
+	# The DataService layer converts to and from a HotelRoom domain object. This gives me greater 
+	control over the data stored in the records and makes all the client side code more readable and 
+	maintainable as it only deals with these well structured HotelRoom objects.
 
-Factory pattern
-    I used the factory pattern for creating RMI objects. The factory is put in the
-naming service and a client attempting to get a connection retrieves a connection
-client from the factory.
-
-Extra interface
-    I had to create an extra interface between the controller and the Data class in order
-to allow me to throw a RemoteException on the methods in the DBMain interface.
-In an ideal situation I could have merely added the RemoteException throw to the method
-declaration for each method but I had to leave the DBMain interface I received as is.
-
-
-
-======= 3. Database decisions =======
-
-Object class
-    In the spirit of Object Oriented programming I created a Room POJO for record representation
-to handle get and set attributes on a record. I also added a toStringArray method which returns
-the record as a String array.
-
-
-Delegation pattern
-    I used the delegation pattern to delegate the responsibility of the Data class to
-the DataDBAccess class, keeping Data clean and small, if I put all the functionality in the Data
-class it would balloon to over 500 lines.
-
+7. Database Decisions
+--------------------------------------------
 
 DuplicateKeyException
-    I chose not to throw the DuplicateKeyException as I saw an issue with how it could be implemented.
+
+I assumed Hotel Name & Address as a primary key. I came to this conclusion after analyzing the original database file, noticed
+
+I have chosen to throw the DuplicateKeyException as I saw an issue with how it could be implemented.
 I could not see a unique identifier to make a primary key. To my mind, if the data in two separate
 records was identical, e.g. hotel name and location and maximum occupancy etc was exactly the same it
 would not necessarily be a duplicate.
@@ -83,19 +231,11 @@ Also it was not a 'must' requirement.
 
 
 RandomAccessFile
-    I used RandomAccessFile to read/write to the database file. This was my first time 
+I used RandomAccessFile to read/write to the database file. This was my first time 
 using RandomAccessFile but I found it easy to use and efficient. I did research on RandomAccessFile
 vs FileInputStream/FileOutputStream which I had used before. RandomAccessFile can use one instance to 
 both read and write and the seek() method is noticeably faster than FileInputStream's skip() method when
 reading the file.
-
-
-Record Cache
-    I decided against implementing a record cache and adding an extra layer of complexity.
-I felt that the cache was unnecessary and so just read from the database instead of keeping 
-the records in memory. While the extra I/O would have an adverse effect on speed in 
-a larger application with a bigger database, in an application of this size the impact
-on speed is basically unnoticeable.
 
 Limitation
     Creating a new record has a limitation where an empty custId must be passed in 

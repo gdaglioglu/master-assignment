@@ -1,6 +1,6 @@
 package suncertify.app.ui;
 
-import static suncertify.app.NetworkApplication.RMI_SERVER;
+import static suncertify.app.NetworkedApplication.RMI_SERVER;
 import static suncertify.app.util.App.showError;
 import static suncertify.app.util.PropertyManager.SERVER_ADDRESS;
 import static suncertify.app.util.PropertyManager.getParameter;

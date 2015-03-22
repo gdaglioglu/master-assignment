@@ -6,8 +6,8 @@ import static suncertify.app.util.App.setLookAndFeel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import suncertify.app.NetworkApplication;
-import suncertify.app.NetworkClientApplication;
+import suncertify.app.NetworkedApplication;
+import suncertify.app.NetworkedClientApplication;
 import suncertify.app.StandAloneApplication;
 
 /**
@@ -33,7 +33,7 @@ public class ApplicationRunner {
 	 *            Holds the command line inputs.
 	 */
 	public static void main(String[] args) {
-		new ApplicationRunner(new String[] { "alone" });
+		new ApplicationRunner(new String[] {});
 	}
 
 	/**
@@ -49,13 +49,13 @@ public class ApplicationRunner {
 
 		if (args.length == 0) {
 			logger.log(Level.INFO, "Starting URLybird in Networked Client Mode");
-			new NetworkClientApplication().init();
+			new NetworkedClientApplication().init();
 		} else if (args.length == 1 && "alone".equals(args[0])) {
 			logger.log(Level.INFO, "Starting URLybird in Stand Alone Mode");
 			new StandAloneApplication().init();
 		} else if (args.length == 1 && "server".equals(args[0])) {
 			logger.log(Level.INFO, "Starting URLybird in Networked Server Mode");
-			new NetworkApplication().init();
+			new NetworkedApplication().init();
 		} else {
 			printUsage();
 		}

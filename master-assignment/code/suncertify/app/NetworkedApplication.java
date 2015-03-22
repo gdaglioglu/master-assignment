@@ -16,8 +16,11 @@ import suncertify.server.DataServiceImpl;
  * 
  * @author Gokhan Daglioglu
  */
-public class NetworkApplication implements Application {
+public class NetworkedApplication implements Application {
 
+	/**
+	 * The name to associate with the remote reference.
+	 */
 	public static final String RMI_SERVER = "remote.database.server";
 
 	/**

@@ -79,14 +79,17 @@ public class PropertyManager {
 	private static PropertyManager propertyManager = new PropertyManager();
 
 	/**
-	 * Creates a new instance of SavedConfiguration. There should only ever be
-	 * one instance of this class (a Singleton), so we have made it private.
+	 * Creates a new instance of saved configuration. There should only ever be
+	 * one instance of this class (a Singleton), so I have made it private.
 	 */
 	private PropertyManager() {
 		init();
 		logger.log(Level.FINE, "Initialized Singleton Property Manager Object");
 	}
 
+	/**
+	 * Reads saved configuration from the file and loads them into the memory.
+	 */
 	private void init() {
 		props = loadParametersFromFile();
 

@@ -13,6 +13,10 @@ import suncertify.ui.HotelRoomController;
  */
 public class StandAloneApplication implements Application {
 
+	/**
+	 * The reference to UI instance which is responsible of creating, displaying
+	 * and populating the networked server user interface.
+	 */
 	private ServerUI serverUI;
 
 	/**

@@ -9,8 +9,12 @@ import suncertify.ui.HotelRoomController;
  * 
  * @author Gokhan Daglioglu
  */
-public class NetworkClientApplication implements Application {
+public class NetworkedClientApplication implements Application {
 
+	/**
+	 * The reference to UI instance which allows the user specify the hostname
+	 * of the remote server to connect to.
+	 */
 	private ClientUI clientUI;
 
 	/**
