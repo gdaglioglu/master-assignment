@@ -18,8 +18,13 @@
 	b. Searching
 6. Domain Object
 7. Database Decisions
-5. Property file decisions
-6. Concurrency and locking decisions
+	a. DuplicateKeyException
+	b. RandomAccessFile
+	c. Limitation
+8. Property File Decisions
+	a. PropertyManager
+	b. Server Host Name & Port
+9. Concurrency and Locking Decisions
 7. GUI and usability decisions
 8. General decision and considerations
 
@@ -212,56 +217,47 @@ I have utilized both of the these approaches:
 
 7. Database Decisions
 --------------------------------------------
+a. DuplicateKeyException
 
-DuplicateKeyException
-
-I assumed Hotel Name & Address as a primary key. I came to this conclusion after analyzing the original database file, noticed
-
-I have chosen to throw the DuplicateKeyException as I saw an issue with how it could be implemented.
-I could not see a unique identifier to make a primary key. To my mind, if the data in two separate
-records was identical, e.g. hotel name and location and maximum occupancy etc was exactly the same it
-would not necessarily be a duplicate.
-Since we are not given room numbers for hotel rooms the hotel name, location, maximum occupancy, smoking status,
-price, date available and CSR number could be the same and still refer to different rooms.
-Imagine a scenario where a CSR books multiple rooms for something like a wedding party, the CSR number would
-be the same, so would dates and they would likely get rooms close to each other, so similar rooms.
-To avoid getting off the point: Without a unique identifier like room number, I did not
-feel comfortable implementing the DuplicateKeyException.
-Also it was not a 'must' requirement.
+	I have defined Hotel Name & Address combination as a primary key. I came to this conclusion after 
+	analyzing the original database file and verifying that there is no Hotel Name & Address duplicates.	
+	So, a DuplicateKeyException is thrown if a record with same Hotel name & Address as an existing 
+	record is created.
 
 
-RandomAccessFile
-I used RandomAccessFile to read/write to the database file. This was my first time 
-using RandomAccessFile but I found it easy to use and efficient. I did research on RandomAccessFile
-vs FileInputStream/FileOutputStream which I had used before. RandomAccessFile can use one instance to 
-both read and write and the seek() method is noticeably faster than FileInputStream's skip() method when
-reading the file.
+b. RandomAccessFile
 
-Limitation
-    Creating a new record has a limitation where an empty custId must be passed in 
-in the data String array like so: data.create(new String[] {"Elephant Inn", "Emerald City", "6", 
-"N", "$120.00", "2005/02/03",""}); 
-This because the implementation of the create method works on the premise that all 
-data criteria are in the String[], the data for the custId can be populated or empty but
-like the other data fields it will be expanded out to the max field size in bytes before 
-being written to the database.
+	I have used RandomAccessFile to read/write to the database file. This was my first time	using 
+	RandomAccessFile but I found it easy to use and efficient. I did research on RandomAccessFile vs.
+	FileInputStream/FileOutputStream which I had used before. RandomAccessFile can use one instance to 
+	both read and write and the seek() method is noticeably faster than FileInputStream's skip() method when
+	reading the file.
 
+c. Limitation
 
-
-======= 4. Property file decisions =======
-
-PropertyManager
-    I utilized a singleton PropertyManager class to deal with persistence of properties.
-The property manager deals with saving and loading of persistent properties and creates
-a suncertify.properties file if the application can not find an existing one.
-
-Server host name
-    I decided to make the server name localhost by default and not to allow the user
-to enter a hostname when starting the server, the server will always start on localhost
-and clients can enter a hostname to connect to, it will be localhost on the same machine and
-whatever the ip address of the machine is when running from another machine.
+    Creating a new record has a limitation where an empty custId must be passed in in the data String 
+    array like so: data.create(new String[] {"Elephant Inn", "Emerald City", "6", "N", "$120.00", 
+    "2005/02/03",""}); 
+	This because the implementation of the create method works on the premise that all data criteria 
+	are in the String[], the data for the custId can be populated or empty but like the other data 
+	fields it will be expanded out to the max field size in bytes before being written to the database.
 
 
+8. Property file Decisions
+--------------------------------------------
+a. PropertyManager
+
+	I have utilized a singleton PropertyManager class to deal with persistence of properties. The 
+	property manager deals with saving and loading of persistent properties and creates	a 
+	suncertify.properties file if the application can not find an existing one.
+
+b. Server Host Name & Port
+
+    I have specified the server name as "localhost", and port as "1099" by default. It is not possible 
+    to run the application on any other port, port is not a configurable entity.    
+    User is not allowed to enter a hostname when starting the server, the server will always start on 
+    localhost and clients can enter a hostname to connect to, it will be localhost on the same machine 
+    and whatever the ip address of the machine is when running from another machine.
 
 ======= 5. Concurrency and locking decisions =======
 

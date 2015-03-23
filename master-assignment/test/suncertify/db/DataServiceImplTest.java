@@ -89,7 +89,7 @@ public class DataServiceImplTest {
 	@Test
 	public void testCreate() throws RemoteException, DuplicateKeyException, RecordNotFoundException {
 		final String[] newRecord = new String[] { "Dew Drop Inn", "Smallville", "4", "Y",
-				"$210.00", "2005/05/02", "" };
+				"$210.00", "2005/05/02" };
 		this.dataService.delete(CREATE_REC_NO);
 		final int newRecordNum = this.dataService.create(newRecord);
 

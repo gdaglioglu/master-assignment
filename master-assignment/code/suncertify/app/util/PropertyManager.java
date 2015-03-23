@@ -40,12 +40,6 @@ public class PropertyManager {
 	public static final String SERVER_ADDRESS = "server.address";
 
 	/**
-	 * The key in application properties indicating that the value will be the
-	 * port the RMI Registry.
-	 */
-	public static final String SERVER_PORT = "server.port";
-
-	/**
 	 * The name used to persist the whether the state of the "Exact match"
 	 * checkbox on client UI.
 	 */
@@ -96,7 +90,6 @@ public class PropertyManager {
 		if (props == null) {
 			props = new Properties();
 			props.setProperty(SERVER_ADDRESS, "localhost");
-			props.setProperty(SERVER_PORT, "" + java.rmi.registry.Registry.REGISTRY_PORT);
 			props.setProperty(EXACT_MATCH, "false");
 		}
 
