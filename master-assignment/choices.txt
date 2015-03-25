@@ -1,4 +1,4 @@
-==================== URLyBird application design choices ====================
+==================== URLyBird Application Design Choices ====================
 
 ====== Table of Contents ======
 1. General
@@ -25,9 +25,15 @@
 	a. PropertyManager
 	b. Server Host Name & Port
 9. Concurrency and Locking Decisions
-7. GUI and usability decisions
-8. General decision and considerations
-
+	a. Server Responsibility
+10. General Decisions and Considerations
+	a. HotelRoomView GUI
+	b. ServerUI GUI
+	c. 48-hour Rule
+	d. Packaging Structure
+	e. Keeping Clients up-to-date
+	f. Logging
+	g. Rebooking of records
 
 1. General
 --------------------------------------------
@@ -146,6 +152,7 @@ b. IO Layer
 		
 4. Network Communication - RMI vs. Sockets
 --------------------------------------------
+
 I have chosen to use RMI over Sockets for a number of general reasons:
 	# Less code needed to implement the server in RMI than sockets
 	# Easier to maintain an RMI server using the Factory pattern than a
@@ -224,7 +231,6 @@ a. DuplicateKeyException
 	So, a DuplicateKeyException is thrown if a record with same Hotel name & Address as an existing 
 	record is created.
 
-
 b. RandomAccessFile
 
 	I have used RandomAccessFile to read/write to the database file. This was my first time	using 
@@ -242,7 +248,6 @@ c. Limitation
 	are in the String[], the data for the custId can be populated or empty but like the other data 
 	fields it will be expanded out to the max field size in bytes before being written to the database.
 
-
 8. Property file Decisions
 --------------------------------------------
 a. PropertyManager
@@ -259,96 +264,65 @@ b. Server Host Name & Port
     localhost and clients can enter a hostname to connect to, it will be localhost on the same machine 
     and whatever the ip address of the machine is when running from another machine.
 
-======= 5. Concurrency and locking decisions =======
+9. Concurrency and Locking Decisions
+--------------------------------------------
 
-I chose to avoid using the built in lock packages in Java in the package java.util.concurrent.
-This is because I was unfamiliar with the classes and I was more comfortable with
-synchronization. Also, I thought using synchronization would be simpler for a junior 
-programmer to understand.
+Locking on server side was required me to make a choice among various options. I wanted my locking 
+mechanism to offer simplicity, speed and reliability. I used ReentrantLock as it out performs the use
+of synchronized keyword. Using ReentrantLock offered me more flexibility. 
 
+I utilized two separate locking mechanisms; one lock for read/update/delete; one lock for create. This 
+way, client is still able to create without blocking any other read/update/delete operation 
+unnecessarily. This approach offers better server performance.
 
-Locking map
-    I utilized a singleton LockManager class with a HashMap, the HashMap is populated
-with a record number as the key and a long as the value.
-The long is obtained by the thread id of the current client thread.
-The locking procedure consists of a call to lock a record, which adds the record number and the client thread id
-into the HashMap, these calls in the HotelFrameController are not synchronized because 
-a call to lock will block other threads wishing to access the record while the record number
-is in the locking HashMap.
-The next call is to update, which checks the current thread id is the owner of the lock of the record.
-The final call unlocks the record, this is in the finally block of a try-catch to
-ensure the call is made to unlock even if an exception is caught.
+A single ReentranLock is used for create operation and this lock can't be manipulated by any other 
+class other than Data.java class. Data#create() method tries to acquire the create lock when user 
+attempts to create a record. Only one thread can access the create method at a time.
 
+For other operations, i.e., read, update and delete, there is a separate ReentrantLock used for each 
+record in the database. This approach allows for multiple clients to update separate records at the 
+same time.
 
-Client responsibility
-    The call to lock/update/unlock the record is made from the HotelFrameController.
-It is the responsibility of the client to call lock, then update, then finally unlock.
-If the unlock is not called by the client then deadlock will occur.
+I used a write through cache approach. When multiple clients attempt to update to multiple records, 
+there was a contention between multiple threads trying to update the records. So I introduced another 
+locking mechanism in DBWriter class to ensure only one thread can update a record in database at a time
+although still allowing threads to update the cache.
 
+a. Server responsibility
+    Locking records is the responsibility of DataService layer as mentioned on Section 3.a. This allows
+    simplifying client side code and ease of managing locks.
 
-Locking/Unlocking
-    When attempting to lock the lock method in the data Facade will attempt to read
-the record number, if the read is not successful the record number will not be locked.
-A RecordNotFoundException will be thrown in accordance with the instructions.
-This is to prevent random record numbers that do not have corresponding records in the database
-from being added into the locking map.
-    When attempting to unlock the unlock method in the data Facade will attempt to read as well.
-If the read is not successful (for reasons like record has just been deleted) the unlock will still
-remove the record number entry from the locking map, keeping the locking map clean.
-A RecordNotFoundException will be thrown in accordance with the instructions.
+9. General Decisions and Considerations
+--------------------------------------------
 
+a. HotelRoomView GUI
 
+	I chose not to limit the visibility of records to the user, so all records are displayed in the 
+	JTable, rather than only displaying bookable records e.g records violating 48 hour rule or records 
+	already booked by CSR. See below(Section 9.c) for additional 48-hour rationale.	
 
-======= 6. GUI and usability decisions =======
+	When the user attempts to book a room I implemented validation to make sure that a record has been
+	selected, then a JDialog user input is verified as being 8 characters long and all digits.
 
-Configuration GUI
-    The configuration dialog is common to the three application start-up modes.
-Depending on the mode in which the application is started then some components will be disabled.
-In standalone client mode -
-    Only the database location needs to be entered, host name and port are not editable.
-In network client mode - 
-    The RMI host name and port need to be entered, database location is not editable.
-In server mode -
-    The RMI port number and database location have to be entered, host name is set to
-localhost by default.
+b. ServerUI GUI
 
+	I decided to implement 3 simple server button, i.e., Start, Shutdown, Browse. Once the server is 
+	started Start and Browse buttons are disabled. Shutdown button stops server and closes the GUI.
 
-HotelFrame GUI
-    I chose not to limit the visibility of records to the user, so all records are displayed in the JTable, rather than
-only displaying bookable records e.g records violating 48 hour rule or records already booked
-by CSR. See Section 7 for additional 48-hour rationale.
-I chose to load all records in the database on application start up, this was a purely
-aesthetic decision on my part.
-When the user attempts to book a room I implemented validation to make sure that a record has been
-selected, then a JDialog user input is verified as being 8 characters long and all digits.
+c. 48-hour Rule
+    I decided against implementing the 48 hour rule as the dates in the database file are all years in 
+    the past. I did not see any point in implementing code that would never be used. If the dates were
+    in the future then simple implementation in the GUI code to ensure that only bookable entries are 
+    displayed to the user could have been added in. It was also not a "must" requirement.
 
+d. Packaging Structure
+    
+    I divided the application structure into 9 packages, the application is started from the 
+    ApplicationRunner.java class which I placed into the suncertify.init package on its own.
+    All packages have a package-info.java file which explains the purpose of the classes in each 
+    package.
 
-Server GUI
-    I decided that rather than having a simple start server button that I would display the 
-options that the server is using to start as un-editable text fields. The server then has an exit button
-and the start server button is disabled as soon as the server is started.
-
-
-
-======= 7. General decision and considerations =======
-
-48-hour rule
-    I decided against implementing the 48 hour rule as the dates in the database file
-are all years in the past. I did not see any point in implementing code that would never be used.
-If the dates were in the future then simple implementation in the GUI code to ensure that only bookable 
-entries are displayed to the user could have been added in. 
-However since I validate the magic cookie in the database file the application is locked
-to the specific database I received which has all old dates.
-It was also not a 'must' requirement.
-
-
-Packaging structure
-    I divided the application structure into five packages, the application is 
-started from the StartUp.java class which I placed into the suncertify.init package
-on it's own. 
-The suncertify.util package is used to contain classes that can be used to 
-provide common functionality across the application.
-The other packages are self-explanatory.
+e. Keeping Clients up-to-date
 
 
 Model View Controller architecture pattern
@@ -366,11 +340,11 @@ controller methods.
 The view is represented by the HotelFrame class, it constructs the Swing GUI components and displays the data in the model.
 
 
-Logging
+f. Logging
     I used extensive logging in the application, logging as Level.SEVERE for caught exceptions and
     as Level.INFO for informative messages in the application flow.
 
-Rebooking of records
+g. Rebooking of records
     I do not allow re-booking of records or unbooking. It was not a must requirement
 and I believe it is a security risk. If the CSR makes a mistake when entering the number
 carelessly then they cannot unbook the record. How would the application know whether it is the same
