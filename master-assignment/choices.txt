@@ -333,7 +333,7 @@ d. Packaging Structure
     All packages have a package-info.java file which explains the purpose of the classes in each 
     package.
 
-e. Keeping Clients up-to-date
+e. Keeping Clients Up-To-Date
 
 	I used a passive implementation model view controller pattern. My model does not notify the 
 	HotelRoomView when there has been a change in state/information, the user must manually refresh the
@@ -351,7 +351,7 @@ f. Logging
     # logging as Level.FINE/Level.FINER for messages which will help developers to troubleshoot an 
     issue.
 
-g. Rebooking of records
+g. Rebooking of Records
 
     I do not allow re-booking of records or unbooking. It was not a must requirement and I believe it 
     is a security risk. If the CSR makes a mistake when entering the number carelessly then they cannot
