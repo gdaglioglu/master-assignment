@@ -245,9 +245,9 @@ b. RandomAccessFile
 
 c. Limitation
 
-    Creating a new record has a limitation where an empty custId must be passed in in the data String 
-    array like so: data.create(new String[] {"Elephant Inn", "Emerald City", "6", "N", "$120.00", 
-    "2005/02/03",""}); 
+	Creating a new record has a limitation where an empty custId must be passed in in the data String 
+	array like so: data.create(new String[] {"Elephant Inn", "Emerald City", "6", "N", "$120.00", 
+	"2005/02/03",""}); 
 	This because the implementation of the create method works on the premise that all data criteria 
 	are in the String[], the data for the custId can be populated or empty but like the other data 
 	fields it will be expanded out to the max field size in bytes before being written to the database.
@@ -263,11 +263,11 @@ a. PropertyManager
 
 b. Server Host Name & Port
 
-    I specified the server name as "localhost", and port as "1099" by default. It is not possible 
-    to run the application on any other port, port is not a configurable entity.    
-    User is not allowed to enter a hostname when starting the server, the server will always start on 
-    localhost and clients can enter a hostname to connect to, it will be localhost on the same machine 
-    and whatever the ip address of the machine is when running from another machine.
+	I specified the server name as "localhost", and port as "1099" by default. It is not possible 
+	to run the application on any other port, port is not a configurable entity.    
+	User is not allowed to enter a hostname when starting the server, the server will always start on 
+	localhost and clients can enter a hostname to connect to, it will be localhost on the same machine 
+	and whatever the ip address of the machine is when running from another machine.
 
 9. Concurrency and Locking Decisions
 --------------------------------------------
@@ -295,8 +295,8 @@ although still allowing threads to update the cache.
 
 a. Server responsibility
 
-    Locking records is the responsibility of DataService layer as mentioned on Section 3.a. This allows
-    simplifying client side code and ease of managing locks.
+	Locking records is the responsibility of DataService layer as mentioned on Section 3.a. This allows
+	simplifying client side code and ease of managing locks.
 
 10. General Decisions and Considerations
 --------------------------------------------
@@ -321,17 +321,17 @@ b. ServerUI GUI
 
 c. 48-hour Rule
 
-    I decided against implementing the 48 hour rule as the dates in the database file are all years in 
-    the past. I did not see any point in implementing code that would never be used. If the dates were
-    in the future then simple implementation in the GUI code to ensure that only bookable entries are 
-    displayed to the user could have been added in. It was also not a "must" requirement.
+	I decided against implementing the 48 hour rule as the dates in the database file are all years in 
+	the past. I did not see any point in implementing code that would never be used. If the dates were
+	in the future then simple implementation in the GUI code to ensure that only bookable entries are 
+	displayed to the user could have been added in. It was also not a "must" requirement.
 
 d. Packaging Structure
     
-    I divided the application structure into 9 packages, the application is started from the 
-    ApplicationRunner.java class which I placed into the suncertify.init package on its own.
-    All packages have a package-info.java file which explains the purpose of the classes in each 
-    package.
+	I divided the application structure into 9 packages, the application is started from the 
+	ApplicationRunner.java class which I placed into the suncertify.init package on its own.
+	All packages have a package-info.java file which explains the purpose of the classes in each 
+	package.
 
 e. Keeping Clients Up-To-Date
 
@@ -343,18 +343,18 @@ e. Keeping Clients Up-To-Date
 
 f. Logging
 
-    I used extensive logging in the application:
-    # logging as Level.SEVERE for caught exceptions which will cause application to exit.
-    # logging as Level.WARNING for caught exception which will not cause application to exit and when 
-    showing users a warning/error message.
-    # logging as Level.INFO for informative messages in the application flow.
-    # logging as Level.FINE/Level.FINER for messages which will help developers to troubleshoot an 
-    issue.
+	I used extensive logging in the application:
+	# logging as Level.SEVERE for caught exceptions which will cause application to exit.
+	# logging as Level.WARNING for caught exception which will not cause application to exit and when 
+	showing users a warning/error message.
+	# logging as Level.INFO for informative messages in the application flow.
+	# logging as Level.FINE/Level.FINER for messages which will help developers to troubleshoot an 
+	issue.
 
 g. Rebooking of Records
 
-    I do not allow re-booking of records or unbooking. It was not a must requirement and I believe it 
-    is a security risk. If the CSR makes a mistake when entering the number carelessly then they cannot
-    unbook the record. How would the application know whether it is the same CSR attempting to unbook 
-    the record or another unscrupulous CSR unbooking to make a record available for that CSR's clients?
-    It would have needed additional implementation and I did not feel it added value to the application.
+	I do not allow re-booking of records or unbooking. It was not a must requirement and I believe it 
+	is a security risk. If the CSR makes a mistake when entering the number carelessly then they cannot
+	unbook the record. How would the application know whether it is the same CSR attempting to unbook 
+	the record or another unscrupulous CSR unbooking to make a record available for that CSR's clients?
+	It would have needed additional implementation and I did not feel it added value to the application.
