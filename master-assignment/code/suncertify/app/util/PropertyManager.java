@@ -90,7 +90,7 @@ public class PropertyManager {
 		if (props == null) {
 			props = new Properties();
 			props.setProperty(SERVER_ADDRESS, "localhost");
-			props.setProperty(EXACT_MATCH, "false");
+			props.setProperty(EXACT_MATCH, "true");
 		}
 
 	}
