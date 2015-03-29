@@ -1,12 +1,13 @@
 package suncertify.app;
 
+import static suncertify.app.util.App.showErrorAndExit;
+
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import suncertify.app.ui.ServerUI;
-import suncertify.app.util.App;
 import suncertify.server.DataService;
 import suncertify.server.DataServiceImpl;
 
@@ -54,7 +55,7 @@ public class NetworkedApplication implements Application {
 			final Registry registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 			registry.rebind(RMI_SERVER, rmiStub);
 		} catch (final RemoteException e) {
-			App.showErrorAndExit("Cannot publish the RMI server, check no other applications are using the default RMI port 1099.");
+			showErrorAndExit("Cannot publish the RMI server, check no other applications are using the default RMI port 1099.");
 		}
 	}
 }

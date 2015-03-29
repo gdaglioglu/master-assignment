@@ -1,7 +1,7 @@
 /**
  * This package contains classes that are implementing MVC pattern.
  * 
- * @author gdaglioglu
+ * @author Gokhan Daglioglu
  *
  */
 package suncertify.ui;

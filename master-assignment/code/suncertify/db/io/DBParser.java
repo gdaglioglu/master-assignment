@@ -65,7 +65,6 @@ public class DBParser {
 				final String[] dataItem = this.readNextRecord();
 				hotelRooms.add(dataItem);
 			}
-
 		} catch (final IOException e) {
 			showErrorAndExit("Cannot read from database file.");
 		}

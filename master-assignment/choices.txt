@@ -37,27 +37,28 @@
 
 1. General
 --------------------------------------------
+
 a. Code Style
 
-	I have used expressive names for classes/methods and variables so that it should be easier for a 
+	I used expressive names for classes/methods and variables so that it should be easier for a 
 	junior programmer to understand what a class or method doing.
 
 b. Javadoc/Comments
 
 	Javadoc is added to every class, all methods and attributes, regardless of their access modifier.
-	I have tried to avoid single line comments and instead explain as much as possible in the javadoc 
-	comments. 
-	This allows a centralized documentation for all operations in my application, which I think is 
-	useful for junior developers.
+	I tried to avoid single line comments and instead explain as much as possible in the javadoc 
+	comments. This allows a centralized documentation for all operations in my application, which I 
+	think is useful for junior developers.
 	
 	Though sometimes, I felt the code(i.e. DBParser.java and HotelRoomView.java) needed additional 
 	clarification and single line comments were unavoidable.
 
 2. Architectural Overview
 --------------------------------------------
+
 The thing I was particularly concerned with while designing the application, was how to split between 
 Networked and Stand-alone mode. My main goal to minimize code replication and maximize code 
-maintainability. So, I have decided to make majority of client and server code unaware of the mode the 
+maintainability. So, I decided to make majority of client and server code unaware of the mode the 
 application is running in. 
  
 On start up, the application creates an instance of an Application based on the start mode 
@@ -104,6 +105,7 @@ c. StandAloneApplication
  
 3. Server Side Architecture
 --------------------------------------------
+
 The server side architecture consists of three layers, the DataService
 layer, the Data layer and the IO layer.
 
@@ -113,7 +115,7 @@ a. DataService Layer
 		# managing the locking and thread safety of all reads and writes made by clients and 
 		# any business logic that needs to be performed, i.e. exact match.
 		
-	I have introduced the DataService layer to enable clients to talk to the server without having to 
+	I introduced the DataService layer to enable clients to talk to the server without having to 
 	do any locking. This server side business layer was a simple solution to address that problem.
 	The DataService layer gets an instance of Data using a factory, then it passes calls(read/write) to
 	this Data instance.
@@ -127,9 +129,9 @@ b. Data Layer
 	
 	On initialization, the Data object uses the DBParser to build a cache of the data records. 
 	
-	I have decided to use a cache as this enabled me to keep keep all the methods of the DBMain 
+	I decided to use a cache as this enabled me to keep keep all the methods of the DBMain 
 	interface to be simple and clean. The cache is a write through cache which allows for fast and 
-	efficient reads while keeping the on disk database constantly up-to-date. I have preferred a write
+	efficient reads while keeping the on disk database constantly up-to-date. I preferred a write
 	through cache as I didn't want	the database file out of sync with what was shown on the clients'.
 	This was a least error prone cache implementation considering other options, i.e., write cache to 
 	the on disk database on exit.
@@ -139,7 +141,7 @@ b. Data Layer
   
 b. IO Layer
 
-	The IO layer is responsible for dumb reading and writing to the database file. I have decided to 
+	The IO layer is responsible for dumb reading and writing to the database file. I decided to 
 	introduce this layer, as reading and writing to the database file using  proper database schema can 
 	be complex.
 	
@@ -153,7 +155,7 @@ b. IO Layer
 4. Network Communication - RMI vs. Sockets
 --------------------------------------------
 
-I have chosen to use RMI over Sockets for a number of general reasons:
+I chose to use RMI over Sockets for a number of general reasons:
 	# Less code needed to implement the server in RMI than sockets
 	# Easier to maintain an RMI server using the Factory pattern than a
 	multi-threaded sockets server
@@ -170,9 +172,10 @@ In addition, RMI supported my particular design/architecture by
 
 5. Presentation Layer
 --------------------------------------------
+
 a. MVC Pattern
 	
-	I have opted to implement a strict MVC pattern where neither the HotelRoomTableModel nor the 
+	I opted to implement a strict MVC pattern where neither the HotelRoomTableModel nor the 
 	HotelRoomView classes have any knowledge of each other or of the HotelRoomController.
 	
 	This means that if the HotelRoomView is replaced in the future it will have	no impact on the 
@@ -184,7 +187,7 @@ a. MVC Pattern
 	calls that method and adds an ActionListener to it, rather than HotelRoomView just adding the 
 	ActionListener and calling HotelRoomController when the button is pressed.
 
-	The HotelRoomView is split up into multiple Panels that extend JPanel. I have chosen this for 
+	The HotelRoomView is split up into multiple Panels that extend JPanel. I chose this for 
 	modularity and maintainability purposes. So if for instance the search functionality was to be
 	replaced a new JPanel containing the new search components could be created	and swapped for the 
 	existing SearchPanel making extending the application simpler.
@@ -197,7 +200,7 @@ b. Searching
 	can	enter the value to search on. Leaving a search box empty will not filter search results	by that
 	field.
 
-	Searches may be strict or not. I have used an "Exact match" check-box to control this so that to be
+	Searches may be strict or not. I used an "Exact match" check-box to control this so that to be
 	able offer more flexible search mechanism. When the "Exact match" box is unchecked the search will 
 	return rooms whose fields contain the search criteria. I.e. searching 'is' will match 'Metropolis' 
 	'Digitopolis' and 'Atlantis'.
@@ -212,9 +215,9 @@ I had two options on how I was to store the data records read from the database.
 	everywhere for storing the data records.
 	# Second option was to use a domain object for data storage. 
 	
-I have utilized both of the these approaches:
+I utilized both of the these approaches:
 
-	# In the IO & Data layer I have kept the reading and writing of the data records generic, using 
+	# In the IO & Data layer I kept the reading and writing of the data records generic, using 
 	only String arrays. This allowed these two low level tiers be completely generic, therefore if 
 	changes to the database schema ever occur it should not have any impact of these two tiers once the
 	new schema is reflected in the DBSchema class.
@@ -224,16 +227,17 @@ I have utilized both of the these approaches:
 
 7. Database Decisions
 --------------------------------------------
+
 a. DuplicateKeyException
 
-	I have defined Hotel Name & Address combination as a primary key. I came to this conclusion after 
+	I defined Hotel Name & Address combination as a primary key. I came to this conclusion after 
 	analyzing the original database file and verifying that there is no Hotel Name & Address duplicates.	
 	So, a DuplicateKeyException is thrown if a record with same Hotel name & Address as an existing 
 	record is created.
 
 b. RandomAccessFile
 
-	I have used RandomAccessFile to read/write to the database file. This was my first time	using 
+	I used RandomAccessFile to read/write to the database file. This was my first time using 
 	RandomAccessFile but I found it easy to use and efficient. I did research on RandomAccessFile vs.
 	FileInputStream/FileOutputStream which I had used before. RandomAccessFile can use one instance to 
 	both read and write and the seek() method is noticeably faster than FileInputStream's skip() method when
@@ -248,17 +252,18 @@ c. Limitation
 	are in the String[], the data for the custId can be populated or empty but like the other data 
 	fields it will be expanded out to the max field size in bytes before being written to the database.
 
-8. Property file Decisions
+8. Property File Decisions
 --------------------------------------------
+
 a. PropertyManager
 
-	I have utilized a singleton PropertyManager class to deal with persistence of properties. The 
+	I utilized a singleton PropertyManager class to deal with persistence of properties. The 
 	property manager deals with saving and loading of persistent properties and creates	a 
 	suncertify.properties file if the application can not find an existing one.
 
 b. Server Host Name & Port
 
-    I have specified the server name as "localhost", and port as "1099" by default. It is not possible 
+    I specified the server name as "localhost", and port as "1099" by default. It is not possible 
     to run the application on any other port, port is not a configurable entity.    
     User is not allowed to enter a hostname when starting the server, the server will always start on 
     localhost and clients can enter a hostname to connect to, it will be localhost on the same machine 
@@ -289,20 +294,25 @@ locking mechanism in DBWriter class to ensure only one thread can update a recor
 although still allowing threads to update the cache.
 
 a. Server responsibility
+
     Locking records is the responsibility of DataService layer as mentioned on Section 3.a. This allows
     simplifying client side code and ease of managing locks.
 
-9. General Decisions and Considerations
+10. General Decisions and Considerations
 --------------------------------------------
 
 a. HotelRoomView GUI
 
 	I chose not to limit the visibility of records to the user, so all records are displayed in the 
 	JTable, rather than only displaying bookable records e.g records violating 48 hour rule or records 
-	already booked by CSR. See below(Section 9.c) for additional 48-hour rationale.	
+	already booked by CSR. See below(Section 9.c) for additional 48-hour rationale.
+	
+	There are only two buttons in HotelRoomView GUI, one for searching, one for booking a room. 
+	I decided not to present buttons for create and delete operations although this functionality is
+	implemented.
 
 	When the user attempts to book a room I implemented validation to make sure that a record has been
-	selected, then a JDialog user input is verified as being 8 characters long and all digits.
+	selected, then a JDialog user input is verified as being 8 characters long and all digits.	
 
 b. ServerUI GUI
 
@@ -310,6 +320,7 @@ b. ServerUI GUI
 	started Start and Browse buttons are disabled. Shutdown button stops server and closes the GUI.
 
 c. 48-hour Rule
+
     I decided against implementing the 48 hour rule as the dates in the database file are all years in 
     the past. I did not see any point in implementing code that would never be used. If the dates were
     in the future then simple implementation in the GUI code to ensure that only bookable entries are 
@@ -324,32 +335,26 @@ d. Packaging Structure
 
 e. Keeping Clients up-to-date
 
-
-Model View Controller architecture pattern
-    I used a passive implementation model view controller pattern because it was a good fit for what I needed
-in the client side code and Swing implementation.
-In my application the model is represented by the AbstractTableModel and the information to be sent to
-the user. I say passive implementation as my model does not notify the view and controller 
-when there has been a change in state/information, the user must manually refresh the table data through
-the Load table button or search button with no criteria. I could have used the observer pattern as a method
-of notifying the view and controller but did not feel there was sufficient need.
-The controller is represented by the HotelFrameController which is a class common to both the network
-and stand alone clients. It creates the network/direct connection depending on application mode.
-The controller also calls the lock/update/unlock/find/read methods in the data layer through the 
-controller methods.
-The view is represented by the HotelFrame class, it constructs the Swing GUI components and displays the data in the model.
-
+	I used a passive implementation model view controller pattern. My model does not notify the 
+	HotelRoomView when there has been a change in state/information, the user must manually refresh the
+	HotelRoomTableModel data through search button with no criteria. 
+	I could have used the observer pattern as a method of notifying the view and controller but did not
+	feel there was sufficient need.
 
 f. Logging
-    I used extensive logging in the application, logging as Level.SEVERE for caught exceptions and
-    as Level.INFO for informative messages in the application flow.
+
+    I used extensive logging in the application:
+    # logging as Level.SEVERE for caught exceptions which will cause application to exit.
+    # logging as Level.WARNING for caught exception which will not cause application to exit and when 
+    showing users a warning/error message.
+    # logging as Level.INFO for informative messages in the application flow.
+    # logging as Level.FINE/Level.FINER for messages which will help developers to troubleshoot an 
+    issue.
 
 g. Rebooking of records
-    I do not allow re-booking of records or unbooking. It was not a must requirement
-and I believe it is a security risk. If the CSR makes a mistake when entering the number
-carelessly then they cannot unbook the record. How would the application know whether it is the same
-CSR attempting to unbook the record or another unscrupulous CSR unbooking to make a record available for that CSR's
-clients? It would have needed additional implementation and I did not feel it added value to
-the application.
 
-
+    I do not allow re-booking of records or unbooking. It was not a must requirement and I believe it 
+    is a security risk. If the CSR makes a mistake when entering the number carelessly then they cannot
+    unbook the record. How would the application know whether it is the same CSR attempting to unbook 
+    the record or another unscrupulous CSR unbooking to make a record available for that CSR's clients?
+    It would have needed additional implementation and I did not feel it added value to the application.

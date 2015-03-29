@@ -2,6 +2,7 @@ package suncertify.app.ui;
 
 import static suncertify.app.NetworkedApplication.RMI_SERVER;
 import static suncertify.app.util.App.showError;
+import static suncertify.app.util.App.showErrorAndExit;
 import static suncertify.app.util.PropertyManager.SERVER_ADDRESS;
 import static suncertify.app.util.PropertyManager.getParameter;
 import static suncertify.app.util.PropertyManager.setParameter;
@@ -193,9 +194,9 @@ public class ClientUI extends JFrame {
 					ClientUI.this.dispose();
 					ClientUI.this.application.launch();
 				} catch (final RemoteException e) {
-					showError("Cannot connect to the remote server.\nThe hostname may be incorrect or the server could be down.");
+					showErrorAndExit("Cannot connect to the remote server.\nThe hostname may be incorrect or the server could be down.");
 				} catch (final NotBoundException e) {
-					showError("Server found but cannot connect.\nThe server has not started correctly and should be restarted.");
+					showErrorAndExit("Server found but cannot connect.\nThe server has not started correctly and should be restarted.");
 				}
 			}
 		}
